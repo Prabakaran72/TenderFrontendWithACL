@@ -1,8 +1,7 @@
 import axios from "axios";
-import { Fragment,  useEffect, useState,useContext } from "react";
+import { Fragment,  useEffect, useState, useContext } from "react";
 import {  useNavigate } from "react-router-dom";
 // import Swal from "sweetalert2";
-import AuthContext from "../../../storeAuth/auth-context";
 
 //For DataTable
 import "jquery/dist/jquery.min.js";
@@ -22,6 +21,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
+import AuthContext from "../../../storeAuth/auth-context";
 
 let table;
 const ProjectstatusList = () => {
@@ -30,8 +30,7 @@ const ProjectstatusList = () => {
   const navigate = useNavigate();
 
   const authData = useContext(AuthContext);
-  console.log("authData", authData)
-
+console.log("authData", authData)
   const deleterecord = async (id) => {
     let response =  axios.delete(`${baseUrl}/api/projectstatus/${id}`)
     return response;

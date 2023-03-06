@@ -82,7 +82,7 @@ function Login() {
     setdatasending(true);
 
     const loginData = {
-      user_id: userNameState.value,
+      name: userNameState.value,
       password: passwordState.value,
     };
 
@@ -120,7 +120,8 @@ function Login() {
       .then((data) => {
         console.log(data);
         if (data.logStatus === "success") {
-          authCtx.login(data.tokenId, userNameState.value);
+          const {tokenId, role, permission} = data
+          authCtx.login(tokenId, userNameState.value, role, permission);
           navigate("/tender", { replace: true });
           // navigate(0)
           setError("");

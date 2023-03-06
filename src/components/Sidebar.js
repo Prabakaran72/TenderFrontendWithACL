@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import AuthContext from "../storeAuth/auth-context";
 function Sidebar() {
   const [active, setActive] = useState("");
 
   const pathName = "tender";
+
+
+  const authData = useContext(AuthContext);
+console.log("authData", authData)
 
   const hideSidebarElement = (menuId, tab) => {
     document.getElementById(menuId).click();
@@ -167,6 +171,15 @@ function Sidebar() {
             >
               Project Status
             </NavLink>
+            {authData.permission.includes("delete") && 
+            <NavLink
+              className={`collapse-item ${({ isActive }) =>
+                isActive ? "active" : undefined}`}
+              to={`/${pathName}/master/test`}
+              onClick={() => hideSidebarElement("MasterMenu")}
+            >
+              ACL TEST COMP
+            </NavLink>}
             <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
