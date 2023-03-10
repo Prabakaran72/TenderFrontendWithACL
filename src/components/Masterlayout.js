@@ -21,7 +21,7 @@ function Masterlayout() {
 
  
 
-  const validateToken = () => {
+  const validateToken = async () => {
     if(localStorage.getItem('token')){
       let data = {
         tokenid : localStorage.getItem('token')
@@ -52,6 +52,10 @@ function Masterlayout() {
         // navigate('/');
       });
 
+      let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, formdata)
+      if(rolesAndPermission.status === 200){
+        authCtx.rolesAndPermission(rolesAndPermission.data.role, rolesAndPermission.data.permission)
+      }
     }
   }
   

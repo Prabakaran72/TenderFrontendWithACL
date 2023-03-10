@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { useEffect, useState } from "react";
 // import RotateLoader from "react-spinners/RotateLoader";
 import "./CustomerCreationList.css";
@@ -23,6 +23,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
 import { Loader } from "rsuite";
+import AuthContext from "../../../storeAuth/auth-context";
+import {can} from "../../../components/UserPermission"
 let table;
 
 const CustomerCreationList = () => {
@@ -31,6 +33,7 @@ const CustomerCreationList = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [customerList, setCustomerlist] = useState([]);
+  const authData = useContext(AuthContext);
 
   useEffect(() => {
     table = $("#dataTable").DataTable({
@@ -42,6 +45,7 @@ const CustomerCreationList = () => {
         { data: "city_name" },
         { data: "customer_group" },
         { data: "buttons" },
+      //  (can('customer-edit', authData.permissions) || can('customer-delete', authData.permissions)) && { data: "buttons" },
       ],
       dom:
         //   "<'row'<'col-sm-12'l>>" +
@@ -92,18 +96,36 @@ const CustomerCreationList = () => {
     });
   };
 
+  
   const getlist = async () => {
     setLoading(true);
     let response = await axios.get(`${baseUrl}/api/customercreationprofile`);
+    // let userPermissions = authData.permission
+    let userPermissions;
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
+      
+    let rolesAndPermission = await axios.post(`http://localhost:8000/api/getrolesandpermision`, data)
+      if(rolesAndPermission.status === 200){
+        userPermissions = rolesAndPermission.data;
+      }
+    
+
 
     let list = [...response.data.customercreationList];
-    let listarr = list.map((item, index, arr) => ({
+    let listarr = list.map((item, index, arr) => {
+      let editbtn = can('customer-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+      let deletebtn =  can('customer-delete', (userPermissions.permission || [])) ?  '<i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>' : '';
+    return {
       ...item,
       customer_group:
         item.smart_city === "yes" ? "Smart City" : "Non Smart City",
-      buttons: `<i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>`,
+        
+      buttons: editbtn + deletebtn,
       sl_no: index + 1,
-    }));
+    }});
     table.clear().rows.add(listarr).draw();
     setLoading(false);
   };
@@ -150,6 +172,7 @@ const CustomerCreationList = () => {
                   <th scope="col">State Name</th>
                   <th scope="col">City Name</th>
                   <th scope="col">Customer Group</th>
+                  {/* {(can('customer-edit', authData.permissions) || can('customer-delete', authData.permissions)) &&  <th scope="col">Action</th>} */}
                   <th scope="col">Action</th>
                 </tr>
               </thead>

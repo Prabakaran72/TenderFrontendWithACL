@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import AuthContext from "../storeAuth/auth-context";
+import { can } from "./UserPermission";
 function Sidebar() {
   const [active, setActive] = useState("");
 
@@ -9,7 +10,6 @@ function Sidebar() {
 
 
   const authData = useContext(AuthContext);
-console.log("authData", authData)
 
   const hideSidebarElement = (menuId, tab) => {
     document.getElementById(menuId).click();
@@ -78,7 +78,7 @@ console.log("authData", authData)
         >
           {/*<i className="fas fa-fw fa-cog" />*/}
           <i className="fa fa-graduation-cap"></i>
-          <span>Master</span>
+          <span>Master</span> 
         </Link>
         <div
           id="collapseMasterMenu"
@@ -87,22 +87,23 @@ console.log("authData", authData)
           data-parent="#accordionSidebar"
         >
           <div className="bg-white py-2 collapse-inner rounded">
-            <NavLink
+           {can('customer-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/master/customercreation/list`}
               onClick={() => hideSidebarElement("MasterMenu")}
             >
               Customer Creation
-            </NavLink>
-            <NavLink
+            </NavLink>}
+
+           {can('competitor-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/master/competitorcreation`}
               onClick={() => hideSidebarElement("MasterMenu")}
             >
               Competitor Creation
-            </NavLink>
+            </NavLink>}
             {/* <Link className={`collapse-item ${active === "stateMasterTab"? "active":""}`} to={`/${pathName}/master/statemaster`} onClick = {() => hideSidebarElement("MasterMenu", "stateMasterTab")}>
               State Creation
             </Link> */}

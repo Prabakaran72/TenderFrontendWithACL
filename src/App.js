@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/login/Login";
 import Masterlayout from "./components/Masterlayout";
@@ -51,11 +51,37 @@ import TenderStatus from "./components/tender/Bidmanagement/TenderStatus/TenderS
 import Workorder from "./components/tender/Bidmanagement/Workorder/Workorder";
 import CommunicationFilesView from "./components/Library/CommunicationFiles/CommunicationFilesView";
 import CommunicationFilesCreation from "./components/Library/CommunicationFiles/CommunicationFilesCreation";
+import axios from "axios";
+import { can } from "./components/UserPermission";
 
 function App() {
-  const authCtx = useContext(AuthContext);
+  const authData = useContext(AuthContext);
+  // const [role, setRole] = useState([]); 
+  // const [permission, setPermission] = useState([]); 
+
+  // useEffect(() => {
+  //   const rolesPermission = async () => {
+  //     if(localStorage.getItem('token')){
+
+  //     let data = {
+  //       tokenid : localStorage.getItem('token')
+  //     }
+
+        
+  //     let rolesAndPermission = await axios.post(`http://localhost:8000/api/getrolesandpermision`, data)
+  //       if(rolesAndPermission.status === 200){
+  //         console.log('sdada', rolesAndPermission.data)
+  //         setRole(rolesAndPermission.data.role);
+  //         setPermission(rolesAndPermission.data.permission) 
+  //       }
+  //     }
+  //   }
+
+  //   rolesPermission()
+  // }, [])
+
   return (
-    <AuthContextProvider>
+   
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -82,51 +108,51 @@ function App() {
               </Route>
             </Route>
             <Route path="master">
-              <Route
+             {can('customer-list' , (authData.permission || [])) && <Route
                 path="customercreation/list"
                 element={<CustomerCreation />}
-              />
+              />}
               <Route
                 path="customercreation/list/main"
                 element={<CustomerCreationMain />}
               >
-                <Route path="profile" element={<CustomerCreationProfile />} />
-                <Route
+                {can('customer-create' , (authData.permission || [])) && <Route path="profile" element={<CustomerCreationProfile />} />}
+               {can('customer-edit' , (authData.permission || [])) && <Route
                   path="profile/:id"
                   element={<CustomerCreationProfile />}
-                />
-                <Route
+                />}
+                {can('customer-create' , (authData.permission || [])) && <Route
                   path="contactperson"
                   element={<CustomerCreationContactPerson />}
-                />
-                <Route
+                />}
+                {can('customer-edit' , (authData.permission || [])) && <Route
                   path="contactperson/:id"
                   element={<CustomerCreationContactPerson />}
-                />
-                <Route
+                />}
+               {can('customer-create' , (authData.permission || [])) && <Route
                   path="ulbdetails"
                   element={<CustomerCreationUlbDetails />}
-                />
-                <Route
+                />}
+               {can('customer-edit' , (authData.permission || [])) && <Route
                   path="ulbdetails/:id"
                   element={<CustomerCreationUlbDetails />}
-                />
-                <Route
+                />}
+                {can('customer-create' , (authData.permission || [])) && <Route
                   path="bankdetails"
                   element={<CustomerCreationBankDetails />}
-                />
-                <Route
+                />}
+               {can('customer-edit' , (authData.permission || [])) && <Route
                   path="bankdetails/:id"
                   element={<CustomerCreationBankDetails />}
-                />
-                <Route
+                />}
+                {can('customer-create' , (authData.permission || [])) && <Route
                   path="swmprojectstatus"
                   element={<CustomerCreationSWMProjectStatus />}
-                />
-                <Route
+                />}
+               {can('customer-edit' , (authData.permission || [])) && <Route
                   path="swmprojectstatus/:id"
                   element={<CustomerCreationSWMProjectStatus />}
-                />
+                />}
               </Route>
               <Route
                 path="customercreation/tabs"
@@ -266,7 +292,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
-    </AuthContextProvider>
+   
   );
 }
 
