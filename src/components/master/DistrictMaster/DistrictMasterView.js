@@ -1,10 +1,14 @@
 import { motion } from "framer-motion";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../../../storeAuth/auth-context";
 import { usePageTitle } from "../../hooks/usePageTitle";
+import { can } from "../../UserPermission";
 import DistrictMasterList from "./DistrictMasterList";
 
 const DistrictMasterView = () => {
   usePageTitle("District Master Creation");
+  const {permission} = useContext(AuthContext)
   return (
     <>
       {/* Page Heading */}
@@ -17,7 +21,7 @@ const DistrictMasterView = () => {
                 <div className="row">
                 <div className="col-6 text-left ml-3"> <h6 className="m-0 font-weight-bold text-primary">DISTRICT MASTER LIST</h6></div>
                 <div className="col-5 text-right ml-5">
-                  <Link
+                  {can('district-create', (permission || [])) &&  <Link
                     to="districtcreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
@@ -25,7 +29,7 @@ const DistrictMasterView = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>
+                  </Link>}
                 </div>
                 </div>
               </div>

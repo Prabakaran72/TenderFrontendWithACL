@@ -4,13 +4,16 @@ import axios from "axios";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import CustomerCreationList from "./CustomerCreationList";
 import { motion } from "framer-motion";
+import { can } from "../../UserPermission";
+import { useContext } from "react";
+import AuthContext from "../../../storeAuth/auth-context";
 
 const CustomerCreation = () => {
   usePageTitle("Customer Creation");
   const { server1: baseUrl } = useBaseUrl();
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const authData = useContext(AuthContext);
 
   const createCustomer = async () => {
     let data = {
@@ -44,12 +47,12 @@ const CustomerCreation = () => {
               initial={{scale: 0,opacity:0}} animate={{scale:1,opacity:1}} transition={{type:'tween'}}>
               <div className="card-body">
                 <div className="float-right ">
-                  <Link to ="main/profile" state={{ data: data }}  className=" btn btn-primary btn-icon-split">
+                 {can('customer-create', authData.permission) && <Link to ="main/profile" state={{ data: data }}  className=" btn btn-primary btn-icon-split">
                     <span className="icon text-white-50">
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>
+                  </Link>}
                 </div>                
                 <div>
                   <CustomerCreationList />

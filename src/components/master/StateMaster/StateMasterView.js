@@ -1,12 +1,16 @@
 import { motion } from "framer-motion";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../../../storeAuth/auth-context";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { usePageTitle } from "../../hooks/usePageTitle";
+import { can } from "../../UserPermission";
 
 import StateMasterList from "./StateMasterList";
 const StateMasterView = () => {
   usePageTitle("State Master List");
   useDocumentTitle("State Master");
+  const {permission} = useContext(AuthContext)
   return (
     <>
       {/* Page Heading */}
@@ -17,7 +21,7 @@ const StateMasterView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                  <Link
+                  {can('state-create', (permission || [])) && <Link
                     to="statecreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
@@ -25,7 +29,7 @@ const StateMasterView = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>
+                  </Link>}
                 </div>
               </div>
             </div>

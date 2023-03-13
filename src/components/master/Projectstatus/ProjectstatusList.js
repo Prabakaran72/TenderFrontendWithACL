@@ -22,15 +22,15 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
+import { can } from "../../UserPermission";
 
 let table;
 const ProjectstatusList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const {permission} = useContext(AuthContext)
 
-  const authData = useContext(AuthContext);
-  console.log("authData", authData)
 
   const deleterecord = async (id) => {
     let response =  axios.delete(`${baseUrl}/api/projectstatus/${id}`)
@@ -40,17 +40,33 @@ const ProjectstatusList = () => {
   const getList = async () => {
     const projectstatuslist = await axios.get(`${baseUrl}/api/projectstatus`);
     var dataSet;
+
+    
+    let userPermissions ;
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
+    let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+    if(rolesAndPermission.status === 200){
+      userPermissions = rolesAndPermission.data;
+    }
+
     if (
       projectstatuslist.status === 200 &&
       projectstatuslist.data.status === 200
     ) {
       let list = [...projectstatuslist.data.projectstatus];
-      let listarr = list.map((item, index, arr) => ({
+      let listarr = list.map((item, index, arr) =>{ 
+        let editbtn = can('projectStatus-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+        let deletebtn =  can('projectStatus-delete', (userPermissions.permission || [])) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        return {
         ...item,
         status : (item.status ===  "Active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
-        action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+        action : editbtn + deletebtn,
         sl_no: index + 1,
-      }));
+      }});
 
       dataSet = listarr;
 

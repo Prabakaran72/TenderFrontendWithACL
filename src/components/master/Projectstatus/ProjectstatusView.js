@@ -1,12 +1,15 @@
 import { motion } from "framer-motion";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../../../storeAuth/auth-context";
 import { usePageTitle } from "../../hooks/usePageTitle";
+import { can } from "../../UserPermission";
 import ProjectstatusList from "./ProjectstatusList";
 
 
 const ProjectstatusView = () => {
     usePageTitle("Project Status Master List");
-
+    const {permission} = useContext(AuthContext)
     return (
         <>
           {/* Page Heading */}
@@ -17,7 +20,7 @@ const ProjectstatusView = () => {
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="float-right">
-                      <Link
+                     {can('projectStatus-create', (permission || [])) && <Link
                         to="projectstatuscreation"
                         className="btn btn-primary btn-icon-split rounded-pill"
                       >
@@ -25,7 +28,7 @@ const ProjectstatusView = () => {
                           <i className="fas fa-plus-circle" />
                         </span>
                         <span className="text">New</span>
-                      </Link>
+                      </Link>}
                     </div>
                   </div>
                 </div>

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import PreLoader from "../../UI/PreLoader";
 
 //For DataTable
@@ -23,6 +23,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import Swal from "sweetalert2";
 import { usePageTitle } from "../../hooks/usePageTitle";
 import FilesModal from "./FilesModal";
+import AuthContext from "../../../storeAuth/auth-context";
+import { can } from "../../UserPermission";
 
 
 
@@ -38,6 +40,7 @@ const CommunicationFilesList = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [mainId, setMainId] = useState(null);
+    const {permission} = useContext(AuthContext)
 
     useEffect(() => {
       
@@ -115,16 +118,31 @@ const CommunicationFilesList = (props) => {
 
         let list = [...response.data.communicationFiles];
         
-        let listarr = list.map((item, index, arr)=> ({
+        let userPermissions ;
+        let data = {
+          tokenid : localStorage.getItem('token')
+        }
+    
+        let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+        if(rolesAndPermission.status === 200){
+          userPermissions = rolesAndPermission.data;
+        }
+
+        let listarr = list.map((item, index, arr)=> {
+          
+          let editbtn = can('communicationFiles-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i>  ' : '';
+          let deletebtn =  can('communicationFiles-delete', (userPermissions.permission || [])) ?  '<i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>' : '';
+          return {
           ...item,
           date    : item.date ? FormattedDate(item.date) : '',
           Files   : `<i class="fa fa-cloud-download text-primary mx-2 h6" style="cursor:pointer; font-size: 1.25rem" title="Files"  data-toggle="modal"
           data-target="#filesCloud" ></i> `,
-          action  :`
-          <i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> 
-          <i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>`,
+          // action  :`
+          // <i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> 
+          // <i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>`,
+          action  : editbtn+deletebtn,
           sl_no   : index+1
-        }))
+        }})
     
         return listarr;
       }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -20,6 +20,8 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import { can } from "../../UserPermission";
+import AuthContext from "../../../storeAuth/auth-context";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 window.JSZip = jsZip;
 
@@ -32,6 +34,7 @@ let table;
 const CountryMasterList = () => {
 
   const { server1: baseUrl } = useBaseUrl();
+  const {permission} = useContext(AuthContext)
   
   useDocumentTitle("Country Master")
 
@@ -147,8 +150,8 @@ const CountryMasterList = () => {
         {item.country_status==='Active' && <td className="text-success font-weight-bold">Active</td>}
         {item.country_status==='InActive' && <td className="">Inactive</td>}
         <td>
-        <Link to = {`countrycreation/${item.id}`}><i className="fas fa-edit text-primary"></i></Link>
-        { <Link onClick={() => deletehandler(item.id, item.country_name)}><i className="fas fa-trash text-danger mx-3"></i></Link> }
+        { can('country-edit', (permission || [])) && <Link to = {`countrycreation/${item.id}`}><i className="fas fa-edit text-primary"></i></Link>}
+        { can('country-delete', (permission || [])) && <Link onClick={() => deletehandler(item.id, item.country_name)}><i className="fas fa-trash text-danger mx-3"></i></Link> }
         </td>
       </tr>
     );

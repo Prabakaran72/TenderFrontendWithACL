@@ -1,12 +1,15 @@
 import { motion } from "framer-motion"
-import { Fragment } from "react"
+import { Fragment, useContext } from "react"
 import { Link } from "react-router-dom"
+import AuthContext from "../../../storeAuth/auth-context"
 import { usePageTitle } from "../../hooks/usePageTitle"
+import { can } from "../../UserPermission"
 import CityMasterList from "./CityMasterList"
 
 
 const CityMasterView = () => {
     usePageTitle("City Master List")
+    const {permission} = useContext(AuthContext)
     return (
     <Fragment>
       {/* Page Heading */}
@@ -17,7 +20,7 @@ const CityMasterView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                  <Link
+                {can('city-create', (permission || [])) && <Link
                     to="citycreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
@@ -25,7 +28,7 @@ const CityMasterView = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>
+                  </Link>}
                 </div>
               </div>
             </div>

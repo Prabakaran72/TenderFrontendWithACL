@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Fragment,  useEffect, useState } from "react";
+import { Fragment,  useContext,  useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
 // import Swal from "sweetalert2";
 
@@ -21,13 +21,15 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
+import AuthContext from "../../../storeAuth/auth-context";
+import { can } from "../../UserPermission";
 
 let table;
 const CustSubCategList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  const {permission} = useContext(AuthContext)
   const deleterecord = async (id) => {
     let response =  axios.delete(`${baseUrl}/api/customersubcategory/${id}`)
     return response;
@@ -36,17 +38,32 @@ const CustSubCategList = () => {
   const getList = async () => {
     const customersubcategorylist = await axios.get(`${baseUrl}/api/customersubcategory`);
     var dataSet;
+
+    let userPermissions ;
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
+    let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+    if(rolesAndPermission.status === 200){
+      userPermissions = rolesAndPermission.data;
+    }
+
     if (
         customersubcategorylist.status === 200 &&
         customersubcategorylist.data.status === 200
     ) {
       let list = [...customersubcategorylist.data.customersubcategory];
-      let listarr = list.map((item, index, arr) => ({
+      let listarr = list.map((item, index, arr) => {
+        let editbtn = can('customerSubCategory-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+        let deletebtn =  can('customerSubCategory-delete', (userPermissions.permission || [])) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        return {
         ...item,
         status : (item.status ===  "Active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
-        action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+        action: editbtn + deletebtn,
         sl_no: index + 1,
-      }));
+      }});
 
       dataSet = listarr;
 

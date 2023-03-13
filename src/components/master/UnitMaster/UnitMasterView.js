@@ -1,11 +1,15 @@
 import { motion } from "framer-motion";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../../../storeAuth/auth-context";
 import { usePageTitle } from "../../hooks/usePageTitle";
+import { can } from "../../UserPermission";
 import UnitMasterList from "./UnitMasterList";
 
 
 const UnitMasterView = () => {
   usePageTitle("Unit Creation");
+  const {permission} = useContext(AuthContext)
   return (
     <>
       {/* Page Heading */}
@@ -18,7 +22,7 @@ const UnitMasterView = () => {
                 <div className="row">
                 <div className="col-6 text-left ml-3"> <h6 className="m-0 font-weight-bold text-primary">UNIT MASTER LIST</h6></div>
                 <div className="col-5 text-right ml-5">
-                  <Link
+                 {can('unit-create', (permission || [])) && <Link
                     to="unitcreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
@@ -26,7 +30,7 @@ const UnitMasterView = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>
+                  </Link>}
                 </div>
                 </div>
               </div>

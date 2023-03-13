@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 //For DataTable
@@ -19,6 +19,8 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { Link } from "react-router-dom";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
+import AuthContext from "../../../storeAuth/auth-context";
+import { can } from "../../UserPermission";
 
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -30,7 +32,7 @@ let table;
 const StateMasterList = () => {
   const [stateList, setStateList] = useState([]);
   const {server1 : baseUrl} = useBaseUrl()
-
+  const {permission} = useContext(AuthContext)
   const loadData = useCallback(async () => {
     if ( $.fn.DataTable.isDataTable( '#dataTable' ) ) {
         table.destroy();
@@ -143,8 +145,8 @@ const StateMasterList = () => {
                 {item.state_status==='InActive' && <td className="">Inactive</td>}
                 
                 <td>
-                <Link to = {`statecreation/${item.id}`}><i className="fas fa-edit text-primary"  ></i></Link>
-                <Link onClick={() => deleteState(item.id, item.state_name)}><i className="fas fa-trash text-danger mx-3"></i></Link>
+                {can('state-edit', (permission || [])) && <Link to = {`statecreation/${item.id}`}><i className="fas fa-edit text-primary"  ></i></Link>}
+                {can('state-delete', (permission || [])) && <Link onClick={() => deleteState(item.id, item.state_name)}><i className="fas fa-trash text-danger mx-3"></i></Link>}
                 </td>
               </tr>
             );

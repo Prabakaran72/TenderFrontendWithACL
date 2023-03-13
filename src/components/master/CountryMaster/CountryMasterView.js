@@ -1,10 +1,14 @@
 import { motion } from "framer-motion";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../../../storeAuth/auth-context";
 import { usePageTitle } from "../../hooks/usePageTitle";
+import { can } from "../../UserPermission";
 import CountryMasterList from "./CountryMasterList";
 
 const CountryMasterView = () => {
   usePageTitle("Country Master List");
+  const {permission} = useContext(AuthContext)
   return (
     <>
       {/* Page Heading */}
@@ -14,7 +18,7 @@ const CountryMasterView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                  <Link
+                 {can('country-create', (permission || [])) && <Link
                     to="countrycreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
@@ -22,7 +26,7 @@ const CountryMasterView = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>
+                  </Link>}
                 </div>
               </div>
             </div>
