@@ -2,12 +2,12 @@ import React from "react";
 import Topbar from "./Topbar";
 import Pagewrapper from "./Pagewrapper";
 import Footer from "./Footer";
-function Contentwrapper() {
+function Contentwrapper(props) {
   return (
       <div id="content-wrapper" className="d-flex flex-column"> 
         <div id="content">
              <Topbar/>
-             <Pagewrapper/>
+             <Pagewrapper loading={props.loading}/>
         </div> 
         <Footer/>                 
       </div>

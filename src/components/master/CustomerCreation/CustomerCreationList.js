@@ -107,7 +107,7 @@ const CustomerCreationList = () => {
     }
 
       
-    let rolesAndPermission = await axios.post(`http://localhost:8000/api/getrolesandpermision`, data)
+    let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
       if(rolesAndPermission.status === 200){
         userPermissions = rolesAndPermission.data;
       }

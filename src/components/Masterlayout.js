@@ -15,11 +15,9 @@ import OnlineStatus from "./OnlineStatus";
 
 function Masterlayout() {
   const authCtx = useContext(AuthContext);
-
+  const [loading, setLoading] = useState(true)
   const { server1: baseUrl } = useBaseUrl();
-  const navigate = useNavigate(); 
-
- 
+  const navigate = useNavigate();  
 
   const validateToken = async () => {
     if(localStorage.getItem('token')){
@@ -45,23 +43,39 @@ function Masterlayout() {
           window.history.replaceState({},"login", "/");
           navigate('/')
         }
+    
       }).catch((err) => {
         authCtx.logout()
         window.history.replaceState({},"login", "/");
         navigate(0)
         // navigate('/');
+       
       });
 
-      let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, formdata)
+      
+    }
+  }
+
+  const getpermissions = async () => {
+    if(localStorage.getItem('token')){
+      let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, {
+        tokenid : localStorage.getItem('token')
+      })
       if(rolesAndPermission.status === 200){
         authCtx.rolesAndPermission(rolesAndPermission.data.role, rolesAndPermission.data.permission)
       }
+      setLoading(false)
+    }else{
+      setLoading(false)
     }
   }
   
-  useEffect(() => {
 
-    validateToken()
+
+  useEffect( () => {
+    getpermissions();
+    validateToken();
+
     window.addEventListener('storage', validateToken)
 
     return () => {
@@ -83,7 +97,7 @@ function Masterlayout() {
 	   <div id="wrapper">
   
         <Sidebar/>
-        <Contentwrapper />
+        <Contentwrapper loading={loading} />
         
 
     </div>

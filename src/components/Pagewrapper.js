@@ -1,13 +1,17 @@
 import React from "react";
 import {  Outlet } from "react-router-dom";
+import PreLoader from "./UI/PreLoader";
 
 
 
-function Pagewrapper() {
+function Pagewrapper(props) {
   return (
-    <div className="container-fluid">
-      <Outlet />
+   
+
+    <div className="container-fluid"> 
+      {!props.loading && <Outlet />}
     </div>
+   
   );
 }
 

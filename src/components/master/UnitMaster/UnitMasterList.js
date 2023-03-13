@@ -1,6 +1,6 @@
 import axios from "axios";
 // import { data } from "jquery";
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useContext } from "react";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2";
 
@@ -20,6 +20,8 @@ import "datatables.net-buttons/js/buttons.print.js";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../../storeAuth/auth-context";
+import { can } from "../../UserPermission";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 window.JSZip = jsZip;
 
@@ -28,6 +30,7 @@ const UnitMasterList = () => {
   const [loading, setLoading] = useState(true);
   const [unitList, setUnitList] = useState([]);
   const { server1: baseUrl } = useBaseUrl();
+  const {permission} = useContext(AuthContext)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -108,10 +111,10 @@ const UnitMasterList = () => {
           <td className="text-center">{unitData.unit_status}</td>
           <td className="text-center">
             <span>
-              <i
+             {can('unit-edit', (permission || [])) && <i
                 className="fas fa-edit text-primary h4"
                 onClick={(e) => editHandler(e, unitData.id)}
-              ></i>
+              ></i>}
             </span>
           </td>
         </tr>

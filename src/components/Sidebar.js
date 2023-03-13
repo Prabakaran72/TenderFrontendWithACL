@@ -10,7 +10,7 @@ function Sidebar() {
 
 
   const authData = useContext(AuthContext);
-
+  console.log(authData)
   const hideSidebarElement = (menuId, tab) => {
     document.getElementById(menuId).click();
     setActive(tab);
@@ -25,6 +25,8 @@ function Sidebar() {
       document.body.removeChild(script);
     };
   }, []);
+
+
 
   return (
     <ul
@@ -107,22 +109,22 @@ function Sidebar() {
             {/* <Link className={`collapse-item ${active === "stateMasterTab"? "active":""}`} to={`/${pathName}/master/statemaster`} onClick = {() => hideSidebarElement("MasterMenu", "stateMasterTab")}>
               State Creation
             </Link> */}
-            <NavLink
+            {can('country-list',  authData.permission) &&  <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/master/countrymaster`}
               onClick={() => hideSidebarElement("MasterMenu")}
             >
               Country Creation
-            </NavLink>
-            <NavLink
+            </NavLink>}
+            {can('state-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/master/statemaster`}
               onClick={() => hideSidebarElement("MasterMenu")}
             >
               State Creation
-            </NavLink>
+            </NavLink>}
             {/* <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
@@ -132,46 +134,46 @@ function Sidebar() {
               ULB Creation
             </NavLink> */}
 
-            <NavLink
+           {can('district-list',  authData.permission) &&  <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/master/districtmaster`}
               onClick={() => hideSidebarElement("MasterMenu")}
             >
               District Creation
-            </NavLink>
-            <NavLink
+            </NavLink>}
+           { can('city-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/master/citymaster`}
               onClick={() => hideSidebarElement("MasterMenu")}
             >
               City Creation
-            </NavLink>
-            <NavLink
+            </NavLink>}
+           { can('unit-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/master/unitmaster`}
               onClick={() => hideSidebarElement("MasterMenu")}
             >
               Unit Creation
-            </NavLink>
-            <NavLink
+            </NavLink>}
+            {can('projectType-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/master/projecttype`}
               onClick={() => hideSidebarElement("MasterMenu")}
             >
               Project Type Creation
-            </NavLink>
-            <NavLink
+            </NavLink>}
+            {can('projectStatus-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/master/projectstatus`}
               onClick={() => hideSidebarElement("MasterMenu")}
             >
               Project Status
-            </NavLink>
+            </NavLink>}
             {authData.permission.includes("delete") && 
             <NavLink
               className={`collapse-item ${({ isActive }) =>
@@ -189,14 +191,14 @@ function Sidebar() {
             >
               Customer Sub Category
             </NavLink>
-            <NavLink
+           {can('tenderType-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/master/tendertypemaster`}
               onClick={() => hideSidebarElement("MasterMenu")}
             >
               Tender Type Master
-            </NavLink>
+            </NavLink>}
             
           </div>
         </div>
@@ -227,38 +229,38 @@ function Sidebar() {
           data-parent="#accordionSidebar"
         >
           <div className="bg-white py-2 collapse-inner rounded">
-            <NavLink
+            {can('tenderCreation-create',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/tendercreation`}
               onClick={() => hideSidebarElement("tenderMenu")}
             >
               Tender Creation
-            </NavLink>
-            <NavLink
+            </NavLink>}
+            {can('bidsManagement-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/bidmanagement/list`}
               onClick={() => hideSidebarElement("tenderMenu")}
             >
               Bid's Management
-            </NavLink>
-            <NavLink
+            </NavLink>}
+            {can('tenderTracker-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/tendertracker`}
               onClick={() => hideSidebarElement("tenderMenu")}
             >
               Tender Tracker
-            </NavLink>
-            <NavLink
+            </NavLink>}
+            {can('legacyStatment-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/legacystatement`}
               onClick={() => hideSidebarElement("tenderMenu")}
             >
               Legacy Statement
-            </NavLink>
+            </NavLink>}
           </div>
         </div>
       </motion.li>
@@ -288,14 +290,14 @@ function Sidebar() {
           data-parent="#accordionSidebar"
         >
           <div className="bg-white py-2 collapse-inner rounded">
-            <NavLink
+           {can('communicationFiles-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
               to={`/${pathName}/library/communicationfiles`}
               onClick={() => hideSidebarElement("libraryMenu")}
             >
               Communication Files
-            </NavLink>           
+            </NavLink>      }     
           </div>
         </div>
       </li>

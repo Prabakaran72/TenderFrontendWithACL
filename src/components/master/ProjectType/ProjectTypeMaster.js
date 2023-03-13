@@ -1,15 +1,16 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { useState, useEffect } from "react";
 import { usePageTitle } from "../../hooks/usePageTitle";
 import Swal from "sweetalert2/src/sweetalert2.js";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
+import AuthContext from "../../../storeAuth/auth-context";
 
 
 const ProejctTypeMaster = () => {
     usePageTitle("Project Type Creation");
-
+    const {permission} = useContext(AuthContext)
     const {server1:baseUrl} = useBaseUrl()
   
     const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useContext, useEffect, useState } from "react"
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2";
 
@@ -22,6 +22,8 @@ import { Link } from "react-router-dom";
 
 import 'rsuite/dist/rsuite.min.css';
 import { Loader } from 'rsuite';
+import AuthContext from "../../../storeAuth/auth-context";
+import { can } from "../../UserPermission";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 window.JSZip = jsZip;
@@ -32,7 +34,7 @@ const CityMasterList = () => {
     const { server1: baseUrl } = useBaseUrl();
     const [cityMasterList, setcityList] = useState([]);
     const [loading,setLoading]=useState(true);
-   
+    const {permission} = useContext(AuthContext)
     useEffect(() => {
      
         table = $(`#dataTable`).DataTable({
@@ -143,8 +145,8 @@ content="Fetching Data..." />}
                 {item.city_status==='Active' && <td className="text-success font-weight-bold">Active</td>}
                 {item.city_status==='InActive' && <td className="">Inactive</td>}
                 <td>
-                <Link to = {`citycreation/${item.id}`}><i className="fas fa-edit text-primary"  ></i></Link>
-                <Link onClick={() => deleteHandler(item.id, item.city_name )}><i className="fas fa-trash text-danger mx-3"></i></Link>
+               { can('city-edit', (permission || [])) && <Link to = {`citycreation/${item.id}`}><i className="fas fa-edit text-primary"  ></i></Link>}
+               { can('city-delete', (permission || [])) && <Link onClick={() => deleteHandler(item.id, item.city_name )}><i className="fas fa-trash text-danger mx-3"></i></Link>}
                 </td>
               </tr>
             );

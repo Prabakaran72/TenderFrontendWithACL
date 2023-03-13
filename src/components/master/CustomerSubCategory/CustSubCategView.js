@@ -1,13 +1,16 @@
 import { motion } from "framer-motion";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../../../storeAuth/auth-context";
 import { usePageTitle } from "../../hooks/usePageTitle";
+import { can } from "../../UserPermission";
 import CustSubCategList from "./CustSubCategList";
 
 
 
 const CustSubCategView = () => {
     usePageTitle("Customer Sub Category Master List");
-
+    const {permission} = useContext(AuthContext)
     return (
         <>
           {/* Page Heading */}
@@ -18,7 +21,7 @@ const CustSubCategView = () => {
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="float-right">
-                      <Link
+                     {can('customerSubCategory-create', (permission || [])) &&  <Link
                         to="customersubcategorycreation"
                         className="btn btn-primary btn-icon-split rounded-pill"
                       >
@@ -26,7 +29,7 @@ const CustSubCategView = () => {
                           <i className="fas fa-plus-circle" />
                         </span>
                         <span className="text">New</span>
-                      </Link>
+                      </Link>}
                     </div>
                   </div>
                 </div>

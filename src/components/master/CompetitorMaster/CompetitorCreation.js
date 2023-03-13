@@ -1,6 +1,6 @@
 import { usePageTitle } from "../../hooks/usePageTitle";
 import { Link } from "react-router-dom";
-import { Fragment, useCallback, useEffect, useState} from "react";
+import { Fragment, useCallback, useContext, useEffect, useState} from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
@@ -23,6 +23,8 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { motion } from "framer-motion";
+import { can } from "../../UserPermission";
+import AuthContext from "../../../storeAuth/auth-context";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 window.JSZip = jsZip;
 
@@ -34,6 +36,7 @@ const CompetitorCreation = () => {
   useDocumentTitle("Competitor Creation");
   usePageTitle("Competitor Creation");
   const { server1: baseUrl } = useBaseUrl();
+  const authData = useContext(AuthContext)
   const navigate = useNavigate();
   //Id is the Last submited form id
   const { id } = useParams();
@@ -129,10 +132,10 @@ const CompetitorCreation = () => {
         <td> {item.mobile} </td>
         <td> {item.email} </td>
         <td>
-          <Link to={`competitor/profile/${item.id}`}>
+         {can('competitor-edit', (authData.permission || [])) && <Link to={`competitor/profile/${item.id}`}>
             <i className="fas fa-edit text-primary"></i>
-          </Link>
-          { <Link onClick={() => deletehandler(item.id)}><i className="fas fa-trash text-danger mx-3"></i></Link> }
+          </Link>}
+         {can('competitor-delete', (authData.permission || []))  && <Link onClick={() => deletehandler(item.id)}><i className="fas fa-trash text-danger mx-3"></i></Link> }
         </td>
       </tr>
     );
@@ -147,7 +150,7 @@ const CompetitorCreation = () => {
             <div className="card shadow mb-4">
               <div className="card-body">
                 <div className="float-right">
-                  <Link
+                 {can('competitor-create', (authData.permission || [])) &&      <Link
                     to={id ? "competitor/profile/${id}" : "competitor/profile"}
                     className="btn btn-primary btn-icon-split"
                   >
@@ -155,7 +158,7 @@ const CompetitorCreation = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>
+                  </Link>}
                 </div>
               </div>
             </div>
