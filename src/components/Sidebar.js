@@ -89,6 +89,24 @@ function Sidebar() {
           data-parent="#accordionSidebar"
         >
           <div className="bg-white py-2 collapse-inner rounded">
+          <h6 className="collapse-header">Login Screens:</h6>
+            {can('userType-list',  authData.permission) && <NavLink
+                  className={`collapse-item ${({ isActive }) =>
+                    isActive ? "active" : undefined}`}
+                  to={`/${pathName}/master/usertype`}
+                  onClick={() => hideSidebarElement("MasterMenu")}
+                >
+                  User Type
+                </NavLink>}
+            {can('userCreation-list',  authData.permission) && <NavLink
+                className={`collapse-item ${({ isActive }) =>
+                  isActive ? "active" : undefined}`}
+                to={`/${pathName}/master/usercreation`}
+                onClick={() => hideSidebarElement("MasterMenu")}
+              >
+                User Creation
+              </NavLink>}
+          <h6 className="collapse-header">Other Master:</h6>
            {can('customer-list',  authData.permission) && <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
