@@ -6,6 +6,11 @@ import axios from "axios";
 import "./logoicon.css";
 import { usePageTitle } from "./hooks/usePageTitle";
 import { motion } from "framer-motion";
+import { ulbdataActions } from "./store/UlbDataSlice";
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
+
 
 function Dashboard() {
   const authCtx = useContext(AuthContext);
@@ -28,24 +33,35 @@ function Dashboard() {
     retender: 0,
   });
 
+  let ulbdata = useSelector((state) => state.ulbpopulation.inputData)
+  const dispatch = useDispatch();
+
   // url: 'bidcreation/creation/live_tenders'
   usePageTitle("Dashboard");
 
   useEffect(()=>{
     //Tender Analysis
     axios.get(`${baseUrl}/api/dashboard/tenderanalysis`).then((resp) => {
-      console.log("Tender :",resp.data);
+      // console.log("Tender :",resp.data);
     });
 
 
   //Customer Analysis
   axios.get(`${baseUrl}/api/dashboard/ulbdetails`).then((resp) => {
+   
     // if(resp.data.awarded_tender_count){
     // console.log("ULB :",resp.data);
     // setawarded_tenders_count(resp.data.awarded_tender_count)
     // }
   });
-
+  axios.get(`${baseUrl}/api/dashboard/ulbpopdetails`).then((resp) => {
+    // if(resp.data.awarded_tender_count){
+      dispatch(ulbdataActions.storeInput(resp.data));
+    // console.log("POP :",resp.data);
+    // setawarded_tenders_count(resp.data.awarded_tender_count)
+    // }
+  });
+  
 
   //Customer Bid Analysis
   axios.get(`${baseUrl}/api/dashboard/bidanalysis`).then((resp) => {
@@ -86,7 +102,7 @@ function Dashboard() {
     .get(`${baseUrl}/api/bidcreation/creation/projectstatus`)
     .then((resp) => {
       // if(resp.data.awarded_tender_count){
-
+// console.log("project status", resp);
       if (resp.data.status === 200) {
         resp.data.live_tender_count &&
           setLive_tenders_count(resp.data.live_tender_count);
@@ -121,7 +137,7 @@ function Dashboard() {
   // });
   // console.log("Bidanan - ",bidanalysis);
   return (
-    <>
+<>
       {/* Page Heading */}
 
       <div className="d-sm-flex align-items-center justify-content-between mb-4">
@@ -247,7 +263,7 @@ function Dashboard() {
           </motion.div>
         </div>
       </div>
-    </>
+      </>   
   );
 }
 
