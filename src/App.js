@@ -54,6 +54,9 @@ import CommunicationFilesCreation from "./components/Library/CommunicationFiles/
 import axios from "axios";
 import { can } from "./components/UserPermission";
 import Unauthorized from "./components/pages/Unauthorized";
+import UserCreationView from "./components/master/UserCreation/UserCreationView";
+import UserTypeView from "./components/master/UserType/UserTypeView";
+import UserType from "./components/master/UserType/UserType";
 
 function App() {
   const authData = useContext(AuthContext);
@@ -228,6 +231,16 @@ function App() {
                 <Route index element={can('city-list' , (authData.permission || [])) ? <CityMasterView /> :  <Unauthorized/>} />
                 <Route path="citycreation" element={can('city-create' , (authData.permission || [])) ? <CityCreation /> :  <Unauthorized/>} />
                 <Route path="citycreation/:id" element={can('city-edit' , (authData.permission || [])) ? <CityCreation /> :  <Unauthorized/>} />
+              </Route>
+              <Route path="usertype">
+                <Route index element={can('userType-list' , (authData.permission || [])) ? <UserTypeView /> :  <Unauthorized/>} />
+                <Route path="create" element={can('userType-create' , (authData.permission || [])) ? <UserType /> :  <Unauthorized/>} />
+                <Route path="edit/:id" element={can('userType-edit' , (authData.permission || [])) ? <UserType /> :  <Unauthorized/>} />
+              </Route>
+              <Route path="usercreation">
+                <Route index element={can('userCreation-list' , (authData.permission || [])) ? <UserCreationView/> :  <Unauthorized/>} />
+                {/* <Route path="usercreation" element={can('userCreation-create' , (authData.permission || [])) ? <CityCreation /> :  <Unauthorized/>} />
+                <Route path="usercreation/:id" element={can('userCreation-edit' , (authData.permission || [])) ? <CityCreation /> :  <Unauthorized/>} /> */}
               </Route>
               <Route path="projecttype">
                 <Route index element={can('projectType-list' , (authData.permission || []))  ?  <ProjectTypeView /> : <Unauthorized/>} />
