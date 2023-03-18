@@ -32,12 +32,12 @@ const UserCreationList = () => {
   const {permission} = useContext(AuthContext)
 
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/usertype/${id}`)
+    let response =  axios.delete(`${baseUrl}/api/usercreation/${id}`)
     return response;
   }
 
   const getList = async () => {
-    const usertypelist = await axios.get(`${baseUrl}/api/usertype`);
+    const userCreationList = await axios.get(`${baseUrl}/api/usercreation`);
     
     let userPermissions ;
     let data = {
@@ -51,18 +51,17 @@ const UserCreationList = () => {
 
     var dataSet;
     if (
-      usertypelist.status === 200 &&
-      usertypelist.data.status === 200
+      userCreationList.status === 200 
     ) {
-      let list = [...usertypelist.data.userType];
+      let list = [...userCreationList.data.userlist];
       let listarr = list.map((item, index, arr) => {
-        let editbtn = can('userType-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
-        let deletebtn =  can('userType-delete', (userPermissions.permission || [])) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        let editbtn = can('userCreation-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+        let deletebtn =  can('userCreation-delete', (userPermissions.permission || [])) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
         return {
         ...item,
         status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
         // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
-        action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
+        action:  editbtn + deletebtn ,
         sl_no: index + 1,
       }});
 
@@ -83,7 +82,12 @@ const UserCreationList = () => {
             return ++i;
           },
         },
+        { data: "userName" },
+        { data: "userType" },
+        { data: "mobile" },
+        { data: "email" },
         { data: "name" },
+        { data: "confirm_passsword" },
         { data: "status" },
         { data: "action" },
       ],
@@ -93,7 +97,7 @@ const UserCreationList = () => {
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
       navigate(
-        `/tender/master/usertype/edit/${rowdata.id}`
+        `/tender/master/usercreation/edit/${rowdata.id}`
       );
     });
 
@@ -168,7 +172,12 @@ const UserCreationList = () => {
           <thead className="text-center">
             <tr>
               <th className="">Sl.No</th>
-              <th className="">User Type (role)</th>
+              <th className="">User Name</th>
+              <th className="">User Type (Role)</th>
+              <th className="">Mobile</th>
+              <th className="">E-mail</th>
+              <th className="">Login Id</th>
+              <th className="">Password</th>
               <th className="">Status</th>
               <th className="">Action</th>
             </tr>
