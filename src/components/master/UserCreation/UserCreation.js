@@ -241,12 +241,13 @@ const UserCreation = () => {
 
         let data = {
             userName            : input.userName,
-            usertype            : input.usertype,  
+            userType            : input.usertype,  
             activeStatus        : input.activeStatus,
             password            : input.password,
             confirmPassword     : input.confirmPassword,
             mobile              : input.mobile,
             email               : input.email,
+            loginId             : input.loginId,
             file                : file,
             tokenId             : localStorage.getItem("token")
         }
