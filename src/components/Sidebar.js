@@ -1,15 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-import AuthContext from "../storeAuth/auth-context";
+
 function Sidebar() {
   const [active, setActive] = useState("");
 
   const pathName = "tender";
-
-
-  const authData = useContext(AuthContext);
-console.log("authData", authData)
 
   const hideSidebarElement = (menuId, tab) => {
     document.getElementById(menuId).click();
@@ -32,11 +28,11 @@ console.log("authData", authData)
       id="accordionSidebar"
     >
       {/* Sidebar - Brand */}
-      <motion.span
-      initial={{opacity: 0}}
-      animate={{opacity: 1}} 
-        // to="/"
+      <motion.Link
+        to="/"
         className="sidebar-brand d-flex align-items-center justify-content-center brand"
+        initial={{opacity: 0}}
+        animate={{opacity: 1}} 
       >
         <div className="sidebar-brand-icon">
           <img
@@ -48,7 +44,7 @@ console.log("authData", authData)
           />
         </div>
         <div className="sidebar-brand-text mx-3">Zigma</div>
-      </motion.span>
+      </motion.Link>
       {/* Divider */}
       <hr className="sidebar-divider my-0" />
       {/* Nav Item - Dashboard */}
@@ -171,15 +167,6 @@ console.log("authData", authData)
             >
               Project Status
             </NavLink>
-            {authData.permission.includes("delete") && 
-            <NavLink
-              className={`collapse-item ${({ isActive }) =>
-                isActive ? "active" : undefined}`}
-              to={`/${pathName}/master/test`}
-              onClick={() => hideSidebarElement("MasterMenu")}
-            >
-              ACL TEST COMP
-            </NavLink>}
             <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
@@ -266,7 +253,8 @@ console.log("authData", authData)
        {/* Divider */}
        <hr className="sidebar-divider my-0" />
       {/* Nav Item - Pages Collapse Menu */}
-      <li className="nav-item">
+      <motion.li className="nav-item" 
+         animate={{x:0}} initial={{x:-300}} transition={{type: 'tween', delay: 0.3 }}>
         <Link
           className="nav-link collapsed"
           to="#"
@@ -297,7 +285,7 @@ console.log("authData", authData)
             </NavLink>           
           </div>
         </div>
-      </li>
+      </motion.li>
 
       <motion.div className="text-center d-none d-md-inline">
         <button className="rounded-circle border-0" id="sidebarToggle"></button>

@@ -129,7 +129,7 @@ const UnitMasterList = () => {
             width="100%"
             cellSpacing={0}
           >
-            <thead className="text-center bg-primary text-white">
+            <thead className="text-center bg-greeny text-white">
               <tr>
                 <th className="text-center">SNO</th>
                 <th className="text-center">UNIT NAME</th>

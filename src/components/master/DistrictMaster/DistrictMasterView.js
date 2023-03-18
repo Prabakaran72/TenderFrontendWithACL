@@ -9,7 +9,7 @@ const DistrictMasterView = () => {
     <>
       {/* Page Heading */}
       <div className="container-fluid p-0">
-        <div className="card shadow mb-4">
+        <div className="card t-card shadow mb-4">
           <motion.div className="card-body"
              initial={{scale: 0,opacity:0}} animate={{scale:1,opacity:1}} transition={{type:'tween'}}>
             <div className="row">
@@ -19,7 +19,7 @@ const DistrictMasterView = () => {
                 <div className="col-5 text-right ml-5">
                   <Link
                     to="districtcreation"
-                    className="btn btn-primary btn-icon-split rounded-pill"
+                    className="btn btn-primary btn-icon-split "
                   >
                     <span className="icon text-white-50">
                       <i className="fas fa-plus-circle" />

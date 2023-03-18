@@ -330,15 +330,15 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
     <div className="card-body ">
       <form>
         <div className="row align-items-center">
-          <div className="inputgroup col-lg-5 mb-4">
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center">
-              <div className="col-lg-4 text-dark">
-                <label htmlFor="accountYear" className="font-weight-bold pt-1">
+              <div className="col-lg-6 text-dark">
+                <label htmlFor="accountYear" className=" pt-1">
                   Accounting Year<span className="text-danger">&nbsp;*</span>
                   <p className="text-info">( Ex : 2022-2023 )</p>
                 </label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-6">
                 <Select
                   name="accountYear"
                   id="accountYear"
@@ -358,12 +358,11 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
                 )}
               </div>
             </div>
-          </div>
-          <div className="inputgroup col-lg-1 mb-4"></div>
+          </div>          
 
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-4 text-dark font-weight-bold pt-1">
+              <div className="col-lg-6 text-dark font-weight-bold pt-1">
                 <label htmlFor="accValue">
                   Value in Rupees ( &#8377; )
                   <span className="text-danger">&nbsp;*</span>
@@ -373,7 +372,7 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
               <div className="col-lg-6">
                 <input
                   type="text"
-                  className="form-control text-right"
+                  className="form-control "
                   id="accValue"
                   placeholder="Enter Value...."
                   name="accValue"
@@ -391,11 +390,9 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
               </div>
             </div>
           </div>
-          <div className="inputgroup col-lg-1 mb-4"></div>
 
-          <div className="inputgroup col-lg-5 mb-4"></div>
-          <div className="inputgroup col-lg-2 mb-4 align-items-center">
-            <div className="row">
+          <div className="inputgroup col-lg-12 mb-4 align-items-center">
+            <div className="row justify-content-center">
               <button
                 className="btn btn-primary"
                 disabled={!formIsValid || isBtnClicked === true}
@@ -415,8 +412,7 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
               </button>
               {formIsValid && btn_clicked === true}
             </div>
-          </div>
-          <div className="inputgroup col-lg-5 mb-4"></div>
+          </div>          
         </div>
       </form>
       <CompetitorDetailsCompanyNetWorthList

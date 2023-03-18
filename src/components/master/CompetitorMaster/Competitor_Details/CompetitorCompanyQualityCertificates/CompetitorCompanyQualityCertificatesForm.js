@@ -552,10 +552,10 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
         <div className="row align-items-center">
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-3 text-dark font-weight-bold pt-1">
+              <div className="col-lg-5 text-dark font-weight-bold pt-1">
                 <label htmlFor="cerName"> Certificate Name</label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 <input
                   type="text"
                   className="form-control"
@@ -579,10 +579,10 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
 
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-3 text-dark font-weight-bold pt-1">
+              <div className="col-lg-5 text-dark font-weight-bold pt-1">
                 <label htmlFor="remark">Remarks</label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 <input
                   type="text"
                   className="form-control"
@@ -606,19 +606,19 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
 
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-3 text-dark font-weight-bold pt-1">
+              <div className="col-lg-5 text-dark font-weight-bold pt-1">
                 <label htmlFor="cerName"> File Upload</label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 <div
-                  className="dashed border-primary height_of_dropbox boderradius__dropbox d-flex flex-column align-items-center justify-content-center  drop-file-input bg-gray-200"
+                  className="dashed border-success height_of_dropbox boderradius__dropbox d-flex flex-column align-items-center justify-content-center  drop-file-input bg-gray-100"
                   ref={wrapperRef}
                   onDragEnter={onDragEnter}
                   onDragLeave={onDragLeave}
                   onDrop={onDrop}
                 >
                   <p className="display-4 mb-0">
-                    <i className="fas fa-cloud-upload-alt text-primary "></i>
+                    <i className="fas fa-cloud-upload-alt text-success   "></i>
                   </p>
                   {!dragover && (
                     <p className="mt-0">Drag & Drop an document or Click</p>
@@ -637,10 +637,10 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
 
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-3 text-dark font-weight-bold pt-1">
+              <div className="col-lg-5 text-dark font-weight-bold pt-1">
                 <label htmlFor="remark">Preview</label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 {file && (
                   <Docsupload
                     file={file}
@@ -654,8 +654,8 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
           </div>
 
           <div className="inputgroup col-lg-5 mb-4"></div>
-          <div className="inputgroup col-lg-2 mb-4 align-items-center">
-            <div className="row">
+          <div className="inputgroup col-lg-12 mb-4 align-items-center">
+            <div className="row justify-content-center">
               <button
                 className="btn btn-primary"
                 disabled={!formIsValid || isBtnClicked === true}

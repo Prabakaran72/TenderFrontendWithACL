@@ -1,8 +1,7 @@
 import axios from "axios";
-import { Fragment,  useEffect, useState,useContext } from "react";
+import { Fragment,  useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
 // import Swal from "sweetalert2";
-import AuthContext from "../../../storeAuth/auth-context";
 
 //For DataTable
 import "jquery/dist/jquery.min.js";
@@ -28,9 +27,6 @@ const ProjectstatusList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  const authData = useContext(AuthContext);
-  console.log("authData", authData)
 
   const deleterecord = async (id) => {
     let response =  axios.delete(`${baseUrl}/api/projectstatus/${id}`)
@@ -149,7 +145,7 @@ const ProjectstatusList = () => {
           width="100%"
           cellSpacing={0}
         >
-          <thead className="text-center">
+          <thead className="text-center bg-greeny text-white">
             <tr>
               <th className="">Sl.No</th>
               <th className="">Project Status</th>

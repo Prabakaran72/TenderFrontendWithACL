@@ -7,6 +7,7 @@ import axios from "axios";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import { useOutletContext, useNavigate, useParams } from "react-router-dom";
 import PreLoader from "../../UI/PreLoader";
+import { motion } from 'framer-motion';
 
 const registrationTypeList = [
   { value: 0, label: "Registered" },
@@ -857,19 +858,53 @@ const CompetitorProfile = () => {
     navigate("/tender/master/competitorcreation/");
   };
 
+  const variant1 = {
+    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .1, type:'spring', stiffness: 180 }}
+  }
+  const variant2 = {
+    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .2, type:'spring', stiffness: 180 }}
+  }
+  const variant3 = {
+    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .3, type:'spring', stiffness: 180 }}
+  }
+  const variant4 = {
+    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .4, type:'spring', stiffness: 180 }}
+  }
+  const variant5 = {
+    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .5, type:'spring', stiffness: 180 }}
+  }
+  const variant6 = {
+    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .6, type:'spring', stiffness: 180 }}
+  }
+  const variant7 = {
+    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .7, type:'spring', stiffness: 180 }}
+  }
+  const variant8 = {
+    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .8, type:'spring', stiffness: 180 }}
+  }
+  const variant9 = {
+    start: { opacity: 0 }, end: { opacity: 1}
+  }
+
+
+
+
+       
+
   return (
     <Fragment>
-      <PreLoader loading={fetchLoading}>
+      
+      <PreLoader loading={fetchLoading}>  
         <form onSubmit={submitHandler}>
           <div className="row align-items-center">
-            <div className="inputgroup col-lg-5 mb-4">
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant1}>
               <div className="row align-items-center font-weight-bold">
-                <div className="col-lg-4 text-dark">
+                <div className="col-lg-5 ">
                   <label htmlFor="no">
                     Competitor No<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <input
                     type="text"
                     className="form-control"
@@ -883,20 +918,20 @@ const CompetitorProfile = () => {
                   />
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
+            </motion.div>
+            
 
-            <div className="inputgroup col-lg-5 mb-4">
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant1}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark">
+                <div className="col-lg-5 ">
                   <label
                     htmlFor="customercategory"
-                    className="font-weight-bold"
+                    className=""
                   >
                     Competitor Name<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <input type="hidden" id="dis" name="dis" defaultValue="1" />
                   <input
                     type="text"
@@ -917,18 +952,18 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
+            </motion.div>
+            
 
-            <div className="inputgroup col-lg-5 mb-4">
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant2}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark">
-                  <label htmlFor="regType" className="font-weight-bold">
+                <div className="col-lg-5 ">
+                  <label htmlFor="regType" className="">
                     Registration Type
                     <span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <Select
                     name="registrationType"
                     id="registrationType"
@@ -948,18 +983,18 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
+            </motion.div>
+            
 
-            <div className="inputgroup col-lg-5 mb-4">
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant2}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark font-weight-bold">
+                <div className="col-lg-5  font-weight-bold">
                   <label htmlFor="registerationYear">
                     Registeration Year
                     <span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <input
                     type="text"
                     className="form-control"
@@ -979,16 +1014,16 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4">
+            </motion.div>
+            
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant3}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark">
-                  <label htmlFor="country" className="font-weight-bold">
+                <div className="col-lg-5 ">
+                  <label htmlFor="country" className="">
                     Country<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <Select
                     name="country"
                     id="country"
@@ -1008,17 +1043,17 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
+            </motion.div>
+            
 
-            <div className="inputgroup col-lg-5 mb-4">
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant3}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark font-weight-bold">
+                <div className="col-lg-5  font-weight-bold">
                   <label htmlFor="state">
                     State/UT<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <Select
                     name="state"
                     id="state"
@@ -1038,17 +1073,17 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
+            </motion.div>
+            
 
-            <div className="inputgroup col-lg-5 mb-4">
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant4}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark">
-                  <label htmlFor="district" className="font-weight-bold">
+                <div className="col-lg-5 ">
+                  <label htmlFor="district" className="">
                     District<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <Select
                     name="district"
                     id="district"
@@ -1068,17 +1103,17 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
+            </motion.div>
+            
 
-            <div className="inputgroup col-lg-5 mb-4">
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant4}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark font-weight-bold">
+                <div className="col-lg-5  font-weight-bold">
                   <label htmlFor="city">
                     City<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <Select
                     name="city"
                     id="city"
@@ -1098,16 +1133,16 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4 ">
+            </motion.div>
+            
+            <motion.div className="inputgroup col-lg-6 mb-4 " initial='start' animate='end' variants={variant5}>
               <div className="row align-items-center font-weight-bold">
-                <div className="col-lg-4 text-dark">
+                <div className="col-lg-5 ">
                   <label htmlFor="address">
                     Address<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <textarea
                     className="form-control"
                     rows="3"
@@ -1129,16 +1164,16 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1"></div>
-            <div className="inputgroup col-lg-5 mt-n4">
+            </motion.div>
+            
+            <motion.div className="inputgroup col-lg-6 mt-n4" initial='start' animate='end' variants={variant5}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark font-weight-bold">
+                <div className="col-lg-5  font-weight-bold">
                   <label htmlFor="pincode" className="">
                     Pincode<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <input
                     type="text"
                     className="form-control"
@@ -1157,12 +1192,12 @@ const CompetitorProfile = () => {
                     </div>
                   )}
                 </div>
-                <div className="col-lg-4 text-dark font-weight-bold mt-3 mb-n3">
+                <div className="col-lg-5  font-weight-bold mt-3 mb-n3">
                   <label htmlFor="panNo">
                     PAN<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8 mt-3">
+                <div className="col-lg-7 mt-3">
                   <input
                     type="text"
                     className="form-control"
@@ -1182,16 +1217,16 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4">
+            </motion.div>
+            
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant6}>
               <div className="row align-items-center font-weight-bold">
-                <div className="col-lg-4 text-dark">
+                <div className="col-lg-5 ">
                   <label htmlFor="mobile">
                     Mobile No<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <input
                     type="text"
                     className="form-control"
@@ -1211,16 +1246,16 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4">
+            </motion.div>
+            
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant6}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark font-weight-bold">
+                <div className="col-lg-5  font-weight-bold">
                   <label htmlFor="email">
                     Email ID<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <input
                     type="text"
                     className="form-control"
@@ -1240,17 +1275,17 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="inputgroup col-lg-1 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4">
+            
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant7}>
               <div className="row align-items-center font-weight-bold">
-                <div className="col-lg-4 text-dark">
+                <div className="col-lg-5 ">
                   <label htmlFor="gst">
                     GST No<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <input
                     type="text"
                     className="form-control"
@@ -1270,17 +1305,17 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
+            </motion.div>
+            
 
-            <div className="inputgroup col-lg-5 mb-4">
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant7}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark font-weight-bold">
+                <div className="col-lg-5  font-weight-bold">
                   <label htmlFor="directors">
                     Directors<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <input
                     type="text"
                     className="form-control"
@@ -1300,18 +1335,18 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="inputgroup col-lg-1 mb-4"></div>
+            
 
-            <div className="inputgroup col-lg-5 mb-4">
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant8}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark">
-                  <label htmlFor="companyType" className="font-weight-bold">
+                <div className="col-lg-5 ">
+                  <label htmlFor="companyType" className="">
                     Type of Company<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <Select
                     name="companyType"
                     id="companyType"
@@ -1331,18 +1366,17 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="inputgroup col-lg-4 mb-4"></div>
+            </motion.div>            
 
-            <div className="inputgroup col-lg-5 mb-4">
+            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant8}>
               <div className="row align-items-center">
-                <div className="col-lg-4 text-dark font-weight-bold">
+                <div className="col-lg-5  font-weight-bold">
                   <label htmlFor="manpower">
                     Manpower Strength
                     <span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   <input
                     type="text"
                     className="form-control"
@@ -1362,11 +1396,11 @@ const CompetitorProfile = () => {
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
+           
             <div className="inputgroup col-lg-6 mb-4"></div>
-            <div className="inputgroup col-lg-6 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4 ml-n3">
+            <motion.div className="inputgroup col-lg-6 mb-4 ml-n3" initial='start' whileInView='end' variants={variant9}>
               <div className="row align-items-center">
                 <div className="col-lg-10 text-right ">
                   <button
@@ -1389,10 +1423,11 @@ const CompetitorProfile = () => {
                   </button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </form>
+        </form> 
       </PreLoader>
+      
     </Fragment>
   );
 };

@@ -119,7 +119,7 @@ const StateMasterList = () => {
           width="100%"
           cellSpacing={0}
         >
-          <thead className="text-center">
+          <thead className="text-center bg-greeny text-white">
             <tr>
               <th className="">S.NO</th>
               <th className="">COUNTRY</th>

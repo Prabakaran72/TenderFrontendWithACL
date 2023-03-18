@@ -532,14 +532,14 @@ useEffect(() => {
       
       <form>
         <div className="row align-items-center">
-          <div className="inputgroup col-lg-5 mb-4">
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center">
-              <div className="col-lg-4 text-dark">
-                <label htmlFor="country" className="font-weight-bold">
+              <div className="col-lg-5 ">
+                <label htmlFor="country" className="">
                   Country<span className="text-danger">&nbsp;*</span>
                 </label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 <Select
                   name="country"
                   id="country"
@@ -559,17 +559,16 @@ useEffect(() => {
                 )}
               </div>
             </div>
-          </div>
-          <div className="inputgroup col-lg-1 mb-4"></div>
+          </div>          
 
-          <div className="inputgroup col-lg-5 mb-4">
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center">
-              <div className="col-lg-4 text-dark font-weight-bold">
+              <div className="col-lg-5  font-weight-bold">
                 <label htmlFor="state">
                   State/UT<span className="text-danger">&nbsp;*</span>
                 </label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 <Select
                   name="state"
                   id="state"
@@ -589,17 +588,16 @@ useEffect(() => {
                 )}
               </div>
             </div>
-          </div>
-          <div className="inputgroup col-lg-1 mb-4"></div>
+          </div>          
 
-          <div className="inputgroup col-lg-5 mb-4">
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center">
-              <div className="col-lg-4 text-dark">
-                <label htmlFor="district" className="font-weight-bold">
+              <div className="col-lg-5 text-dark">
+                <label htmlFor="district" className="">
                   District<span className="text-danger">&nbsp;*</span>
                 </label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 <Select
                   name="district"
                   id="district"
@@ -619,17 +617,16 @@ useEffect(() => {
                 )}
               </div>
             </div>
-          </div>
-          <div className="inputgroup col-lg-1 mb-4"></div>
+          </div>          
 
-          <div className="inputgroup col-lg-5 mb-4">
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center">
-              <div className="col-lg-4 text-dark font-weight-bold">
+              <div className="col-lg-5 text-dark font-weight-bold">
                 <label htmlFor="city">
                   City<span className="text-danger">&nbsp;*</span>
                 </label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 <Select
                   name="city"
                   id="city"
@@ -649,10 +646,10 @@ useEffect(() => {
                 )}
               </div>
             </div>
-          </div>
-          <div className="inputgroup col-lg-5 mb-4"></div>
-          <div className="inputgroup col-lg-2 mb-4 align-items-center">
-            <div className="row">
+          </div>   
+
+          <div className="inputgroup col-lg-12 mb-4 align-items-center ">
+            <div className="row justify-content-center">
               <button className="btn btn-primary"  disabled={!formIsValid} onClick={!editableRow.branchId ? submitHandler : updateHandler}>
                 {!editableRow.branchId
                   ? loading === true
@@ -663,8 +660,7 @@ useEffect(() => {
                   : "Update"}
               </button>
             </div>
-          </div>
-          <div className="inputgroup col-lg-5 mb-4"></div>
+          </div>          
         </div>
       </form>
       <CompetitorDetailsBranchList branchList={branchList} onEdit={onEdit} onDelete={onDelete}/>

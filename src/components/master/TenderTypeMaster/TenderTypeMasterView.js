@@ -24,7 +24,7 @@ const TenderTypeMasterView = () => {
                   <div className="col-5 text-right ml-5">
                     <Link
                       to="tendertypecreation"
-                      className="btn btn-primary btn-icon-split rounded-pill"
+                      className="btn btn-primary btn-icon-split "
                     >
                       <span className="icon text-white-50">
                         <i className="fas fa-plus-circle" />

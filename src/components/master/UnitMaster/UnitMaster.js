@@ -113,7 +113,7 @@ const UnitMaster = () => {
 
   return (
     <div className="container-fluid">
-      <div className="card p-4">
+      <div className="card  p-4">
         <form onSubmit={submitUnit} id="unit_FORM">
           <div className="row">
             <div className="col-2">

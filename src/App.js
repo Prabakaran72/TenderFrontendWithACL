@@ -224,17 +224,6 @@ function App() {
                   element={<ProjectstatusMaster />}
                 />
               </Route>
-              <Route path="test">
-                <Route index element={<ProjectstatusView />} />
-                <Route
-                  path="projectstatuscreation"
-                  element={<ProjectstatusMaster />}
-                />
-                <Route
-                  path="projectstatuscreation/:id"
-                  element={<ProjectstatusMaster />}
-                />
-              </Route>
               <Route path="customersubcategory">
                 <Route index element={<CustSubCategView />} />
                 <Route

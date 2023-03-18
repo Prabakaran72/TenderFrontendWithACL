@@ -59,9 +59,9 @@ const CompetitorCreation = () => {
     table = $(`#dataTable`).DataTable({
       dom:
          //   "<'row'<'col-sm-12'l>>" +
-         "<'row px-3'<'col-sm-12   col-md-6 pl-4'l>  <'col-sm-12 col-md-6 pr-4'f>>" +
+         "<'row '<'col-sm-12   col-md-6 'l>  <'col-sm-12 col-md-6 'f>>" +
          "<'row'<'col-sm-12'tr>>" +
-         "<'row px-3'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",
+         "<'row '<'col-sm-12 col-md-5 'i><'col-sm-12 col-md-7 'p>>",
 
       buttons: [
         // {
@@ -141,7 +141,7 @@ const CompetitorCreation = () => {
   return (
     <Fragment>
       {/* Page Heading */}
-      <div className="container-fluid p-0">
+      {/* <div className="container-fluid p-0">
         <div className="row">
           <div className="col-lg-12">
             <div className="card shadow mb-4">
@@ -161,33 +161,48 @@ const CompetitorCreation = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="container-fluid p-0">
         <div className="row">
           <div className="col-lg-12">
-            <motion.div className="card shadow mb-4" initial={{scale: 0,opacity:0}} animate={{scale:1,opacity:1}} transition={{type:'tween'}}>
+            <motion.div className="card shadow t-card mb-4" initial={{scale: 0,opacity:0}} animate={{scale:1,opacity:1}} transition={{type:'tween'}}>
               <div className="card-body">
-              </div>
-              <div>
-                <div className="competitorListTable pb-4">
-                  <table
-                    className="table  text-center"
-                    id="dataTable"
-                    width="100%"
-                    cellSpacing={0}
-                  >
-                    <thead className="text-center bg-gray text-greeny">
-                      <tr>
-                        <th className="w-5">Sl.No</th>
-                        <th className="w-15">Competitor No</th>
-                        <th className="w-25">Competitor Name</th>            
-                        <th className="w-15">Mobile Number</th>
-                        <th className="w-25"> Email Id</th>
-                        <th className="w-15">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>{tableData}</tbody>
-                  </table>
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="float-right">
+                        <Link
+                          to={id ? "competitor/profile/${id}" : "competitor/profile"}
+                          className="btn btn-primary btn-icon-split mb-3"
+                        >
+                          <span className="icon text-white-50">
+                            <i className="fas fa-plus-circle" />
+                          </span>
+                          <span className="text">New</span>
+                        </Link>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="competitorListTable pb-4">
+                    <table
+                      className="table table-bordered text-center"
+                      id="dataTable"
+                      width="100%"
+                      cellSpacing={0}
+                    >
+                      <thead className="text-center bg-greeny text-white">
+                        <tr>
+                          <th className="w-5">Sl.No</th>
+                          <th className="w-15">Competitor No</th>
+                          <th className="w-25">Competitor Name</th>            
+                          <th className="w-15">Mobile Number</th>
+                          <th className="w-25"> Email Id</th>
+                          <th className="w-15">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>{tableData}</tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </motion.div>

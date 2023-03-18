@@ -177,7 +177,7 @@ content="Fetching Data..." />
             width="100%"
             cellSpacing={0}
           >
-            <thead>
+            <thead class='text-center bg-greeny text-white'>
               <tr>
                 <th className="text-center">SNO</th>
                 <th className="text-center">COUNTRY</th>

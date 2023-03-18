@@ -120,8 +120,7 @@ function Login() {
       .then((data) => {
         console.log(data);
         if (data.logStatus === "success") {
-          const {tokenId, role, permission} = data
-          authCtx.login(tokenId, userNameState.value, role, permission);
+          authCtx.login(data.tokenId, userNameState.value);
           navigate("/tender", { replace: true });
           // navigate(0)
           setError("");
