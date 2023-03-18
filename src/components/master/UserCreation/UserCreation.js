@@ -32,7 +32,7 @@ const initialStateErr = {
 }
 
 const UserCreation = () => {
-    usePageTitle("User Type Creation");
+    usePageTitle("User Creation");
     // const { id } = useParams();
     const navigate = useNavigate();
     const { id } = useParams();
@@ -242,7 +242,7 @@ const UserCreation = () => {
 
         let data = {
             userName            : input.userName,
-            userType            : input.usertype,  
+            userType            : input.usertype.value,  
             activeStatus        : input.activeStatus,
             password            : input.password,
             confirmPassword     : input.confirmPassword,

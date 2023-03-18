@@ -1,7 +1,7 @@
 import axios from "axios";
-import { Fragment, useContext, useEffect, useState } from "react"
-import { useBaseUrl } from "../../hooks/useBaseUrl";
-import Swal from "sweetalert2";
+import { Fragment,  useContext,  useEffect, useState } from "react";
+import {  useNavigate } from "react-router-dom";
+// import Swal from "sweetalert2";
 
 //For DataTable
 import "jquery/dist/jquery.min.js";
@@ -18,102 +18,145 @@ import "datatables.net-buttons/js/buttons.print.js";
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { Link } from "react-router-dom";
-
-import 'rsuite/dist/rsuite.min.css';
-import { Loader } from 'rsuite';
+import { useBaseUrl } from "../../hooks/useBaseUrl";
+import Swal from "sweetalert2/src/sweetalert2";
+import { Loader } from "rsuite";
 import AuthContext from "../../../storeAuth/auth-context";
 import { can } from "../../UserPermission";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-window.JSZip = jsZip;
-
-
-let table ;
+let table;
 const UserCreationList = () => {
-    const { server1: baseUrl } = useBaseUrl();
-    const [userList, setUserList] = useState([]);
-    const [loading,setLoading]=useState(true);
-    const {permission} = useContext(AuthContext)
-    useEffect(() => {
-     
-        table = $(`#dataTable`).DataTable({
-            dom:"<'row'<'col-sm-12   col-md-2 mt-2'l> <'col-sm-12  col-md-4'B> <'col-sm-12 col-md-6 mt-2'f>>" +
-                "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-            buttons: [],
-        });
-       
-    }, [userList]);
+  const { server1: baseUrl } = useBaseUrl();
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const {permission} = useContext(AuthContext)
 
+  const deleterecord = async (id) => {
+    let response =  axios.delete(`${baseUrl}/api/usertype/${id}`)
+    return response;
+  }
 
-    const loadData = async () => {
-          
-    //   if ( $.fn.DataTable.isDataTable( '#dataTable' ) ) {
-    //       table.destroy();
-    //   }   
-    //   setLoading(true);
-    //    const userCreationList = await axios.get(
-    //   `${baseUrl}/api/userlist`
-    //   ) ;
-    //   if (userCreationList.status === 200 && userCreationList.data.status === 200) {
-    //       setcityList(userCreationList.data.citylist);
-    //       setLoading(false);
-    //   }
-    };
-    useEffect(() =>{
+  const getList = async () => {
+    const usertypelist = await axios.get(`${baseUrl}/api/usertype`);
+    
+    let userPermissions ;
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
+    let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+    if(rolesAndPermission.status === 200){
+      userPermissions = rolesAndPermission.data;
+    }
+
+    var dataSet;
+    if (
+      usertypelist.status === 200 &&
+      usertypelist.data.status === 200
+    ) {
+      let list = [...usertypelist.data.userType];
+      let listarr = list.map((item, index, arr) => {
+        let editbtn = can('userType-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+        let deletebtn =  can('userType-delete', (userPermissions.permission || [])) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        return {
+        ...item,
+        status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
+        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+        action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
+        sl_no: index + 1,
+      }});
+
+      dataSet = listarr;
+
+    } else {
+       dataSet = [];
+    }
+
+    console.log(dataSet)
+    let i = 0;
+    table = $("#dataTable").DataTable({
+      data: dataSet,
+      columns: [
+        {
+          //data: 'sl_no',
+          render: function (data, type, row) {
+            return ++i;
+          },
+        },
+        { data: "name" },
+        { data: "status" },
+        { data: "action" },
+      ],
+    })
+    setLoading(false)
+    //to edit 
+    $("#dataTable tbody").on("click", "tr .fa-edit", function () {
+      let rowdata = table.row($(this).closest("tr")).data();
+      navigate(
+        `/tender/master/usertype/edit/${rowdata.id}`
+      );
+    });
+
+    // to delete a row
+    $("#dataTable tbody").on("click", "tr .fa-trash-alt", async function () {
+      let rowdata = table.row($(this).closest("tr")).data();
       
-        loadData()
-       
-    }, [baseUrl])
-
-    const deleteHandler =  (id,name) => {
-   
       Swal.fire({
-       text: `Are You sure, to delete ${name}?`,
-       icon: "warning",
-       showCancelButton: true,
-       confirmButtonText: 'Yes, delete it!',
-       cancelButtonText: 'No, cancel!',
-       confirmButtonColor: '#2fba5f',
-       cancelButtonColor: '#fc5157'
-    }).then((willDelete) => {
-       if(willDelete.isConfirmed){
-           axios.delete(`${baseUrl}/api/userlist/${id}`)
-           .then((res) => {
-           if (res.data.status === 200) {
-             loadData()
-             Swal.fire({
-               icon: "success",
-               text: `${name} has been removed!`,
-               timer: 1500 ,
-               showConfirmButton: false,               
-             });
-           } else if (res.data.status === 404) {
-             Swal.fire({
-               icon: "error",
-               text: res.data.message,
-               showConfirmButton: true,
-             });
-           }
-         });
-       }
-       else{
-           Swal.fire({
-               title: 'Cancelled',
-               icon:'error',
-               timer: 1500
-             });
-       }
+        text: `Are You sure, to delete ${rowdata.name}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonColor: "#2fba5f",
+        cancelButtonColor: "#fc5157",
+      }).then( async (willDelete) => {
+        if (willDelete.isConfirmed) {
+         let response = await deleterecord(rowdata.id)
 
-       });
-   
- }
-    return (
+         if (response.data.status === 200) {
+            Swal.fire({ //success msg
+              icon: "success",
+              text: `${rowdata.name} role has been removed!`,
+              timer: 1500,
+              showConfirmButton: false,
+            });
+
+            //delete in datatable
+              table
+              .row($(this).parents("tr"))
+              .remove()
+              .column(0)
+              .nodes()
+              .each(function (cell, i) {
+                cell.innerHTML = i + 1;
+              })
+              .draw();
+          }else if (response.data.status === 404) {
+            Swal.fire({ // error msg
+              icon: "error",
+              text: response.data.message,
+              showConfirmButton: true,
+            });
+          } else {
+            Swal.fire({
+              title: "Cancelled",
+              icon: "error",
+              timer: 1500,
+            });
+          }
+        } 
+      });
+    });
+  };
+
+  useEffect(() => {
+    getList();
+  }, []);
+
+  return (
     <Fragment>
       <div>
-      {loading && <Loader size="lg" backdrop
-content="Fetching Data..." />}
+        {loading && <Loader size="lg" backdrop content="Fetching Data..." />}
       </div>
       <div className="table-responsive">
         <table
@@ -125,37 +168,16 @@ content="Fetching Data..." />}
           <thead className="text-center">
             <tr>
               <th className="">Sl.No</th>
-              <th className="">Country</th>
-              <th className="">State</th>
-              <th className="">District</th>
-              <th className="">City</th>
+              <th className="">User Type (role)</th>
               <th className="">Status</th>
               <th className="">Action</th>
             </tr>
           </thead>
-          <tbody>
-          {/* {cityMasterList.map((item, index) => {
-            return (
-              <tr key={item.id}>
-                <td> {index + 1}</td>
-                <td> {item.country_name} </td>
-                <td> {item.state_name} </td>
-                <td> {item.district_name}</td>
-                <td> {item.city_name}</td>
-                {item.city_status==='Active' && <td className="text-success font-weight-bold">Active</td>}
-                {item.city_status==='InActive' && <td className="">Inactive</td>}
-                <td>
-               { can('city-edit', (permission || [])) && <Link to = {`citycreation/${item.id}`}><i className="fas fa-edit text-primary"  ></i></Link>}
-               { can('city-delete', (permission || [])) && <Link onClick={() => deleteHandler(item.id, item.city_name )}><i className="fas fa-trash text-danger mx-3"></i></Link>}
-                </td>
-              </tr>
-            );
-          })} */}
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </Fragment>
-    )
-}
+  );
+};
 
 export default UserCreationList;
