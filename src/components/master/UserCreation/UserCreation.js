@@ -219,12 +219,14 @@ const UserCreation = () => {
             }
             setDataSending(false);
           }).catch((err) => {
+            console.log("err", err.response.data.message)
             Swal.fire({
                 icon: "error",
                 title: "User Creation",
-                text: err,
+                text:  (err.response.data.message || err),
                 confirmButtonColor: "#5156ed",
               })
+              setDataSending(false);
           });
     }
 
