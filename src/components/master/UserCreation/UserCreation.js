@@ -180,7 +180,8 @@ const UserCreation = () => {
        input.confirmPassword !== '' &&
        isMobileValidation(input.mobile) &&
        isEmailValid(input.email) &&
-       !inputValidation.confirmPassword 
+       !inputValidation.confirmPassword && 
+       file
     ){
         formIsValid = true
     }
@@ -514,7 +515,7 @@ const UserCreation = () => {
                            {file === null &&  <div className="inputgroup col-lg-12 mb-4 p-0">
                             <div className="row col-lg-6">
                                 <div className="col-lg-4 text-dark font-weight-bold">
-                                    <label htmlFor="image">Image Upload :</label>
+                                    <label htmlFor="image">Image Upload :<span className="text-danger">&nbsp;*</span></label>
                                 </div>
                                 <div className="col-lg-8">
                                     <div className={`border-primary d-flex flex-column align-items-center justify-content-center   bg-gray-200 ${styles.height_of_dropbox} ${styles.boderradius__dropbox} ${styles.dashed} ${styles.drop_file_input} `}
