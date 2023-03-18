@@ -86,7 +86,17 @@ const UserType = () => {
             });
           }
           setDataSending(false);
-        });
+        })
+        .catch((err) => {
+            console.log("err", err.response.data.message)
+            Swal.fire({
+                icon: "error",
+                title: "User Type",
+                text:  (err.response.data.message || err),
+                confirmButtonColor: "#5156ed",
+              })
+              setDataSending(false);
+          });
       };
 
 
@@ -134,9 +144,10 @@ const UserType = () => {
 
         if(!formIsValid){
            setDataSending(false)
+           console.log("Test 12");
            return     
         }
-
+        console.log("Test");
         let data = {
             name     : input.usertype,
             activeStatus : input.activeStatus,
