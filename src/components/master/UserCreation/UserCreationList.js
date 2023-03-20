@@ -83,7 +83,7 @@ const UserCreationList = () => {
           },
         },
         { data: "userName" },
-        { data: "userType" },
+        { data: "role_name" },
         { data: "mobile" },
         { data: "email" },
         { data: "name" },

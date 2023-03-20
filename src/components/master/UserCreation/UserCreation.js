@@ -48,12 +48,47 @@ const UserCreation = () => {
     const [dragover, setdragover] = useState(false);
 
     useEffect(() => {
-        axios.get(`${baseUrl}/api/usertype`).then((response) => {
+        axios.get(`${baseUrl}/api/usertype/options`).then((response) => {
             if(response.data.status === 200){
                 generateOptions(response.data.userType);
             }
         });
     }, [])
+
+    useEffect(() => {
+        if(id){
+          axios.get(`${baseUrl}/api/usercreation/${id}`).then((resp)=> {
+            console.log(resp)
+            if(resp.data.status === 200){
+                let user =  resp.data.user
+                setInput({
+                    usertype: user.userType,
+                    activeStatus: user.activeStatus,
+                    userName : user.userName,
+                    loginId  : user.name,
+                    password : user.confirm_passsword,
+                    confirmPassword :  user.confirm_passsword,
+                    mobile: user.mobile.toString(),
+                    email: user.email,
+                })
+
+                if(resp.data.user.filename){
+                    axios({
+                        url: `${baseUrl}/api/download/userfile/${user.id}`,
+                        method: 'GET',
+                        responseType: 'blob', // important
+                    }).then((response) => {
+                        if (response.status === 200) {
+                            response.data.name = user.original_filename
+                            setFile(response.data)
+                        } 
+                        // setFetchLoading(false)
+                    });
+                }
+            }
+          })
+        }
+      },[id, baseUrl])
 
     const generateOptions = (usertype = []) => {
         let roles = usertype.map((role, index) => ({
@@ -65,6 +100,7 @@ const UserCreation = () => {
     }
 
     const isMobileValidation = (value) => {
+        console.log(value)
         if (value === null) {
           return false;
         }else if(
@@ -118,11 +154,20 @@ const UserCreation = () => {
 
         }
 
-        if (e.target.value === "") {
-            setInputValidation({ ...inputValidation, [e.target.name]: true });
-        } else {
-            setInputValidation({ ...inputValidation, [e.target.name]: false });
+        if(e.target.name === 'password'){
+            if(input.confirmPassword !== "" && (e.target.value !== input.confirmPassword)){
+                setInputValidation({ ...inputValidation, confirmPassword: 'Not match with password entered' });
+            }else if(input.confirmPassword !== "" && (e.target.value === input.confirmPassword)){
+                setInputValidation({ ...inputValidation, confirmPassword: false });
+            }
         }
+
+        if (e.target.value === "") {
+            setInputValidation((prev) => ({ ...prev, [e.target.name]: true }));
+        } else {
+            setInputValidation((prev) => ({ ...prev, [e.target.name]: false }));
+        }
+
     }
 
     const inputHandlerForSelect = (value, action) => {
@@ -231,7 +276,48 @@ const UserCreation = () => {
     }
 
     const putData = (data, id) => {
-
+        axios.post(`${baseUrl}/api/usercreation/${id}?_method=PUT`, data).then((resp) => {
+            if (resp.data.status === 200) {
+              Swal.fire({
+                icon: "success",
+                title: "User Creation",
+                text:  resp.data.message,
+                confirmButtonColor: "#5156ed",
+              });
+  
+            navigate(`/tender/master/usercreation`);
+            
+            } else if (resp.data.status === 400) {
+              Swal.fire({
+                icon: "error",
+                title: "User Creation",
+                text: resp.data.errors,
+                confirmButtonColor: "#5156ed",
+              });
+            }
+            else {
+              Swal.fire({
+                icon: "error",
+                title: "User Creation",
+                text: "Provided Credentials are Incorrect",
+                confirmButtonColor: "#5156ed",
+              })
+            //   .then (()=>{
+            //     localStorage.clear();
+            //     navigate("/");
+            //   });
+            }
+            setDataSending(false);
+          }).catch((err) => {
+            console.log("err", err.response.data.message)
+            Swal.fire({
+                icon: "error",
+                title: "User Creation",
+                text:  (err.response.data.message || err),
+                confirmButtonColor: "#5156ed",
+              })
+              setDataSending(false);
+          });
     }
 
     const submitHandler = (e) => {
