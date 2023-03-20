@@ -1,24 +1,23 @@
 import axios from "axios";
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useBaseUrl } from "../../hooks/useBaseUrl";
-import { usePageTitle } from "../../hooks/usePageTitle";
+import { useBaseUrl } from "../../../hooks/useBaseUrl";
+import { usePageTitle } from "../../../hooks/usePageTitle";
 import Swal from "sweetalert2/src/sweetalert2.js";
 
 const initialState = {
-    usertype: "",
-    activeStatus: 'active',
+    calltype: "",
+    activeStatus: 'Active',
 }
 
 const initialStateErr = {
-    usertypeErr: '',
+    calltypeErr: '',
     activeStatusErr: '',
 }
 
-const UserType = () => {
+const CallType = () => {
 
-    usePageTitle("User Type Creation");
-    // const { id } = useParams();
+    usePageTitle("Call Type Creation");
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -30,10 +29,11 @@ const UserType = () => {
 
     useEffect(() => {
         if(id){
-          axios.get(`${baseUrl}/api/usertype/${id}`).then((resp)=> {
+            
+          axios.get(`${baseUrl}/api/calltype/${id}`).then((resp)=> {
             setInput({
-                usertype: resp.data.usertype.name,
-                activeStatus: resp.data.usertype.activeStatus,
+                calltype: resp.data.calltype.name,
+                activeStatus: resp.data.calltype.activeStatus,
             })
           })
         }
@@ -54,21 +54,21 @@ const UserType = () => {
 
 
     const postData = (data) => {
-        axios.post(`${baseUrl}/api/usertype`, data).then((resp) => {
+        axios.post(`${baseUrl}/api/calltype`, data).then((resp) => {
           if (resp.data.status === 200) {
             Swal.fire({
               icon: "success",
-              title: "User Type",
+              title: "Call Type",
               text:  resp.data.message,
               confirmButtonColor: "#5156ed",
             });
 
-          navigate(`/tender/master/usertype`);
+          navigate(`/tender/master/calltypemaster`);
           
           } else if (resp.data.status === 400) {
             Swal.fire({
               icon: "error",
-              title: "User Type",
+              title: "Call Type",
               text: resp.data.errors,
               confirmButtonColor: "#5156ed",
             });
@@ -77,7 +77,7 @@ const UserType = () => {
           else {
             Swal.fire({
               icon: "error",
-              title: "User Type",
+              title: "Call Type",
               text: "Provided Credentials are Incorrect",
               confirmButtonColor: "#5156ed",
             }).then (()=>{
@@ -91,7 +91,7 @@ const UserType = () => {
             console.log("err", err.response.data.message)
             Swal.fire({
                 icon: "error",
-                title: "User Type",
+                title: "Call Type",
                 text:  (err.response.data.message || err),
                 confirmButtonColor: "#5156ed",
               })
@@ -101,39 +101,43 @@ const UserType = () => {
 
 
       const putData = (data, id) => {
-        axios.put(`${baseUrl}/api/usertype/${id}`, data).then((res) => {
+        axios.put(`${baseUrl}/api/calltype/${id}`, data).then((res) => {
           if (res.data.status === 200) {
             Swal.fire({
               icon: "success",
-              title: "User Type",
+              title: "Call Type",
               text: "Updated Successfully!",
               confirmButtonColor: "#5156ed",
             });
             setInput(initialState)
-            navigate('/tender/master/usertype')
+            navigate('/tender/master/calltypemaster')
           } else if (res.data.status === 400) {
-            // let errorMessage="" ;
-
-            // Object.keys(res.data.errors).map(key => (
-            //     errorMessage +=  res.data.errors[key][0] + '\n'
-            // ))
-
-            // console.log(errorMessage)
             Swal.fire({
               icon: "error",
-              title: "User Type",
+              title: "Call Type",
               text: res.data.errors,
               confirmButtonColor: "#5156ed",
             });
             setDataSending(false)
           }
-        });
+        })
+        .catch((err) => {
+            console.log("err", err.response.data.message)
+            Swal.fire({
+                icon: "error",
+                title: "Call Type",
+                text:  (err.response.data.message || err),
+                confirmButtonColor: "#5156ed",
+              })
+              setDataSending(false);
+          });
+        ;
       }
 
 
     let formIsValid = false;
 
-    if(input.usertype !== "" ){
+    if(input.calltype !== "" ){
         formIsValid = true 
     }
 
@@ -144,12 +148,11 @@ const UserType = () => {
 
         if(!formIsValid){
            setDataSending(false)
-           console.log("Test 12");
            return     
         }
-        console.log("Test");
+        
         let data = {
-            name     : input.usertype,
+            name     : input.calltype,
             activeStatus : input.activeStatus,
             tokenId : localStorage.getItem("token")
         }
@@ -165,7 +168,7 @@ const UserType = () => {
     }
 
     const cancelHandler = () => {
-        navigate(`/tender/master/usertype`);
+        navigate(`/tender/master/calltypemaster`);
     }
 
     return (
@@ -174,37 +177,37 @@ const UserType = () => {
                 <div className="card p-4">
                     <form>
                         <div className="row align-items-center">
-                            <div className="inputgroup col-lg-6 mb-4">
+                            <div className="inputgroup col-lg-12 mb-4">
                                 <div className="row align-items-center">
-                                    <div className="col-lg-4 text-dark">
-                                        <label htmlFor="usertype" className="font-weight-bold">User Type<span className="text-danger">&nbsp;*</span> </label>
+                                    <div className="col-lg-2 text-dark">
+                                        <label htmlFor="calltype" className="font-weight-bold">Call Type<span className="text-danger">&nbsp;*</span> </label>
                                     </div>
-                                    <div className="col-lg-8">
+                                    <div className="col-lg-4">
                                         <input
                                             type="text"
                                             className="form-control"
-                                            id="usertype"
-                                            name="usertype"
-                                            value={input.usertype}
+                                            id="calltype"
+                                            name="calltype"
+                                            value={input.calltype}
                                             onChange={inputHandler}
                                         />
 
-                                        {inputValidation.usertype && (
+                                        {inputValidation.calltype && (
                                             <div className="pt-1">
                                                 <span className="text-danger font-weight-bold">
-                                                    Enter User Type
+                                                    Enter Call Type
                                                 </span>
                                             </div>
                                         )}
                                     </div>
                                 </div>
                             </div>
-                            <div className="inputgroup col-lg-6 mb-4">
+                            <div className="inputgroup col-lg-12 mb-4">
                                 <div className="row align-items-center">
-                                    <div className="col-lg-5 text-dark ">
+                                    <div className="col-lg-2 text-dark ">
                                         <label htmlFor="activeStatus " className="font-weight-bold" >Active Status&nbsp;</label>
                                     </div>
-                                    <div className="col-lg-7">
+                                    <div className="col-lg-4">
                                         <div className="form-check form-check-inline">
                                             <label
                                                 className="form-check-label"
@@ -215,8 +218,8 @@ const UserType = () => {
                                                     type="radio"
                                                     name="activeStatus"
                                                     id="activeStatus_active"
-                                                    checked={("active" === input.activeStatus)}
-                                                    value="active"
+                                                    checked={("Active" === input.activeStatus)}
+                                                    value="Active"
                                                     onChange={inputHandler}
                                                 />
                                                 Active
@@ -229,11 +232,11 @@ const UserType = () => {
                                                     type="radio"
                                                     name="activeStatus"
                                                     id="activeStatus_inactive"
-                                                    checked={"inactive" === input.activeStatus}
-                                                    value="inactive"
+                                                    checked={"InActive" === input.activeStatus}
+                                                    value="InActive"
                                                     onChange={inputHandler}
                                                 />
-                                                Inactive
+                                                Inactive 
                                             </label>
                                         </div>
                                     </div>
@@ -241,7 +244,7 @@ const UserType = () => {
                             </div>
                             <div className="inputgroup col-lg-12 mb-4 ml-3">
                                 <div className="row align-items-center">
-                                    <div className="col-lg-10 text-right ">
+                                    <div className="col-lg-12 text-center ">
                                         <button
                                             className="btn btn-primary"
                                             disabled={!formIsValid}
@@ -251,8 +254,7 @@ const UserType = () => {
                                             {dataSending === true ? ((id) ? 'Updating...' :"Submitting....") : ((id) ? 'Update' :"Save" )}
 
                                         </button>
-                                    </div>
-                                    <div className="col-lg-1 text-left">
+                                           <span>&nbsp;&nbsp;&nbsp;</span>
                                         <button className="btn btn-secondary" onClick={cancelHandler} disabled = {dataSending}>
                                             Cancel
                                         </button>
@@ -267,4 +269,4 @@ const UserType = () => {
     )
 }
 
-export default UserType
+export default CallType
