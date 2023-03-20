@@ -66,7 +66,7 @@ function Dashboard() {
 
   const handleChange = (event, newValue) => { 
     setValue(newValue);
-    console.log("newValue ", newValue); 
+    // console.log("newValue ", newValue); 
       };
 
   useEffect(() => {
