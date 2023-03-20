@@ -57,6 +57,7 @@ import Unauthorized from "./components/pages/Unauthorized";
 import UserCreationView from "./components/master/UserCreation/UserCreationView";
 import UserTypeView from "./components/master/UserType/UserTypeView";
 import UserType from "./components/master/UserType/UserType";
+import UserCreation from "./components/master/UserCreation/UserCreation";
 import CallTypeView from "./components/master/CallLogs/CallType/CallTypeView";
 import CallType from "./components/master/CallLogs/CallType/CallType";
 import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
@@ -244,8 +245,8 @@ function App() {
               </Route>
               <Route path="usercreation">
                 <Route index element={can('userCreation-list' , (authData.permission || [])) ? <UserCreationView/> :  <Unauthorized/>} />
-                {/* <Route path="usercreation" element={can('userCreation-create' , (authData.permission || [])) ? <CityCreation /> :  <Unauthorized/>} />
-                <Route path="usercreation/:id" element={can('userCreation-edit' , (authData.permission || [])) ? <CityCreation /> :  <Unauthorized/>} /> */}
+                <Route path="create" element={can('userCreation-create' , (authData.permission || [])) ? <UserCreation /> :  <Unauthorized/>} />
+                <Route path="edit/:id" element={can('userCreation-edit' , (authData.permission || [])) ? <UserCreation /> :  <Unauthorized/>} />
               </Route>
               <Route path="projecttype">
                 <Route index element={can('projectType-list' , (authData.permission || []))  ?  <ProjectTypeView /> : <Unauthorized/>} />
