@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from "react";
 import Chart from "react-apexcharts";
 import axios from "axios";
-import { Slider } from "@mui/material";
+// import { Slider } from "@mui/material";
 import { useBaseUrl } from "./hooks/useBaseUrl";
 
 function BarChart(props) {
@@ -15,11 +15,7 @@ function BarChart(props) {
 
   const [ulbPopulation, setUlbPopulation] = useState("");
 
-  // const state = [];
-  // const count = [];
-  // const countryId = [];
-  // const id = [];
-  // const pop = [];
+
   const { server1: baseUrl } = useBaseUrl();
 
   useEffect(() => {
@@ -39,7 +35,8 @@ function BarChart(props) {
       }
     });
   };
-console.log("ulbpopulation",ulbPopulation);
+
+
   const setChart = () => {
     setOptions({
       chart: {
@@ -112,15 +109,16 @@ console.log("ulbpopulation",ulbPopulation);
 
 
   useEffect(() => {
-    console.log("Props", props.value)
+    
     if(ulbPopulation.length>0 && props.value)
     {
       sliderOnChange();
-      setChart();
+    
     }
   }, [props.value, ulbPopulation]);
 
-  const sliderOnChange = async () => {
+  const sliderOnChange = () => {
+    // console.log("Props",props.value);
     let unit = [0, 100000, 300000, 500000, 1000000, 2000000];
     let value = props.value;
     let unique = [];
@@ -149,21 +147,29 @@ console.log("ulbpopulation",ulbPopulation);
         }
       });
       setChartValue(chartArr);
-    }
-    
+    }    
   };
-  console.log("chartValue", chartValue);
-  console.log("state", state);
-  console.log("count", count);
+  
 
 
   //to change Objet to array
   useEffect(() => {
+    // console.log("chartValue",chartValue);
     if (chartValue) {
       setStates(Object.keys(chartValue));
       setCounts(Object.values(chartValue).map(item => item.count));
     }
   }, [chartValue]);
+
+//to change Objet to array
+useEffect(() => {
+  // console.log("chartValue",chartValue);
+  if (state && count) {
+    setChart();
+  }
+}, [state, count]);
+
+  
 
   return (
     <>

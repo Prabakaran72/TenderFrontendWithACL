@@ -58,20 +58,20 @@ function Dashboard() {
   });
 
   const marks = [
-    { value: 0, label: "0" },
-    { value: 6, label: "20 Lakh >" },
+    { value: 0, label: "Zero" },
+    { value: 6, label: "20 Lakh +" },
   ]; // defines the start and end points for the slider
 
   usePageTitle("Dashboard");
 
   const handleChange = (event, newValue) => { 
     setValue(newValue);
-    // console.log("newValue ", newValue); 
+    console.log("newValue ", newValue); 
       };
 
   useEffect(() => {
 
-    setValue(0,6)
+    // setValue(0,6)
     //Tender Analysis
     axios.get(`${baseUrl}/api/dashboard/tenderanalysis`).then((resp) => {
       // console.log("Tender :",resp.data);
@@ -137,6 +137,7 @@ function Dashboard() {
       });
   }, []);
 
+  
   return (
     <>
       <div className="fixedCard">
@@ -536,8 +537,7 @@ function Dashboard() {
             <div className="box col-lg-12">
               <div className="slider">
                 <div className="col-md-6 mb-2 h6 text-primery">
-                  {" "}
-                  Population :{" "}
+                  {" "}Population :{" "}
                 </div>
                 <div className="col-md-6">
                   <Slider
@@ -556,15 +556,6 @@ function Dashboard() {
               </div>
             </div>
             <BarChart value={value} />
-            {/* <div className="responsive">
-              <Chart
-                options={options}
-                series={series}
-                type="bar"
-                width="100%"
-                height={450}
-              />
-            </div> */}
           </div>
         </div>
 
@@ -579,9 +570,7 @@ function Dashboard() {
                     height={400}
                     options={{
                       labels: [
-                        // "Bid Submitted",
                         "To Be Opened",
-                        // "Bid Details",
                         "In Technical Evaluation ",
                         "In Financial Evaluation ",
                         "Contract Awarded",
@@ -665,7 +654,7 @@ function Dashboard() {
         <div className="card shadow mb-4">
           <div className="card-body">
             <div className="responsive">
-              <AreaChart />
+            <AreaChart />
             </div>
           </div>
         </div>

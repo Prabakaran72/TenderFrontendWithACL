@@ -1,160 +1,158 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
 import Chart from "react-apexcharts";
 import axios from "axios";
-import { useBaseUrl } from "./hooks/useBaseUrl";
 import { Slider } from "@mui/material";
+import Select from "react-select";
+
+const dataValue = [
+  { state: "31", count: 5, year: 2021, name: "Tamilnadu" },
+  { state: "31", count: 12, year: 2022, name: "Tamilnadu" },
+  { state: "31", count: 25, year: 2023, name: "Tamilnadu" },
+  { state: "1", count: 1, year: 2021, name: "Delhi" },
+  { state: "1", count: 5, year: 2022, name: "Delhi" },
+  { state: "1", count: 8, year: 2023, name: "Delhi" },
+  { state: "17", count: 10, year: 2021, name: "Karnataka" },
+  { state: "17", count: 20, year: 2022, name: "Karnataka" },
+  { state: "17", count: 2, year: 2023, name: "Karnataka" },
+  { state: "14", count: 0, year: 2021, name: "Himachal Pradesh" },
+  { state: "14", count: 20, year: 2022, name: "Himachal Pradesh" },
+  { state: "14", count: 45, year: 2023, name: "Himachal Pradesh" },
+  { state: "2", count: 12, year: 2021, name: "Andhra pradesh" },
+  { state: "2", count: 8, year: 2022, name: "Andhra pradesh" },
+  { state: "2", count: 0, year: 2023, name: "Andhra pradesh" },
+];
 
 const AreaChart = () => {
-  const { server1: baseUrl } = useBaseUrl();
-
-  const [options1, setOptions1] = useState({});
-  const [series1, setSeries1] = useState([]);
-
-  const year = [];
-  const count1 = [];
-  const countVal = [];
-  const countVal_bidS = [];
-  const countVal_bidD = [];
-  const countVal_opened = [];
-  const countVal_inTechEval = [];
-  const countVal_inFinEval = [];
-  const countVal_cancelled = [];
-  const countVal_retender = [];
-
-  // Customer Analysis
-  let total = 0;
-  let bidS_total = 0;
-  let bidD_total = 0;
-  let toBeOpened_total = 0;
-  let inTechEval_total = 0;
-  let inFinEval_total = 0;
-  let cancelled_total = 0;
-  let retender_total = 0;
+  const [options, setOption] = useState([]); // list of values for dropdown
+  const [selectedOption, setSelectedOption] = useState(null); // state for selected state id
+  const [chartValue, setChartValue] = useState({
+    year: [],
+    count: [],
+  }); // state hold value for chart preparing
+  const [yearlysum, setYearlySum] = useState(); // holds [year : {count : value}] =>  [2021 : {count: 10}]
+  const [opt, setOpt] = useState({}); // set year options for Chart in x axis
+  const [srs, setSrs] = useState([]); // set Customer count options for Chart in y axis
+  
 
   useEffect(() => {
-    // const ulbDetails = () => {
-    axios.get(`${baseUrl}/api/dashboard/bidanalysis`).then((res) => {
-      // setBool(res.data.list);
-      // console.log(res.data.awarded);
-      {
-        res.data.awarded.map((award) => {
-          year.push(award.year);
-          count1.push(award.count);
-          total += award.count;
-        });
-        countVal.push(total);
-      }
-      {
-        res.data.bid_submitted.map((bidS) => {
-          bidS_total += bidS.count;
-        });
-        countVal_bidS.push(bidS_total);
-      }
-      {
-        res.data.bid_details.map((bidD) => {
-          bidD_total += bidD.count;
-        });
-        countVal_bidD.push(bidD_total);
-      }
-      {
-        res.data.to_be_opened.map((opened) => {
-          toBeOpened_total += opened.count;
-        });
-        countVal_opened.push(toBeOpened_total);
-      }
-      {
-        res.data.in_tech_eval.map((techE) => {
-          inTechEval_total += techE.count;
-        });
-        countVal_inTechEval.push(inTechEval_total);
-      }
-      {
-        res.data.in_fin_eval.map((finE) => {
-          inFinEval_total += finE.count;
-        });
-        countVal_inFinEval.push(inFinEval_total);
-      }
-      {
-        res.data.cancelled.map((cancel) => {
-          cancelled_total += cancel.count;
-        });
-        countVal_cancelled.push(cancelled_total);
-      }
-      {
-        res.data.retender.map((retender) => {
-          retender_total += retender.count;
-        });
-        countVal_retender.push(retender_total);
+    if (dataValue) {
+      setdropdown();
+    }
+  }, [dataValue, selectedOption]);
+
+  const setdropdown = () => {
+    let uniqueList = []; //for Dropdown
+    let uniqueYear = []; //for chart x axis
+    let yearlyCount = [];
+    
+
+    let list = dataValue.forEach((item) => {
+      //set Dropdown options
+      if (!uniqueList.some((el) => el.value === item.state)) {
+        let newArr = { value: item.state, label: item.name };
+        uniqueList.push(newArr);
+        // y.push(item.count);
       }
 
-      setOptions1({
-        chart: {
-          id: "basic-bar",
-        },
-        // colors: ['#252525','#ccc','ddd'],
-        xaxis: {
-          labels: {
-            rotate: 270,
-            borderColor: "#00E396",
-          },
-          categories: year,
-        },
-        title: {
-          text: "Customer Analysis",
-        },
-        noData: {
-          text: "Loading...",
-        },
-      });
-      setSeries1([
-        {
-          name: "Awarded",
-          data: countVal,
-        },
-        {
-          name: "Bid Submitted",
-          data: countVal_bidS,
-        },
-        {
-          name: "Bid Details",
-          data: countVal_bidD,
-        },
-        {
-          name: "To Be Opened",
-          data: countVal_opened,
-        },
-        {
-          name: "Technical Eval",
-          data: countVal_inTechEval,
-        },
-        {
-          name: "Financial Eval",
-          data: countVal_inFinEval,
-        },
-        {
-          name: "Cancelled",
-          data: countVal_cancelled,
-        },
-        {
-          name: "Retender",
-          data: countVal_retender,
-        },
-      ]);
+      //collect unique Year list
+      if (!uniqueYear.some((elem) => elem == item.year)) {
+        uniqueYear.push(item.year);
+        // x.push(item.year);
+      }
+
+      if (!selectedOption) {
+        if (uniqueYear.some((elem) => elem == item.year)) {
+          yearlyCount[item.year] = {
+            count: (yearlyCount[item.year]?.count || 0) + item.count,
+          };
+        }
+      }
+      else if ((uniqueYear.some((elem) => elem == item.year ) && item.state == selectedOption)) {
+          yearlyCount[item.year] = {
+            count: (yearlyCount[item.year]?.count || 0) + item.count,
+          };
+        
+      }
     });
-    // };
-    // return () => ulbDetails();
-  }, []);
+    setYearlySum(yearlyCount);
+    setOption(uniqueList);
+  };
 
+  //to change Objet to array
+  useEffect(() => {
+      if (yearlysum) {
+      setChartValue({
+        year: Object.keys(yearlysum),
+        count: Object.values(yearlysum.map((obj) => obj.count)),
+      });
+    }
+  }, [yearlysum]);
+
+  
+  useEffect(() => {
+    if (chartValue) {
+      getOpt();
+      getSrs();
+    }
+  }, [chartValue]);
+
+  const getOpt = () => {
+    setOpt({
+      chart: {
+        id: "area-bar",
+      },
+      xaxis: {
+        categories: chartValue.year,
+      },
+      title: {
+        text: "Customer Analysis",
+      },
+      noData: {
+        text: "Loading...",
+      },
+    });
+  };
+  const getSrs = () => {
+    setSrs([
+      {
+        name: "Customers",
+        data: chartValue.count,
+      },
+    ]);
+  };
+
+  const handleTypeSelect = (e) => {
+    setSelectedOption(e.value);
+  };
+console.log("selectedOption",selectedOption);
   return (
-    <>
-      <Chart
-        options={options1}
-        series={series1}
-        type="area"
-        width="100%"
-        height={450}
-      />
-    </>
+    <div className="responsive col-log-12">
+      <div className="row">
+        <div className="col-md-8 d-flex "></div>
+        <div className="col-md-4 d-flex align-item-right">
+          <div className="col-sm-3 mt-2">State : </div>
+          <div className="col-sm-8">
+            <Select
+              name="stateList"
+              id="stateList"
+              options={options}
+              onChange={handleTypeSelect}
+              value={options.filter(e=> e.value === selectedOption)}
+            ></Select>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <Chart
+          options={opt} 
+          series={srs} 
+          type="area"
+          width="97%"
+          height={350}
+        />
+      </div>
+    </div>
   );
 };
 
