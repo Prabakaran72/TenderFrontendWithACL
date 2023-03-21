@@ -192,7 +192,15 @@ function Sidebar() {
             >
               Project Status
             </NavLink>}
-           
+            {authData.permission.includes("delete") && 
+            <NavLink
+              className={`collapse-item ${({ isActive }) =>
+                isActive ? "active" : undefined}`}
+              to={`/${pathName}/master/test`}
+              onClick={() => hideSidebarElement("MasterMenu")}
+            >
+              ACL TEST COMP
+            </NavLink>}
             <NavLink
               className={`collapse-item ${({ isActive }) =>
                 isActive ? "active" : undefined}`}
@@ -208,23 +216,6 @@ function Sidebar() {
               onClick={() => hideSidebarElement("MasterMenu")}
             >
               Tender Type Master
-            </NavLink>}
-
-            {can('tenderType-list',  authData.permission) && <NavLink
-              className={`collapse-item ${({ isActive }) =>
-                isActive ? "active" : undefined}`}
-              to={`/${pathName}/master/calltypemaster`}
-              onClick={() => hideSidebarElement("MasterMenu")}
-            >
-              Call Type Master
-            </NavLink>}
-
-            {can('tenderType-list',  authData.permission) && <NavLink
-              className={`collapse-item ${({ isActive }) =>
-                isActive ? "active" : undefined}`}
-              to={`/${pathName}/master/businessforecastmaster`}
-              onClick={() => hideSidebarElement("MasterMenu")}
-            > Bussiness Forecast
             </NavLink>}
             
           </div>
@@ -328,9 +319,6 @@ function Sidebar() {
           </div>
         </div>
       </li>
-
-      
-
 
       <motion.div className="text-center d-none d-md-inline">
         <button className="rounded-circle border-0" id="sidebarToggle"></button>

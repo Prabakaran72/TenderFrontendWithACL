@@ -57,6 +57,12 @@ import Unauthorized from "./components/pages/Unauthorized";
 import UserCreationView from "./components/master/UserCreation/UserCreationView";
 import UserTypeView from "./components/master/UserType/UserTypeView";
 import UserType from "./components/master/UserType/UserType";
+import UserCreation from "./components/master/UserCreation/UserCreation";
+import CallTypeView from "./components/master/CallLogs/CallType/CallTypeView";
+import CallType from "./components/master/CallLogs/CallType/CallType";
+import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
+import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
+
 
 function App() {
   const authData = useContext(AuthContext);
@@ -239,8 +245,8 @@ function App() {
               </Route>
               <Route path="usercreation">
                 <Route index element={can('userCreation-list' , (authData.permission || [])) ? <UserCreationView/> :  <Unauthorized/>} />
-                {/* <Route path="usercreation" element={can('userCreation-create' , (authData.permission || [])) ? <CityCreation /> :  <Unauthorized/>} />
-                <Route path="usercreation/:id" element={can('userCreation-edit' , (authData.permission || [])) ? <CityCreation /> :  <Unauthorized/>} /> */}
+                <Route path="create" element={can('userCreation-create' , (authData.permission || [])) ? <UserCreation /> :  <Unauthorized/>} />
+                <Route path="edit/:id" element={can('userCreation-edit' , (authData.permission || [])) ? <UserCreation /> :  <Unauthorized/>} />
               </Route>
               <Route path="projecttype">
                 <Route index element={can('projectType-list' , (authData.permission || []))  ?  <ProjectTypeView /> : <Unauthorized/>} />
@@ -291,6 +297,32 @@ function App() {
                 <Route path="communicationfilescreation" element={<CommunicationFilesCreation />}/>
                 <Route path="communicationfilescreation/:id" element={<CommunicationFilesCreation />}/>
               </Route> */}
+
+              {/*$$$  Have to modify permission name */}
+              <Route path="calltypemaster">  
+                <Route index element={can('tenderType-list' , (authData.permission || []))  ? <CallTypeView /> : <Unauthorized/>} />
+                <Route
+                  path="calltypecreation"
+                  element={can('tenderType-create' , (authData.permission || []))  ? <CallType /> : <Unauthorized/>}
+                />
+                <Route
+                  path="edit/:id"
+                  element={can('tenderType-edit' , (authData.permission || []))  ?  <CallType /> : <Unauthorized/>}
+                />
+              </Route>
+
+               {/*$$$  Have to modify permission name */}
+               <Route path="businessforecastmaster">  
+                <Route index element={can('tenderType-list' , (authData.permission || []))  ? <BusinessForecastView /> : <Unauthorized/>} />
+                <Route
+                  path="creation"
+                  element={can('tenderType-create' , (authData.permission || []))  ? <BusinessForecast /> : <Unauthorized/>}
+                />
+                <Route
+                  path="creation/:id"
+                  element={can('tenderType-edit' , (authData.permission || []))  ?  <BusinessForecast /> : <Unauthorized/>}
+                />
+              </Route>
             </Route>
 
             <Route path="library">
