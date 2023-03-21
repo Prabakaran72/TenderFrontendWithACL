@@ -77,8 +77,7 @@ function Dashboard() {
       // console.log("Tender :",resp.data);
     });
 
-    //Customer Analysis
-    axios.get(`${baseUrl}/api/dashboard/ulbdetails`).then((resp) => {});
+    
 
     //Customer Bid Analysis
     axios.get(`${baseUrl}/api/dashboard/bidanalysis`).then((resp) => {
