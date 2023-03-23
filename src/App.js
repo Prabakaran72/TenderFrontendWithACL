@@ -60,10 +60,15 @@ import UserType from "./components/master/UserType/UserType";
 import UserCreation from "./components/master/UserCreation/UserCreation";
 import CallTypeView from "./components/master/CallLogs/CallType/CallTypeView";
 import CallType from "./components/master/CallLogs/CallType/CallType";
+
 import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
 import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
 import UserPermission from "./components/master/UserPermission/UserPermission";
 import UserPermissionView from "./components/master/UserPermission/UserPermissionView";
+
+
+
+import CallLogMain from "./components/calllog/CallLogCreation/CallLogMain";
 
 
 function App() {
@@ -120,6 +125,10 @@ function App() {
                 <Route path="workorder/:id" element={ <Workorder /> } />
               </Route>
             </Route>
+
+            <Route path="calllog" element={can('tenderCreation-create' , (authData.permission || [])) ? <CallLogMain /> : <Unauthorized/>} />
+
+
             <Route path="master">
               <Route
                 path="customercreation/list"
@@ -310,7 +319,7 @@ function App() {
             
 
                {/*$$$  Have to modify permission name */}
-              
+
             </Route>
 
             <Route path="library">

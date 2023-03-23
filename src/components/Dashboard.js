@@ -58,8 +58,8 @@ function Dashboard() {
   });
 
   const marks = [
-    { value: 0, label: "0" },
-    { value: 6, label: "20 Lakh >" },
+    { value: 0, label: "Zero" },
+    { value: 6, label: "20 Lakh +" },
   ]; // defines the start and end points for the slider
 
   usePageTitle("Dashboard");
@@ -71,14 +71,13 @@ function Dashboard() {
 
   useEffect(() => {
 
-    setValue(0,6)
+    // setValue(0,6)
     //Tender Analysis
     axios.get(`${baseUrl}/api/dashboard/tenderanalysis`).then((resp) => {
       // console.log("Tender :",resp.data);
     });
 
-    //Customer Analysis
-    axios.get(`${baseUrl}/api/dashboard/ulbdetails`).then((resp) => {});
+    
 
     //Customer Bid Analysis
     axios.get(`${baseUrl}/api/dashboard/bidanalysis`).then((resp) => {
@@ -89,7 +88,7 @@ function Dashboard() {
           awarded: resp.data.awarded.reduce((acc, item) => {
             return acc + item.count;
           }, 0),
-          bid_submitted: resp.data.bid_submitted.reduce((acc, item) => {
+           bid_submitted: resp.data.bid_submitted.reduce((acc, item) => {
             return acc + item.count;
           }, 0),
           to_be_opened: resp.data.to_be_opened.reduce((acc, item) => {
@@ -137,6 +136,7 @@ function Dashboard() {
       });
   }, []);
 
+  
   return (
     <>
       <div className="fixedCard">
@@ -536,8 +536,7 @@ function Dashboard() {
             <div className="box col-lg-12">
               <div className="slider">
                 <div className="col-md-6 mb-2 h6 text-primery">
-                  {" "}
-                  Population :{" "}
+                  {" "}Population :{" "}
                 </div>
                 <div className="col-md-6">
                   <Slider
@@ -556,15 +555,6 @@ function Dashboard() {
               </div>
             </div>
             <BarChart value={value} />
-            {/* <div className="responsive">
-              <Chart
-                options={options}
-                series={series}
-                type="bar"
-                width="100%"
-                height={450}
-              />
-            </div> */}
           </div>
         </div>
 
@@ -579,9 +569,7 @@ function Dashboard() {
                     height={400}
                     options={{
                       labels: [
-                        // "Bid Submitted",
                         "To Be Opened",
-                        // "Bid Details",
                         "In Technical Evaluation ",
                         "In Financial Evaluation ",
                         "Contract Awarded",
@@ -608,14 +596,12 @@ function Dashboard() {
                       },
                     }}
                     series={[
-                      // bidanalysis.bid_submitted,
-                      bidanalysis.to_be_opened,
-                      // data.bid_details,
-                      bidanalysis.in_tech_eval,
-                      bidanalysis.in_fin_eval,
-                      bidanalysis.awarded,
-                      bidanalysis.cancelled,
-                      bidanalysis.retender,
+                      bidanalysis?.to_be_opened,
+                      bidanalysis?.in_tech_eval,
+                      bidanalysis?.in_fin_eval,
+                      bidanalysis?.awarded,
+                      bidanalysis?.cancelled,
+                      bidanalysis?.retender,
                     ]}
                   />
                 </div>
@@ -632,9 +618,7 @@ function Dashboard() {
                     height={400}
                     options={{
                       labels: [
-                        // "Bid Submitted",
                         "To Be Opened",
-                        // "Bid Details",
                         "In Technical Evaluation ",
                         "In Financial Evaluation ",
                         "Contract Awarded",
@@ -664,9 +648,9 @@ function Dashboard() {
 
         <div className="card shadow mb-4">
           <div className="card-body">
-            <div className="responsive">
-              <AreaChart />
-            </div>
+            
+            <AreaChart />
+            
           </div>
         </div>
       </div>
