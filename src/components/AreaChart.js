@@ -141,7 +141,7 @@ const AreaChart = () => {
   };
 
   return (
-    <div className="responsive col-log-12">
+    <div className="col-log-12">
       <div className="row">
         <div className="col-md-8 d-flex "></div>
         <div className="col-md-4 d-flex align-item-right">

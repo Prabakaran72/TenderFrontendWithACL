@@ -88,7 +88,7 @@ function Dashboard() {
           awarded: resp.data.awarded.reduce((acc, item) => {
             return acc + item.count;
           }, 0),
-          bid_submitted: resp.data.bid_submitted.reduce((acc, item) => {
+           bid_submitted: resp.data.bid_submitted.reduce((acc, item) => {
             return acc + item.count;
           }, 0),
           to_be_opened: resp.data.to_be_opened.reduce((acc, item) => {
@@ -596,14 +596,12 @@ function Dashboard() {
                       },
                     }}
                     series={[
-                      // bidanalysis.bid_submitted,
-                      bidanalysis.to_be_opened,
-                      // data.bid_details,
-                      bidanalysis.in_tech_eval,
-                      bidanalysis.in_fin_eval,
-                      bidanalysis.awarded,
-                      bidanalysis.cancelled,
-                      bidanalysis.retender,
+                      bidanalysis?.to_be_opened,
+                      bidanalysis?.in_tech_eval,
+                      bidanalysis?.in_fin_eval,
+                      bidanalysis?.awarded,
+                      bidanalysis?.cancelled,
+                      bidanalysis?.retender,
                     ]}
                   />
                 </div>
@@ -620,9 +618,7 @@ function Dashboard() {
                     height={400}
                     options={{
                       labels: [
-                        // "Bid Submitted",
                         "To Be Opened",
-                        // "Bid Details",
                         "In Technical Evaluation ",
                         "In Financial Evaluation ",
                         "Contract Awarded",
@@ -652,9 +648,9 @@ function Dashboard() {
 
         <div className="card shadow mb-4">
           <div className="card-body">
-            <div className="responsive">
+            
             <AreaChart />
-            </div>
+            
           </div>
         </div>
       </div>

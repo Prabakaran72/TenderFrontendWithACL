@@ -6,19 +6,18 @@ import { usePageTitle } from "../../../hooks/usePageTitle";
 import Swal from "sweetalert2/src/sweetalert2.js";
 
 const initialState = {
-    bizzforecast: "",
-    activeStatus: 'active',
+    calltype: "",
+    activeStatus: 'Active',
 }
 
 const initialStateErr = {
-    bizzforecastErr: '',
+    calltypeErr: '',
     activeStatusErr: '',
 }
 
-const BusinessForecast = () => {
+const CallType = () => {
 
-    usePageTitle("Business Forecast Creation");
-    // const { id } = useParams();
+    usePageTitle("Call Type Creation");
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -30,10 +29,11 @@ const BusinessForecast = () => {
 
     useEffect(() => {
         if(id){
-          axios.get(`${baseUrl}/api/bizzforecast/${id}`).then((resp)=> {
+            
+          axios.get(`${baseUrl}/api/calltype/${id}`).then((resp)=> {
             setInput({
-                bizzforecast: resp.data.bizzforecast.name,
-                activeStatus: resp.data.bizzforecast.activeStatus,
+                calltype: resp.data.calltype.name,
+                activeStatus: resp.data.calltype.activeStatus,
             })
           })
         }
@@ -54,22 +54,22 @@ const BusinessForecast = () => {
 
 
     const postData = (data) => {
-        axios.post(`${baseUrl}/api/bizzforecast`, data).then((resp) => {
+        axios.post(`${baseUrl}/api/calltype`, data).then((resp) => {
           if (resp.data.status === 200) {
             Swal.fire({
               icon: "success",
-              title: "Bussiness Forecast",
+              title: "Call Type",
               text:  resp.data.message,
               confirmButtonColor: "#5156ed",
             });
 
-          navigate(`/tender/master/bizzforecast`);
+          navigate(`/tender/master/calltypemaster`);
           
           } else if (resp.data.status === 400) {
             Swal.fire({
               icon: "error",
-              title: "Bussiness Forecast",
-              text: resp.data.message,
+              title: "Call Type",
+              text: resp.data.errors,
               confirmButtonColor: "#5156ed",
             });
            
@@ -77,7 +77,7 @@ const BusinessForecast = () => {
           else {
             Swal.fire({
               icon: "error",
-              title: "Bussiness Forecast",
+              title: "Call Type",
               text: "Provided Credentials are Incorrect",
               confirmButtonColor: "#5156ed",
             }).then (()=>{
@@ -91,7 +91,7 @@ const BusinessForecast = () => {
             console.log("err", err.response.data.message)
             Swal.fire({
                 icon: "error",
-                title: "Bussiness Forecast",
+                title: "Call Type",
                 text:  (err.response.data.message || err),
                 confirmButtonColor: "#5156ed",
               })
@@ -101,20 +101,20 @@ const BusinessForecast = () => {
 
 
       const putData = (data, id) => {
-        axios.put(`${baseUrl}/api/bizzforecast/${id}`, data).then((res) => {
+        axios.put(`${baseUrl}/api/calltype/${id}`, data).then((res) => {
           if (res.data.status === 200) {
             Swal.fire({
               icon: "success",
-              title: "Bussiness Forecast",
+              title: "Call Type",
               text: "Updated Successfully!",
               confirmButtonColor: "#5156ed",
             });
             setInput(initialState)
-            navigate('/tender/master/bizzforecast')
+            navigate('/tender/master/calltypemaster')
           } else if (res.data.status === 400) {
             Swal.fire({
               icon: "error",
-              title: "Bussiness Forecast",
+              title: "Call Type",
               text: res.data.errors,
               confirmButtonColor: "#5156ed",
             });
@@ -125,7 +125,7 @@ const BusinessForecast = () => {
             console.log("err", err.response.data.message)
             Swal.fire({
                 icon: "error",
-                title: "Bussiness Forecast",
+                title: "Call Type",
                 text:  (err.response.data.message || err),
                 confirmButtonColor: "#5156ed",
               })
@@ -137,7 +137,7 @@ const BusinessForecast = () => {
 
     let formIsValid = false;
 
-    if(input.bizzforecast !== "" ){
+    if(input.calltype !== "" ){
         formIsValid = true 
     }
 
@@ -152,7 +152,7 @@ const BusinessForecast = () => {
         }
         
         let data = {
-            name     : input.bizzforecast,
+            name     : input.calltype,
             activeStatus : input.activeStatus,
             tokenId : localStorage.getItem("token")
         }
@@ -168,7 +168,7 @@ const BusinessForecast = () => {
     }
 
     const cancelHandler = () => {
-        navigate(`/tender/master/bussinessforecastmaster`);
+        navigate(`/tender/master/calltypemaster`);
     }
 
     return (
@@ -180,22 +180,22 @@ const BusinessForecast = () => {
                             <div className="inputgroup col-lg-12 mb-4">
                                 <div className="row align-items-center">
                                     <div className="col-lg-2 text-dark">
-                                        <label htmlFor="bizzforecast" className="font-weight-bold">Bussiness Forecast<span className="text-danger">&nbsp;*</span> </label>
+                                        <label htmlFor="calltype" className="font-weight-bold">Call Type<span className="text-danger">&nbsp;*</span> </label>
                                     </div>
                                     <div className="col-lg-4">
                                         <input
                                             type="text"
                                             className="form-control"
-                                            id="bizzforecast"
-                                            name="bizzforecast"
-                                            value={input.bizzforecast}
+                                            id="calltype"
+                                            name="calltype"
+                                            value={input.calltype}
                                             onChange={inputHandler}
                                         />
 
-                                        {inputValidation.bizzforecast && (
+                                        {inputValidation.calltype && (
                                             <div className="pt-1">
                                                 <span className="text-danger font-weight-bold">
-                                                    Enter Bussiness Forecast
+                                                    Enter Call Type
                                                 </span>
                                             </div>
                                         )}
@@ -218,8 +218,8 @@ const BusinessForecast = () => {
                                                     type="radio"
                                                     name="activeStatus"
                                                     id="activeStatus_active"
-                                                    checked={("active" === input.activeStatus)}
-                                                    value="active"
+                                                    checked={("Active" === input.activeStatus)}
+                                                    value="Active"
                                                     onChange={inputHandler}
                                                 />
                                                 Active
@@ -232,11 +232,11 @@ const BusinessForecast = () => {
                                                     type="radio"
                                                     name="activeStatus"
                                                     id="activeStatus_inactive"
-                                                    checked={"inactive" === input.activeStatus}
-                                                    value="inactive"
+                                                    checked={"InActive" === input.activeStatus}
+                                                    value="InActive"
                                                     onChange={inputHandler}
                                                 />
-                                                Inactive
+                                                Inactive 
                                             </label>
                                         </div>
                                     </div>
@@ -269,4 +269,4 @@ const BusinessForecast = () => {
     )
 }
 
-export default BusinessForecast
+export default CallType
