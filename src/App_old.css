@@ -4,20 +4,6 @@ body {
     font-family: 'Exo 2', sans-serif;
 }
 
-#wrapper {
-    display: flex;
-    overflow: hidden;
-    z-index: 111;
-    position: relative;
-}
-#wrapper #content-wrapper {
-    background-color: #f8f9fc;
-    width: 100%;
-    overflow-x: hidden;
-    z-index: -1;
-    position: relative;
-}
-
 .Login .login_Bg {   
     background-color: #f0f0f0!important;
     /* background-color: #1ea9ff!important; */
@@ -562,198 +548,6 @@ body {
 }
 
 /* ------------------------------ DASHBOARD */
-
-.fixedCard .cardUl{
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    overflow-wrap: break-word;
-    padding-left: 0 ;
-}
-.fixedCard .card{
-    margin: 10px 15px;
-    width: 190px;
-    height: 120px!important;
-}
-.fixedCard .card .card-body{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.fixedCard .card .icons{
-    display: flex;
-    justify-content: center;
-    align-items: center;   
-}
-.fixedCard .card .icons i{
-    display: flex;
-    justify-content: center;
-    align-items: center;  
-    border-radius: 50px;
-    height: 25px;
-    width: 25px;
-    margin-bottom: 10px;
-    padding: 16px;
-    box-shadow: 3px 2px 14px #584c4c52;   
-}
-.fixedCard .card .icons1 i{      
-    background: #3576ff;
-    color: #fff;   
-}
-.fixedCard .card .icons2 i{      
-    background: #3576ff;
-    color: #fff;   
-}
-.fixedCard .card .icons3 i{      
-    background: #3576ff;
-    color: #fff;   
-}
-.fixedCard .card .icons4 i{      
-    background: #3576ff;
-    color: #fff;   
-}
-.fixedCard .card .icons5 i{      
-    background: #3576ff;
-    color: #fff;   
-}
-.fixedCard .card .icons6 i{      
-    background: #3576ff;
-    color: #fff;   
-}
-.fixedCard .card .icons7 i{      
-    background: #3576ff;
-    color: #fff;   
-}
-.fixedCard .card .icons8 i{      
-    background: #3576ff;
-    color: #fff;   
-}
-.fixedCard .card .icons9 i{      
-    background: #3576ff;
-    color: #fff;   
-}
-.fixedCard .card .icons10 i{      
-    background: #3576ff;
-    color: #fff;   
-}
-.fixedCard .card.border-left-primary {
-    border-left: 0.25rem solid #4653cc !important
-}
-.fixedCard .card.border-left-success {
-    border-left: 0.25rem solid #1cc85e !important
-}
-.fixedCard .card.border-left-info {
-    border-left: 0.25rem solid #1c97c8 !important
-}
-.fixedCard .card.border-left-pink {
-    border-left: 0.25rem solid #c21cc8 !important
-}
-.fixedCard .card.border-left-orange {
-    border-left: 0.25rem solid #e49a2b !important
-}
-.fixedCard .card.border-left-red {
-    border-left: 0.25rem solid #c81c50 !important
-}
-.fixedCard .card.border-left-brown {
-    border-left: 0.25rem solid #7e5144 !important
-}
-.fixedCard .card.border-left-yellow {
-    border-left: 0.25rem solid #c4c112 !important
-}
-.fixedCard .card.border-left-ash {
-    border-left: 0.25rem solid #12c4b5 !important
-}
-.fixedCard .card.border-left-dblue {
-    border-left: 0.25rem solid #7412c4 !important
-}
-.fixedCard .cardUl li{
-    list-style: none;
-}
-.fixedCard .cardUl li .h4{
-    font-size: 14px!important;
-    /* letter-spacing: .2px; */
-}
-.fixedCard .cardUl li .h2 {
-    color: #6c6969 !important;
-    font-weight: 600 !important;
-    font-size: 27px;
-}
-
-.fixedCard .cardUl li .text-primary{
-    color: #4653cc !important;
-}
-.fixedCard .cardUl li .text-success {
-    color: #1cc85e !important;
-}
-.fixedCard .cardUl li .text-info {
-    color: #1c97c8 !important;
-}
-.fixedCard .cardUl li .text-pink {
-    color: #c21cc8 !important;
-}
-.fixedCard .cardUl li .text-orange {
-    color: #e49a2b !important;
-}
-.fixedCard .cardUl li .text-red {
-    color: #c81c50 !important;
-}
-.fixedCard .cardUl li .text-brown{
-    color: #7e5144 !important;
-}
-.fixedCard .cardUl li .text-yellow{
-    color: #c4c112 !important;
-}
-.fixedCard .cardUl li .text-ash {
-    color: #12c4b5 !important;
-}
-.fixedCard .cardUl li .text-dblue{
-    color: #7412c4 !important;
-}
-
-
-.responsive {
-    overflow-x: auto;
-}
-.DynamicCard .card .box{
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    width: 100%;
-    /* margin-right: 15px; */
-    /* transform: translate(-60px, 0); */
-}
-.DynamicCard .card .box .slider{
-   width: 250px;
-   /* margin-right: 50px; */
-   transform: translate(-90px, 0);
-   display: flex;
-   justify-content: center;
-   align-items: center;
-}
-.DynamicCard .card .box .slider span.val1{
-    transform: translateX(-15px);
- }
-.DynamicCard .card .box .slider span.val2{
-    transform: translateX(15px);
- }
-.DynamicCard .card .box .btn1{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #269de2;
-    color: #fff;
-    margin: 0px 10px;
-    width: 80px;
-}
-.DynamicCard .card .box .btn2{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #18c26d;
-    color: #fff;
-    width: 80px;
-}
-
 .triangle-fresh {
     width: 0;
     height: 0;
@@ -782,7 +576,7 @@ body {
     width: 0;
     height: 0;
     border-top: 80px solid transparent;
-    border-right: 80px solid #36b9cc ;
+    border-right: 80px solid rgb(78, 183, 243);
     border-bottom: 80px solid transparent;
     border-left: -20px solid transparent;
     rotate: 0deg!important;
@@ -940,30 +734,4 @@ footer a {
 }
 .CustomerCreationMain .tabContent textarea{
     font-size: 14px;    
-}
-
-.Competitor .tabContent label{
-    font-size: 14px;
-    font-weight: 500 ;
-    color: #5f5f5f;
-} 
-.Competitor .tabContent input{
-    font-size: 14px;    
-}
-.Competitor .tabContent textarea{
-    font-size: 14px;    
-}
-
-
-.Competitor .CompetitorDetails .card{
-    box-shadow: 1px 3px 8px #3e3b3b1a;
-    border: none;
-}
-/* .Competitor .CompetitorDetails .card a{    
-    border-bottom: none;
-} */
-
-.Competitor .CompetitorDetails h6 {
-    font-size: 13px;
-    font-weight: 600!important;
 }
