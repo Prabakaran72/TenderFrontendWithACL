@@ -4,11 +4,11 @@ import { Link } from "react-router-dom"
 import AuthContext from "../../../storeAuth/auth-context"
 import { usePageTitle } from "../../hooks/usePageTitle"
 import { can } from "../../UserPermission"
-import CityMasterList from "./CityMasterList"
+import UserPermissionList from "./UserPermissionList"
 
 
-const CityMasterView = () => {
-    usePageTitle("City Master List")
+const UserPermissionView = () => {
+    usePageTitle("User Permission List")
     const {permission} = useContext(AuthContext)
     return (
     <Fragment>
@@ -20,10 +20,10 @@ const CityMasterView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                 {!!(permission?.Cities?.can_add) && <Link
-                    to="citycreation"
+                   {!!(permission?.["User Permissions"]?.can_add) && <Link
+                    to="create"
                     className="btn btn-primary btn-icon-split rounded-pill"
-                  >
+                    >
                     <span className="icon text-white-50">
                       <i className="fas fa-plus-circle" />
                     </span>
@@ -34,7 +34,7 @@ const CityMasterView = () => {
             </div>
             <div className="row mt-3">
               <div className="col-lg-12">
-                <CityMasterList/>
+                <UserPermissionList/>
               </div>
             </div>
           </div>
@@ -44,4 +44,4 @@ const CityMasterView = () => {
     )
 }
 
-export default CityMasterView
+export default UserPermissionView

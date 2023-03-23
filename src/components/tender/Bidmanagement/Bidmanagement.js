@@ -1,6 +1,7 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import AuthContext from "../../../storeAuth/auth-context";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import useInputValidation from "../../hooks/useInputValidation";
 import { isNotEmpty } from "../CommonFunctions/CommonFunctions";
@@ -12,6 +13,7 @@ function Bidmanagement(props) {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(false);
   const [list, setListarr] = useState([])
+  const {permission} = useContext(AuthContext)
 
   const {
     value: fromdateValue,
@@ -58,7 +60,12 @@ function Bidmanagement(props) {
 
     let list = [...response.data.tenderCreationList];
     
-    let listarr = list.map((item, index, arr)=> ({
+    let listarr = list.map((item, index, arr)=> {
+      
+      let editbtn = !!(permission?.["Bids Managements"]?.can_edit) ? '<i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+      let deletebtn = !!(permission?.["Bids Managements"]?.can_delete) ?  '<i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>' : '';
+
+      return {
       ...item,
       NITdate:FormattedDate(item.nitdate),
 
@@ -68,12 +75,13 @@ function Bidmanagement(props) {
       submissiondate:(item.submissiondate) ? FormattedDate(item.submissiondate) : '',
       status:`<span class="font-weight-bold text-primary">${item.tenderStatus}</span>`,
       current_stage:`<span class="font-weight-bold text-warning">Stage</span>`,
-      action:`
+      // action:`
       
-      <i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> 
-      <i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>`,
+      // <i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> 
+      // <i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>`,
+      action : editbtn+''+deletebtn,
       sl_no : index+1
-    }))
+    }})
 // <i class="fa fa-print text-info mr-2 h6" style="cursor:pointer; font-size: 1.25rem" title="Print"></i>  -- To add @ line 72 
     return listarr;
   }

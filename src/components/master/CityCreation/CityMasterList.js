@@ -145,8 +145,8 @@ content="Fetching Data..." />}
                 {item.city_status==='Active' && <td className="text-success font-weight-bold">Active</td>}
                 {item.city_status==='InActive' && <td className="">Inactive</td>}
                 <td>
-               { can('city-edit', (permission || [])) && <Link to = {`citycreation/${item.id}`}><i className="fas fa-edit text-primary"  ></i></Link>}
-               { can('city-delete', (permission || [])) && <Link onClick={() => deleteHandler(item.id, item.city_name )}><i className="fas fa-trash text-danger mx-3"></i></Link>}
+              {!!(permission?.Cities?.can_edit) && <Link to = {`citycreation/${item.id}`}><i className="fas fa-edit text-primary"  ></i></Link>}
+               {!!(permission?.Cities?.can_delete) && <Link onClick={() => deleteHandler(item.id, item.city_name )}><i className="fas fa-trash text-danger mx-3"></i></Link>}
                 </td>
               </tr>
             );

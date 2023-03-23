@@ -14,6 +14,7 @@ const CustomerCreation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const authData = useContext(AuthContext);
+  const {permission} = useContext(AuthContext)
 
   const createCustomer = async () => {
     let data = {
@@ -47,12 +48,12 @@ const CustomerCreation = () => {
               initial={{scale: 0,opacity:0}} animate={{scale:1,opacity:1}} transition={{type:'tween'}}>
               <div className="card-body">
                 <div className="float-right ">
-                 {can('customer-create', authData.permission) && <Link to ="main/profile" state={{ data: data }}  className=" btn btn-primary btn-icon-split">
+                 {!!(permission?.Customers?.can_add) ? <Link to ="main/profile" state={{ data: data }}  className=" btn btn-primary btn-icon-split">
                     <span className="icon text-white-50">
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>}
+                  </Link> : ''}
                 </div>                
                 <div>
                   <CustomerCreationList />

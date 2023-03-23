@@ -145,8 +145,8 @@ const StateMasterList = () => {
                 {item.state_status==='InActive' && <td className="">Inactive</td>}
                 
                 <td>
-                {can('state-edit', (permission || [])) && <Link to = {`statecreation/${item.id}`}><i className="fas fa-edit text-primary"  ></i></Link>}
-                {can('state-delete', (permission || [])) && <Link onClick={() => deleteState(item.id, item.state_name)}><i className="fas fa-trash text-danger mx-3"></i></Link>}
+                {!!(permission?.States?.can_edit) && <Link to = {`statecreation/${item.id}`}><i className="fas fa-edit text-primary"  ></i></Link>}
+                {!!(permission?.States?.can_delete) && <Link onClick={() => deleteState(item.id, item.state_name)}><i className="fas fa-trash text-danger mx-3"></i></Link>}
                 </td>
               </tr>
             );

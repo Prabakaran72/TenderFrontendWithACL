@@ -60,12 +60,20 @@ import UserType from "./components/master/UserType/UserType";
 import UserCreation from "./components/master/UserCreation/UserCreation";
 import CallTypeView from "./components/master/CallLogs/CallType/CallTypeView";
 import CallType from "./components/master/CallLogs/CallType/CallType";
-// import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
-// import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
+
+import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
+import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
+import UserPermission from "./components/master/UserPermission/UserPermission";
+import UserPermissionView from "./components/master/UserPermission/UserPermissionView";
+
+
+
 import CallLogMain from "./components/calllog/CallLogCreation/CallLogMain";
+
 
 function App() {
   const authData = useContext(AuthContext);
+  const {permission} = useContext(AuthContext)
   // const [role, setRole] = useState([]); 
   // const [permission, setPermission] = useState([]); 
 
@@ -98,23 +106,23 @@ function App() {
           {/* {authCtx.isLoggedIn && ( */}
           <Route path="/tender" element={<Masterlayout />}>
             <Route index element={<Dashboard />} />
-            <Route path="tendertracker" element={can('tenderTracker-list' , (authData.permission || [])) ? <Tendertracker /> : <Unauthorized/>} />
-            <Route path="tendercreation" element={can('tenderCreation-create' , (authData.permission || [])) ? <Tendercreation /> : <Unauthorized/>} />
-            <Route path="legacystatement" element={can('legacyStatment-list' , (authData.permission || [])) ? <Legacystatement /> : <Unauthorized/>} />
+            <Route path="tendertracker" element={!!(permission?.["Tender Tracker"]?.can_view) ? <Tendertracker />: <Unauthorized/> } />
+            <Route path="tendercreation" element={!!(permission?.Tenders?.can_add) ? <Tendercreation /> : <Unauthorized/> } />
+            <Route path="legacystatement" element={!!(permission?.["Legacy Statements"]?.can_view) ? <Legacystatement /> : <Unauthorized/>} />
             <Route path="bidmanagement">
-              <Route path="list" element={can('bidsManagement-list' , (authData.permission || [])) ? <Bidmanagement /> : <Unauthorized/>} />
-              <Route path="list/main" element={can('bidsManagement-create' , (authData.permission || [])) ? <BidmanagementMain /> : <Unauthorized/>}>
-                <Route path="bidcreationmain/:tenderid" element={can('bidsManagement-edit' , (authData.permission || [])) ? <BidCreationMain /> : <Unauthorized/>} />
+              <Route path="list" element={!!(permission?.['Bids Managements']?.can_view) ? <Bidmanagement /> : <Unauthorized/>} />
+              <Route path="list/main" element={(!!(permission?.['Bids Managements']?.can_add) || !!(permission?.['Bids Managements']?.can_edit)) ? <BidmanagementMain /> : <Unauthorized/>}>
+                <Route path="bidcreationmain/:tenderid" element={ <BidCreationMain /> } />
                 <Route
                   path="bidcreationmain/:tenderid/:id"
-                  element={can('bidsManagement-edit' , (authData.permission || [])) ? <BidCreationMain /> : <Unauthorized/>}
+                  element={ <BidCreationMain /> }
                 />
-                <Route path="bidsubmission" element={can('bidsManagement-create' , (authData.permission || [])) ? <BidSubmission /> : <Unauthorized/>} />
-                <Route path="bidsubmission/:id" element={can('bidsManagement-edit' , (authData.permission || [])) ? <BidSubmission /> : <Unauthorized/>} />
-                <Route path="tenderstatus" element={can('bidsManagement-create' , (authData.permission || [])) ? <TenderStatus /> : <Unauthorized/>} />
-                <Route path="tenderstatus/:id" element={can('bidsManagement-edit' , (authData.permission || [])) ? <TenderStatus /> : <Unauthorized/>} />
-                <Route path="workorder" element={can('bidsManagement-create' , (authData.permission || [])) ? <Workorder /> : <Unauthorized/>} />
-                <Route path="workorder/:id" element={can('bidsManagement-edit' , (authData.permission || [])) ? <Workorder /> : <Unauthorized/>} />
+                <Route path="bidsubmission" element={ <BidSubmission /> } />
+                <Route path="bidsubmission/:id" element={ <BidSubmission /> } />
+                <Route path="tenderstatus" element={ <TenderStatus /> } />
+                <Route path="tenderstatus/:id" element={ <TenderStatus /> } />
+                <Route path="workorder" element={ <Workorder /> } />
+                <Route path="workorder/:id" element={ <Workorder /> } />
               </Route>
             </Route>
 
@@ -122,51 +130,51 @@ function App() {
 
 
             <Route path="master">
-             {can('customer-list' , (authData.permission || [])) && <Route
+              <Route
                 path="customercreation/list"
-                element={<CustomerCreation />}
-              />}
+                element={!!(permission?.Customers?.can_view) ? <CustomerCreation /> : <Unauthorized/>}
+              />
               <Route
                 path="customercreation/list/main"
                 element={<CustomerCreationMain />}
               >
-                {can('customer-create' , (authData.permission || [])) && <Route path="profile" element={<CustomerCreationProfile />} />}
-               {can('customer-edit' , (authData.permission || [])) && <Route
+                <Route path="profile" element={!!(permission?.Customers?.can_add) ? <CustomerCreationProfile /> : <Unauthorized/>} />
+               <Route
                   path="profile/:id"
-                  element={<CustomerCreationProfile />}
-                />}
-                {can('customer-create' , (authData.permission || [])) && <Route
+                  element={!!(permission?.Customers?.can_edit) ? <CustomerCreationProfile /> : <Unauthorized/>}
+                />
+                 <Route
                   path="contactperson"
-                  element={<CustomerCreationContactPerson />}
-                />}
-                {can('customer-edit' , (authData.permission || [])) && <Route
+                  element={!!(permission?.Customers?.can_add) ? <CustomerCreationContactPerson /> : <Unauthorized/>}
+                />
+                <Route
                   path="contactperson/:id"
-                  element={<CustomerCreationContactPerson />}
-                />}
-               {can('customer-create' , (authData.permission || [])) && <Route
+                  element={!!(permission?.Customers?.can_edit) ? <CustomerCreationContactPerson /> : <Unauthorized/>}
+                />
+                <Route
                   path="ulbdetails"
-                  element={<CustomerCreationUlbDetails />}
-                />}
-               {can('customer-edit' , (authData.permission || [])) && <Route
+                  element={!!(permission?.Customers?.can_add) ? <CustomerCreationUlbDetails /> : <Unauthorized/>}
+                />
+               <Route
                   path="ulbdetails/:id"
-                  element={<CustomerCreationUlbDetails />}
-                />}
-                {can('customer-create' , (authData.permission || [])) && <Route
+                  element={!!(permission?.Customers?.can_edit) ? <CustomerCreationUlbDetails /> : <Unauthorized/>}
+                />
+                 <Route
                   path="bankdetails"
-                  element={<CustomerCreationBankDetails />}
-                />}
-               {can('customer-edit' , (authData.permission || [])) && <Route
+                  element={!!(permission?.Customers?.can_add) ? <CustomerCreationBankDetails /> : <Unauthorized/>}
+                />
+               <Route
                   path="bankdetails/:id"
-                  element={<CustomerCreationBankDetails />}
-                />}
-                {can('customer-create' , (authData.permission || [])) && <Route
+                  element={!!(permission?.Customers?.can_edit) ? <CustomerCreationBankDetails /> : <Unauthorized/>}
+                />
+                 <Route
                   path="swmprojectstatus"
-                  element={<CustomerCreationSWMProjectStatus />}
-                />}
-               {can('customer-edit' , (authData.permission || [])) && <Route
+                  element={!!(permission?.Customers?.can_add) ? <CustomerCreationSWMProjectStatus /> : <Unauthorized/> }
+                />
+               <Route
                   path="swmprojectstatus/:id"
-                  element={<CustomerCreationSWMProjectStatus />}
-                />}
+                  element={!!(permission?.Customers?.can_edit) ? <CustomerCreationSWMProjectStatus /> : <Unauthorized/>}
+                />
               </Route>
               <Route
                 path="customercreation/tabs"
@@ -174,37 +182,37 @@ function App() {
               />
               <Route
                 path="competitorcreation"
-                element={can('competitor-list' , (authData.permission || []))  ? <CompetitorCreation /> : <Unauthorized/>}
+                element={!!(permission?.Competitors?.can_view) ? <CompetitorCreation /> : <Unauthorized/>}
               />
 
               <Route
                 path="competitorcreation/competitor"
-                element={<Competitor />}
+                element={(!!(permission?.Competitors?.can_add) || !!(permission?.Competitors?.can_edit)) ? <Competitor /> : <Unauthorized/>}
               >
-                <Route path="profile" element={can('competitor-create' , (authData.permission || [])) ? <CompetitorProfile /> : <Unauthorized/>} />
-                <Route path="profile/:id" element={can('competitor-edit' , (authData.permission || [])) ?  <CompetitorProfile /> : <Unauthorized/>} />
+                <Route path="profile" element={ <CompetitorProfile /> } />
+                <Route path="profile/:id" element={  <CompetitorProfile /> } />
                 <Route path="details" element={<CompetitorDetails />}>
-                  <Route path="branches" element={can('competitor-create' , (authData.permission || [])) ? <CompetitorBranchForm /> : <Unauthorized/>} />
+                  <Route path="branches" element={ <CompetitorBranchForm /> } />
                 </Route>
 
                 {/*route for to edit with id*/}
                 <Route path="details/:compid" element={<CompetitorDetails />}>
                   <Route
                     path="branches/:compid"
-                    element={can('competitor-edit' , (authData.permission || [])) ? <CompetitorBranchForm /> : <Unauthorized/> }
+                    element={ <CompetitorBranchForm />  }
                   />
                 </Route>
               </Route>
 
               <Route path="statemaster">
-                <Route index element={can('state-list' , (authData.permission || [])) ? <StateMasterView /> : <Unauthorized/>} />
-                <Route path="statecreation" element={can('state-create' , (authData.permission || [])) ? <StateMaster /> : <Unauthorized/>} />
-                <Route path="statecreation/:id" element={can('state-edit' , (authData.permission || [])) ? <StateMaster /> : <Unauthorized/>} />
+                <Route index element={!!(permission?.States?.can_view) ? <StateMasterView /> : <Unauthorized/>} />
+                <Route path="statecreation" element={!!(permission?.States?.can_add) ? <StateMaster /> : <Unauthorized/>} />
+                <Route path="statecreation/:id" element={!!(permission?.States?.can_edit) ? <StateMaster /> : <Unauthorized/>} />
               </Route>
               <Route path="countrymaster">
-                <Route index element={can('country-list' , (authData.permission || []))  ? <CountryMasterView /> : <Unauthorized/>} />
-                <Route path="countrycreation" element={can('country-create' , (authData.permission || [])) ? <CountryMaster /> : <Unauthorized/>} />
-                <Route path="countrycreation/:id" element={can('country-edit' , (authData.permission || [])) ? <CountryMaster /> : <Unauthorized/>} />
+                <Route index element={!!(permission?.Countries?.can_view) ? <CountryMasterView /> : <Unauthorized/> } />
+                <Route path="countrycreation" element={!!(permission?.Countries?.can_add) ?  <CountryMaster /> : <Unauthorized/> } />
+                <Route path="countrycreation/:id" element={!!(permission?.Countries?.can_edit) ? <CountryMaster /> : <Unauthorized/>} />
               </Route>
               <Route path="ulbmaster">
                 <Route index element={<ULBMasterView />} />
@@ -212,88 +220,93 @@ function App() {
                 <Route path="ulbcreation/:id" element={<ULBMaster />} />
               </Route>
               <Route path="unitmaster">
-                <Route index element={can('unit-list' , (authData.permission || []))  ? <UnitMasterView /> : <Unauthorized/>} />
-                <Route path="unitcreation" element={can('unit-create' , (authData.permission || []))  ? <UnitMaster /> : <Unauthorized/>} />
-                <Route path="unitcreation/:id" element={can('unit-edit' , (authData.permission || []))  ? <UnitMaster /> : <Unauthorized/>} />
+                <Route index element={!!(permission?.Units?.can_view) ? <UnitMasterView /> : <Unauthorized/> } />
+                <Route path="unitcreation" element={!!(permission?.Units?.can_add) ? <UnitMaster /> : <Unauthorized/> } />
+                <Route path="unitcreation/:id" element={!!(permission?.Units?.can_edit) ? <UnitMaster /> : <Unauthorized/> } />
               </Route>
 
               <Route path="tendertypemaster">
-                <Route index element={can('tenderType-list' , (authData.permission || []))  ? <TenderTypeMasterView /> : <Unauthorized/>} />
+                <Route index element={!!(permission?.['Tender Types']?.can_view) ? <TenderTypeMasterView /> : <Unauthorized/> } />
                 <Route
                   path="tendertypecreation"
-                  element={can('tenderType-create' , (authData.permission || []))  ? <TenderTypeMaster /> : <Unauthorized/>}
+                  element={!!(permission?.['Tender Types']?.can_add) ? <TenderTypeMaster /> : <Unauthorized/>}
                 />
                 <Route
                   path="tendertypecreation/:id"
-                  element={can('tenderType-edit' , (authData.permission || []))  ?  <TenderTypeMaster /> : <Unauthorized/>}
+                  element={!!(permission?.['Tender Types']?.can_edit) ?  <TenderTypeMaster /> : <Unauthorized/> }
                 />
               </Route>
 
               <Route path="districtmaster">
-                <Route index element={can('district-list' , (authData.permission || [])) ?  <DistrictMasterView /> : <Unauthorized/>} />
-                <Route path="districtcreation" element={can('district-create' , (authData.permission || [])) ?  <DistrictMaster /> : <Unauthorized/>} />
+                <Route index element={!!(permission?.Districts?.can_view) ?  <DistrictMasterView /> : <Unauthorized/>} />
+                <Route path="districtcreation" element={!!(permission?.Districts?.can_add) ?  <DistrictMaster /> : <Unauthorized/>} />
                 <Route
                   path="districtcreation/:id"
-                  element={can('district-edit' , (authData.permission || [])) ?  <DistrictMaster /> : <Unauthorized/>}
+                  element={!!(permission?.Districts?.can_edit) ?   <DistrictMaster /> : <Unauthorized/>}
                 />
               </Route>
               <Route path="citymaster">
-                <Route index element={can('city-list' , (authData.permission || [])) ? <CityMasterView /> :  <Unauthorized/>} />
-                <Route path="citycreation" element={can('city-create' , (authData.permission || [])) ? <CityCreation /> :  <Unauthorized/>} />
-                <Route path="citycreation/:id" element={can('city-edit' , (authData.permission || [])) ? <CityCreation /> :  <Unauthorized/>} />
+                <Route index element={!!(permission?.Cities?.can_view) ?  <CityMasterView /> : <Unauthorized/>} />
+                <Route path="citycreation" element={!!(permission?.Cities?.can_add) ?  <CityCreation /> : <Unauthorized/>} />
+                <Route path="citycreation/:id" element={!!(permission?.Cities?.can_edit) ? <CityCreation /> : <Unauthorized/>} />
               </Route>
               <Route path="usertype">
-                <Route index element={can('userType-list' , (authData.permission || [])) ? <UserTypeView /> :  <Unauthorized/>} />
-                <Route path="create" element={can('userType-create' , (authData.permission || [])) ? <UserType /> :  <Unauthorized/>} />
-                <Route path="edit/:id" element={can('userType-edit' , (authData.permission || [])) ? <UserType /> :  <Unauthorized/>} />
+                <Route index element={!!(permission?.["User Type"]?.can_view) ? <UserTypeView /> : <Unauthorized/>} />
+                <Route path="create" element={!!(permission?.["User Type"]?.can_add) ? <UserType /> : <Unauthorized/>} />
+                <Route path="edit/:id" element={!!(permission?.["User Type"]?.can_edit) ? <UserType /> : <Unauthorized/>} />
+              </Route>
+              <Route path="userpermissions">
+                <Route index element={ !!(permission?.["User Permissions"]?.can_view) ? <UserPermissionView /> : <Unauthorized/>} />
+                <Route path="create" element={!!(permission?.["User Permissions"]?.can_add) ? <UserPermission /> : <Unauthorized/>} />
+                <Route path="edit/:id" element={!!(permission?.["User Permissions"]?.can_edit) ? <UserPermission /> : <Unauthorized/>} />
               </Route>
               <Route path="usercreation">
-                <Route index element={can('userCreation-list' , (authData.permission || [])) ? <UserCreationView/> :  <Unauthorized/>} />
-                <Route path="create" element={can('userCreation-create' , (authData.permission || [])) ? <UserCreation /> :  <Unauthorized/>} />
-                <Route path="edit/:id" element={can('userCreation-edit' , (authData.permission || [])) ? <UserCreation /> :  <Unauthorized/>} />
+                <Route index element={!!(permission?.["User Creation"]?.can_view) ? <UserCreationView/> : <Unauthorized/>} />
+                <Route path="create" element={!!(permission?.["User Creation"]?.can_add) ? <UserCreation /> : <Unauthorized/>} />
+                <Route path="edit/:id" element={!!(permission?.["User Creation"]?.can_edit) ? <UserCreation /> : <Unauthorized/>} />
               </Route>
               <Route path="projecttype">
-                <Route index element={can('projectType-list' , (authData.permission || []))  ?  <ProjectTypeView /> : <Unauthorized/>} />
+                <Route index element={!!(permission?.['Project Types']?.can_view) ?  <ProjectTypeView /> : <Unauthorized/> } />
                 <Route
                   path="projecttypecreation"
-                  element={can('projectType-create' , (authData.permission || []))  ? <ProejctTypeMaster /> : <Unauthorized/>}
+                  element={!!(permission?.['Project Types']?.can_add) ? <ProejctTypeMaster /> : <Unauthorized/> }
                 />
                 <Route
                   path="projecttypecreation/:id"
-                  element={can('projectType-edit' , (authData.permission || []))  ? <ProejctTypeMaster /> : <Unauthorized/>}
+                  element={!!(permission?.['Project Types']?.can_edit) ? <ProejctTypeMaster /> : <Unauthorized/>}
                 />
               </Route>
               <Route path="projectstatus">
-                <Route index element={can('projectStatus-list' , (authData.permission || []))  ? <ProjectstatusView /> :<Unauthorized/>} />
+                <Route index element={ !!(permission?.['Project Status']?.can_view) ? <ProjectstatusView /> : <Unauthorized/>} />
                 <Route
                   path="projectstatuscreation"
-                  element={can('projectStatus-create' , (authData.permission || []))  ? <ProjectstatusMaster /> :<Unauthorized/>}
+                  element={!!(permission?.['Project Status']?.can_add) ? <ProjectstatusMaster /> : <Unauthorized/>} 
                 />
                 <Route
                   path="projectstatuscreation/:id"
-                  element={can('projectStatus-edit' , (authData.permission || []))  ? <ProjectstatusMaster /> :<Unauthorized/>}
+                  element={!!(permission?.['Project Status']?.can_edit) ? <ProjectstatusMaster /> : <Unauthorized/>}
                 />
               </Route>
               <Route path="test">
-                <Route index element={can('projectStatus-list' , (authData.permission || []))  ? <ProjectstatusView /> :<Unauthorized/> } />
+                <Route index element={ <ProjectstatusView /> } />
                 <Route
                   path="projectstatuscreation"
-                  element={can('projectStatus-create' , (authData.permission || []))  ? <ProjectstatusMaster /> : <Unauthorized/>}
+                  element={ <ProjectstatusMaster /> }
                 />
                 <Route
                   path="projectstatuscreation/:id"
-                  element={can('projectStatus-edit' , (authData.permission || []))  ? <ProjectstatusMaster /> :<Unauthorized/> }
+                  element={ <ProjectstatusMaster /> }
                 />
               </Route>
               <Route path="customersubcategory">
-                <Route index element={can('customerSubCategory-edit' , (authData.permission || []))  ? <CustSubCategView /> :<Unauthorized/>} />
+                <Route index element={!!(permission?.['Customer Sub Category']?.can_view) ? <CustSubCategView /> : <Unauthorized/>} />
                 <Route
                   path="customersubcategorycreation"
-                  element={can('customerSubCategory-edit' , (authData.permission || []))  ? <CustSubCategMaster /> :<Unauthorized/>}
+                  element={!!(permission?.['Customer Sub Category']?.can_add) ? <CustSubCategMaster /> : <Unauthorized/>}
                 />
                 <Route
                   path="customersubcategorycreation/:id"
-                  element={can('customerSubCategory-edit' , (authData.permission || []))  ? <CustSubCategMaster /> :<Unauthorized/>}
+                  element={!!(permission?.['Customer Sub Category']?.can_edit) ? <CustSubCategMaster /> : <Unauthorized/>}
                 />
               </Route>
               {/* <Route path="communicationfiles" >
@@ -303,37 +316,17 @@ function App() {
               </Route> */}
 
               {/*$$$  Have to modify permission name */}
-              <Route path="calltypemaster">  
-                <Route index element={can('tenderType-list' , (authData.permission || []))  ? <CallTypeView /> : <Unauthorized/>} />
-                <Route
-                  path="calltypecreation"
-                  element={can('tenderType-create' , (authData.permission || []))  ? <CallType /> : <Unauthorized/>}
-                />
-                <Route
-                  path="edit/:id"
-                  element={can('tenderType-edit' , (authData.permission || []))  ?  <CallType /> : <Unauthorized/>}
-                />
-              </Route>
+            
 
                {/*$$$  Have to modify permission name */}
-               {/* <Route path="businessforecastmaster">  
-                <Route index element={can('tenderType-list' , (authData.permission || []))  ? <BusinessForecastView /> : <Unauthorized/>} />
-                <Route
-                  path="creation"
-                  element={can('tenderType-create' , (authData.permission || []))  ? <BusinessForecast /> : <Unauthorized/>}
-                />
-                <Route
-                  path="creation/:id"
-                  element={can('tenderType-edit' , (authData.permission || []))  ?  <BusinessForecast /> : <Unauthorized/>}
-                />
-              </Route> */}
+
             </Route>
 
             <Route path="library">
               <Route path="communicationfiles" >
-                <Route index element={can('communicationFiles-list' , (authData.permission || []))  ? <CommunicationFilesView /> : <Unauthorized/>} />
-                <Route path="communicationfilescreation" element={can('communicationFiles-create' , (authData.permission || []))  ? <CommunicationFilesCreation /> : <Unauthorized/>}/>
-                <Route path="communicationfilescreation/:id" element={can('communicationFiles-edit' , (authData.permission || []))  ? <CommunicationFilesCreation /> : <Unauthorized/>}/>
+                <Route index element={!!(permission?.['Communication Files']?.can_view) ? <CommunicationFilesView /> : <Unauthorized/> } />
+                <Route path="communicationfilescreation" element={!!(permission?.['Communication Files']?.can_add) ? <CommunicationFilesCreation /> : <Unauthorized/> }/>
+                <Route path="communicationfilescreation/:id" element={!!(permission?.['Communication Files']?.can_edit) ? <CommunicationFilesCreation /> : <Unauthorized/> }/>
               </Route>
             </Route>
           </Route>

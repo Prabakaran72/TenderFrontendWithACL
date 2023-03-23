@@ -20,7 +20,7 @@ const ProjectTypeView = () => {
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="float-right">
-                     { can('projectType-create', (permission || [])) && <Link
+                      {!!(permission?.['Project Types']?.can_add) && <Link
                         to="projecttypecreation"
                         className="btn btn-primary btn-icon-split rounded-pill"
                       >

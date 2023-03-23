@@ -111,7 +111,7 @@ const UnitMasterList = () => {
           <td className="text-center">{unitData.unit_status}</td>
           <td className="text-center">
             <span>
-             {can('unit-edit', (permission || [])) && <i
+             {!!(permission?.Units?.can_edit) && <i
                 className="fas fa-edit text-primary h4"
                 onClick={(e) => editHandler(e, unitData.id)}
               ></i>}

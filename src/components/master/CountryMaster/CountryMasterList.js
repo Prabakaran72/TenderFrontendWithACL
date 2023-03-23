@@ -150,8 +150,8 @@ const CountryMasterList = () => {
         {item.country_status==='Active' && <td className="text-success font-weight-bold">Active</td>}
         {item.country_status==='InActive' && <td className="">Inactive</td>}
         <td>
-        { can('country-edit', (permission || [])) && <Link to = {`countrycreation/${item.id}`}><i className="fas fa-edit text-primary"></i></Link>}
-        { can('country-delete', (permission || [])) && <Link onClick={() => deletehandler(item.id, item.country_name)}><i className="fas fa-trash text-danger mx-3"></i></Link> }
+         {!!(permission?.Countries?.can_edit) && <Link to = {`countrycreation/${item.id}`}><i className="fas fa-edit text-primary"></i></Link>}
+         {!!(permission?.Countries?.can_delete) &&  <Link onClick={() => deletehandler(item.id, item.country_name)}><i className="fas fa-trash text-danger mx-3"></i></Link>} 
         </td>
       </tr>
     );

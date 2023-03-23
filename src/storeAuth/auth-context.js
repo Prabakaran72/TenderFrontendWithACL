@@ -25,7 +25,7 @@ export const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem('token')
   const [token, setToken] = useState(initialToken); 
   const [role, setRole] = useState([]); 
-  const [permission, setPermission] = useState([]); 
+  const [permission, setPermission] = useState({}); 
 
   const userIsLoggedIn = !!token;
   

@@ -39,15 +39,6 @@ const ProejectTypeList = () => {
   const getList = async () => {
     const projecttypelist = await axios.get(`${baseUrl}/api/projecttype`);
     
-    let userPermissions ;
-    let data = {
-      tokenid : localStorage.getItem('token')
-    }
-
-    let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
-    if(rolesAndPermission.status === 200){
-      userPermissions = rolesAndPermission.data;
-    }
 
     var dataSet;
     if (
@@ -56,8 +47,8 @@ const ProejectTypeList = () => {
     ) {
       let list = [...projecttypelist.data.projecttype];
       let listarr = list.map((item, index, arr) => {
-        let editbtn = can('projectType-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
-        let deletebtn =  can('projectType-delete', (userPermissions.permission || [])) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        let editbtn = !!(permission?.['Project Types']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '' ;
+        let deletebtn = !!(permission?.['Project Types']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
         return {
         ...item,
         status : (item.status ===  "Active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,

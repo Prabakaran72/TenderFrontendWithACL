@@ -22,7 +22,7 @@ const UnitMasterView = () => {
                 <div className="row">
                 <div className="col-6 text-left ml-3"> <h6 className="m-0 font-weight-bold text-primary">UNIT MASTER LIST</h6></div>
                 <div className="col-5 text-right ml-5">
-                 {can('unit-create', (permission || [])) && <Link
+                  {!!(permission?.Units?.can_add) && <Link
                     to="unitcreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >

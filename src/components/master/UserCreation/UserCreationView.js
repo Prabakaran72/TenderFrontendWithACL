@@ -21,7 +21,7 @@ const UserCreationView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                {can('userCreation-create', (permission || [])) && <Link
+               {!!(permission?.["User Creation"]?.can_add) ? <Link
                     to="create"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
@@ -29,7 +29,7 @@ const UserCreationView = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>}
+                  </Link> : ''}
                 </div>
               </div>
             </div>

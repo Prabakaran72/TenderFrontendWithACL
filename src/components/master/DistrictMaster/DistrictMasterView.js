@@ -9,6 +9,7 @@ import DistrictMasterList from "./DistrictMasterList";
 const DistrictMasterView = () => {
   usePageTitle("District Master Creation");
   const {permission} = useContext(AuthContext)
+
   return (
     <>
       {/* Page Heading */}
@@ -21,7 +22,8 @@ const DistrictMasterView = () => {
                 <div className="row">
                 <div className="col-6 text-left ml-3"> <h6 className="m-0 font-weight-bold text-primary">DISTRICT MASTER LIST</h6></div>
                 <div className="col-5 text-right ml-5">
-                  {can('district-create', (permission || [])) &&  <Link
+          
+                 {!!(permission?.Districts?.can_add) && <Link
                     to="districtcreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >

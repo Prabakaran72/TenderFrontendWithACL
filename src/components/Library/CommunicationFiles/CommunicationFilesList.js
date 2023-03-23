@@ -130,8 +130,8 @@ const CommunicationFilesList = (props) => {
 
         let listarr = list.map((item, index, arr)=> {
           
-          let editbtn = can('communicationFiles-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i>  ' : '';
-          let deletebtn =  can('communicationFiles-delete', (userPermissions.permission || [])) ?  '<i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>' : '';
+          let editbtn = !!(permission?.['Communication Files']?.can_edit) ? '<i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i>  ' : '' ;
+          let deletebtn = !!(permission?.['Communication Files']?.can_delete) ? '<i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>' : '' ;
           return {
           ...item,
           date    : item.date ? FormattedDate(item.date) : '',
