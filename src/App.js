@@ -62,6 +62,8 @@ import CallTypeView from "./components/master/CallLogs/CallType/CallTypeView";
 import CallType from "./components/master/CallLogs/CallType/CallType";
 import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
 import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
+import UserPermission from "./components/master/UserPermission/UserPermission";
+import UserPermissionView from "./components/master/UserPermission/UserPermissionView";
 
 
 function App() {
@@ -305,30 +307,10 @@ function App() {
               </Route> */}
 
               {/*$$$  Have to modify permission name */}
-              <Route path="calltypemaster">  
-                <Route index element={can('tenderType-list' , (authData.permission || []))  ? <CallTypeView /> : <Unauthorized/>} />
-                <Route
-                  path="calltypecreation"
-                  element={can('tenderType-create' , (authData.permission || []))  ? <CallType /> : <Unauthorized/>}
-                />
-                <Route
-                  path="edit/:id"
-                  element={can('tenderType-edit' , (authData.permission || []))  ?  <CallType /> : <Unauthorized/>}
-                />
-              </Route>
+            
 
                {/*$$$  Have to modify permission name */}
-               <Route path="businessforecastmaster">  
-                <Route index element={can('tenderType-list' , (authData.permission || []))  ? <BusinessForecastView /> : <Unauthorized/>} />
-                <Route
-                  path="creation"
-                  element={can('tenderType-create' , (authData.permission || []))  ? <BusinessForecast /> : <Unauthorized/>}
-                />
-                <Route
-                  path="creation/:id"
-                  element={can('tenderType-edit' , (authData.permission || []))  ?  <BusinessForecast /> : <Unauthorized/>}
-                />
-              </Route>
+              
             </Route>
 
             <Route path="library">
