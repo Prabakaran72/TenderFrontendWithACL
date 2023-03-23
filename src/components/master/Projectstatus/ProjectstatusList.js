@@ -58,8 +58,8 @@ const ProjectstatusList = () => {
     ) {
       let list = [...projectstatuslist.data.projectstatus];
       let listarr = list.map((item, index, arr) =>{ 
-        let editbtn = can('projectStatus-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
-        let deletebtn =  can('projectStatus-delete', (userPermissions.permission || [])) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        let editbtn = !!(permission?.['Project Status']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> '  : '';
+        let deletebtn =  !!(permission?.['Project Status']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
         return {
         ...item,
         status : (item.status ===  "Active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,

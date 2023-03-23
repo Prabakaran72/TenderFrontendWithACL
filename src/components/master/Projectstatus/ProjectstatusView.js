@@ -20,7 +20,7 @@ const ProjectstatusView = () => {
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="float-right">
-                     {can('projectStatus-create', (permission || [])) && <Link
+                      { !!(permission?.['Project Status']?.can_add) && <Link
                         to="projectstatuscreation"
                         className="btn btn-primary btn-icon-split rounded-pill"
                       >

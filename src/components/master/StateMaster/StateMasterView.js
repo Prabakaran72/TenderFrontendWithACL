@@ -21,7 +21,7 @@ const StateMasterView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                  {can('state-create', (permission || [])) && <Link
+                  {!!(permission?.States?.can_add) && <Link
                     to="statecreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >

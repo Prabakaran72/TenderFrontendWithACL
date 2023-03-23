@@ -18,7 +18,7 @@ const CountryMasterView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                 {can('country-create', (permission || [])) && <Link
+                  {!!(permission?.Countries?.can_add) && <Link
                     to="countrycreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >

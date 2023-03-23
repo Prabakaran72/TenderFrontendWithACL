@@ -21,7 +21,7 @@ const CustSubCategView = () => {
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="float-right">
-                     {can('customerSubCategory-create', (permission || [])) &&  <Link
+                      {!!(permission?.['Customer Sub Category']?.can_add) && <Link
                         to="customersubcategorycreation"
                         className="btn btn-primary btn-icon-split rounded-pill"
                       >

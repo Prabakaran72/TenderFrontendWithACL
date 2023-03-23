@@ -34,6 +34,7 @@ const CustomerCreationList = () => {
   const location = useLocation();
   const [customerList, setCustomerlist] = useState([]);
   const authData = useContext(AuthContext);
+  const {permission} = useContext(AuthContext)
 
   useEffect(() => {
     table = $("#dataTable").DataTable({
@@ -101,23 +102,13 @@ const CustomerCreationList = () => {
     setLoading(true);
     let response = await axios.get(`${baseUrl}/api/customercreationprofile`);
     // let userPermissions = authData.permission
-    let userPermissions;
-    let data = {
-      tokenid : localStorage.getItem('token')
-    }
-
-      
-    let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
-      if(rolesAndPermission.status === 200){
-        userPermissions = rolesAndPermission.data;
-      }
-    
+   
 
 
     let list = [...response.data.customercreationList];
     let listarr = list.map((item, index, arr) => {
-      let editbtn = can('customer-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
-      let deletebtn =  can('customer-delete', (userPermissions.permission || [])) ?  '<i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>' : '';
+      let editbtn = !!(permission?.Customers?.can_edit) ? '<i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+      let deletebtn =  !!(permission?.Customers?.can_delete) ?  '<i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>' : '' ;
     return {
       ...item,
       customer_group:

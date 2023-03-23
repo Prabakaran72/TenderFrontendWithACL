@@ -159,12 +159,12 @@ const TenderTypeMasterList = () => {
           </td>
           <td className="text-center">
             <span>
-              {can('tenderType-edit', (permission || [])) &&  <i
+              {!!(permission?.['Tender Types']?.can_edit) && <i
                 className="fas fa-edit text-primary h6"
                 onClick={(e) => editHandler(e, item.id)}
               ></i>}
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-             { can('tenderType-delete', (permission || [])) &&  <i
+             {!!(permission?.['Tender Types']?.can_delete) && <i
                 className="fas fa-trash-alt text-danger h6"
                 onClick={(e) => deleteHandler(e, item.id)}
               ></i>}

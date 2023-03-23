@@ -36,7 +36,7 @@ const CompetitorCreation = () => {
   useDocumentTitle("Competitor Creation");
   usePageTitle("Competitor Creation");
   const { server1: baseUrl } = useBaseUrl();
-  const authData = useContext(AuthContext)
+  const {permission} = useContext(AuthContext)
   const navigate = useNavigate();
   //Id is the Last submited form id
   const { id } = useParams();
@@ -132,10 +132,10 @@ const CompetitorCreation = () => {
         <td> {item.mobile} </td>
         <td> {item.email} </td>
         <td>
-         {can('competitor-edit', (authData.permission || [])) && <Link to={`competitor/profile/${item.id}`}>
+          {!!(permission?.Competitors?.can_edit) && <Link to={`competitor/profile/${item.id}`}>
             <i className="fas fa-edit text-primary"></i>
           </Link>}
-         {can('competitor-delete', (authData.permission || []))  && <Link onClick={() => deletehandler(item.id)}><i className="fas fa-trash text-danger mx-3"></i></Link> }
+          {!!(permission?.Competitors?.can_delete) && <Link onClick={() => deletehandler(item.id)}><i className="fas fa-trash text-danger mx-3"></i></Link>} 
         </td>
       </tr>
     );
@@ -150,7 +150,7 @@ const CompetitorCreation = () => {
             <div className="card shadow mb-4">
               <div className="card-body">
                 <div className="float-right">
-                 {can('competitor-create', (authData.permission || [])) &&      <Link
+                  {!!(permission?.Competitors?.can_add) ? <Link
                     to={id ? "competitor/profile/${id}" : "competitor/profile"}
                     className="btn btn-primary btn-icon-split"
                   >
@@ -158,7 +158,7 @@ const CompetitorCreation = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>}
+                  </Link> : ''}
                 </div>
               </div>
             </div>

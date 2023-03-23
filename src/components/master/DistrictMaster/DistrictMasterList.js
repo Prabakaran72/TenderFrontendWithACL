@@ -153,12 +153,12 @@ content="Fetching Data..." />
       
           <td className="text-center">
             <span className ="h5" >
-              {can('district-edit', (permission || [])) &&  <i
+              {!!(permission?.Districts?.can_edit) && <i
                 className="fa fa-edit text-primary mr-4"
                 onClick={(e) => editHandler(e, districtData.id)}
                
               ></i>}
-              {can('district-delete', (permission || [])) &&<i
+              {!!(permission?.Districts?.can_delete) && <i
                 className="fa fa-trash text-danger "
              
                 onClick={() => deleteHandler(districtData.id, districtData.district_name)}

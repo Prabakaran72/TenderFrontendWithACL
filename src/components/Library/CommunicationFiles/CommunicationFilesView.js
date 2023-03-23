@@ -17,7 +17,7 @@ const CommunicationFilesView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                 {can('communicationFiles-create', (permission || [])) && <Link
+                  {!!(permission?.['Communication Files']?.can_add) && <Link
                     to="communicationfilescreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >

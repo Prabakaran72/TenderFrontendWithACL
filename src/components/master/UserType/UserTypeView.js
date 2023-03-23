@@ -12,6 +12,7 @@ import UserTypeList from "./UserTypeList"
 const UserTypeView = () => {
     usePageTitle("User Type List")
     const {permission} = useContext(AuthContext)
+    console.log(permission)
     return (
     <Fragment>
       {/* Page Heading */}
@@ -22,7 +23,8 @@ const UserTypeView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                {can('userType-create', (permission || [])) && <Link
+                
+                 {!!(permission?.["User Type"]?.can_add) ? <Link
                     to="create"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
@@ -30,7 +32,7 @@ const UserTypeView = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>}
+                  </Link> : ''}
                 </div>
               </div>
             </div>

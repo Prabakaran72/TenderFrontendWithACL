@@ -27,7 +27,7 @@ const TenderTypeMasterView = () => {
                     </h6>
                   </div>
                   <div className="col-5 text-right ml-5">
-                   {can('tenderType-create', (permission || [])) &&  <Link
+                   {!!(permission?.['Tender Types']?.can_add) && <Link
                       to="tendertypecreation"
                       className="btn btn-primary btn-icon-split rounded-pill"
                     >
