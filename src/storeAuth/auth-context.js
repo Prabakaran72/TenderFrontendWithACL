@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useBaseUrl } from "../components/hooks/useBaseUrl";
 
 
 const AuthContext = React.createContext({
@@ -10,6 +11,7 @@ const AuthContext = React.createContext({
   login: (token, username, role, permission) => {},
   rolesAndPermission : (roles, permission) => {},
   logout: () => {},
+  getpermissions : () => {},
 });
 
 let data = {
@@ -26,6 +28,7 @@ export const AuthContextProvider = (props) => {
   const [token, setToken] = useState(initialToken); 
   const [role, setRole] = useState([]); 
   const [permission, setPermission] = useState({}); 
+  const { server1: baseUrl } = useBaseUrl();
 
   const userIsLoggedIn = !!token;
   
@@ -62,6 +65,20 @@ export const AuthContextProvider = (props) => {
     setPermission(permission);
   };
 
+  const getpermissions = async () => {
+    if(localStorage.getItem('token')){
+      let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, {
+        tokenid : localStorage.getItem('token')
+      })
+      if(rolesAndPermission.status === 200){
+        rolesAndPermissionHandler(rolesAndPermission.data.role, rolesAndPermission.data.permission)
+      }
+    
+    }else{
+    
+    }
+  }
+
   const contextValue = {
     token               : token,
     isLoggedIn          : userIsLoggedIn,
@@ -70,6 +87,7 @@ export const AuthContextProvider = (props) => {
     login               : loginHandler,
     logout              : logoutHandler,
     rolesAndPermission  : rolesAndPermissionHandler,
+    getpermissions      : getpermissions
   };
 
   return (
