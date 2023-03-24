@@ -30,10 +30,17 @@ const UserPermissionList = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const {permission} = useContext(AuthContext)
-    
+    const authcontext = useContext(AuthContext)
+
     useEffect(() => {
         getList();
     }, []);
+
+    const deleterecord = async (role_id) => {
+      let response =  axios.delete(`${baseUrl}/api/userpermission/${role_id}`)
+      return response;
+    }
+  
 
     const getList = async () => {
         const userPermissionList = await axios.get(`${baseUrl}/api/userpermissions`);
@@ -82,6 +89,60 @@ const UserPermissionList = () => {
               `/tender/master/userpermissions/edit/${rowdata.role_id}`
             );
           });
+
+          // to delete a row
+    $("#dataTable tbody").on("click", "tr .fa-trash-alt", async function () {
+      let rowdata = table.row($(this).closest("tr")).data();
+      
+      Swal.fire({
+        text: `Are You sure, to delete ${rowdata.name}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonColor: "#2fba5f",
+        cancelButtonColor: "#fc5157",
+      }).then( async (willDelete) => {
+        if (willDelete.isConfirmed) {
+         let response = await deleterecord(rowdata.role_id)
+
+         if (response.data.status === 200) {
+            Swal.fire({ //success msg
+              icon: "success",
+              text: `${rowdata.name} role and its permissions has been removed!`,
+              timer: 1500,
+              showConfirmButton: false,
+            });
+
+            authcontext.getpermissions()
+            //delete in datatable
+              table
+              .row($(this).parents("tr"))
+              .remove()
+              .column(0)
+              .nodes()
+              .each(function (cell, i) {
+                cell.innerHTML = i + 1;
+              })
+              .draw();
+
+
+          }else if (response.data.status === 404) {
+            Swal.fire({ // error msg
+              icon: "error",
+              text: response.data.message,
+              showConfirmButton: true,
+            });
+          } else {
+            Swal.fire({
+              title: "Cancelled",
+              icon: "error",
+              timer: 1500,
+            });
+          }
+        } 
+      });
+    });
     
     }
 

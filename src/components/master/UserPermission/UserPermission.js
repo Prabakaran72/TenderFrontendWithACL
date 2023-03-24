@@ -1,10 +1,11 @@
 import axios from "axios";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import { usePageTitle } from "../../hooks/usePageTitle";
 import Swal from "sweetalert2/src/sweetalert2.js";
 import Select from "react-select";
+import AuthContext from "../../../storeAuth/auth-context";
 
 const initialState = {
     usertype: "",
@@ -34,6 +35,7 @@ const UserPermission = () => {
     const [roleHasPermissions, setRoleHasPermissions] = useState([]);
     const [untouchedMatrix, setUntouchedMatrix] = useState({});
     const [savedData, setSavedData] = useState([])
+    const authcontext = useContext(AuthContext)
 
 
     const [inputValidation, setInputValidation] = useState(initialStateErr);
@@ -115,7 +117,7 @@ const UserPermission = () => {
             }
         })
 
-        console.log(inputMatrix)
+        // console.log(inputMatrix)
         setUntouchedMatrix(inputMatrix)
         setPermissionMatrix(inputMatrix)
     }
@@ -257,8 +259,9 @@ const UserPermission = () => {
                     text:  resp.data.message,
                     confirmButtonColor: "#5156ed",
                   });
-      
+                  authcontext.getpermissions();
                 navigate(`/tender/master/userpermissions`);
+
             }else{
                 Swal.fire({
                     icon: "error",
