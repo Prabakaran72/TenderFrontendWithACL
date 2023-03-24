@@ -61,8 +61,8 @@ import UserCreation from "./components/master/UserCreation/UserCreation";
 import CallTypeView from "./components/master/CallLogs/CallType/CallTypeView";
 import CallType from "./components/master/CallLogs/CallType/CallType";
 
-import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
-import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
+// import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
+// import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
 import UserPermission from "./components/master/UserPermission/UserPermission";
 import UserPermissionView from "./components/master/UserPermission/UserPermissionView";
 
@@ -126,7 +126,7 @@ function App() {
               </Route>
             </Route>
 
-            <Route path="calllog" element={can('tenderCreation-create' , (authData.permission || [])) ? <CallLogMain /> : <Unauthorized/>} />
+           
 
 
             <Route path="master">
@@ -329,7 +329,18 @@ function App() {
                 <Route path="communicationfilescreation/:id" element={!!(permission?.['Communication Files']?.can_edit) ? <CommunicationFilesCreation /> : <Unauthorized/> }/>
               </Route>
             </Route>
+
+            <Route path="calllog" element={!!(permission?.['Call Log Creation']?.can_view) ? <CallLogMain/> : <Unauthorized/> }
+            >
+            
+              {/* <Route path="creation" element = {<CallLogMain/>}>
+              </Route>
+              <Route path="creation/{id}" element = {<CallLogMain/>}></Route> */}
+            </Route> 
+            
           </Route>
+
+          
 
           {/* )} */}
           <Route path="*" element={<Navigate to="/" />} />

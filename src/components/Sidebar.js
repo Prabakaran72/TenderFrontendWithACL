@@ -38,7 +38,7 @@ function Sidebar() {
     });
   }, [])
 
-  // console.log(menus)
+  console.log(menus)
 
   return (
     <ul
@@ -77,6 +77,7 @@ function Sidebar() {
       {/* $$$$ */}
      
       {menus.map((item,index) => {
+       
        return (
         <Fragment key={index}>
 
@@ -93,7 +94,7 @@ function Sidebar() {
         id={`${item.name}Menu`}
         >
          <i className={item.icoClass}></i>
-         <span>{item.name}</span> 
+         <span>{item.aliasName}</span> 
         </Link>
         <div
           id={`collapse${item.name}Menu`}
