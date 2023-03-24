@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import { Fragment,  useContext,  useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
@@ -18,26 +19,26 @@ import "datatables.net-buttons/js/buttons.print.js";
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { useBaseUrl } from "../../../hooks/useBaseUrl";
+import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
-import AuthContext from "../../../../storeAuth/auth-context";
-import { can } from "../../../UserPermission";
+import AuthContext from "../../../storeAuth/auth-context";
+import { can } from "../../UserPermission";
 
 let table;
-const BusinessForecastList = () => {
+const CallLogMainList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
 
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/bizzforecast/${id}`)
+    let response =  axios.delete(`${baseUrl}/api/usertype/${id}`)
     return response;
   }
 
   const getList = async () => {
-    const bizzforecastlist = await axios.get(`${baseUrl}/api/bizzforecast`);
+    const usertypelist = await axios.get(`${baseUrl}/api/usertype`);
     
     let userPermissions ;
     let data = {
@@ -51,10 +52,10 @@ const BusinessForecastList = () => {
 
     var dataSet;
     if (
-      bizzforecastlist.status === 200 &&
-      bizzforecastlist.data.status === 200
+      usertypelist.status === 200 &&
+      usertypelist.data.status === 200
     ) {
-      let list = [...bizzforecastlist.data.callType];
+      let list = [...usertypelist.data.userType];
       let listarr = list.map((item, index, arr) => {
         let editbtn = can('userType-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
         let deletebtn =  can('userType-delete', (userPermissions.permission || [])) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
@@ -93,7 +94,7 @@ const BusinessForecastList = () => {
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
       navigate(
-        `/tender/master/bussinessforecastmaster/edit/${rowdata.id}`
+        `/tender/master/usertype/edit/${rowdata.id}`
       );
     });
 
@@ -165,7 +166,7 @@ const BusinessForecastList = () => {
           width="100%"
           cellSpacing={0}
         >
-          <thead className="text-center">
+          <thead className="text-center bg-primary text-white">
             <tr>
               <th className="">Sl.No</th>
               <th className="">User Type (role)</th>
@@ -180,4 +181,4 @@ const BusinessForecastList = () => {
   );
 };
 
-export default BusinessForecastList;
+export default CallLogMainList;

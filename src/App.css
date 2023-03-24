@@ -967,3 +967,87 @@ footer a {
     font-size: 13px;
     font-weight: 600!important;
 }
+
+
+
+/* CallLogsDashboard */
+.CallLogsDashboard .title h5{
+    font-size: 16px;
+    font-weight: 400;
+}
+.CallLogsDashboard .cards {
+    padding: 20px 0;
+}
+.CallLogsDashboard .cards .card{
+    border-radius: 11px;
+    border: none;
+    box-shadow: 1px 1px 12px #584e4e17 !important;
+    /* height: 118px; */
+    width: 100%;
+    letter-spacing: .2px;
+    transition: .1s ease-in-out;
+}
+.CallLogsDashboard .cards .card:hover {
+    transform: scale(1.10);
+    transition: .3s ease-in-out;
+    box-shadow: 1px 1px 20px #584e4e1e !important;
+}
+.CallLogsDashboard .cards .card .title h4{
+    font-size: 14px;
+    font-weight: 500;
+    color: #635656;
+}
+.CallLogsDashboard .cards .card .icon {   
+    border-radius: 50px;
+    height: 47px;
+    width: 47px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;    
+    top: 0px;
+    right: 11px;
+    /* box-shadow: 2px 3px 13px #8a7b7b1a; */
+}
+.CallLogsDashboard .cards .card svg{
+    font-size: 21px;    
+ }
+.CallLogsDashboard .cards .card .count h4{
+    font-size: 19px;
+    font-weight: 600;
+ }
+.CallLogsDashboard .cards .card .row .col-lg-3 {
+   display: flex;
+   justify-content: center;   
+}
+.CallLogsDashboard .cards .card .row .newCall .count h4{
+    color: #209fe4;
+}
+.CallLogsDashboard .cards .card .row .newCall .icon{
+    background: #209fe417;
+    color: #209fe4;
+}
+.CallLogsDashboard .cards .card .row .newCall .icon svg{
+   font-size: 17px !important;
+}
+.CallLogsDashboard .cards .card .row .pendingCall .count h4{
+    color: #38b000;
+}
+.CallLogsDashboard .cards .card .row .pendingCall .icon{
+    background: #38b00018;
+    color: #38b000;
+}
+.CallLogsDashboard .cards .card .row .updatedCall .count h4{
+    color: #9d4edd;
+}
+.CallLogsDashboard .cards .card .row .updatedCall .icon{
+    background: #9d4edd21;
+    color: #9d4edd;
+}
+.CallLogsDashboard .cards .card .row .completedCall .count h4{
+    color: #d00000;
+}
+.CallLogsDashboard .cards .card .row .completedCall .icon{
+    background: #d0000015;
+    color: #d00000;
+}

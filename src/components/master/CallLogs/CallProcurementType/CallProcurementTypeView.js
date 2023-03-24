@@ -4,10 +4,10 @@ import { Link } from "react-router-dom"
 import AuthContext from "../../../../storeAuth/auth-context"
 import { usePageTitle } from "../../../hooks/usePageTitle"
 import { can } from "../../../UserPermission"
-import BusinessForecastList from "./BusinessForecastList"
+import CallTypeList from "./CallProcurementTypeList"
 
-const BusinessForecastView = () => {
-    usePageTitle("Business Forecast List")
+const CallTypeView = () => {
+    usePageTitle("Call Type List")
     const {permission} = useContext(AuthContext)
     return (
     <Fragment>
@@ -19,8 +19,8 @@ const BusinessForecastView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                {can('userType-create', (permission || [])) && <Link  //Have to modify userType-create to CustomerForecast-create
-                    to="creation"
+                {can('userType-create', (permission || [])) && <Link  //Have to modify userType-create to CallType-create
+                    to="calltypecreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
                     <span className="icon text-white-50">
@@ -33,7 +33,7 @@ const BusinessForecastView = () => {
             </div>
             <div className="row mt-3">
               <div className="col-lg-12">
-                <BusinessForecastList/>
+                <CallTypeList/>
               </div>
             </div>
           </div>
@@ -43,4 +43,4 @@ const BusinessForecastView = () => {
     )
 }
 
-export default BusinessForecastView
+export default CallTypeView
