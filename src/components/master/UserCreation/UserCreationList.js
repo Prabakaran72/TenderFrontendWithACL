@@ -53,7 +53,7 @@ const UserCreationList = () => {
         ...item,
         status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
         // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
-        action:  editbtn + deletebtn ,
+        action: (item.id === 1 || item.name === 'Admin')  ? '' : editbtn + deletebtn ,
         sl_no: index + 1,
       }});
 

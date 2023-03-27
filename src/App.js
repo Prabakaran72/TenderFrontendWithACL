@@ -60,12 +60,13 @@ import UserType from "./components/master/UserType/UserType";
 import UserCreation from "./components/master/UserCreation/UserCreation";
 import CallTypeView from "./components/master/CallLogs/CallType/CallTypeView";
 import CallType from "./components/master/CallLogs/CallType/CallType";
+import ZoneView from "./components/master/ZoneMaster/ZoneView";
+import ZoneMaster from "./components/master/ZoneMaster/ZoneMaster";
 
-// import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
-// import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
+import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
+import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
 import UserPermission from "./components/master/UserPermission/UserPermission";
 import UserPermissionView from "./components/master/UserPermission/UserPermissionView";
-
 
 
 import CallLogMain from "./components/calllog/CallLogCreation/CallLogMain";
@@ -312,16 +313,40 @@ function App() {
                   element={!!(permission?.['Customer Sub Category']?.can_edit) ? <CustSubCategMaster /> : <Unauthorized/>}
                 />
               </Route>
-              {/* <Route path="communicationfiles" >
-                <Route index element={<CommunicationFilesView />} />
-                <Route path="communicationfilescreation" element={<CommunicationFilesCreation />}/>
-                <Route path="communicationfilescreation/:id" element={<CommunicationFilesCreation />}/>
-              </Route> */}
 
-              {/*$$$  Have to modify permission name */}
-            
-
-               {/*$$$  Have to modify permission name */}
+              <Route path="zonemaster">
+                <Route index element={!!(permission?.['ZoneMaster']?.can_view) ? <ZoneView /> : <Unauthorized/>} />
+                <Route
+                  path="create"
+                  element={!!(permission?.['ZoneMaster']?.can_add) ? <ZoneMaster /> : <Unauthorized/>}
+                />
+                <Route
+                  path="create/:id"
+                  element={!!(permission?.['ZoneMaster']?.can_edit) ? <ZoneMaster /> : <Unauthorized/>}
+                />
+              </Route>
+              <Route path="calltypemaster">  
+                <Route index element={!!(permission?.['CallType']?.can_view) ? <CallTypeView /> : <Unauthorized/>} />
+                <Route
+                  path="calltypecreation"
+                  element={!!(permission?.['CallType']?.can_add) ? <CallType /> : <Unauthorized/>} 
+                />
+                <Route
+                  path="edit/:id"
+                  element={!!(permission?.['CallType']?.can_edit) ? <CallType /> : <Unauthorized/>} 
+                />
+              </Route>
+              <Route path="businessforecastmaster">  
+                <Route index element={!!(permission?.['BusinessForecast']?.can_view) ? <BusinessForecastView /> : <Unauthorized/>}  />
+                <Route
+                  path="create"
+                  element={!!(permission?.['BusinessForecast']?.can_add) ? <BusinessForecast /> : <Unauthorized/>} 
+                />
+                <Route
+                  path="edit/:id"
+                  element={!!(permission?.['BusinessForecast']?.can_edit) ? <BusinessForecast /> : <Unauthorized/>} 
+                />
+              </Route>
 
             </Route>
 

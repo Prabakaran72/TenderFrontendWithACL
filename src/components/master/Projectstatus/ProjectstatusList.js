@@ -22,7 +22,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
-import { can } from "../../UserPermission";
+
 
 let table;
 const ProjectstatusList = () => {

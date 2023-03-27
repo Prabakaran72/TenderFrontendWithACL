@@ -44,10 +44,10 @@ const CallTypeList = () => {
       tokenid : localStorage.getItem('token')
     }
 
-    let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
-    if(rolesAndPermission.status === 200){
-      userPermissions = rolesAndPermission.data;
-    }
+    // let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+    // if(rolesAndPermission.status === 200){
+    //   userPermissions = rolesAndPermission.data;
+    // }
 
     var dataSet;
     if (
@@ -56,8 +56,8 @@ const CallTypeList = () => {
     ) {
       let list = [...calltypelist.data.calltype];
       let listarr = list.map((item, index, arr) => {
-        let editbtn = can('userType-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
-        let deletebtn =  can('userType-delete', (userPermissions.permission || [])) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        let editbtn = !!(permission?.['CallType']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> '  : '';
+        let deletebtn =  !!(permission?.['CallType']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
         return {
         ...item,
         status : (item.activeStatus ===  "Active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
@@ -116,7 +116,8 @@ const CallTypeList = () => {
          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
-              text: `${rowdata.name} Call Type has been removed!`,
+              title: `${rowdata.name}`,
+              text: `Call Type has been removed!`,
               timer: 1500,
               showConfirmButton: false,
             });
@@ -139,8 +140,9 @@ const CallTypeList = () => {
             });
           } else {
             Swal.fire({
-              title: "Cancelled",
+              title: `${rowdata.name}`,
               icon: "error",
+              text : 'Unable to delete now',
               timer: 1500,
             });
           }

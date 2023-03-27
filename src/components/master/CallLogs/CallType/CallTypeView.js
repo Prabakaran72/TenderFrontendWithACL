@@ -19,7 +19,7 @@ const CallTypeView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                {can('userType-create', (permission || [])) && <Link  //Have to modify userType-create to CallType-create
+                <Link  //Have to modify userType-create to CallType-create
                     to="calltypecreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
@@ -27,7 +27,7 @@ const CallTypeView = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>}
+                  </Link>
                 </div>
               </div>
             </div>
