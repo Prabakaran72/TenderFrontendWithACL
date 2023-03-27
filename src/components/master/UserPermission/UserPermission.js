@@ -184,7 +184,7 @@ const UserPermission = () => {
  
         let options = list.map((item, index) => ({
             value: item.id,
-            label: item.name,
+            label: item.aliasName,
         }))
 
         setMenuoptions(options)
@@ -382,7 +382,7 @@ const UserPermission = () => {
                             {subMenuList.map((record, index) => {
                                 return (
                                     <tr key={index} >
-                                        <td className="align-middle text-primary font-weight-bold">{record.name}</td>
+                                        <td className="align-middle text-primary font-weight-bold">{record.aliasName}</td>
                                         <td>
                                         {(permissionMatrix[record.id]?.view && 
                                           permissionMatrix[record.id]?.add  &&
