@@ -319,7 +319,7 @@ function App() {
                   element={can('tenderType-create' , (authData.permission || []))  ? <BusinessForecast /> : <Unauthorized/>}
                 />
                 <Route
-                  path="creation/:id"
+                  path="edit/:id"
                   element={can('tenderType-edit' , (authData.permission || []))  ?  <BusinessForecast /> : <Unauthorized/>}
                 />
               </Route>

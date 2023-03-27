@@ -38,7 +38,7 @@ const BusinessForecastList = () => {
 
   const getList = async () => {
     const bizzforecastlist = await axios.get(`${baseUrl}/api/bizzforecast`);
-    
+    console.log('bizzforecastlist',bizzforecastlist)
     let userPermissions ;
     let data = {
       tokenid : localStorage.getItem('token')
@@ -48,17 +48,18 @@ const BusinessForecastList = () => {
     if(rolesAndPermission.status === 200){
       userPermissions = rolesAndPermission.data;
     }
-
+  
     var dataSet;
     if (
       bizzforecastlist.status === 200 &&
       bizzforecastlist.data.status === 200
     ) {
-      let list = [...bizzforecastlist.data.callType];
+      let list = [...bizzforecastlist.data.bizzforecast];
       let listarr = list.map((item, index, arr) => {
         let editbtn = can('userType-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
         let deletebtn =  can('userType-delete', (userPermissions.permission || [])) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
         return {
+
         ...item,
         status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
         // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
@@ -72,7 +73,7 @@ const BusinessForecastList = () => {
        dataSet = [];
     }
 
-    console.log(dataSet)
+    console.log("DATA:"+dataSet);
     let i = 0;
     table = $("#dataTable").DataTable({
       data: dataSet,
@@ -83,8 +84,10 @@ const BusinessForecastList = () => {
             return ++i;
           },
         },
+        
+        { data: "calltype_name" },
         { data: "name" },
-        { data: "status" },
+        { data: "activeStatus" },
         { data: "action" },
       ],
     })
@@ -93,7 +96,7 @@ const BusinessForecastList = () => {
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
       navigate(
-        `/tender/master/bussinessforecastmaster/edit/${rowdata.id}`
+        `/tender/master/businessforecastmaster/edit/${rowdata.id}`
       );
     });
 
@@ -116,7 +119,7 @@ const BusinessForecastList = () => {
          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
-              text: `${rowdata.name} role has been removed!`,
+              text: `${rowdata.name} Business Forecast has been removed!`,
               timer: 1500,
               showConfirmButton: false,
             });
@@ -168,12 +171,14 @@ const BusinessForecastList = () => {
           <thead className="text-center">
             <tr>
               <th className="">Sl.No</th>
-              <th className="">User Type (role)</th>
+              <th className="">Call Type</th>
+              <th className="">Business Forecast</th>
               <th className="">Status</th>
               <th className="">Action</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+          </tbody>
         </table>
       </div>
     </Fragment>
