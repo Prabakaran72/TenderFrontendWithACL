@@ -2,9 +2,9 @@ import React, { useEffect, useState, useContext, Fragment } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import AuthContext from "../storeAuth/auth-context";
-import { can } from "./UserPermission";
 import { useBaseUrl } from "./hooks/useBaseUrl";
 import axios from "axios";
+
 function Sidebar() {
   const [active, setActive] = useState("");
   const { server1: baseUrl } = useBaseUrl();
@@ -106,9 +106,8 @@ function Sidebar() {
 
               return(
               <NavLink
-              key={index+""+i}
-              className={`collapse-item ${({ isActive }) =>
-                isActive ? "active" : undefined}`}
+                key={index+""+i}
+                className={`collapse-item ${({ isActive }) => isActive ? "active" : undefined}`}
                 to={subMenu.menuLink}
                 onClick={() => hideSidebarElement(`${item.name}Menu`)}
               >

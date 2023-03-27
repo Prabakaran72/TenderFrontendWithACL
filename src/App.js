@@ -70,6 +70,9 @@ import UserPermissionView from "./components/master/UserPermission/UserPermissio
 
 import CallLogMain from "./components/calllog/CallLogCreation/CallLogMain";
 
+import CallToBDMView from "./components/master/CallLogs/CallToBDM/CallToBDMView";
+import CallToBDM from "./components/master/CallLogs/CallToBDM/CallToBDM";
+
 
 function App() {
   const authData = useContext(AuthContext);
@@ -330,9 +333,13 @@ function App() {
               </Route>
             </Route>
 
-            <Route path="calllog" element={!!(permission?.['Call Log Creation']?.can_view) ? <CallLogMain/> : <Unauthorized/> }
-            >
-            
+            <Route path="calllog">
+              <Route index element={!!(permission?.['Call Log Creation']?.can_view) ? <CallLogMain/> : <Unauthorized/>} />
+              <Route path="calltobdm" >
+               <Route index element={!!(permission?.call_to_bdm?.can_view) ? <CallToBDMView/> : <Unauthorized/>} />
+               <Route path="create" element={!!(permission?.call_to_bdm?.can_add) ? <CallToBDM/> : <Unauthorized/>} />
+               <Route path="edit" element={!!(permission?.call_to_bdm?.can_edit) ? <CallToBDM/> : <Unauthorized/>} />
+              </Route>
               {/* <Route path="creation" element = {<CallLogMain/>}>
               </Route>
               <Route path="creation/{id}" element = {<CallLogMain/>}></Route> */}
