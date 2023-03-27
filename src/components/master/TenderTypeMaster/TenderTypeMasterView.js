@@ -1,10 +1,15 @@
 import { motion } from "framer-motion";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../../../storeAuth/auth-context";
 import { usePageTitle } from "../../hooks/usePageTitle";
+import { can } from "../../UserPermission";
 import TenderTypeMasterList from "./TenderTypeMasterList";
+
 
 const TenderTypeMasterView = () => {
   usePageTitle("Tender Type Creation");
+  const {permission} = useContext(AuthContext)
   return (
     <>
       {/* Page Heading */}
@@ -22,15 +27,15 @@ const TenderTypeMasterView = () => {
                     </h6>
                   </div>
                   <div className="col-5 text-right ml-5">
-                    <Link
+                   {!!(permission?.['Tender Types']?.can_add) && <Link
                       to="tendertypecreation"
-                      className="btn btn-primary btn-icon-split "
+                      className="btn btn-primary btn-icon-split rounded-pill"
                     >
                       <span className="icon text-white-50">
                         <i className="fas fa-plus-circle" />
                       </span>
                       <span className="text">New</span>
-                    </Link>
+                    </Link>}
                   </div>
                 </div>
               </div>

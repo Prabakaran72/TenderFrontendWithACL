@@ -40,7 +40,7 @@ const getCompNo = async () => {
 
 
   return (
-  <div className="CompetitorDetails">
+
     <div className="formContent">
       {!compid && (
         <div className="loading">
@@ -69,7 +69,7 @@ const getCompNo = async () => {
         </a>
         {/* Card Content - Collapse */}
         <div className="collapse" id="competitorBranch">
-          <div className="card-body">
+          <div className="card-header">
             <CompetitorBranchForm compNo1={compNo}/>
           </div>
         </div>
@@ -90,7 +90,7 @@ const getCompNo = async () => {
         </a>
         {/* Card Content - Collapse */}
         <div className="collapse" id="competitorTurnOver">
-          <div className="card-body">
+          <div className="card-header">
             <CompetitorDetailsTurnOverForm compNo={compNo}/>
           </div>
         </div>
@@ -111,7 +111,7 @@ const getCompNo = async () => {
         </a>
         {/* Card Content - Collapse */}
         <div className="collapse" id="competitorNetWorth">
-          <div className="card-body">
+          <div className="card-header">
             <CompetitorDetailsCompanyNetWorthForm compNo={compNo}/>
           </div>
         </div>
@@ -132,7 +132,7 @@ const getCompNo = async () => {
         </a>
         {/* Card Content - Collapse */}
         <div className="collapse" id="qualitycertificates">
-          <div className="card-body">
+          <div className="card-header">
             <CompetitorCompanyQualityCertificatesForm compNo={compNo}/>
           </div>
         </div>
@@ -153,7 +153,7 @@ const getCompNo = async () => {
         </a>
         {/* Card Content - Collapse */}
         <div className="collapse" id="competitorlineofbusiness">
-          <div className="card-body">
+          <div className="card-header">
             <CompetitorDetailsLineOfBusinessForm compNo={compNo}/>
           </div>
         </div>
@@ -174,7 +174,7 @@ const getCompNo = async () => {
         </a>
         {/* Card Content - Collapse */}
         <div className="collapse" id="competitorworkorder">
-          <div className="card-body">
+          <div className="card-header">
             <CompetitorCompanyWorkOrderForm compNo={compNo}/>
           </div>
         </div>
@@ -196,15 +196,14 @@ const getCompNo = async () => {
         </a>
         {/* Card Content - Collapse */}
         <div className="collapse" id="competitorplusminus">
-          <div className="card-body">
+          <div className="card-header">
             <CompetitorCompanyStrengthWeaknessForm compNo={compNo}/>
           </div>
         </div>
     </div>
 
 
-    </div>
-  </div>
+</div>
 
   );
 };

@@ -1,6 +1,6 @@
 import { usePageTitle } from "../../hooks/usePageTitle";
 import { Link } from "react-router-dom";
-import { Fragment, useCallback, useEffect, useState} from "react";
+import { Fragment, useCallback, useContext, useEffect, useState} from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
@@ -23,6 +23,8 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { motion } from "framer-motion";
+import { can } from "../../UserPermission";
+import AuthContext from "../../../storeAuth/auth-context";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 window.JSZip = jsZip;
 
@@ -34,6 +36,7 @@ const CompetitorCreation = () => {
   useDocumentTitle("Competitor Creation");
   usePageTitle("Competitor Creation");
   const { server1: baseUrl } = useBaseUrl();
+  const {permission} = useContext(AuthContext)
   const navigate = useNavigate();
   //Id is the Last submited form id
   const { id } = useParams();
@@ -59,9 +62,9 @@ const CompetitorCreation = () => {
     table = $(`#dataTable`).DataTable({
       dom:
          //   "<'row'<'col-sm-12'l>>" +
-         "<'row '<'col-sm-12   col-md-6 'l>  <'col-sm-12 col-md-6 'f>>" +
+         "<'row px-3'<'col-sm-12   col-md-6 pl-4'l>  <'col-sm-12 col-md-6 pr-4'f>>" +
          "<'row'<'col-sm-12'tr>>" +
-         "<'row '<'col-sm-12 col-md-5 'i><'col-sm-12 col-md-7 'p>>",
+         "<'row px-3'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",
 
       buttons: [
         // {
@@ -129,10 +132,10 @@ const CompetitorCreation = () => {
         <td> {item.mobile} </td>
         <td> {item.email} </td>
         <td>
-          <Link to={`competitor/profile/${item.id}`}>
+          {!!(permission?.Competitors?.can_edit) && <Link to={`competitor/profile/${item.id}`}>
             <i className="fas fa-edit text-primary"></i>
-          </Link>
-          { <Link onClick={() => deletehandler(item.id)}><i className="fas fa-trash text-danger mx-3"></i></Link> }
+          </Link>}
+          {!!(permission?.Competitors?.can_delete) && <Link onClick={() => deletehandler(item.id)}><i className="fas fa-trash text-danger mx-3"></i></Link>} 
         </td>
       </tr>
     );
@@ -141,13 +144,13 @@ const CompetitorCreation = () => {
   return (
     <Fragment>
       {/* Page Heading */}
-      {/* <div className="container-fluid p-0">
+      <div className="container-fluid p-0">
         <div className="row">
           <div className="col-lg-12">
             <div className="card shadow mb-4">
               <div className="card-body">
                 <div className="float-right">
-                  <Link
+                  {!!(permission?.Competitors?.can_add) ? <Link
                     to={id ? "competitor/profile/${id}" : "competitor/profile"}
                     className="btn btn-primary btn-icon-split"
                   >
@@ -155,54 +158,39 @@ const CompetitorCreation = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>
+                  </Link> : ''}
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
       <div className="container-fluid p-0">
         <div className="row">
           <div className="col-lg-12">
-            <motion.div className="card shadow t-card mb-4" initial={{scale: 0,opacity:0}} animate={{scale:1,opacity:1}} transition={{type:'tween'}}>
+            <motion.div className="card shadow mb-4" initial={{scale: 0,opacity:0}} animate={{scale:1,opacity:1}} transition={{type:'tween'}}>
               <div className="card-body">
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="float-right">
-                        <Link
-                          to={id ? "competitor/profile/${id}" : "competitor/profile"}
-                          className="btn btn-primary btn-icon-split mb-3"
-                        >
-                          <span className="icon text-white-50">
-                            <i className="fas fa-plus-circle" />
-                          </span>
-                          <span className="text">New</span>
-                        </Link>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="competitorListTable pb-4">
-                    <table
-                      className="table table-bordered text-center"
-                      id="dataTable"
-                      width="100%"
-                      cellSpacing={0}
-                    >
-                      <thead className="text-center bg-greeny text-white">
-                        <tr>
-                          <th className="w-5">Sl.No</th>
-                          <th className="w-15">Competitor No</th>
-                          <th className="w-25">Competitor Name</th>            
-                          <th className="w-15">Mobile Number</th>
-                          <th className="w-25"> Email Id</th>
-                          <th className="w-15">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>{tableData}</tbody>
-                    </table>
-                  </div>
+              </div>
+              <div>
+                <div className="competitorListTable pb-4">
+                  <table
+                    className="table  text-center"
+                    id="dataTable"
+                    width="100%"
+                    cellSpacing={0}
+                  >
+                    <thead className="text-center bg-gray text-greeny">
+                      <tr>
+                        <th className="w-5">Sl.No</th>
+                        <th className="w-15">Competitor No</th>
+                        <th className="w-25">Competitor Name</th>            
+                        <th className="w-15">Mobile Number</th>
+                        <th className="w-25"> Email Id</th>
+                        <th className="w-15">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>{tableData}</tbody>
+                  </table>
                 </div>
               </div>
             </motion.div>

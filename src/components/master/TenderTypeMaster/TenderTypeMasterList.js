@@ -1,6 +1,6 @@
 import axios from "axios";
 // import { data } from "jquery";
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useContext } from "react";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2";
 
@@ -20,6 +20,8 @@ import "datatables.net-buttons/js/buttons.print.js";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../../storeAuth/auth-context";
+import { can } from "../../UserPermission";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 window.JSZip = jsZip;
 
@@ -27,6 +29,7 @@ const TenderTypeMasterList = () => {
   const [loading, setLoading] = useState(true);
   const [tenderTypeList, setTenderTypeList] = useState([]);
   const { server1: baseUrl } = useBaseUrl();
+  const {permission} = useContext(AuthContext)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -156,15 +159,15 @@ const TenderTypeMasterList = () => {
           </td>
           <td className="text-center">
             <span>
-              <i
+              {!!(permission?.['Tender Types']?.can_edit) && <i
                 className="fas fa-edit text-primary h6"
                 onClick={(e) => editHandler(e, item.id)}
-              ></i>
+              ></i>}
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <i
+             {!!(permission?.['Tender Types']?.can_delete) && <i
                 className="fas fa-trash-alt text-danger h6"
                 onClick={(e) => deleteHandler(e, item.id)}
-              ></i>
+              ></i>}
             </span>
           </td>
         </tr>
@@ -182,7 +185,7 @@ const TenderTypeMasterList = () => {
             width="100%"
             cellSpacing={0}
           >
-            <thead className="text-center bg-greeny text-white">
+            <thead className="text-center bg-primary text-white">
               <tr>
                 <th className="text-center">SNO</th>
                 <th className="text-center">TENDER TYPE NAME</th>

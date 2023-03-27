@@ -1,6 +1,6 @@
 import axios from "axios";
 // import { data } from "jquery";
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useContext } from "react";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2";
 import { Loader } from 'rsuite';
@@ -20,6 +20,8 @@ import "datatables.net-buttons/js/buttons.print.js";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../../storeAuth/auth-context";
+import { can } from "../../UserPermission";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 window.JSZip = jsZip;
 
@@ -29,6 +31,7 @@ const DistrictMasterList = () => {
   const [loading, setLoading] = useState(true);
   const [districtList, setDistrictList] = useState([]);
   const { server1: baseUrl } = useBaseUrl();
+  const {permission} = useContext(AuthContext)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -150,16 +153,16 @@ content="Fetching Data..." />
       
           <td className="text-center">
             <span className ="h5" >
-              <i
+              {!!(permission?.Districts?.can_edit) && <i
                 className="fa fa-edit text-primary mr-4"
                 onClick={(e) => editHandler(e, districtData.id)}
                
-              ></i>
-              <i
+              ></i>}
+              {!!(permission?.Districts?.can_delete) && <i
                 className="fa fa-trash text-danger "
              
                 onClick={() => deleteHandler(districtData.id, districtData.district_name)}
-              ></i>
+              ></i>}
             </span>
           </td>
         </tr>
@@ -177,7 +180,7 @@ content="Fetching Data..." />
             width="100%"
             cellSpacing={0}
           >
-            <thead class='text-center bg-greeny text-white'>
+            <thead>
               <tr>
                 <th className="text-center">SNO</th>
                 <th className="text-center">COUNTRY</th>

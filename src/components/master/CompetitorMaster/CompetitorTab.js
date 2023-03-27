@@ -29,7 +29,7 @@ useEffect(() => {
         <div className="row">
           <div className="col-lg-12">
             <div className="card mb-4">
-              <div className="card-body"  >
+              <div className="card-body">
                 <div>
                   <ul className="nav nav-tabs nav-justified" id="myTab" role="tablist">
                     <li className="nav-item">
@@ -61,23 +61,20 @@ useEffect(() => {
                       </NavLink>
                     </li>
                   </ul>
-                </div>
-              </div>
-            </div>
-            <div className="card mb-4">
-              <div className="card-body">
-                <div className="tab-content" id="myTabContent">
-                  <div
                   
-                    className={activeTab[5] ==='profile'? `tab-pane fade show active card-body bg-light`:`tab-pane fade show active card-body bg-white`}
-                    id="home"
-                    role="tabpanel"
-                    aria-labelledby="home-tab"
-                  >
-                    <Outlet competitorId/>
+                  <div className="tab-content" id="myTabContent">
+                    <div
+                    
+                      className={activeTab[5]==='profile'? `tab-pane fade show active card-body bg-light`:`tab-pane fade show active card-body bg-white`}
+                      id="home"
+                      role="tabpanel"
+                      aria-labelledby="home-tab"
+                    >
+                      <Outlet  competitorId/>
+                    </div>
+                    
                   </div>
-                  
-                </div>                
+                </div>
               </div>
             </div>
           </div>

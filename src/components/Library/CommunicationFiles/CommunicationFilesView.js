@@ -1,10 +1,13 @@
-import { Fragment } from "react"
+import { Fragment, useContext } from "react"
 import { Link } from "react-router-dom"
+import AuthContext from "../../../storeAuth/auth-context"
 import { usePageTitle } from "../../hooks/usePageTitle"
+import { can } from "../../UserPermission"
 import CommunicationFilesList from "./CommunicationFilesList"
 
 const CommunicationFilesView = () => {
     usePageTitle("Communication Files List")
+    const {permission} = useContext(AuthContext)
     return (
     <Fragment>
       {/* Page Heading */}
@@ -14,7 +17,7 @@ const CommunicationFilesView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                  <Link
+                  {!!(permission?.['Communication Files']?.can_add) && <Link
                     to="communicationfilescreation"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
@@ -22,7 +25,7 @@ const CommunicationFilesView = () => {
                       <i className="fas fa-plus-circle" />
                     </span>
                     <span className="text">New</span>
-                  </Link>
+                  </Link>}
                 </div>
               </div>
             </div>

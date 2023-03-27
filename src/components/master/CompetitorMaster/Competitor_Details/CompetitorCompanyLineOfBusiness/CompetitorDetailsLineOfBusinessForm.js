@@ -275,14 +275,14 @@ useEffect(() => {
         <div className="row align-items-center">
         <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-5 text-dark font-weight-bold pt-1">
+              <div className="col-lg-4 text-dark font-weight-bold pt-1">
                 <label htmlFor="bizLineValue"> Line of Business
 
                     {/* Value in Rupees ( &#8377; )<span className="text-danger">&nbsp;*</span>
                     <p className="text-info">( upto : 99,999,999,999.99 )</p> */}
                 </label>
               </div>
-              <div className="col-lg-7">
+              <div className="col-lg-6">
               <input
                   type="text"
                   className="form-control"
@@ -307,12 +307,12 @@ useEffect(() => {
 
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-5 text-dark font-weight-bold pt-1">
+              <div className="col-lg-4 text-dark font-weight-bold pt-1">
                 <label htmlFor="remark">
                   Remarks
                 </label>
               </div>
-              <div className="col-lg-7">
+              <div className="col-lg-6">
               <input
                   type="text"
                   className="form-control"
@@ -333,11 +333,11 @@ useEffect(() => {
               </div>
             </div>
           </div>
-          
+          <div className="inputgroup col-lg-1 mb-4"></div>
 
-          
-          <div className="inputgroup col-lg-12 mb-4 align-items-center">
-            <div className="row justify-content-center">
+          <div className="inputgroup col-lg-5 mb-4"></div>
+          <div className="inputgroup col-lg-2 mb-4 align-items-center">
+            <div className="row">
               <button className="btn btn-primary"  disabled={!formIsValid || isBtnClicked === true} onClick={!competitorBizLineInput.bizLineId ? submitHandler : updateHandler}>
                 {!competitorBizLineInput.bizLineId
                   ? loading === true
@@ -349,7 +349,7 @@ useEffect(() => {
               </button>
             </div>
           </div>
-         
+          <div className="inputgroup col-lg-5 mb-4"></div>
         </div>
       </form>
       <CompetitorDetailsLineOfBusinessList bizLineList={bizLineList} onEdit={onEdit} onDelete={onDelete}/>

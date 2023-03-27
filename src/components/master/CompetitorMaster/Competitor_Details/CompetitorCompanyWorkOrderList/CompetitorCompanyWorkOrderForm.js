@@ -838,7 +838,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
           <div className="row align-items-center">
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="custName">
                     {" "}
                     Customer Name
@@ -847,7 +847,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                     </span>
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   <input
                     type="text"
                     className="form-control"
@@ -871,7 +871,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="projectName">
                     Project Name
                     <span className="text-danger h6 font-weight-bold">
@@ -879,7 +879,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                     </span>
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   <input
                     type="text"
                     className="form-control"
@@ -903,7 +903,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="tnederId">
                     {" "}
                     Tender Id
@@ -912,7 +912,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                     </span>
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   <input
                     type="text"
                     className="form-control"
@@ -936,7 +936,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="state">
                     State Name
                     <span className="text-danger h6 font-weight-bold">
@@ -944,7 +944,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                     </span>
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   <Select
                     name="state"
                     id="state"
@@ -968,7 +968,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="woDate">
                     {" "}
                     WO Date
@@ -977,7 +977,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                     </span>
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   <input
                     type="date"
                     className="form-control"
@@ -1000,7 +1000,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="qantity">
                     Quantity
                     <span className="text-danger h6 font-weight-bold">
@@ -1008,7 +1008,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                     </span>
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   <input
                     type="text"
                     className="form-control"
@@ -1032,7 +1032,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="unit">
                     Unit
                     <span className="text-danger h6 font-weight-bold">
@@ -1040,7 +1040,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                     </span>
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   <Select
                     name="unit"
                     id="unit"
@@ -1064,7 +1064,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="projectValue">
                     Project Value
                     <span className="text-danger h6 font-weight-bold">
@@ -1072,7 +1072,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                     </span>
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   <input
                     type="text"
                     className="form-control"
@@ -1096,7 +1096,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="perTonRate">
                     Per Ton Rate
                     <span className="text-danger h6 font-weight-bold">
@@ -1104,7 +1104,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                     </span>
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   <input
                     type="text"
                     className="form-control"
@@ -1128,7 +1128,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="qualityCompleted">
                     Quantity Completed
                     <span className="text-danger h6 font-weight-bold">
@@ -1136,7 +1136,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                     </span>
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   <input
                     type="text"
                     className="form-control"
@@ -1160,7 +1160,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="date">
                     {" "}
                     Date
@@ -1169,7 +1169,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                     </span>
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   <input
                     type="date"
                     className="form-control"
@@ -1193,10 +1193,10 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                {/*<div className="col-lg-5 text-dark font-weight-bold pt-1">
+                {/*<div className="col-lg-3 text-dark font-weight-bold pt-1">
                 <label htmlFor="projectName">WO Upload</label>
               </div>
-               <div className="col-lg-7">
+               <div className="col-lg-8">
                 <input
                   type="text"
                   className="form-control"
@@ -1220,7 +1220,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-7 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-4 text-dark font-weight-bold pt-1">
                   <label htmlFor="woUpload">
                     {" "}
                     WO Upload
@@ -1231,16 +1231,16 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                   <p className="text-info ">Allowed File Type JPG/JPEG/PNG/PDF</p> */}
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-6">
                   <div
-                    className="dashed border-success height_of_dropbox boderradius__dropbox d-flex flex-column align-items-center justify-content-center  drop-file-input bg-gray-100"
+                    className="dashed border-primary height_of_dropbox boderradius__dropbox d-flex flex-column align-items-center justify-content-center  drop-file-input bg-gray-200"
                     ref={wrapperRef}
                     onDragEnter={onDragEnter}
                     onDragLeave={onDragLeave}
                     onDrop={onDrop}
                   >
                     <p className="display-4 mb-0">
-                      <i className="fas fa-cloud-upload-alt text-success "></i>
+                      <i className="fas fa-cloud-upload-alt text-primary "></i>
                     </p>
                     {!dragover && (
                       <p className="mt-0">Drag & Drop an document or Click</p>
@@ -1261,10 +1261,10 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-5 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="woUpload">Preview</label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   {woFile && (
                     <div className="card border-left-info shadow py-2 w-100 my-4">
                       <div className="card-body">
@@ -1347,7 +1347,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-7 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-4 text-dark font-weight-bold pt-1">
                   <label htmlFor="completionCertificate">
                     {" "}
                     Completion Certificate Upload
@@ -1356,16 +1356,16 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                   </span> */}
                   </label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-6">
                   <div
-                    className="dashed border-success height_of_dropbox boderradius__dropbox d-flex flex-column align-items-center justify-content-center  drop-file-input bg-gray-100"
+                    className="dashed border-primary height_of_dropbox boderradius__dropbox d-flex flex-column align-items-center justify-content-center  drop-file-input bg-gray-200"
                     ref={wrapperRef1}
                     onDragEnter={onDragEnter}
                     onDragLeave={onDragLeave}
                     onDrop={onDrop}
                   >
                     <p className="display-4 mb-0">
-                      <i className="fas fa-cloud-upload-alt text-success "></i>
+                      <i className="fas fa-cloud-upload-alt text-primary "></i>
                     </p>
                     {!dragover && (
                       <p className="mt-0">Drag & Drop an document or Click</p>
@@ -1386,10 +1386,10 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-5 mb-4 ">
               <div className="row align-items-center">
-                <div className="col-lg-5 text-dark font-weight-bold pt-1">
+                <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="projectName">Preview</label>
                 </div>
-                <div className="col-lg-7">
+                <div className="col-lg-8">
                   {completionFile && (
                     <div className="card border-left-info shadow py-2 w-100 my-4">
                       <div className="card-body">
@@ -1476,9 +1476,9 @@ const CompetitorCompanyWorkOrderForm = (props) => {
               </div>
             </div>
 
-            
-            <div className="inputgroup col-lg-12 mb-4 align-items-center">
-              <div className="row justify-content-center">
+            <div className="inputgroup col-lg-5 mb-4"></div>
+            <div className="inputgroup col-lg-2 mb-4 align-items-center">
+              <div className="row">
                 <button
                   className="btn btn-primary"
                   disabled={!formIsValid || isBtnClicked === true}
@@ -1503,7 +1503,8 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                   Clear
                 </button>
               </div>
-            </div>            
+            </div>
+            <div className="inputgroup col-lg-5 mb-4"></div>
           </div>
         </form>
       </PreLoader>

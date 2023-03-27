@@ -317,15 +317,15 @@ useEffect(()=>{
     <div className="card-body ">
       <form>
         <div className="row align-items-center">
-          <div className="inputgroup col-lg-6 mb-4">
+          <div className="inputgroup col-lg-5 mb-4">
             <div className="row align-items-center">
-              <div className="col-lg-6 text-dark">
-                <label htmlFor="accountYear" className=" pt-1">
+              <div className="col-lg-4 text-dark">
+                <label htmlFor="accountYear" className="font-weight-bold pt-1">
                   Accounting Year<span className="text-danger">&nbsp;*</span>
                   <p className="text-info">( Ex : 2022-2023 )</p>
                 </label>
               </div>
-              <div className="col-lg-6">
+              <div className="col-lg-8">
               <Select
                   name="accountYear"
                   id="accountYear"
@@ -346,11 +346,11 @@ useEffect(()=>{
               </div>
             </div>
           </div>
-          
+          <div className="inputgroup col-lg-1 mb-4"></div>
 
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-6 text-dark font-weight-bold pt-1">
+              <div className="col-lg-4 text-dark font-weight-bold pt-1">
                 <label htmlFor="accValue">
                   Value in Rupees ( &#8377; )<span className="text-danger">&nbsp;*</span>
                   <p className="text-info">( upto : 99,999,999,999.99 )</p>
@@ -359,7 +359,7 @@ useEffect(()=>{
               <div className="col-lg-6">
               <input
                   type="text"
-                  className="form-control "
+                  className="form-control text-right"
                   id="accValue"
                   placeholder="Enter Value...."
                   name="accValue"
@@ -377,10 +377,11 @@ useEffect(()=>{
               </div>
             </div>
           </div>
-          
-         
-          <div className="inputgroup col-lg-12 mb-4 align-items-center">
-            <div className="row justify-content-center">
+          <div className="inputgroup col-lg-1 mb-4"></div>
+
+          <div className="inputgroup col-lg-5 mb-4"></div>
+          <div className="inputgroup col-lg-2 mb-4 align-items-center">
+            <div className="row">
               <button className="btn btn-primary"  disabled={!formIsValid || isBtnClicked === true} onClick={!competitorTurnOverInput.accYearId ? submitHandler : updateHandler}>
                 {!competitorTurnOverInput.accYearId
                   ? loading === true
@@ -392,7 +393,8 @@ useEffect(()=>{
               </button>
               {formIsValid && btn_clicked === true}
             </div>
-          </div>         
+          </div>
+          <div className="inputgroup col-lg-5 mb-4"></div>
         </div>
       </form>
       <CompetitorDetailsTurnOverList turnOverList={turnOverList} onEdit={onEdit} onDelete={onDelete}/>
