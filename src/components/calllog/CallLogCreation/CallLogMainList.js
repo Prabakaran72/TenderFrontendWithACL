@@ -40,15 +40,6 @@ const CallLogMainList = () => {
   const getList = async () => {
     const usertypelist = await axios.get(`${baseUrl}/api/usertype`);
     
-    let userPermissions ;
-    let data = {
-      tokenid : localStorage.getItem('token')
-    }
-
-    let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
-    if(rolesAndPermission.status === 200){
-      userPermissions = rolesAndPermission.data;
-    }
 
     var dataSet;
     if (
@@ -57,8 +48,8 @@ const CallLogMainList = () => {
     ) {
       let list = [...usertypelist.data.userType];
       let listarr = list.map((item, index, arr) => {
-        let editbtn = can('userType-edit', (userPermissions.permission || [])) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
-        let deletebtn =  can('userType-delete', (userPermissions.permission || [])) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        let editbtn =`<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i>` ;
+        let deletebtn =  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' ;
         return {
         ...item,
         status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
