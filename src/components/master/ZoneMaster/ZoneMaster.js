@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Select from "react-select";
 
-const options = [{value:'1', label : 'AP'},{value:'2', label : 'MP'},{value:'3', label : 'Tamilnadu'},{value:'1', label : 'Delhi'}];
+const options = [{value:'1', label : 'AP'},{value:'2', label : 'MP'},{value:'3', label : 'Tamilnadu'},{value:'4', label : 'Delhi'}];
 
 const ZoneMaster = () => {
     usePageTitle("Zone Master Creation");
@@ -29,14 +29,16 @@ const ZoneMaster = () => {
         statelistErr :""
       });
       const [dataSending, setDataSending] = useState(false);
-      console.log("statelist", statelist)
       useEffect(() => {
         if(id){
-          axios.get(`${baseUrl}/api/zonename/${id}`).then((resp)=> {
+          axios.get(`${baseUrl}/api/zonemaster/${id}`).then((resp)=> {
+            console.log("Resp", resp);
             setInput({
-                zonename: resp.data.zonename.zonename,
-                status: resp.data.zonename.status,
+                zonename: resp.data.zonename.zone_name,
+                status: resp.data.zonename.active_status
             })
+
+            setStateList(resp.data.zonename.statelist)
           })
         }
       },[id, baseUrl])
@@ -118,6 +120,7 @@ const ZoneMaster = () => {
         if (zonenameErr === "") {
           const data = {
             zonename: input.zonename,
+            statelist: statelist,
             status: input.status,
             tokenId: localStorage.getItem('token'),
           };
@@ -168,13 +171,13 @@ const ZoneMaster = () => {
                     <div className="row">
                         <div className="col-5 mr-5 ">
                         <Select
-                                            name="statelis"
+                                            name="statelist"
                                             id="statelist"
                                             isSearchable="true"
                                             isClearable="true"
                                             isMulti='true'
                                             options={options}
-                                            value={input.statelist}
+                                            value={statelist}
                                             onChange={(value, action) => { setStateList(value) }}
                                         ></Select>
                         </div>
@@ -203,8 +206,8 @@ const ZoneMaster = () => {
                             type="radio"
                             id="statusActive"
                             name="status"
-                            value="Active"
-                            checked={input.status === "Active"}
+                            value="active"
+                            checked={input.status === "active"}
                             onChange={inputHandler}
                             />
                             Active
@@ -220,8 +223,8 @@ const ZoneMaster = () => {
                             type="radio"
                             id="statusInactive"
                             name="status"
-                            value="InActive"
-                            checked={input.status === "InActive"}
+                            value="inactive"
+                            checked={input.status === "inactive"}
                             onChange={inputHandler}
                             />
                             Inactive
