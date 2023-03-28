@@ -13,7 +13,7 @@ function Sidebar() {
   const pathName = "tender";
 
 
-  const authData = useContext(AuthContext);
+  const permission = useContext(AuthContext);
   // console.log(authData)
   const hideSidebarElement = (menuId, tab) => {
     document.getElementById(menuId).click();
@@ -38,8 +38,7 @@ function Sidebar() {
     });
   }, [])
 
-  console.log(menus)
-
+  
   return (
     <ul
       className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion SideNav"
@@ -101,17 +100,18 @@ function Sidebar() {
           className="collapse"
           data-parent="#accordionSidebar"
         >
-        <div className="bg-white py-2 collapse-inner rounded">
+        <div className="bg-white py-2 collapse-inner rounded">  
             {item.sub_menus.map((subMenu, i)=> {
-
+              
               return(
+        
               <NavLink
                 key={index+""+i}
                 className={`collapse-item ${({ isActive }) => isActive ? "active" : undefined}`}
                 to={subMenu.menuLink}
                 onClick={() => hideSidebarElement(`${item.name}Menu`)}
               >
-                {subMenu.aliasName}
+               {subMenu.aliasName}   
               </NavLink>
               )
             }) }
