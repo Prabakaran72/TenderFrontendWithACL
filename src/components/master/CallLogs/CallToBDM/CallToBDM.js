@@ -9,17 +9,17 @@ import { useBaseUrl } from "../../../hooks/useBaseUrl";
 
 const initialState = {
     staffName: "",
-    menu: ""
+    customer: ""
 }
 
 const initialStateErr = {
     staffName: '',
-    menu: ""
+    customer: ""
 }
 
 const CallToBDM = () => {
 
-    usePageTitle('Call to BDM');
+    usePageTitle('Assign Calls to BDM');
 
     const navigate = useNavigate();
     const { id } = useParams();
@@ -29,13 +29,176 @@ const CallToBDM = () => {
     const [inputValidation, setInputValidation] = useState(initialStateErr);
     const [userOptions, setUserOptions] = useState([]);
     const [customerOptions, setCustomerOptions] = useState([]);
+    const [dataSending, setDataSending] = useState(false);
+
+    useEffect(() => {
+        axios.get(`${baseUrl}/api/userOptions`).then((response) => {
+            if (response.data.status === 200) {
+                generateOptions(response.data.user);
+            }
+        });
+
+        if(id){
+            getSavedData()
+        }
+    }, [])
+
+    useEffect(() => {
+        if(input.staffName !== "" && input.staffName !== null){
+            axios.get(`${baseUrl}/api/customerOptions`).then((response) => {
+                if (response.status === 200) {
+                    setCustomerOptions(response.data.customerList);
+                }
+            });
+        }
+    }, [input.staffName])
+
+    const getSavedData = () => {
+        axios.get(`${baseUrl}/api/calltobdm/${id}`).then((response) => {
+            if (response.data.status === 200) {
+                // console.log(response.data)
+                // let savedData = {
+                //     staffName   : response.data.user_id,
+                //     customer    : response.data.customer_id
+                // }
+
+                setInput((prev) => ({
+                    ...prev,
+                    staffName : response.data.calltobdm.user_id,
+                    customer  : response.data.calltobdm.customer_id
+                }))
+            }
+        });
+    }
+
+    const resetCusomer = () => {
+
+        setInput((prev) => ({
+            ...prev,
+            customer: null,
+        }));
+
+        setCustomerOptions(null)
+    }
+
+    const generateOptions = (userList) => {
+        let options = userList.map((item, index) => ({
+            value: item.id,
+            label: item.name,
+        }))
+
+        setUserOptions(options)
+    }
+
 
     const inputHandlerForSelect = (value, action) => {
+        setInput((prev) => ({
+            ...prev,
+            [action.name]: value,
+        }));
+        if (value === "" | value === null) {
+            setInputValidation({ ...inputValidation, [action.name]: true });
+        }
+        else {
+            setInputValidation({ ...inputValidation, [action.name]: false });
+        }
+    }
 
+    let formIsValid = false;
+
+    if(input.staffName && input.customer){
+        formIsValid = true;
+    }
+
+    const postData = (data) => {
+        setDataSending(true)
+
+        axios.post(`${baseUrl}/api/calltobdm`, data).then((resp) => {
+            if(resp.data.status === 200){
+                Swal.fire({
+                    icon: "success",
+                    title: "Call to BDM",
+                    text:  resp.data.message,
+                    confirmButtonColor: "#5156ed",
+                });
+                  
+                navigate(`/tender/calllog/calltobdm`);
+
+            }else{
+                Swal.fire({
+                    icon    : "error",
+                    title   : "Call to BDM",
+                    text    :  (resp.data.error || 'Unable to process'),
+                    confirmButtonColor  : "#5156ed",
+                })
+            }
+            setDataSending(false);
+        }).catch((err) => {
+            Swal.fire({
+                icon: "error",
+                title: "Call to BDM",
+                text:  (err.response.data.message || err),
+                confirmButtonColor: "#5156ed",
+              })
+              setDataSending(false);
+          });
+    }
+
+    const putData = (data, id) => {
+        setDataSending(true)
+        axios.put(`${baseUrl}/api/calltobdm/${id}`, data).then((resp) => {
+            if(resp.data.status === 200){
+                Swal.fire({
+                    icon: "success",
+                    title: "Call to BDM",
+                    text:  resp.data.message,
+                    confirmButtonColor: "#5156ed",
+                });
+                  
+                navigate(`/tender/calllog/calltobdm`);
+
+            }else{
+                Swal.fire({
+                    icon    : "error",
+                    title   : "Call to BDM",
+                    text    :  (resp.data.error || 'Unable to process'),
+                    confirmButtonColor  : "#5156ed",
+                })
+            }
+            setDataSending(false);
+        }).catch((err) => {
+            Swal.fire({
+                icon: "error",
+                title: "Call to BDM",
+                text:  (err.response.data.message || err),
+                confirmButtonColor: "#5156ed",
+              })
+            setDataSending(false);
+        });
     }
 
     const submitHandler = (e) => {
         e.preventDefault();
+
+        if(!formIsValid){
+            return
+        }
+
+        let data = {
+            staffName   : input.staffName.value,
+            customer    : input.customer.value,
+            tokenid     : localStorage.getItem("token")
+        }
+
+        if(id){
+            putData(data, id);
+        }else{
+            postData(data)
+        }
+    }
+
+    const cancelHandler = () => {
+        navigate(`/tender/calllog/calltobdm`);
     }
 
     return (
@@ -57,8 +220,8 @@ const CallToBDM = () => {
                                             isClearable="true"
                                             options={userOptions}
                                             value={input.staffName}
-                                            isDisabled={!!id}
-                                            onChange={(value, action) => { inputHandlerForSelect(value, action); }}
+                                           
+                                            onChange={(value, action) => { inputHandlerForSelect(value, action); resetCusomer()}}
                                         ></Select>
                                         {inputValidation.staffName && (
                                             <div className="pt-1">
@@ -83,7 +246,7 @@ const CallToBDM = () => {
                                             isClearable="true"
                                             options={customerOptions}
                                             value={input.customer}
-                                            isDisabled={!!id}
+                                          
                                             onChange={(value, action) => { inputHandlerForSelect(value, action); }}
                                         ></Select>
                                         {inputValidation.customer && (
@@ -94,6 +257,25 @@ const CallToBDM = () => {
                                             </div>
                                         )}
                                     </div>
+                                </div>
+                            </div>
+                            <div className="inputgroup col-lg-12 mb-4 ml-3 mt-3">
+                                <div className="row align-items-center">
+                                    <div className="col-lg-12 text-right ">
+                                        <button
+                                            className="btn btn-primary"
+                                            disabled={!formIsValid}
+                                            onClick={submitHandler}
+                                        >
+                                            {dataSending && <span className="spinner-border spinner-border-sm mr-2"></span>}
+                                            {dataSending === true ? ((id) ? 'Updating...' : "Submitting....") : ((id) ? 'Update' : "Save")}
+
+                                        </button>
+                                        <button className="btn btn-secondary mx-3" onClick={cancelHandler} disabled={dataSending}>
+                                            Cancel
+                                        </button>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
