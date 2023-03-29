@@ -363,7 +363,7 @@ function App() {
               <Route path="calltobdm" >
                <Route index element={!!(permission?.call_to_bdm?.can_view) ? <CallToBDMView/> : <Unauthorized/>} />
                <Route path="create" element={!!(permission?.call_to_bdm?.can_add) ? <CallToBDM/> : <Unauthorized/>} />
-               <Route path="edit" element={!!(permission?.call_to_bdm?.can_edit) ? <CallToBDM/> : <Unauthorized/>} />
+               <Route path="edit/:id" element={!!(permission?.call_to_bdm?.can_edit) ? <CallToBDM/> : <Unauthorized/>} />
               </Route>
               {/* <Route path="creation" element = {<CallLogMain/>}>
               </Route>
