@@ -104,6 +104,7 @@ const CallToBDM = () => {
         }
     }
 
+    console.log(input)
     let formIsValid = false;
 
     if(input.staffName && input.customer){
@@ -186,7 +187,7 @@ const CallToBDM = () => {
 
         let data = {
             staffName   : input.staffName.value,
-            customer    : input.customer.value,
+            customer    : input.customer,
             tokenid     : localStorage.getItem("token")
         }
 
@@ -246,7 +247,7 @@ const CallToBDM = () => {
                                             isClearable="true"
                                             options={customerOptions}
                                             value={input.customer}
-                                          
+                                            isMulti
                                             onChange={(value, action) => { inputHandlerForSelect(value, action); }}
                                         ></Select>
                                         {inputValidation.customer && (
