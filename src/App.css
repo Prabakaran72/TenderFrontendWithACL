@@ -1051,3 +1051,57 @@ footer a {
     background: #d0000015;
     color: #d00000;
 }
+
+
+
+/* Image Upload For CallLogCreation */
+.CallLogsCreation .upload_Documents {
+    padding-top: 27px;
+ }
+.CallLogsCreation .upload_Documents .card {
+   box-shadow: 2px 2px 13px #312e2e15;
+   border-radius: 50px;
+   border: none;
+   margin-top: 15px;
+   /* width: 350px; */
+}
+.CallLogsCreation .upload_Documents .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 21px;
+}
+.CallLogsCreation .upload_Documents .UploadImg {
+    display: flex;
+    justify-content: center;
+    align-items: center;       
+}
+.CallLogsCreation .upload_Documents .UploadImg img{      
+    height: 75px;
+    width: 75px;
+    border-radius: 50px;
+    border: 4px solid #209fe4;
+    box-shadow: 1px 3px 14px #3838341f;
+}
+.CallLogsCreation .upload_Documents .UploadingDetails{      
+    display: flex;
+    justify-content: center;      
+    flex-direction: column;
+    width: 100%;
+ }
+ .CallLogsCreation .upload_Documents .UploadingDetails div{      
+    display: flex;    
+ }
+ .CallLogsCreation .upload_Documents .UploadingDetails div span{      
+    margin-left: 10px;
+ }
+.CallLogsCreation .upload_Documents .UploadingDetails h6{      
+   font-size: 15px;
+   font-weight: 600;
+   width: 50px;
+}
+.CallLogsCreation .upload_Documents .UploadingDetails span{      
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .2px;
+ }

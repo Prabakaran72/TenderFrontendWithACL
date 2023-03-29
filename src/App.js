@@ -68,6 +68,7 @@ import UserPermissionView from "./components/master/UserPermission/UserPermissio
 
 
 import CallLogCreation from './components/calllog/CallLogCreation/CallLogCreation';
+import CallLogMain from './components/calllog/CallLogCreation/CallLogMain';
 
 
 // import CallLogMain from "./components/calllog/CallLogCreation/CallLogMain";
@@ -128,6 +129,7 @@ function App() {
               </Route>
             </Route>
 
+            <Route path="CallLogMain" element={<CallLogMain />} />
             <Route path="CallLogCreation" element={<CallLogCreation />} />
             {/* <Route path="calllog" element={can('tenderCreation-create' , (authData.permission || [])) ? <CallLogMain /> : <Unauthorized/>} /> */}
 
