@@ -18,13 +18,13 @@ import "datatables.net-buttons/js/buttons.print.js";
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { useBaseUrl } from "../../hooks/useBaseUrl";
+import { useBaseUrl } from "../../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
-import AuthContext from "../../../storeAuth/auth-context";
+import AuthContext from "../../../../storeAuth/auth-context";
 
 let table;
-const ZoneList = () => {
+const AttendanceList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -44,8 +44,8 @@ const ZoneList = () => {
     ) {
       let list = [...zonelist.data.zonemaster];
       let listarr = list.map((item, index, arr) => {
-        let editbtn =  !!(permission?.['ZoneMaster']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '' ;
-        let deletebtn = !!(permission?.['ZoneMaster']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '' ;
+        let editbtn =  !!(permission?.['AttendanceEntry']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '' ;
+        let deletebtn = !!(permission?.['AttendanceEntry']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '' ;
         return {
         ...item,
         status : (item.active_status ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
@@ -167,4 +167,4 @@ const ZoneList = () => {
   );
 };
 
-export default ZoneList;
+export default AttendanceList;
