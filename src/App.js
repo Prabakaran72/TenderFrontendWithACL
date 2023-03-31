@@ -71,6 +71,7 @@ import ExpenseTypeView from "./components/master/ExpenseType/ExpenseTypeView";
 import ExpenseType from "./components/master/ExpenseType/ExpenseType";
 import AttendanceView from "./components/hr/AttendanceEntry/Attendance/AttendanceView";
 import AttendanceEntry from "./components/hr/AttendanceEntry/Attendance/AttendanceEntry";
+import AttendanceReport from "./components/hr/AttendanceReport/AttendanceReport";
 
 function App() {
   const authData = useContext(AuthContext);
@@ -383,6 +384,7 @@ function App() {
                 <Route path="create" element={!!(permission?.['AttendanceEntry']?.can_add) ? <AttendanceEntry /> : <Unauthorized/> }/>
                 <Route path="edit/:id" element={!!(permission?.['AttendanceEntry']?.can_edit) ? <AttendanceEntry /> : <Unauthorized/> }/>
               </Route>
+              <Route path="attendancereport" element={!!(permission?.attendance_report?.can_view) ? <AttendanceReport/> : <Unauthorized/>}/>
             </Route>
             
           </Route>
