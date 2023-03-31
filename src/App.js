@@ -73,6 +73,8 @@ import CallLogMain from "./components/calllog/CallLogCreation/CallLogMain";
 
 import CallToBDMView from "./components/master/CallLogs/CallToBDM/CallToBDMView";
 import CallToBDM from "./components/master/CallLogs/CallToBDM/CallToBDM";
+import ExpenseTypeView from "./components/master/ExpenseType/ExpenseTypeView";
+import ExpenseType from "./components/master/ExpenseType/ExpenseType";
 
 
 function App() {
@@ -278,6 +280,17 @@ function App() {
                 <Route
                   path="projecttypecreation/:id"
                   element={!!(permission?.['Project Types']?.can_edit) ? <ProejctTypeMaster /> : <Unauthorized/>}
+                />
+              </Route>
+              <Route path="expensetype">
+                <Route index element={!!(permission?.expense_type?.can_view) ?  <ExpenseTypeView /> : <Unauthorized/> } />
+                <Route
+                  path="create"
+                  element={!!(permission?.expense_type?.can_add) ? <ExpenseType /> : <Unauthorized/> }
+                />
+                <Route
+                  path="edit/:id"
+                  element={!!(permission?.expense_type?.can_edit) ? <ExpenseType /> : <Unauthorized/>}
                 />
               </Route>
               <Route path="projectstatus">
