@@ -1,34 +1,35 @@
 import { Fragment } from "react";
 import { useState, useEffect } from "react";
-import { usePageTitle } from "../../hooks/usePageTitle";
+import { usePageTitle } from "../../../hooks/usePageTitle";
 import Swal from "sweetalert2/src/sweetalert2.js";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { useBaseUrl } from "../../hooks/useBaseUrl";
+// import { useBaseUrl } from "../../../hooks/useBaseUrl";
+import { useBaseUrl } from "./../../../hooks/useBaseUrl";
 import Select from "react-select";
+import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 
-// const options = [{value:'1', label : 'AP'},{value:'2', label : 'MP'},{value:'3', label : 'Tamilnadu'},{value:'4', label : 'Delhi'}];
+const attendance_type_options=[{value : 1, label : "Check-In"},{value : 2, label : "Check-Out"},{value : 3, label : "Break-In"}]
 
-const ZoneMaster = () => {
-    usePageTitle("Zone Master Creation");
-
+const employeeList = [{value : 1, label : "Kumar"},{value : 2, label : "Babu"},{value : 3, label : "Raja"}]
+const AttendanceEntry = () => {
+    usePageTitle("Daily Attendance Entry");
     const {server1:baseUrl} = useBaseUrl()
-  
     const navigate = useNavigate();
     const { id } = useParams();
     const [options, setOptions] = useState([]);
 
     const initialState = {
-        zonename: "",
-        status: "active",
+        employeeId: null,
+        attendanceType: null,
       };
-    
+      const initialStateErr = {
+        employeeIdErr: false,
+        attendanceTypeErr: false,
+      };
+      const [formIsValid, setFormIsValid]=useState(false);
       const [input, setInput] = useState(initialState);
-      const [statelist, setStateList] = useState([]);
-      const [validation, setInputValidation] = useState({
-        zonenameErr : "",
-        statelistErr :""
-      });
+      const [validation, setInputValidation] = useState(initialStateErr);
       const [dataSending, setDataSending] = useState(false);
 
       useEffect(()=>{
@@ -44,19 +45,41 @@ const ZoneMaster = () => {
                 zonename: resp.data.zonename.zone_name,
                 status: resp.data.zonename.active_status
             })
-
-            setStateList(resp.data.zonename.statelist)
+            // setStateList(resp.data.zonename.statelist)
           })
         }
       },[id, baseUrl])
+
+      useEffect(()=>{
+      const errors=validation;
+      console.log("Error", errors)
+        if (input.employeeId === null) {
+          errors.employeeIdErr = true;
+        } else {
+          errors.employeeIdErr = false;
+        }
+        if (input.attendanceType === null) {
+          errors.attendanceTypeErr = true;
+        } else {
+          errors.attendanceTypeErr = BsFillArrowLeftSquareFill;
+        }
+        setInputValidation((prev)=>{return{...prev,employeeIdErr : errors.employeeIdErr,attendanceTypeErr: errors.attendanceTypeErr}});
+
+      },[input])
+
+      useEffect(()=>{
+        if (validation.employeeIdErr !== true  || validation.attendanceTypeErr !== true) {
+          setFormIsValid(true);          
+        }    
+      },[validation])
 
       const postData = (data) => {
         axios.post(`${baseUrl}/api/zonemaster`, data).then((res) => {
               if (res.data.status === 200) {
                 Swal.fire({
                   icon: "success",
-                  title: "New Zone ",
-                  text: "Created Successfully!",
+                  title: "Attendance",
+                  text: "Status Updated Successfully!",
                   confirmButtonColor: "#5156ed",
                 });
                 setInput(initialState)
@@ -64,7 +87,7 @@ const ZoneMaster = () => {
               } else if (res.data.status === 400) {
                 Swal.fire({
                   icon: "error",
-                  title: "Zone ",
+                  title: "Attendance",
                   text: res.data.errors,
                   confirmButtonColor: "#5156ed",
                 });
@@ -78,8 +101,8 @@ const ZoneMaster = () => {
           if (res.data.status === 200) {
             Swal.fire({
               icon: "success",
-              title: "Zone ",
-              text: "Updated Successfully!",
+              title: "Attendance ",
+              text: "Status Updated Successfully!",
               confirmButtonColor: "#5156ed",
             });
             setInput(initialState)
@@ -87,7 +110,7 @@ const ZoneMaster = () => {
           } else if (res.data.status === 400) {
             Swal.fire({
               icon: "error",
-              title: "Zone ",
+              title: "Attendance",
               text: res.data.errors,
               confirmButtonColor: "#5156ed",
             });
@@ -95,44 +118,34 @@ const ZoneMaster = () => {
           }
         });
       }
-
-
-      const inputHandler = (e) => {
-        e.persist();
-        setInput({ ...input , [e.target.name]: e.target.value });
-      };
-
    
     const submitHandler = (e) => {
         e.preventDefault();
         setDataSending(true)
         var errors = { ...validation };
     
-        if (input.zonename.trim() === "") {
-          errors.zonenameErr = "Please Enter Zone Name";
-        
+        if (input.employeeId === null) {
+          errors.employeeIdErr = "Please Select Employee";
         } else {
-          errors.zonenameErr = "";
+          errors.employeeIdErr = "";
         }
-    
-        const { zonenameErr } = errors;
-    
+        if (input.attendanceType === null) {
+          errors.attendanceTypeErr = "Please Select Attendance Type";
+        } else {
+          errors.attendanceTypeErr = "";
+        }
         setInputValidation(errors);
-    
-        if (zonenameErr !== "") {
+        if (errors.employeeIdErr !== "" || errors.attendanceTypeErr !== "") {
           setDataSending(false)
           return;
-        }
-    
-        if (zonenameErr === "") {
+        }    
+        if (errors.employeeIdErr === "" && errors.attendanceTypeErr ==="") {
           const data = {
-            zonename: input.zonename,
-            statelist: statelist,
-            status: input.status,
+            employeeId: input.employeeId.value,
+            attendanceType: input.attendanceType.value,
             tokenId: localStorage.getItem('token'),
           };
-        
-    
+  
           if(!id){
             postData(data);
           }else{
@@ -141,6 +154,15 @@ const ZoneMaster = () => {
         }
     };
 
+const selectChangeHandler = (value, action) =>{
+  setInput((prev)=>{return {...prev, [action.name]: value}});
+  if (value) {
+    setFormIsValid(true);          
+  }    
+  else{setFormIsValid(false);          }
+}
+console.log("input",input )
+console.log("Vlaidation",validation)
     return (
         <Fragment>
         <div className="container-fluid">
@@ -148,55 +170,58 @@ const ZoneMaster = () => {
                 <form onSubmit={submitHandler}>
                 <div className="row">
                     <div className="col-2">
-                    <label>Zone Name</label>
+                    <label>Employee Name</label>
                     </div>
                     <div className="col-10 mb-3">
                     <div className="row">
                         <div className="col-5 mr-5 ">
-                        <input
-                            className="form-control "
-                            type="text"
-                            id="zonename"
-                            name="zonename"
-                            onChange={inputHandler}
-                            value={input.zonename}
-                        />
+                        <Select
+                            name="employeeId"
+                            id="employeeId"
+                            isSearchable="true"
+                            isClearable="true"
+                            options={employeeList}
+                            value={input.employeeId}
+                            onChange={selectChangeHandler}
+                        ></Select>
                         </div>
+
                         <div className="col-6 ml-n5 mt-2">
+                        {validation.employeeIdErr && 
                         <span style={{ color: "red" }}>
-                            {validation.zonenameErr}
-                        </span>
+                          Please Select Employee..!                          
+                        </span>  }
                         </div>
                     </div>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-2">
-                    <label>State</label>
+                    <label>Attendance Type</label>
                     </div>
                     <div className="col-10 mb-3">
                     <div className="row">
                         <div className="col-5 mr-5 ">
                         <Select
-                                            name="statelist"
-                                            id="statelist"
+                                            name="attendanceType"
+                                            id="attendanceType"
                                             isSearchable="true"
                                             isClearable="true"
-                                            isMulti='true'
-                                            options={options}
-                                            value={statelist}
-                                            onChange={(value, action) => { setStateList(value) }}
+                                            options={attendance_type_options}
+                                            value={input.attendanceType}
+                                            onChange={selectChangeHandler}
                                         ></Select>
                         </div>
                         <div className="col-6 ml-n5 mt-2">
+                        {validation.attendanceTypeErr && 
                         <span style={{ color: "red" }}>
-                            {validation.zonenameErr}
-                        </span>
+                            Please Select Attendance Type..!       
+                        </span>}
                         </div>
                     </div>
                     </div>
                 </div>
-                <div className="row">
+                {/* <div className="row">
                     <div className="col-2">
                     <label>Active Status</label>
                     </div>
@@ -239,13 +264,13 @@ const ZoneMaster = () => {
                         </div>
                     </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="row text-center">
                     <div className="col-12">
                     {id ? (
-                        <button className="btn btn-primary" disabled ={dataSending} > {dataSending ? "Updating..." : "Update"}</button>
+                        <button className="btn btn-primary" disabled ={dataSending || formIsValid} > {dataSending ? "Updating..." : "Update"}</button>
                     ) : (
-                        <button className="btn btn-primary" disabled = {dataSending}> {dataSending ? "Submitting..." : "Submit"}</button>
+                        <button className="btn btn-primary" disabled = {dataSending || formIsValid}> {dataSending ? "Submitting..." : "Submit"}</button>
                     )}
                     </div>
                 </div>
@@ -256,4 +281,4 @@ const ZoneMaster = () => {
     )
 }
 
-export default ZoneMaster;
+export default AttendanceEntry;

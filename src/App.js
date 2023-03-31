@@ -51,8 +51,6 @@ import TenderStatus from "./components/tender/Bidmanagement/TenderStatus/TenderS
 import Workorder from "./components/tender/Bidmanagement/Workorder/Workorder";
 import CommunicationFilesView from "./components/Library/CommunicationFiles/CommunicationFilesView";
 import CommunicationFilesCreation from "./components/Library/CommunicationFiles/CommunicationFilesCreation";
-import axios from "axios";
-import { can } from "./components/UserPermission";
 import Unauthorized from "./components/pages/Unauthorized";
 import UserCreationView from "./components/master/UserCreation/UserCreationView";
 import UserTypeView from "./components/master/UserType/UserTypeView";
@@ -62,18 +60,15 @@ import CallTypeView from "./components/master/CallLogs/CallType/CallTypeView";
 import CallType from "./components/master/CallLogs/CallType/CallType";
 import ZoneView from "./components/master/ZoneMaster/ZoneView";
 import ZoneMaster from "./components/master/ZoneMaster/ZoneMaster";
-
 import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
 import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
 import UserPermission from "./components/master/UserPermission/UserPermission";
 import UserPermissionView from "./components/master/UserPermission/UserPermissionView";
-
-
 import CallLogMain from "./components/calllog/CallLogCreation/CallLogMain";
-
 import CallToBDMView from "./components/master/CallLogs/CallToBDM/CallToBDMView";
 import CallToBDM from "./components/master/CallLogs/CallToBDM/CallToBDM";
-
+import AttendanceView from "./components/hr/AttendanceEntry/Attendance/AttendanceView";
+import AttendanceEntry from "./components/hr/AttendanceEntry/Attendance/AttendanceEntry";
 
 function App() {
   const authData = useContext(AuthContext);
@@ -369,6 +364,13 @@ function App() {
               </Route>
               <Route path="creation/{id}" element = {<CallLogMain/>}></Route> */}
             </Route> 
+            <Route path="hr">
+              <Route path="attendanceentry" >
+                <Route index element={!!(permission?.['AttendanceEntry']?.can_view) ? <AttendanceView /> : <Unauthorized/> } />
+                <Route path="create" element={!!(permission?.['AttendanceEntry']?.can_add) ? <AttendanceEntry /> : <Unauthorized/> }/>
+                <Route path="edit/:id" element={!!(permission?.['AttendanceEntry']?.can_edit) ? <AttendanceEntry /> : <Unauthorized/> }/>
+              </Route>
+            </Route>
             
           </Route>
 
