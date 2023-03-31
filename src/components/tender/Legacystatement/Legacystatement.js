@@ -244,8 +244,6 @@ function Legacystatement() {
 												}}
 												onBlur={statusBlurHandler}
 												value={statusValue}
-											
-
 											></Select>
 										</div>
 									</div>
