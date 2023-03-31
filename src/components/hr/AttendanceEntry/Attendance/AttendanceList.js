@@ -30,28 +30,54 @@ const AttendanceList = () => {
   const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/zonemaster/${id}`)
+    let response =  axios.delete(`${baseUrl}/api/attendanceentry/${id}`)
     return response;
   }
 
   const getList = async () => {
-    const zonelist = await axios.get(`${baseUrl}/api/zonemaster`);
+    const zonelist = await axios.get(`${baseUrl}/api/attendanceentry`);
     var dataSet;
 
     if (
         zonelist.status === 200 &&
         zonelist.data.status === 200
     ) {
-      let list = [...zonelist.data.zonemaster];
+      console.log(zonelist.data.list);
+      let list = [...zonelist.data.list];
+
       let listarr = list.map((item, index, arr) => {
+
         let editbtn =  !!(permission?.['AttendanceEntry']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '' ;
         let deletebtn = !!(permission?.['AttendanceEntry']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '' ;
+
+     const date = new Date(Date.parse(item.created_at)-(5.5 * 60 * 60 * 1000));
+     const options = {
+      // timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
+    };
+    const finalFormattedDate = date.toLocaleString(options);
+console.log(finalFormattedDate);
+
+
+        // let date = new Date(list.created_at).getDate();
+        // let month = new Date(list.created_at).getMonth();
+        // let year = new Date(list.created_at).getFullYear();
+        // let hour = new Date(list.created_at).getHours();
+        // let min = new Date(list.created_at).getMinutes();
+        // let sec = new Date(list.created_at).getSeconds();
+        // let datetime = date+"-"+month+"-"+year+"  "+hour+":"+min+":"+sec;
         return {
         ...item,
-        status : (item.active_status ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
-        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+        // status : (item.active_status ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
         action: editbtn + deletebtn,
         sl_no: index + 1,
+        dateTime: finalFormattedDate,
       }});
 
       dataSet = listarr;
@@ -69,9 +95,11 @@ const AttendanceList = () => {
             return ++i;
           },
         },
-        { data: "zone_name" },
-        { data: "status" },
+        { data: "dateTime" },
+        { data: "userId" },
+        { data: "attendanceType" },
         { data: "action" },
+        
       ],
     })
     setLoading(false)
@@ -155,8 +183,9 @@ const AttendanceList = () => {
           <thead className="text-center">
             <tr>
               <th className="">Sl.No</th>
-              <th className="">Zone Name</th>
-              <th className="">Status</th>
+              <th className="">Date & Time </th>
+              <th className="">User Name</th>
+              <th className="">Attendance Type</th>
               <th className="">Action</th>
             </tr>
           </thead>

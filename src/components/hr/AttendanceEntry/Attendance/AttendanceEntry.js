@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 // import { useBaseUrl } from "../../../hooks/useBaseUrl";
 import { useBaseUrl } from "./../../../hooks/useBaseUrl";
 import Select from "react-select";
-import { BsFillArrowLeftSquareFill } from "react-icons/bs";
+// import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 
 const attendance_type_options=[{value : 1, label : "Check-In"},{value : 2, label : "Check-Out"},{value : 3, label : "Break-In"}]
 
@@ -30,6 +30,8 @@ const AttendanceEntry = () => {
       const [formIsValid, setFormIsValid]=useState(false);
       const [input, setInput] = useState(initialState);
       const [validation, setInputValidation] = useState(initialStateErr);
+      const [isClicked, setIsClicked] = useState({employeeId: false,
+        attendanceType: false});
       const [dataSending, setDataSending] = useState(false);
 
       useEffect(()=>{
@@ -45,14 +47,12 @@ const AttendanceEntry = () => {
                 zonename: resp.data.zonename.zone_name,
                 status: resp.data.zonename.active_status
             })
-            // setStateList(resp.data.zonename.statelist)
           })
         }
       },[id, baseUrl])
 
       useEffect(()=>{
       const errors=validation;
-      console.log("Error", errors)
         if (input.employeeId === null) {
           errors.employeeIdErr = true;
         } else {
@@ -61,20 +61,23 @@ const AttendanceEntry = () => {
         if (input.attendanceType === null) {
           errors.attendanceTypeErr = true;
         } else {
-          errors.attendanceTypeErr = BsFillArrowLeftSquareFill;
+          errors.attendanceTypeErr = false;
+          // BsFillArrowLeftSquareFill;
         }
         setInputValidation((prev)=>{return{...prev,employeeIdErr : errors.employeeIdErr,attendanceTypeErr: errors.attendanceTypeErr}});
 
       },[input])
 
       useEffect(()=>{
-        if (validation.employeeIdErr !== true  || validation.attendanceTypeErr !== true) {
+        if (validation.employeeIdErr !== true  && validation.attendanceTypeErr !== true) {
           setFormIsValid(true);          
-        }    
+        }    else{
+          setFormIsValid(false);          
+        }
       },[validation])
 
       const postData = (data) => {
-        axios.post(`${baseUrl}/api/zonemaster`, data).then((res) => {
+        axios.post(`${baseUrl}/api/attendanceentry`, data).then((res) => {
               if (res.data.status === 200) {
                 Swal.fire({
                   icon: "success",
@@ -83,7 +86,7 @@ const AttendanceEntry = () => {
                   confirmButtonColor: "#5156ed",
                 });
                 setInput(initialState)
-                navigate('/tender/master/zonemaster')
+                navigate('/tender/master/attendanceentry')
               } else if (res.data.status === 400) {
                 Swal.fire({
                   icon: "error",
@@ -97,7 +100,7 @@ const AttendanceEntry = () => {
       }
       
       const putData = (data, id) => {
-        axios.put(`${baseUrl}/api/zonemaster/${id}`, data).then((res) => {
+        axios.put(`${baseUrl}/api/attendanceentry/${id}`, data).then((res) => {
           if (res.data.status === 200) {
             Swal.fire({
               icon: "success",
@@ -106,7 +109,7 @@ const AttendanceEntry = () => {
               confirmButtonColor: "#5156ed",
             });
             setInput(initialState)
-            navigate('/tender/master/zonemaster')
+            navigate('/tender/master/attendanceentry')
           } else if (res.data.status === 400) {
             Swal.fire({
               icon: "error",
@@ -122,26 +125,9 @@ const AttendanceEntry = () => {
     const submitHandler = (e) => {
         e.preventDefault();
         setDataSending(true)
-        var errors = { ...validation };
-    
-        if (input.employeeId === null) {
-          errors.employeeIdErr = "Please Select Employee";
-        } else {
-          errors.employeeIdErr = "";
-        }
-        if (input.attendanceType === null) {
-          errors.attendanceTypeErr = "Please Select Attendance Type";
-        } else {
-          errors.attendanceTypeErr = "";
-        }
-        setInputValidation(errors);
-        if (errors.employeeIdErr !== "" || errors.attendanceTypeErr !== "") {
-          setDataSending(false)
-          return;
-        }    
-        if (errors.employeeIdErr === "" && errors.attendanceTypeErr ==="") {
+      
           const data = {
-            employeeId: input.employeeId.value,
+            userId: input.employeeId.value,
             attendanceType: input.attendanceType.value,
             tokenId: localStorage.getItem('token'),
           };
@@ -151,18 +137,14 @@ const AttendanceEntry = () => {
           }else{
             putData(data, id);
           }
-        }
+        
     };
 
 const selectChangeHandler = (value, action) =>{
   setInput((prev)=>{return {...prev, [action.name]: value}});
-  if (value) {
-    setFormIsValid(true);          
-  }    
-  else{setFormIsValid(false);          }
+  setIsClicked((prev)=>{return {...prev, [action.name]: true}});
 }
-console.log("input",input )
-console.log("Vlaidation",validation)
+
     return (
         <Fragment>
         <div className="container-fluid">
@@ -187,7 +169,7 @@ console.log("Vlaidation",validation)
                         </div>
 
                         <div className="col-6 ml-n5 mt-2">
-                        {validation.employeeIdErr && 
+                        {(validation.employeeIdErr  === true && isClicked.employeeId) &&  
                         <span style={{ color: "red" }}>
                           Please Select Employee..!                          
                         </span>  }
@@ -213,7 +195,7 @@ console.log("Vlaidation",validation)
                                         ></Select>
                         </div>
                         <div className="col-6 ml-n5 mt-2">
-                        {validation.attendanceTypeErr && 
+                        {(validation.attendanceTypeErr === true && isClicked.attendanceType)&& 
                         <span style={{ color: "red" }}>
                             Please Select Attendance Type..!       
                         </span>}
@@ -268,9 +250,9 @@ console.log("Vlaidation",validation)
                 <div className="row text-center">
                     <div className="col-12">
                     {id ? (
-                        <button className="btn btn-primary" disabled ={dataSending || formIsValid} > {dataSending ? "Updating..." : "Update"}</button>
+                        <button className="btn btn-primary" disabled ={dataSending || !formIsValid} > {dataSending ? "Updating..." : "Update"}</button>
                     ) : (
-                        <button className="btn btn-primary" disabled = {dataSending || formIsValid}> {dataSending ? "Submitting..." : "Submit"}</button>
+                        <button className="btn btn-primary" disabled = {dataSending || !formIsValid}> {dataSending ? "Submitting..." : "Submit"}</button>
                     )}
                     </div>
                 </div>

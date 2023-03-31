@@ -359,9 +359,9 @@ const ExpenseType = () => {
                                     </div>
                                     <div className="col-lg-2">
                                         <div className="form-check">
-                                            <input className="form-check-input" type="checkbox" defaultValue id="flexCheckChecked" checked={input?.limitOfRoles?.[item.id].unlimited} onChange={() => toggleLimits(input?.limitOfRoles?.[item.id].unlimited, item.id)}
+                                            <input className="form-check-input" type="checkbox" defaultValue id={"flexCheckChecked"+item.id} checked={input?.limitOfRoles?.[item.id].unlimited} onChange={() => toggleLimits(input?.limitOfRoles?.[item.id].unlimited, item.id)}
                                             />
-                                            <label className="form-check-label" htmlFor="flexCheckChecked">
+                                            <label className="form-check-label" htmlFor={"flexCheckChecked"+item.id}>
                                                 Unlimited
                                             </label>
                                         </div>
