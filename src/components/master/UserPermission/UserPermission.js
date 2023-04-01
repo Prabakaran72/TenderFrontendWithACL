@@ -46,7 +46,6 @@ const UserPermission = () => {
                 generateOptions(response.data.userType);
             }
         });
-
         if(id){
             getSavedData()
         }
@@ -63,16 +62,13 @@ const UserPermission = () => {
         });
     }, [])
 
-
     const getSavedData = () => {
         axios.get(`${baseUrl}/api/permisions/${id}`).then((resp) => {
             if(resp.data.status === 200){
-            
                 let usertypeValue = {
                     value   : resp.data.roleName.id,
                     label   : resp.data.roleName.name
                 } 
-                
                 setInput({...input, usertype : usertypeValue})
 
                 setSavedData(resp.data.permissions)
@@ -105,8 +101,6 @@ const UserPermission = () => {
         })
     }
     
-
-
     const generateInput = (menuList = []) => {
         let inputMatrix = {}
         menuList.forEach((item, index) => {

@@ -4,10 +4,9 @@ import { usePageTitle } from "../../../hooks/usePageTitle";
 import Swal from "sweetalert2/src/sweetalert2.js";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-// import { useBaseUrl } from "../../../hooks/useBaseUrl";
 import { useBaseUrl } from "./../../../hooks/useBaseUrl";
 import Select from "react-select";
-// import { BsFillArrowLeftSquareFill } from "react-icons/bs";
+import LocalDateTime from "./../../../hooks/useLocalDateTime";
 
 const attendance_type_options=[{value : 1, label : "Check-In"},{value : 2, label : "Check-Out"},{value : 3, label : "Break-In"}]
 
@@ -18,34 +17,35 @@ const AttendanceEntry = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [options, setOptions] = useState([]);
-
+    
+    
     const initialState = {
-        employeeId: null,
+        userId: null,
         attendanceType: null,
       };
       const initialStateErr = {
-        employeeIdErr: false,
+        userIdErr: false,
         attendanceTypeErr: false,
       };
       const [formIsValid, setFormIsValid]=useState(false);
       const [input, setInput] = useState(initialState);
       const [validation, setInputValidation] = useState(initialStateErr);
-      const [isClicked, setIsClicked] = useState({employeeId: false,
+      const [isClicked, setIsClicked] = useState({userId: false,
         attendanceType: false});
       const [dataSending, setDataSending] = useState(false);
 
       useEffect(()=>{
-        axios.get(`${baseUrl}/api/state/list/105`).then((resp)=> {
-          setOptions(resp.data.stateList);
-        })
+        // axios.get(`${baseUrl}/api/state/list/105`).then((resp)=> {
+        //   setOptions(resp.data.stateList);
+        // })
       },[])
       
       useEffect(() => {
         if(id){
-          axios.get(`${baseUrl}/api/zonemaster/${id}`).then((resp)=> {
-            setInput({
-                zonename: resp.data.zonename.zone_name,
-                status: resp.data.zonename.active_status
+          axios.get(`${baseUrl}/api/attendanceentry/${id}`).then((resp)=> {
+              setInput({
+                userId: employeeList.find((x)=>x.value == resp.data?.attendance?.userId),
+                attendanceType: attendance_type_options.find((x)=>x.value == resp.data?.attendance?.attendanceType)
             })
           })
         }
@@ -53,10 +53,10 @@ const AttendanceEntry = () => {
 
       useEffect(()=>{
       const errors=validation;
-        if (input.employeeId === null) {
-          errors.employeeIdErr = true;
+        if (input.userId === null) {
+          errors.userIdErr = true;
         } else {
-          errors.employeeIdErr = false;
+          errors.userIdErr = false;
         }
         if (input.attendanceType === null) {
           errors.attendanceTypeErr = true;
@@ -64,12 +64,12 @@ const AttendanceEntry = () => {
           errors.attendanceTypeErr = false;
           // BsFillArrowLeftSquareFill;
         }
-        setInputValidation((prev)=>{return{...prev,employeeIdErr : errors.employeeIdErr,attendanceTypeErr: errors.attendanceTypeErr}});
+        setInputValidation((prev)=>{return{...prev,userIdErr : errors.userIdErr,attendanceTypeErr: errors.attendanceTypeErr}});
 
       },[input])
 
       useEffect(()=>{
-        if (validation.employeeIdErr !== true  && validation.attendanceTypeErr !== true) {
+        if (validation.userIdErr !== true  && validation.attendanceTypeErr !== true) {
           setFormIsValid(true);          
         }    else{
           setFormIsValid(false);          
@@ -86,7 +86,7 @@ const AttendanceEntry = () => {
                   confirmButtonColor: "#5156ed",
                 });
                 setInput(initialState)
-                navigate('/tender/master/attendanceentry')
+                navigate('/tender/hr/attendanceentry')
               } else if (res.data.status === 400) {
                 Swal.fire({
                   icon: "error",
@@ -104,12 +104,12 @@ const AttendanceEntry = () => {
           if (res.data.status === 200) {
             Swal.fire({
               icon: "success",
-              title: "Attendance ",
+              title: "Attendance",
               text: "Status Updated Successfully!",
               confirmButtonColor: "#5156ed",
             });
             setInput(initialState)
-            navigate('/tender/master/attendanceentry')
+            navigate('/tender/hr/attendanceentry')
           } else if (res.data.status === 400) {
             Swal.fire({
               icon: "error",
@@ -127,7 +127,7 @@ const AttendanceEntry = () => {
         setDataSending(true)
       
           const data = {
-            userId: input.employeeId.value,
+            userId: input.userId.value,
             attendanceType: input.attendanceType.value,
             tokenId: localStorage.getItem('token'),
           };
@@ -158,18 +158,18 @@ const selectChangeHandler = (value, action) =>{
                     <div className="row">
                         <div className="col-5 mr-5 ">
                         <Select
-                            name="employeeId"
-                            id="employeeId"
+                            name="userId"
+                            id="userId"
                             isSearchable="true"
                             isClearable="true"
                             options={employeeList}
-                            value={input.employeeId}
+                            value={input.userId}
                             onChange={selectChangeHandler}
                         ></Select>
                         </div>
 
                         <div className="col-6 ml-n5 mt-2">
-                        {(validation.employeeIdErr  === true && isClicked.employeeId) &&  
+                        {(validation.userIdErr  === true && isClicked.userId) &&  
                         <span style={{ color: "red" }}>
                           Please Select Employee..!                          
                         </span>  }
@@ -203,50 +203,15 @@ const selectChangeHandler = (value, action) =>{
                     </div>
                     </div>
                 </div>
-                {/* <div className="row">
+                 <div className="row">
                     <div className="col-2">
-                    <label>Active Status</label>
+                    <label>Server Time</label>
                     </div>
 
                     <div className="col-5 ml-3">
-                    <div className="row">
-                        <div className="col-3">
-                        <label
-                            className="for-check-label"
-                            htmlFor="statusActive"
-                        >
-                            <input
-                            className="form-check-input"
-                            type="radio"
-                            id="statusActive"
-                            name="status"
-                            value="active"
-                            checked={input.status === "active"}
-                            onChange={inputHandler}
-                            />
-                            Active
-                        </label>
-                        </div>
-                        <div className="col-5">
-                        <label
-                            className="for-check-label"
-                            htmlFor="statusInactive"
-                        >
-                            <input
-                            className="form-check-input"
-                            type="radio"
-                            id="statusInactive"
-                            name="status"
-                            value="inactive"
-                            checked={input.status === "inactive"}
-                            onChange={inputHandler}
-                            />
-                            Inactive
-                        </label>
-                        </div>
+                          <LocalDateTime/>
                     </div>
-                    </div>
-                </div> */}
+                </div> 
                 <div className="row text-center">
                     <div className="col-12">
                     {id ? (

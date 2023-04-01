@@ -18,56 +18,47 @@ import "datatables.net-buttons/js/buttons.print.js";
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { useBaseUrl } from "../../../hooks/useBaseUrl";
+import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
-import AuthContext from "../../../../storeAuth/auth-context";
+import AuthContext from "../../../storeAuth/auth-context";
+
 
 let table;
-const AttendanceList = () => {
+const AttendanceTypeList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
+
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/attendanceentry/${id}`)
+    let response =  axios.delete(`${baseUrl}/api/attendancetype/${id}`)
     return response;
   }
 
   const getList = async () => {
-    const zonelist = await axios.get(`${baseUrl}/api/attendanceentry`);
+    const attendancetypelist = await axios.get(`${baseUrl}/api/attendancetype`);
+    console.log(attendancetypelist)
+    
+    // let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+    // if(rolesAndPermission.status === 200){
+    //   userPermissions = rolesAndPermission.data;
+    // }
+
     var dataSet;
-
     if (
-        zonelist.status === 200 &&
-        zonelist.data.status === 200
+      attendancetypelist.status === 200 &&
+      attendancetypelist.data.status === 200
     ) {
-      console.log(zonelist.data.list);
-      let list = [...zonelist.data.list];
-
+      let list = [...attendancetypelist.data.list];
       let listarr = list.map((item, index, arr) => {
-
-        let editbtn =  !!(permission?.['AttendanceEntry']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '' ;
-        let deletebtn = !!(permission?.['AttendanceEntry']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '' ;
-
-    //  const date = new Date(Date.parse(item.created_at)-(5.5 * 60 * 60 * 1000));
-    const date = new Date(Date.parse(item.created_at));
-     const options = {
-      timeZone: "Asia/Kolkata",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true
-    };
-    const finalFormattedDate = date.toLocaleString('en-US',options);
+        let editbtn = !!(permission?.['attendance_type']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> '  : '';
+        let deletebtn =  !!(permission?.['attendance_type']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
         return {
         ...item,
-        action: editbtn + deletebtn,
+        status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
+        action: ( editbtn + deletebtn),
         sl_no: index + 1,
-        dateTime: finalFormattedDate,
       }});
 
       dataSet = listarr;
@@ -75,6 +66,8 @@ const AttendanceList = () => {
     } else {
        dataSet = [];
     }
+
+    console.log(dataSet)
     let i = 0;
     table = $("#dataTable").DataTable({
       data: dataSet,
@@ -85,11 +78,9 @@ const AttendanceList = () => {
             return ++i;
           },
         },
-        { data: "dateTime" },
-        { data: "userName" },
-        { data: "attendanceTypeName" },
+        { data: "attendanceType" },
+        { data: "status" },
         { data: "action" },
-        
       ],
     })
     setLoading(false)
@@ -97,7 +88,7 @@ const AttendanceList = () => {
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
       navigate(
-        `/tender/hr/attendanceentry/edit/${rowdata.id}`
+        `/tender/master/attendancetype/edit/${rowdata.id}`
       );
     });
 
@@ -106,7 +97,7 @@ const AttendanceList = () => {
       let rowdata = table.row($(this).closest("tr")).data();
       
       Swal.fire({
-        text: `Are You sure, to delete ${rowdata.userName}?`,
+        text: `Are You sure, to delete ${rowdata.attendanceType}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -120,8 +111,8 @@ const AttendanceList = () => {
          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
-              title:"Attendance Entry",
-              text: `${rowdata.userName} has been removed!`,
+              title: `${rowdata.attendanceType}`,
+              text: `Attendance Type has been removed!`,
               timer: 1500,
               showConfirmButton: false,
             });
@@ -144,8 +135,9 @@ const AttendanceList = () => {
             });
           } else {
             Swal.fire({
-              title: "Cancelled",
+              title: `${rowdata.attendanceType}`,
               icon: "error",
+              text : 'Unable to delete now',
               timer: 1500,
             });
           }
@@ -173,9 +165,8 @@ const AttendanceList = () => {
           <thead className="text-center">
             <tr>
               <th className="">Sl.No</th>
-              <th className="">Date & Time </th>
-              <th className="">User Name</th>
               <th className="">Attendance Type</th>
+              <th className="">Status</th>
               <th className="">Action</th>
             </tr>
           </thead>
@@ -186,4 +177,4 @@ const AttendanceList = () => {
   );
 };
 
-export default AttendanceList;
+export default AttendanceTypeList;
