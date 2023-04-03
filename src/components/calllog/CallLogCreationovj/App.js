@@ -51,6 +51,8 @@ import TenderStatus from "./components/tender/Bidmanagement/TenderStatus/TenderS
 import Workorder from "./components/tender/Bidmanagement/Workorder/Workorder";
 import CommunicationFilesView from "./components/Library/CommunicationFiles/CommunicationFilesView";
 import CommunicationFilesCreation from "./components/Library/CommunicationFiles/CommunicationFilesCreation";
+import axios from "axios";
+import { can } from "./components/UserPermission";
 import Unauthorized from "./components/pages/Unauthorized";
 import UserCreationView from "./components/master/UserCreation/UserCreationView";
 import UserTypeView from "./components/master/UserType/UserTypeView";
@@ -58,24 +60,19 @@ import UserType from "./components/master/UserType/UserType";
 import UserCreation from "./components/master/UserCreation/UserCreation";
 import CallTypeView from "./components/master/CallLogs/CallType/CallTypeView";
 import CallType from "./components/master/CallLogs/CallType/CallType";
-import ZoneView from "./components/master/ZoneMaster/ZoneView";
-import ZoneMaster from "./components/master/ZoneMaster/ZoneMaster";
-import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
-import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
+
+// import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/BusinessForecastView";
+// import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
 import UserPermission from "./components/master/UserPermission/UserPermission";
-import UserPermissionView from "./components/master/UserPermission/UserPermissionView";
-//import CallLogMain from "./components/calllog/CallLogCreation_old 01-04-2023/CallLogMain";
-import CallToBDMView from "./components/master/CallLogs/CallToBDM/CallToBDMView";
-import CallToBDM from "./components/master/CallLogs/CallToBDM/CallToBDM";
-import ExpenseTypeView from "./components/master/ExpenseType/ExpenseTypeView";
-import ExpenseType from "./components/master/ExpenseType/ExpenseType";
-import AttendanceView from "./components/hr/AttendanceEntry/Attendance/AttendanceView";
-import AttendanceEntry from "./components/hr/AttendanceEntry/Attendance/AttendanceEntry";
-import AttendanceReport from "./components/hr/AttendanceReport/AttendanceReport";
-import AttendanceType from "./components/master/AttendanceType/AttendanceType";
-import AttendanceTypeView from "./components/master/AttendanceType/AttendanceTypeView";
+import UserPermissionView from "./components/master/UserPermission/UserPermissionView"; 
+
+
 import CallLogCreation from './components/calllog/CallLogCreation/CallLogCreation';
 import CallLogMain from './components/calllog/CallLogCreation/CallLogMain';
+
+
+// import CallLogMain from "./components/calllog/CallLogCreation/CallLogMain";
+
 
 function App() {
   const authData = useContext(AuthContext);
@@ -132,7 +129,9 @@ function App() {
               </Route>
             </Route>
 
-           
+            <Route path="CallLogMain" element={<CallLogMain />} />
+            <Route path="CallLogCreation" element={<CallLogCreation />} />
+            {/* <Route path="calllog" element={can('tenderCreation-create' , (authData.permission || [])) ? <CallLogMain /> : <Unauthorized/>} /> */}
 
 
             <Route path="master">
@@ -282,17 +281,6 @@ function App() {
                   element={!!(permission?.['Project Types']?.can_edit) ? <ProejctTypeMaster /> : <Unauthorized/>}
                 />
               </Route>
-              <Route path="expensetype">
-                <Route index element={!!(permission?.expense_type?.can_view) ?  <ExpenseTypeView /> : <Unauthorized/> } />
-                <Route
-                  path="create"
-                  element={!!(permission?.expense_type?.can_add) ? <ExpenseType /> : <Unauthorized/> }
-                />
-                <Route
-                  path="edit/:id"
-                  element={!!(permission?.expense_type?.can_edit) ? <ExpenseType /> : <Unauthorized/>}
-                />
-              </Route>
               <Route path="projectstatus">
                 <Route index element={ !!(permission?.['Project Status']?.can_view) ? <ProjectstatusView /> : <Unauthorized/>} />
                 <Route
@@ -326,51 +314,16 @@ function App() {
                   element={!!(permission?.['Customer Sub Category']?.can_edit) ? <CustSubCategMaster /> : <Unauthorized/>}
                 />
               </Route>
+              {/* <Route path="communicationfiles" >
+                <Route index element={<CommunicationFilesView />} />
+                <Route path="communicationfilescreation" element={<CommunicationFilesCreation />}/>
+                <Route path="communicationfilescreation/:id" element={<CommunicationFilesCreation />}/>
+              </Route> */}
 
-              <Route path="zonemaster">
-                <Route index element={!!(permission?.['ZoneMaster']?.can_view) ? <ZoneView /> : <Unauthorized/>} />
-                <Route
-                  path="create"
-                  element={!!(permission?.['ZoneMaster']?.can_add) ? <ZoneMaster /> : <Unauthorized/>}
-                />
-                <Route
-                  path="create/:id"
-                  element={!!(permission?.['ZoneMaster']?.can_edit) ? <ZoneMaster /> : <Unauthorized/>}
-                />
-              </Route>
-              <Route path="calltypemaster">  
-                <Route index element={!!(permission?.['CallType']?.can_view) ? <CallTypeView /> : <Unauthorized/>} />
-                <Route
-                  path="calltypecreation"
-                  element={!!(permission?.['CallType']?.can_add) ? <CallType /> : <Unauthorized/>} 
-                />
-                <Route
-                  path="edit/:id"
-                  element={!!(permission?.['CallType']?.can_edit) ? <CallType /> : <Unauthorized/>} 
-                />
-              </Route>
-              <Route path="businessforecastmaster">  
-                <Route index element={!!(permission?.['BusinessForecast']?.can_view) ? <BusinessForecastView /> : <Unauthorized/>}  />
-                <Route
-                  path="create"
-                  element={!!(permission?.['BusinessForecast']?.can_add) ? <BusinessForecast /> : <Unauthorized/>} 
-                />
-                <Route
-                  path="edit/:id"
-                  element={!!(permission?.['BusinessForecast']?.can_edit) ? <BusinessForecast /> : <Unauthorized/>} 
-                />
-              </Route>
-              <Route path="attendancetype">  
-                <Route index element={!!(permission?.['attendance_type']?.can_view) ? <AttendanceTypeView /> : <Unauthorized/>}  />
-                <Route
-                  path="create"
-                  element={!!(permission?.['attendance_type']?.can_add) ? <AttendanceType /> : <Unauthorized/>} 
-                />
-                <Route
-                  path="edit/:id"
-                  element={!!(permission?.['attendance_type']?.can_edit) ? <AttendanceType /> : <Unauthorized/>} 
-                />
-              </Route>
+              {/*$$$  Have to modify permission name */}
+            
+
+               {/*$$$  Have to modify permission name */}
 
             </Route>
 
@@ -381,33 +334,7 @@ function App() {
                 <Route path="communicationfilescreation/:id" element={!!(permission?.['Communication Files']?.can_edit) ? <CommunicationFilesCreation /> : <Unauthorized/> }/>
               </Route>
             </Route>
-
-            <Route path="calllog">
-              <Route index element={!!(permission?.['CallLogCreation']?.can_view) ? <CallLogMain/> : <Unauthorized/>} />
-                <Route path="create" element={!!(permission?.['CallLogCreation']?.can_add) ? <CallLogCreation/> : <Unauthorized/>}/>
-                <Route path="edit/:id" element={!!(permission?.['CallLogCreation']?.can_edit) ? <CallLogCreation/> : <Unauthorized/>}/>
-
-              <Route path="calltobdm" >
-               <Route index element={!!(permission?.call_to_bdm?.can_view) ? <CallToBDMView/> : <Unauthorized/>} />
-               <Route path="create" element={!!(permission?.call_to_bdm?.can_add) ? <CallToBDM/> : <Unauthorized/>} />
-               <Route path="edit/:id" element={!!(permission?.call_to_bdm?.can_edit) ? <CallToBDM/> : <Unauthorized/>} />
-              </Route>
-              {/* <Route path="creation" element = {<CallLogMain/>}>
-              </Route>
-              <Route path="creation/{id}" element = {<CallLogMain/>}></Route> */}
-            </Route> 
-            <Route path="hr">
-              <Route path="attendanceentry" >
-                <Route index element={!!(permission?.['AttendanceEntry']?.can_view) ? <AttendanceView /> : <Unauthorized/> } />
-                <Route path="create" element={!!(permission?.['AttendanceEntry']?.can_add) ? <AttendanceEntry /> : <Unauthorized/> }/>
-                <Route path="edit/:id" element={!!(permission?.['AttendanceEntry']?.can_edit) ? <AttendanceEntry /> : <Unauthorized/> }/>
-              </Route>
-              <Route path="attendancereport" element={!!(permission?.attendance_report?.can_view) ? <AttendanceReport/> : <Unauthorized/>}/>
-            </Route>
-            
           </Route>
-
-          
 
           {/* )} */}
           <Route path="*" element={<Navigate to="/" />} />

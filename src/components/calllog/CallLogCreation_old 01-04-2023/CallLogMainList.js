@@ -23,7 +23,7 @@ import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
 import AuthContext from "../../../storeAuth/auth-context";
-
+import { can } from "../../UserPermission";
 
 let table;
 const CallLogMainList = () => {
@@ -33,29 +33,28 @@ const CallLogMainList = () => {
   const {permission} = useContext(AuthContext)
 
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/callcreation/${id}`)
+    let response =  axios.delete(`${baseUrl}/api/usertype/${id}`)
     return response;
   }
 
   const getList = async () => {
-    const usertypelist = await axios.get(`${baseUrl}/api/callcreation`);
-    console.log("usertypelist",usertypelist);
+    const usertypelist = await axios.get(`${baseUrl}/api/usertype`);
+    
 
     var dataSet;
     if (
       usertypelist.status === 200 &&
-      usertypelist.data.status === 200 && 
-      usertypelist.data?.calllog
+      usertypelist.data.status === 200
     ) {
-      let list = [...usertypelist.data.calllog];
+      let list = [...usertypelist.data.userType];
       let listarr = list.map((item, index, arr) => {
-        let editbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> '  : '';
-        let deletebtn =  !!(permission?.['CallLogCreation']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        let editbtn =`<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i>` ;
+        let deletebtn =  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' ;
         return {
         ...item,
         status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
-        action: ( editbtn + deletebtn),
-        // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
+        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+        action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
         sl_no: index + 1,
       }});
 
@@ -86,7 +85,7 @@ const CallLogMainList = () => {
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
       navigate(
-        `/tender/calllog/edit/${rowdata.id}`
+        `/tender/master/usertype/edit/${rowdata.id}`
       );
     });
 
@@ -161,7 +160,7 @@ const CallLogMainList = () => {
           <thead className="text-center bg-primary text-white">
             <tr>
               <th className="">Sl.No</th>
-              <th className="">Call </th>
+              <th className="">User Type (role)</th>
               <th className="">Status</th>
               <th className="">Action</th>
             </tr>
