@@ -53,10 +53,14 @@ const CallLogMainList = () => {
         let deletebtn =  !!(permission?.['CallLogCreation']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
         return {
         ...item,
-        status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
+        mode: "Direct",
+        // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
         action: ( editbtn + deletebtn),
         // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
         sl_no: index + 1,
+        completed: item.close_date? item.close_date: '--',
+        next_followup :  item.next_followup_date ? item.next_followup_date :  item.close_date ? "<span class='text-success'>Closed</span>" : "<span class='text-warning'>InLive</span>"
+
       }});
 
       dataSet = listarr;
@@ -76,9 +80,16 @@ const CallLogMainList = () => {
             return ++i;
           },
         },
-        { data: "name" },
-        { data: "status" },
-        { data: "action" },
+        { data: "callid" },
+        { data: "customer_name" },
+        { data: "username"},
+        { data: "mode"},
+      { data: "callname" },        
+      { data: "call_date"},
+      { data: "completed"},
+      { data: "next_followup"},
+      { data: "action" },
+        
       ],
     })
     setLoading(false)
@@ -160,13 +171,20 @@ const CallLogMainList = () => {
         >
           <thead className="text-center bg-primary text-white">
             <tr>
-              <th className="">Sl.No</th>
-              <th className="">Call </th>
-              <th className="">Status</th>
+              <th className="">#</th>
+              <th className="">Call ID</th>
+              <th className="">Customer Name</th>
+              <th className="">Executive Name</th>
+              <th className="">Mode</th>
+              <th className="">Call Type</th>
+              <th className="">Started</th>
+              <th className="">Completed</th>
+              <th className="">Next Follow Up</th>
               <th className="">Action</th>
             </tr>
           </thead>
           <tbody></tbody>
+          
         </table>
       </div>
     </Fragment>

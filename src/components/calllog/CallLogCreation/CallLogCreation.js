@@ -9,7 +9,7 @@ import { RiDeleteBin5Fill } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
 import { FaDownload } from "react-icons/fa";
 import { CgSoftwareDownload } from "react-icons/fa";
-import {useNavigate,  useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import csv from "../../hooks/imglogo/csv.png";
 import lock from "../../../images/lock.png";
@@ -50,6 +50,11 @@ const selectStateErr = {
   forecastStatus: "",
 };
 
+const optionsForCallCloseStatus = [
+  { value: "1", label: "Completed" },
+  { value: "2", label: "Order List" },
+];
+
 const CallLogCreation = () => {
   usePageTitle("Call Log Creation");
   const { server1: baseUrl } = useBaseUrl();
@@ -75,31 +80,36 @@ const CallLogCreation = () => {
   const [dataSending, setDataSending] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
 
+  const [fetchedData, setFetchedData] = useState([]);
+  const [isEdited, setEdited] = useState({
+    bizz_status_type: false,
+    calltype: false,
+    bizztype: false,
+  });
 
-useEffect(()=>{
-      if(input.customer?.value &&
-        input.entrydate &&
-        input.calltype?.value &&
-        input.executiveName?.value &&
-        input.procurement?.value &&
-        input.businessForecast?.value &&
-        input.forecastStatus?.value &&
-        // input.addInfo.value &&
-        (input.nxtFollowupDate ? input.nxtFollowupDate:
-        (input.callcloseStatus?.value &&
-        input.callcloseDate))
-        //  && input.remarks.value 
-        )
-        {
-          setIsFormValid(true);
-        }
-        else{
-          setIsFormValid(false);
-        }
-},[input])
+  useEffect(() => {
+    if (
+      input.customer?.value &&
+      input.entrydate &&
+      input.calltype?.value &&
+      input.executiveName?.value &&
+      input.procurement?.value &&
+      input.businessForecast?.value &&
+      input.forecastStatus?.value &&
+      // input.addInfo.value &&
+      (input.nxtFollowupDate
+        ? input.nxtFollowupDate
+        : input.callcloseStatus?.value && input.callcloseDate)
+      //  && input.remarks.value
+    ) {
+      setIsFormValid(true);
+    } else {
+      setIsFormValid(false);
+    }
+  }, [input]);
 
-  useEffect(() => {   
-    axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
+  const InitialRequest = async () => {
+    await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
       setOptionsForCallList(res.data?.calltype);
     });
 
@@ -114,10 +124,155 @@ useEffect(()=>{
     axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
       setOptionsForProcurement(res.data?.procurementlist);
     });
-  }, []);
+    if (id) {
+      await axios.get(`${baseUrl}/api/callcreation/${id}`).then((res) => {
+        setFetchedData(res.data.showcall[0]);
+        let fetcheddata = res.data.showcall[0];
+        setInput((prev) => {
+          return {
+            ...prev,
+            entrydate: fetcheddata.call_date,
+            addInfo: fetcheddata.additional_info,
+            nxtFollowupDate: fetcheddata.next_followup_date,
+            callcloseDate: fetcheddata.close_date,
+            remarks: fetcheddata.remarks,
+          };
+        });
+        setEdited({bizz_status_type: false,
+          calltype: false,
+          bizztype: false})
+      });
+    }
+  };
 
   useEffect(() => {
-    if (input.calltype?.value) {
+    InitialRequest();
+  }, []);
+
+  const getDependentLists = async () => {
+    await axios
+      .get(`${baseUrl}/api/bizzlist/list/${fetchedData.call_id}`)
+      .then((res) => {
+        setOptionsForBizzList(res.data?.bizzlist);
+      });
+
+    // await axios
+    //   .get(`${baseUrl}/api/statuslist/list/${fetchedData.bizz_id}`)
+    //   .then((res) => {
+    //     setOptionsForStatusList(res.data?.statuslist);
+    //     setSelectInputsOnLoad();
+    //   });
+  };
+
+  const setSelectInputsOnLoad = () => {
+    
+    
+    if(fetchedData.hasOwnProperty('cust_id'))
+    {
+      console.log("In IF")
+      console.log("FetchedData", fetchedData)
+      console.log("optionsForCutomerList", optionsForCutomerList)
+      console.log("optionsForExecutive", optionsForExecutive)
+      console.log("optionsForCallList", optionsForCallList)
+      console.log("optionsForProcurement", optionsForProcurement)
+      console.log("optionsForCallCloseStatus", optionsForCallCloseStatus)
+
+      setInput((prev) => {
+      return {
+        ...prev,
+        customer: optionsForCutomerList.find(x => x.value == fetchedData.cust_id),
+        executiveName: optionsForExecutive.find(x => x.value == fetchedData.user_id),
+        calltype: optionsForCallList.find(x => x.id == fetchedData.call_id),
+        // businessForecast: optionsForBizzList.find(
+        //   (x) => x.id == fetchedData.bizz_id
+        // ),
+        // forecastStatus: optionsForStatusList.find(
+        //   (x) => x.id == fetchedData.bizz_status_id
+        // ),
+        procurement: optionsForProcurement.find(x => x.value == fetchedData.proc_id),
+        callcloseStatus: optionsForCallCloseStatus.find(x => x.value == fetchedData.close_status_id),
+      };
+    });
+    console.log("set input")
+  }
+  };
+console.log("Input", input)
+  useEffect(() => {
+    // console.log("ID", id)
+    // console.log("fetchedData", fetchedData)
+    // console.log("!isEdited.calltype", !isEdited.calltype)
+    
+
+    
+
+
+    if (id && fetchedData && !isEdited.calltype) {
+      
+      setSelectInputsOnLoad()
+      // getDependentLists();
+    }
+  }, [fetchedData]);
+
+  useEffect(() => {
+    if (fetchedData.call_id) {
+      axios
+        .get(`${baseUrl}/api/bizzlist/list/${fetchedData.call_id}`)
+        .then((res) => {
+          console.log("Bizz List", res)
+          setOptionsForBizzList(res.data.bizzlist);
+        });
+    } 
+    else {
+      setOptionsForBizzList(null);
+    }
+    setInput({ ...input, businessForecast: null });
+  }, [fetchedData.call_id]);
+
+  useEffect(() => {
+  if (fetchedData.bizz_id && (!isEdited.bizztype || !isEdited.calltype) && optionsForBizzList.length>0) {
+      setInput((prev) => {
+        return {
+          ...prev,
+          businessForecast: optionsForBizzList.find((x) => x.id === fetchedData.bizz_id
+          ),
+        };
+      });
+    }
+  }, [optionsForBizzList]);
+
+
+  useEffect(() => {
+    if (fetchedData.bizz_id && !isEdited.bizztype) {
+      axios
+        .get(`${baseUrl}/api/statuslist/list/${fetchedData.bizz_id}`)
+        .then((res) => {
+          setOptionsForStatusList(res.data.bizzlist);
+        });
+    } else {
+      setOptionsForStatusList(null);
+    }
+    setInput({ ...input, businessForecast: null });
+  }, [fetchedData.bizz_id]);
+
+  // useEffect(() => {
+  //   if (
+  //     fetchedData.bizz_id &&
+  //     // optionsForStatusList.length > 0 &&
+  //     (!isEdited.bizz_status_type || !isEdited.calltype || !isEdited.bizztype)
+  //   ) {
+  //     setInput((prev) => {
+  //       return {
+  //         ...prev,
+  //         businessForecast: optionsForStatusList.find(
+  //           (x) => x.id === fetchedData.bizz_status_id
+  //         ),
+  //       };
+  //     });
+  //   }
+  // }, [optionsForStatusList]);
+
+  useEffect(() => {
+    if (input.calltype?.value && isEdited.calltype) {
       axios
         .get(`${baseUrl}/api/bizzlist/list/${input.calltype?.value}`)
         .then((res) => {
@@ -130,7 +285,7 @@ useEffect(()=>{
   }, [input.calltype]);
 
   useEffect(() => {
-    if (input.businessForecast?.value) {
+    if (input.businessForecast?.value && isEdited.bizztype) {
       axios
         .get(`${baseUrl}/api/statuslist/list/${input.businessForecast?.value}`)
         .then((res) => {
@@ -144,20 +299,19 @@ useEffect(()=>{
 
   useEffect(() => {
     if (checked === "closed") {
-      setInput({ ...input, nxtFollowupDate: '' });
+      setInput({ ...input, nxtFollowupDate: "" });
     }
     if (checked === "nextFollowUp") {
       setInput({
         ...input,
-        callcloseDate: '',
-        callcloseStatus: '',
-        remarks: '',
+        callcloseDate: "",
+        callcloseStatus: "",
+        remarks: "",
       });
     }
   }, [checked]);
 
-
-  console.log('input', input);
+  // console.log('input', input);
 
   const inputHandlerFortext = (e) => {
     setInput((prev) => {
@@ -166,22 +320,9 @@ useEffect(()=>{
   };
 
   const inputHandlerForSelect = (value, action) => {
-    // if (
-    //   input.customer !== null &&
-    //   input.calltype !== null &&
-    //   input.businessForecast !== null &&
-    //   input.forecastStatus !== null
-    // ) {
-    //   setDataSending(false);
-    // } else {
-    //   setDataSending(true);
-    // }
-
     setInput((prev) => {
       return { ...prev, [action.name]: value };
     });
-
-    // && input.calltype !== null && input.businessForecast !== null && input.forecastStatus !== null
 
     if (value === "" || value === null) {
       setInputValidation({ ...inputValidation, [action.name]: true });
@@ -196,6 +337,16 @@ useEffect(()=>{
       value.label === "General Customer Visit"
     ) {
       setCheck(false);
+    }
+
+    if(action.name === 'calltype'){
+      setEdited({ calltype: true, bizztype:true, bizz_status_type:true});
+    }
+    else if(action.name === 'businessForecast'){
+      setEdited({ bizztype:true, bizz_status_type:true});
+    }
+    else if(action.name === 'forecastStatus'){
+      setEdited({ bizz_status_type:true});
     }
   };
 
@@ -247,7 +398,6 @@ useEffect(()=>{
     });
     setFileCheck(true);
   };
-  // console.log('file',file);
 
   const objectData = {
     name: file.name,
@@ -277,19 +427,6 @@ useEffect(()=>{
   let fileCount = 1;
   // console.log('todo',fileData);
 
-
-  const optionsForCallCloseStatus = [
-    { value: "1", label: "Completed" },
-    { value: "2", label: "Order List" },
-  ];
-
-  // const postData = (data) => {
-  //   axios.post(`${baseUrl}/api/callcreation`, data) // Create an Axios request
-  //   .then(response => {
-  //       console.log('data',response.data);
-  //     })
-  // }
-
   const handleSubmit = (e) => {
     e.preventDefault();
     // const formData = new FormData(e.target); // Get the form data
@@ -302,47 +439,44 @@ useEffect(()=>{
       bizz_forecast_id: input.businessForecast.value,
       bizz_forecast_status_id: input.forecastStatus.value,
       additional_info: input.addInfo ? input.addInfo : null,
-      next_followup_date: input.nxtFollowupDate? input.nxtFollowupDate : null,
+      next_followup_date: input.nxtFollowupDate ? input.nxtFollowupDate : null,
       close_status_id: input?.callcloseStatus?.value,
-      close_date: input.callcloseDate? input.callcloseDate : null ,
+      close_date: input.callcloseDate ? input.callcloseDate : null,
       remarks: input.remarks ? input.remarks : null,
       tokenid: localStorage.getItem("token"),
     };
-      setDataSending(true);
-      if(id)
-      {
-        putData(data);
-      }
-      else{
-        postData(data, id);
-      }
+    setDataSending(true);
+    if (id) {
+      putData(data);
+    } else {
+      postData(data, id);
+    }
   };
-
 
   const postData = (data) => {
     axios
       .post(`${baseUrl}/api/callcreation`, data) // Create an Axios request
       .then((res) => {
         if (res.data.status === 200) {
-            Swal.fire({
-              icon: "success",
-              title: "New Call",
-              text: "Created Successfully!",
-              confirmButtonColor: "#5156ed",
-            });
-            navigate('/tender/calllog')
-          } else if (res.data.status === 400) {
-            Swal.fire({
-              icon: "error",
-              title: "New Call",
-              text: res.data.message,
-              confirmButtonColor: "#5156ed",
-            });
-            setDataSending(false)
-          }
-        });
-  }
-  
+          Swal.fire({
+            icon: "success",
+            title: "New Call",
+            text: "Created Successfully!",
+            confirmButtonColor: "#5156ed",
+          });
+          navigate("/tender/calllog");
+        } else if (res.data.status === 400) {
+          Swal.fire({
+            icon: "error",
+            title: "New Call",
+            text: res.data.message,
+            confirmButtonColor: "#5156ed",
+          });
+          setDataSending(false);
+        }
+      });
+  };
+
   const putData = (data, id) => {
     axios.put(`${baseUrl}/api/callcreation/${id}`, data).then((res) => {
       if (res.data.status === 200) {
@@ -360,11 +494,10 @@ useEffect(()=>{
           text: res.data.errors,
           confirmButtonColor: "#5156ed",
         });
-        setDataSending(false)
+        setDataSending(false);
       }
     });
-  }
-
+  };
 
   return (
     <Fragment>
@@ -593,7 +726,7 @@ useEffect(()=>{
                             className="form-check-input mx-3"
                             type="radio"
                             id="closedRadio"
-                            checked={checked === "closed"}                           
+                            checked={checked === "closed"}
                             value="closed"
                             onChange={(e) => {
                               setChecked(e.target.value);
