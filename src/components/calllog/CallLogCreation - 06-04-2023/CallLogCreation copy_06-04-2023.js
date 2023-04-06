@@ -11,17 +11,17 @@ import { FaDownload } from "react-icons/fa";
 import { CgSoftwareDownload } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import PreLoader from "../../UI/PreLoader";
+// import DocumentUpload from './DocumentUpload';
 
 
-
-import csv from "../../hooks/imglogo/csv.png";
-import lock from "../../../images/lock.png";
-import blank from "../../hooks/imglogo/blank.png";
-import pdf from "../../hooks/imglogo/pdf.png";
-import msWord from "../../hooks/imglogo/word.png";
-import zip from "../../hooks/imglogo/zip.png";
-import xls from "../../hooks/imglogo/xls.png";
-import rar from "../../hooks/imglogo/archive.png";
+// import csv from "../../hooks/imglogo/csv.png";
+// import lock from "../../../images/lock.png";
+// import blank from "../../hooks/imglogo/blank.png";
+// import pdf from "../../hooks/imglogo/pdf.png";
+// import msWord from "../../hooks/imglogo/word.png";
+// import zip from "../../hooks/imglogo/zip.png";
+// import xls from "../../hooks/imglogo/xls.png";
+// import rar from "../../hooks/imglogo/archive.png";
 
 const selectState = {
   customer: null,
@@ -38,13 +38,13 @@ const selectState = {
   remarks: "",
 };
 
-const selectFiles = {
-  name: "",
-  size: "",
-  type: "",
-  value: "",
-  src: undefined,
-};
+// const selectFiles = {
+//   name: "",
+//   size: "",
+//   type: "",
+//   value: "",
+//   src: undefined,
+// };
 
 const selectStateErr = {
   customer: "",
@@ -69,11 +69,12 @@ const CallLogCreation = () => {
   const [optionsForStatusList, setOptionsForStatusList] = useState([]);
   const [optionsForProcurement, setOptionsForProcurement] = useState([]);
   const [optionsForExecutive, setOptionsForExecutive] = useState([]);
-
-  const [file, setFile] = useState(selectFiles);
-  const [fileCheck, setFileCheck] = useState(null);
-  const [fileListCheck, setFileListCheck] = useState(null);
-  const [fileData, SetFileData] = useState([]);
+  const ref = useRef();
+  const wrapperRef = useRef(null);
+  // const [file, setFile] = useState(selectFiles);
+  // const [fileCheck, setFileCheck] = useState(null);
+  // const [fileListCheck, setFileListCheck] = useState(null);
+  // const [fileData, SetFileData] = useState([]);
 
   const [checked, setChecked] = useState("nextFollowUp");
   const [check, setCheck] = useState(false); //handleing the visibility of procurement type dropdown input field
@@ -452,82 +453,83 @@ const CallLogCreation = () => {
   }
 
 
-  const handleFile = (e) => {
-    const Files = e.target.files[0];
-    const FilesValue = e.target.value;
-    const fileName = Files.name;
-    const fileType = Files.type;
-    const fileSize = Files.size + " KB";
-    const url = URL.createObjectURL(Files); // this points to the File object we just created
-    // document.querySelector('img').src = url;
+//   const handleFile = (e) => {
+//     const Files = e.target.files[0];
+//     const FilesValue = e.target.value;
+//     const fileName = Files.name;
+//     const fileType = Files.type;
+//     const fileSize = Files.size + " KB";
+//     const url = URL.createObjectURL(Files); // this points to the File object we just created
+//     // document.querySelector('img').src = url;
 
-    // FileMatch
-    const pngFile = fileName.match("png");
-    const csvFile = fileName.match("csv");
-    const mswordFile = fileName.match("docx");
-    const zipFile = fileName.match("zip");
-    const pdfFile = fileName.match("pdf");
-    const msxlFile = fileName.match("vnd.ms-excel");
-    const xlFile = fileName.match("xlsx");
-    const osFile = fileName.match("octet-stream");
-    const rarFile = fileName.match("rar");
+//     // FileMatch
+//     const pngFile = fileName.match("png");
+//     const csvFile = fileName.match("csv");
+//     const mswordFile = fileName.match("docx");
+//     const zipFile = fileName.match("zip");
+//     const pdfFile = fileName.match("pdf");
+//     const msxlFile = fileName.match("vnd.ms-excel");
+//     const xlFile = fileName.match("xlsx");
+//     const osFile = fileName.match("octet-stream");
+//     const rarFile = fileName.match("rar");
 
-    setFile({
-      ...file,
-      name: fileName,
-      type: fileType,
-      size: fileSize,
-      value: FilesValue,
-      src: pngFile
-        ? url
-        : csvFile
-        ? csv
-        : mswordFile
-        ? msWord
-        : zipFile
-        ? zip
-        : pdfFile
-        ? pdf
-        : msxlFile
-        ? xls
-        : xlFile
-        ? xls
-        : osFile
-        ? zip
-        : rarFile
-        ? rar
-        : blank,
-    });
-    setFileCheck(true);
-  };
+//     setFile({
+//       ...file,
+//       name: fileName,
+//       type: fileType,
+//       size: fileSize,
+//       value: FilesValue,
+//       src: pngFile
+//         ? url
+//         : csvFile
+//         ? csv
+//         : mswordFile
+//         ? msWord
+//         : zipFile
+//         ? zip
+//         : pdfFile
+//         ? pdf
+//         : msxlFile
+//         ? xls
+//         : xlFile
+//         ? xls
+//         : osFile
+//         ? zip
+//         : rarFile
+//         ? rar
+//         : blank,
+//     });
+//     setFileCheck(true);
+//   };
 
-  const objectData = {
-    name: file.name,
-    size: file.size,
-    pic: file.src,
-  };
+//   const objectData = {
+//     name: file.name,
+//     size: file.size,
+//     pic: file.src,
+//   };
+// console.log(fileData);
+//   const handleFileAdd = (e) => {
+//     e.preventDefault();
+//     let updated = [...fileData];
+//     console.log("file",file);
+//     updated.push(objectData);
+// //$$$
+//     SetFileData(updated);
+//     setFileListCheck(true);
+//     setFileCheck(false);
+//     Swal.fire({
+//       text: "Uploaded Successfully",
+//       icon: "success",
+//       confirmButtonColor: "#12c350",
+//     });
+//   };
 
-  const handleFileAdd = (e) => {
-    e.preventDefault();
-    
-    let updated = [...fileData];
-    updated.push(objectData);
-    SetFileData(updated);
-    setFileListCheck(true);
-    setFileCheck(false);
-    Swal.fire({
-      text: "Uploaded Successfully",
-      icon: "success",
-      confirmButtonColor: "#12c350",
-    });
-  };
+//   const removePreview = (e) => {
+//     e.preventDefault();
+//     setFileCheck(false);
+//   };
 
-  const removePreview = (e) => {
-    e.preventDefault();
-    setFileCheck(false);
-  };
-
-  let fileCount = 1;
+//   let fileCount = 1;
 
 
   const handleSubmit = (e) => {
@@ -1074,15 +1076,16 @@ const CallLogCreation = () => {
                       )}
                     </div>
                     <div className="col-lg-12">
-                      
-                      {fileListCheck && (
-                        <>
+                      {/* <DocumentUpload id={id} fileData={fileData} /> */}
+                      <DocList ref={ref} BidCreationId={id} onEdit={editHandler} setTotalSize={setTotal_size}/>
+                      {/* {fileListCheck && (
+                        
                           <div className="file_Documents">
                             {fileData.map((t, i) => (
-                              <>
-                                <div className="card">
+                        
+                                <div className="card" key={i}>
                                   <div className="card-body">
-                                    <div className="noOfFiles" key={i}>
+                                    <div className="noOfFiles" >
                                       {fileCount++}
                                     </div>
                                     <div className="fileDetails">
@@ -1115,11 +1118,11 @@ const CallLogCreation = () => {
                                     </div>
                                   </div>
                                 </div>
-                              </>
+                              
                             ))}
                           </div>
-                        </>
-                      )}
+                        
+                      )} */}
                     </div>
                   </div>
                 </div>

@@ -186,6 +186,7 @@ const ZoneMaster = () => {
                                             options={options}
                                             value={statelist}
                                             onChange={(value, action) => { setStateList(value) }}
+                                            closeMenuOnSelect={false}
                                         ></Select>
                         </div>
                         <div className="col-6 ml-n5 mt-2">
