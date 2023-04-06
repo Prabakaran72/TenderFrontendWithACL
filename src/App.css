@@ -1051,3 +1051,76 @@ footer a {
     background: #d0000015;
     color: #d00000;
 }
+
+.popup {
+    position: absolute;
+    top: 27px;
+    left: 0;
+    right: 0;
+    /* bottom: 0; */
+    background-color: #d7d7d71c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    height: auto;
+    width: 100%;
+
+  }
+  
+  .popup__content {
+    position: relative;
+    width: 1100px;
+    max-width: 100%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .popup__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+  
+  .popup__header h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .popup__close-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .popup__body {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .popup__footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .popup__footer button {
+    background-color: #0074d9;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .popup__footer button:not(:last-child) {
+    margin-right: 10px;
+  }
+  

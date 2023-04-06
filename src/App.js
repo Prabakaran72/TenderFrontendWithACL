@@ -49,6 +49,9 @@ import BidCreationMain from "./components/tender/Bidmanagement/Bidcreation/BidCr
 import BidSubmission from "./components/tender/Bidmanagement/Bidsubmission/BidSubmission";
 import TenderStatus from "./components/tender/Bidmanagement/TenderStatus/TenderStatus";
 import Workorder from "./components/tender/Bidmanagement/Workorder/Workorder";
+// ulb report by navin @ 29-03-2023
+import UlbReport from "./components/tender/UlbReport/UlbReport"
+// 
 import CommunicationFilesView from "./components/Library/CommunicationFiles/CommunicationFilesView";
 import CommunicationFilesCreation from "./components/Library/CommunicationFiles/CommunicationFilesCreation";
 import axios from "axios";
@@ -73,7 +76,7 @@ import CallLogMain from "./components/calllog/CallLogCreation/CallLogMain";
 
 import CallToBDMView from "./components/master/CallLogs/CallToBDM/CallToBDMView";
 import CallToBDM from "./components/master/CallLogs/CallToBDM/CallToBDM";
-
+ 
 
 function App() {
   const authData = useContext(AuthContext);
@@ -113,6 +116,8 @@ function App() {
             <Route path="tendertracker" element={!!(permission?.["Tender Tracker"]?.can_view) ? <Tendertracker />: <Unauthorized/> } />
             <Route path="tendercreation" element={!!(permission?.Tenders?.can_add) ? <Tendercreation /> : <Unauthorized/> } />
             <Route path="legacystatement" element={!!(permission?.["Legacy Statements"]?.can_view) ? <Legacystatement /> : <Unauthorized/>} />
+            <Route path="UlbReport" element={!!(permission?.["ULB Report"]?.can_view) ? <UlbReport />: <Unauthorized/> }/>
+          
             <Route path="bidmanagement">
               <Route path="list" element={!!(permission?.['Bids Managements']?.can_view) ? <Bidmanagement /> : <Unauthorized/>} />
               <Route path="list/main" element={(!!(permission?.['Bids Managements']?.can_add) || !!(permission?.['Bids Managements']?.can_edit)) ? <BidmanagementMain /> : <Unauthorized/>}>
@@ -127,6 +132,8 @@ function App() {
                 <Route path="tenderstatus/:id" element={ <TenderStatus /> } />
                 <Route path="workorder" element={ <Workorder /> } />
                 <Route path="workorder/:id" element={ <Workorder /> } />
+                
+                
               </Route>
             </Route>
 
@@ -371,9 +378,7 @@ function App() {
             </Route> 
             
           </Route>
-
           
-
           {/* )} */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
