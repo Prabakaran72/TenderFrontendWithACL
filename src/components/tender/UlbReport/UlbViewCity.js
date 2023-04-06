@@ -79,8 +79,7 @@ else if (ResultFor=='b_1'){
   ulblists='< 1 Lakh';
 }
 console.log('ulblists',ulblists);
-setCol(ulblists);
-setUlblist(props.onData.customersubcategory);
+
 
 let data = {
   ULBnames : props.onData.customersubcategory,
@@ -90,6 +89,8 @@ let data = {
   filter_group: props.onData.filter_group,
 }
 if(data?.POPUP){
+  setCol(ulblists);
+setUlblist(props.onData.customersubcategory);
   let response = await axios.post(`${baseUrl}/api/ulbreport/populb`, data)
   let listarr =  generatepopArray(response);
   
@@ -138,7 +139,7 @@ if(list.length!='0'){
 
   const handleClosePopup = () => {
     setIsOpen(false);
-   
+    setList(null);
   };
 
   return (
