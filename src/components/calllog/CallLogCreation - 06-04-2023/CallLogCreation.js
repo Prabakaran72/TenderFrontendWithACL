@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import { usePageTitle } from "../../hooks/usePageTitle";
 import Select from "react-select";
@@ -11,17 +11,7 @@ import { FaDownload } from "react-icons/fa";
 import { CgSoftwareDownload } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import PreLoader from "../../UI/PreLoader";
-
-
-
-import csv from "../../hooks/imglogo/csv.png";
-import lock from "../../../images/lock.png";
-import blank from "../../hooks/imglogo/blank.png";
-import pdf from "../../hooks/imglogo/pdf.png";
-import msWord from "../../hooks/imglogo/word.png";
-import zip from "../../hooks/imglogo/zip.png";
-import xls from "../../hooks/imglogo/xls.png";
-import rar from "../../hooks/imglogo/archive.png";
+import DocumentUploadForm from "./DocumentUploadForm";
 
 const selectState = {
   customer: null,
@@ -38,13 +28,7 @@ const selectState = {
   remarks: "",
 };
 
-const selectFiles = {
-  name: "",
-  size: "",
-  type: "",
-  value: "",
-  src: undefined,
-};
+
 
 const selectStateErr = {
   customer: "",
@@ -69,11 +53,12 @@ const CallLogCreation = () => {
   const [optionsForStatusList, setOptionsForStatusList] = useState([]);
   const [optionsForProcurement, setOptionsForProcurement] = useState([]);
   const [optionsForExecutive, setOptionsForExecutive] = useState([]);
-
-  const [file, setFile] = useState(selectFiles);
-  const [fileCheck, setFileCheck] = useState(null);
-  const [fileListCheck, setFileListCheck] = useState(null);
-  const [fileData, SetFileData] = useState([]);
+  const ref = useRef();
+  const wrapperRef = useRef(null);
+  // const [file, setFile] = useState(selectFiles);
+  // const [fileCheck, setFileCheck] = useState(null);
+  // const [fileListCheck, setFileListCheck] = useState(null);
+  // const [fileData, SetFileData] = useState([]);
 
   const [checked, setChecked] = useState("nextFollowUp");
   const [check, setCheck] = useState(false); //handleing the visibility of procurement type dropdown input field
@@ -93,7 +78,7 @@ const CallLogCreation = () => {
     callcloseStatus: false,
     executiveName: false,
   });
-  const [isFetching, setIsFetching]=useState({
+  const [isFetching, setIsFetching] = useState({
     customer: true,
     calltype: true,
     bizztype: true,
@@ -101,8 +86,8 @@ const CallLogCreation = () => {
     procurement: true,
     callcloseStatus: true,
     executiveName: true,
-    formData : true
-  })
+    formData: true,
+  });
 
   useEffect(() => {
     if (
@@ -125,27 +110,33 @@ const CallLogCreation = () => {
     }
   }, [input]);
 
-  
   const InitialRequest = async () => {
-    
     await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
       setOptionsForCallList(res.data?.calltype);
-      setIsFetching((prev)=>{return{...prev, calltype: false}})
+      setIsFetching((prev) => {
+        return { ...prev, calltype: false };
+      });
     });
 
     await axios.get(`${baseUrl}/api/customer/list`).then((res) => {
       setOptionsForCutomerList(res.data?.customerList);
-      setIsFetching((prev)=>{return{...prev,  customer: false}})
+      setIsFetching((prev) => {
+        return { ...prev, customer: false };
+      });
     });
 
     await axios.get(`${baseUrl}/api/user/list`).then((res) => {
       setOptionsForExecutive(res.data?.user);
-      setIsFetching((prev)=>{return{...prev,  executiveName: false}})
+      setIsFetching((prev) => {
+        return { ...prev, executiveName: false };
+      });
     });
 
     await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
       setOptionsForProcurement(res.data?.procurementlist);
-      setIsFetching( (prev)=>{return{...prev, procurement: false}})
+      setIsFetching((prev) => {
+        return { ...prev, procurement: false };
+      });
     });
     if (id) {
       await axios.get(`${baseUrl}/api/callcreation/${id}`).then((res) => {
@@ -155,12 +146,14 @@ const CallLogCreation = () => {
             ...prev,
             entrydate: fetcheddata.call_date,
             addInfo: fetcheddata.additional_info,
-            nxtFollowupDate: fetcheddata.next_followup_date ? fetcheddata.next_followup_date : "",
-            callcloseDate : fetcheddata.close_date ? fetcheddata.close_date : "",
+            nxtFollowupDate: fetcheddata.next_followup_date
+              ? fetcheddata.next_followup_date
+              : "",
+            callcloseDate: fetcheddata.close_date ? fetcheddata.close_date : "",
             remarks: fetcheddata.remarks ? fetcheddata.remarks : "",
           };
         });
-       
+
         setEdited({
           customer: false,
           calltype: false,
@@ -171,12 +164,14 @@ const CallLogCreation = () => {
           executiveName: false,
         });
         setFetchedData(res.data.showcall[0]);
-        if(fetcheddata?.calltype?.label !== "General Customer Visit") {
+        if (fetcheddata?.calltype?.label !== "General Customer Visit") {
           setCheck(true);
         }
       });
     }
-    setIsFetching((prev)=>{return {...prev, formData: false}})
+    setIsFetching((prev) => {
+      return { ...prev, formData: false };
+    });
   };
 
   useEffect(() => {
@@ -220,7 +215,6 @@ const CallLogCreation = () => {
   }, [fetchedData.user_id, optionsForExecutive]);
 
   useEffect(() => {
-    
     if (
       id &&
       fetchedData?.call_id &&
@@ -238,7 +232,7 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.call_id, optionsForCallList]);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (
       id &&
       fetchedData?.bizz_id &&
@@ -256,14 +250,14 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.bizz_id, optionsForBizzList]);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (
       id &&
       fetchedData?.bizz_status_id &&
       !isEdited.bizz_status_type &&
       optionsForStatusList?.length > 0
     ) {
-      setInput((prev) => { 
+      setInput((prev) => {
         return {
           ...prev,
           forecastStatus: optionsForStatusList.find(
@@ -274,14 +268,14 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.bizz_status_id, optionsForStatusList]);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (
       id &&
       fetchedData?.proc_id &&
       !isEdited.procurement &&
       optionsForProcurement?.length > 0
     ) {
-      setInput((prev) => { 
+      setInput((prev) => {
         return {
           ...prev,
           procurement: optionsForProcurement.find(
@@ -291,7 +285,6 @@ const CallLogCreation = () => {
       });
     }
   }, [fetchedData.proc_id, optionsForProcurement]);
-
 
   useEffect(() => {
     if (
@@ -309,7 +302,9 @@ const CallLogCreation = () => {
           ),
         };
       });
-      if(fetchedData.close_status_id && fetchedData.close_date) { setChecked("closed")};
+      if (fetchedData.close_status_id && fetchedData.close_date) {
+        setChecked("closed");
+      }
     }
   }, [fetchedData.close_status_id, optionsForCallCloseStatus]);
 
@@ -321,23 +316,28 @@ const CallLogCreation = () => {
   // },[checked, isEdited.callcloseStatus,fetchedData.close_status_id])
 
   useEffect(() => {
-    setIsFetching((prev)=>{return{...prev, bizztype: true}})
+    setIsFetching((prev) => {
+      return { ...prev, bizztype: true };
+    });
     if (input.calltype?.value) {
       axios
         .get(`${baseUrl}/api/bizzlist/list/${input.calltype?.value}`)
         .then((res) => {
           setOptionsForBizzList(res.data.bizzlist);
-          
         });
     } else {
       setOptionsForBizzList(null);
     }
     setInput({ ...input, businessForecast: null });
-    setIsFetching((prev)=>{return{...prev,  bizztype: false}})
+    setIsFetching((prev) => {
+      return { ...prev, bizztype: false };
+    });
   }, [input.calltype]);
 
   useEffect(() => {
-    setIsFetching((prev)=>{return{...prev,  bizz_status_type: true}})
+    setIsFetching((prev) => {
+      return { ...prev, bizz_status_type: true };
+    });
     if (input.businessForecast?.value) {
       axios
         .get(`${baseUrl}/api/statuslist/list/${input.businessForecast?.value}`)
@@ -348,7 +348,9 @@ const CallLogCreation = () => {
       setOptionsForStatusList(null);
     }
     setInput({ ...input, forecastStatus: null });
-    setIsFetching((prev)=>{return{...prev,  bizz_status_type: false}})
+    setIsFetching((prev) => {
+      return { ...prev, bizz_status_type: false };
+    });
   }, [input.businessForecast]);
 
   useEffect(() => {
@@ -366,53 +368,45 @@ const CallLogCreation = () => {
   }, [checked]);
 
   const inputHandlerFortext = (e) => {
-    if(e.target.name == 'nxtFollowupDate')
-    {
+    if (e.target.name == "nxtFollowupDate") {
       let today = new Date();
       const year = today.getFullYear();
-      const month = ('0' + (today.getMonth() + 1)).slice(-2);
-      const day = ('0' + today.getDate()).slice(-2);
+      const month = ("0" + (today.getMonth() + 1)).slice(-2);
+      const day = ("0" + today.getDate()).slice(-2);
       const curr = `${year}-${month}-${day}`;
-      if(e.target.value < curr)
-      {
+      if (e.target.value < curr) {
         setInputValidation({ ...inputValidation, [e.target.name]: true });
         setInput((prev) => {
           return { ...prev, [e.target.name]: curr };
         });
-      }
-      else{
+      } else {
         setInputValidation({ ...inputValidation, [e.target.name]: false });
         setInput((prev) => {
           return { ...prev, [e.target.name]: e.target.value };
         });
       }
-    }
-    else if(e.target.name == 'callcloseDate')
-    {
+    } else if (e.target.name == "callcloseDate") {
       let today = new Date();
       const year = today.getFullYear();
-      const month = ('0' + (today.getMonth() + 1)).slice(-2);
-      const day = ('0' + today.getDate()).slice(-2);
+      const month = ("0" + (today.getMonth() + 1)).slice(-2);
+      const day = ("0" + today.getDate()).slice(-2);
       const curr = `${year}-${month}-${day}`;
-      if(e.target.value > curr)
-      {
+      if (e.target.value > curr) {
         setInputValidation({ ...inputValidation, [e.target.name]: true });
-         setInput((prev) => {
-      return { ...prev, [e.target.name]: curr };
-    });
-      } 
-      else{
+        setInput((prev) => {
+          return { ...prev, [e.target.name]: curr };
+        });
+      } else {
         setInputValidation({ ...inputValidation, [e.target.name]: false });
         setInput((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
+          return { ...prev, [e.target.name]: e.target.value };
+        });
       }
+    } else {
+      setInput((prev) => {
+        return { ...prev, [e.target.name]: e.target.value };
+      });
     }
-    else{
-    setInput((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-  }
   };
 
   const inputHandlerForSelect = (value, action) => {
@@ -426,7 +420,10 @@ const CallLogCreation = () => {
       setInputValidation({ ...inputValidation, [action.name]: false });
     }
 
-    if (action.name == "calltype" && value?.label !== "General Customer Visit") {
+    if (
+      action.name == "calltype" &&
+      value?.label !== "General Customer Visit"
+    ) {
       setCheck(true);
     } else if (
       action.name == "calltype" &&
@@ -443,92 +440,91 @@ const CallLogCreation = () => {
       setEdited({ ...isEdited, bizz_status_type: true });
     }
     if (action.name === "callcloseStatus") {
-      setEdited({ ...isEdited, callcloseStatus: true});
+      setEdited({ ...isEdited, callcloseStatus: true });
     }
   };
 
-  const cancelHandler = () =>{
+  const cancelHandler = () => {
     navigate("/tender/calllog/");
-  }
-
-
-  const handleFile = (e) => {
-    const Files = e.target.files[0];
-    const FilesValue = e.target.value;
-    const fileName = Files.name;
-    const fileType = Files.type;
-    const fileSize = Files.size + " KB";
-    const url = URL.createObjectURL(Files); // this points to the File object we just created
-    // document.querySelector('img').src = url;
-
-    // FileMatch
-    const pngFile = fileName.match("png");
-    const csvFile = fileName.match("csv");
-    const mswordFile = fileName.match("docx");
-    const zipFile = fileName.match("zip");
-    const pdfFile = fileName.match("pdf");
-    const msxlFile = fileName.match("vnd.ms-excel");
-    const xlFile = fileName.match("xlsx");
-    const osFile = fileName.match("octet-stream");
-    const rarFile = fileName.match("rar");
-
-    setFile({
-      ...file,
-      name: fileName,
-      type: fileType,
-      size: fileSize,
-      value: FilesValue,
-      src: pngFile
-        ? url
-        : csvFile
-        ? csv
-        : mswordFile
-        ? msWord
-        : zipFile
-        ? zip
-        : pdfFile
-        ? pdf
-        : msxlFile
-        ? xls
-        : xlFile
-        ? xls
-        : osFile
-        ? zip
-        : rarFile
-        ? rar
-        : blank,
-    });
-    setFileCheck(true);
   };
 
-  const objectData = {
-    name: file.name,
-    size: file.size,
-    pic: file.src,
-  };
+  //   const handleFile = (e) => {
+  //     const Files = e.target.files[0];
+  //     const FilesValue = e.target.value;
+  //     const fileName = Files.name;
+  //     const fileType = Files.type;
+  //     const fileSize = Files.size + " KB";
+  //     const url = URL.createObjectURL(Files); // this points to the File object we just created
+  //     // document.querySelector('img').src = url;
 
-  const handleFileAdd = (e) => {
-    e.preventDefault();
-    
-    let updated = [...fileData];
-    updated.push(objectData);
-    SetFileData(updated);
-    setFileListCheck(true);
-    setFileCheck(false);
-    Swal.fire({
-      text: "Uploaded Successfully",
-      icon: "success",
-      confirmButtonColor: "#12c350",
-    });
-  };
+  //     // FileMatch
+  //     const pngFile = fileName.match("png");
+  //     const csvFile = fileName.match("csv");
+  //     const mswordFile = fileName.match("docx");
+  //     const zipFile = fileName.match("zip");
+  //     const pdfFile = fileName.match("pdf");
+  //     const msxlFile = fileName.match("vnd.ms-excel");
+  //     const xlFile = fileName.match("xlsx");
+  //     const osFile = fileName.match("octet-stream");
+  //     const rarFile = fileName.match("rar");
 
-  const removePreview = (e) => {
-    e.preventDefault();
-    setFileCheck(false);
-  };
+  //     setFile({
+  //       ...file,
+  //       name: fileName,
+  //       type: fileType,
+  //       size: fileSize,
+  //       value: FilesValue,
+  //       src: pngFile
+  //         ? url
+  //         : csvFile
+  //         ? csv
+  //         : mswordFile
+  //         ? msWord
+  //         : zipFile
+  //         ? zip
+  //         : pdfFile
+  //         ? pdf
+  //         : msxlFile
+  //         ? xls
+  //         : xlFile
+  //         ? xls
+  //         : osFile
+  //         ? zip
+  //         : rarFile
+  //         ? rar
+  //         : blank,
+  //     });
+  //     setFileCheck(true);
+  //   };
 
-  let fileCount = 1;
+  //   const objectData = {
+  //     name: file.name,
+  //     size: file.size,
+  //     pic: file.src,
+  //   };
+  // console.log(fileData);
+  //   const handleFileAdd = (e) => {
+  //     e.preventDefault();
+  //     let updated = [...fileData];
+  //     console.log("file",file);
+  //     updated.push(objectData);
+  // //$$$
+  //     SetFileData(updated);
+  //     setFileListCheck(true);
+  //     setFileCheck(false);
+  //     Swal.fire({
+  //       text: "Uploaded Successfully",
+  //       icon: "success",
+  //       confirmButtonColor: "#12c350",
+  //     });
+  //   };
 
+  //   const removePreview = (e) => {
+  //     e.preventDefault();
+  //     setFileCheck(false);
+  //   };
+
+  //   let fileCount = 1;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -543,14 +539,16 @@ const CallLogCreation = () => {
       bizz_forecast_status_id: input.forecastStatus.value,
       additional_info: input.addInfo ? input.addInfo : null,
       next_followup_date: input.nxtFollowupDate ? input.nxtFollowupDate : null,
-      close_status_id: input.nxtFollowupDate ? "" : (input?.callcloseStatus?.value),
+      close_status_id: input.nxtFollowupDate
+        ? ""
+        : input?.callcloseStatus?.value,
       close_date: input.callcloseDate ? input.callcloseDate : null,
       remarks: input.remarks ? input.remarks : null,
       tokenid: localStorage.getItem("token"),
     };
     setDataSending(true);
     if (id) {
-      putData(data,id);
+      putData(data, id);
     } else {
       postData(data);
     }
@@ -605,8 +603,7 @@ const CallLogCreation = () => {
   };
 
   return (
-    
-    <PreLoader loading = {isFetching.formData}>
+    <PreLoader loading={isFetching.formData}>
       <div className="CallLogsCreation">
         <div className="card shadow p-2 mb-4">
           <div className="card-body">
@@ -943,12 +940,12 @@ const CallLogCreation = () => {
                           value={input.callcloseDate}
                         />
                         {inputValidation.callcloseDate && (
-                        <div className="pt-1">
-                          <span className="text-danger font-weight-bold">
-                            Date sholud be today or past Date
-                          </span>
-                        </div>
-                      )}
+                          <div className="pt-1">
+                            <span className="text-danger font-weight-bold">
+                              Date sholud be today or past Date
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       <div className="col-lg-4 text-dark ">
@@ -983,152 +980,33 @@ const CallLogCreation = () => {
                     type="submit"
                     disabled={dataSending || !isFormValid}
                   >
-                    {!id ? (dataSending ? "Saving" : "Save") : (dataSending ? "Updating": "Update")}
+                    {!id
+                      ? dataSending
+                        ? "Saving"
+                        : "Save"
+                      : dataSending
+                      ? "Updating"
+                      : "Update"}
                   </button>
-                  <button className="btn btn-secondary" onClick={cancelHandler} disabled = {dataSending}>
-                                            Cancel
-                                        </button>
-                </div>
-
-                <div className="inputgroup col-lg-6 mb-4">
-                  <div className="row align-items-center">
-                    <div className="col-lg-4 text-dark">
-                      <label htmlFor="document" className="font-weight-bold">
-                        Document
-                      </label>
-                    </div>
-                    <div className="col-lg-8">
-                      <div
-                        className={`border-primary d-flex flex-column align-items-center justify-content-center   bg-gray-200 ${styles.height_of_dropbox} ${styles.boderradius__dropbox} ${styles.dashed} ${styles.drop_file_input} `}
-                      >
-                        <p className="display-4 mb-0">
-                          <i className="fas fa-cloud-upload-alt text-primary "></i>
-                        </p>
-                        <p>Drag & Drop an document or Click</p>
-                        <input
-                          type="file"
-                          value={file.value}
-                          name="image"
-                          className="h-100 w-100 position-absolute top-50 start-50 pointer"
-                          // accept={`image/*`}
-                          onChange={(e) => handleFile(e)}
-                          multiple
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="inputgroup col-lg-6 mb-4 ">
-                  {fileCheck && (
-                    <div className="row align-items-center">
-                      <div className="col-lg-4">
-                        <label className="font-weight-bold">Preview</label>
-                      </div>
-                      <div className="col-lg-8">
-                        <>
-                          <div className="upload_Documents">
-                            <div className="card  my-4">
-                              <div className="card-body">
-                                <div className="UploadingDetails">
-                                  <div>
-                                    <h6> Name : </h6> <span>{file.name}</span>
-                                  </div>
-                                  <div>
-                                    <h6> Size : </h6> <span>{file.size}</span>
-                                  </div>
-                                </div>
-                                <div className="UploadImg">
-                                  <img src={file.src} />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="btns">
-                              <button
-                                className="btn btn-info mr-2"
-                                onClick={(e) => handleFileAdd(e)}
-                              >
-                                Add
-                              </button>
-                              <button
-                                className="btn btn-dark"
-                                onClick={(e) => removePreview(e)}
-                              >
-                                Remove
-                              </button>
-                            </div>
-                          </div>
-                        </>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="inputgroup col-lg-12 mb-4 ">
-                  <div className="row align-items-center">
-                    <div className="col-lg-12">
-                      {fileListCheck && (
-                        <h6 className="listOfupload">
-                          List of Uploaded documents
-                        </h6>
-                      )}
-                    </div>
-                    <div className="col-lg-12">
-                      
-                      {fileListCheck && (
-                        <>
-                          <div className="file_Documents">
-                            {fileData.map((t, i) => (
-                              <>
-                                <div className="card">
-                                  <div className="card-body">
-                                    <div className="noOfFiles" key={i}>
-                                      {fileCount++}
-                                    </div>
-                                    <div className="fileDetails">
-                                      <div className="pic">
-                                        <img src={t.pic} alt="" />
-                                      </div>
-                                      <div className="text">
-                                        <div>
-                                          <h6>Name: </h6>
-                                          <p>{t.name}</p>
-                                        </div>
-                                        <div>
-                                          <h6>Size: </h6>
-                                          <p>{t.size}</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="fileAction">
-                                      <div className="download">
-                                        <a href="#" download>
-                                          <FaDownload />
-                                        </a>
-                                      </div>
-                                      <div className="edit">
-                                        <FiEdit />
-                                      </div>
-                                      <div className="delete">
-                                        <RiDeleteBin5Fill />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </>
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={cancelHandler}
+                    disabled={dataSending}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             </form>
+            
+           
           </div>
         </div>
       </div>
-      </PreLoader>
+      <div>
+             <DocumentUploadForm/>           
+      </div>
+    </PreLoader>
   );
 };
 

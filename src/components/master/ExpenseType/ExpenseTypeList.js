@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Fragment,  useContext,  useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
-// import Swal from "sweetalert2";
 
 //For DataTable
 import "jquery/dist/jquery.min.js";
@@ -22,73 +21,80 @@ import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
 import AuthContext from "../../../storeAuth/auth-context";
+import { can } from "../../UserPermission";
 
 let table;
-const ZoneList = () => {
+const ExpenseTypeList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
-  const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/zonemaster/${id}`)
+
+  useEffect(() => {
+    getList();
+    }, []);
+
+    const deleterecord = async (id) => {
+    let response =  axios.delete(`${baseUrl}/api/expensetype/${id}`)
     return response;
-  }
-
-  const getList = async () => {
-    const zonelist = await axios.get(`${baseUrl}/api/zonemaster`);
-    var dataSet;
-
-    if (
-        zonelist.status === 200 &&
-        zonelist.data.status === 200
-    ) {
-      let list = [...zonelist.data.zonemaster];
-      let listarr = list.map((item, index, arr) => {
-        let editbtn =  !!(permission?.['ZoneMaster']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '' ;
-        let deletebtn = !!(permission?.['ZoneMaster']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '' ;
-        return {
-        ...item,
-        status : (item.active_status ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
-        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
-        action: editbtn + deletebtn,
-        sl_no: index + 1,
-      }});
-
-      dataSet = listarr;
-
-    } else {
-       dataSet = [];
     }
-    let i = 0;
-    table = $("#dataTable").DataTable({
-      data: dataSet,
-      columns: [
-        {
-          //data: 'sl_no',
-          render: function (data, type, row) {
-            return ++i;
-          },
-        },
-        { data: "zone_name" },
-        { data: "status" },
-        { data: "action" },
-      ],
-    })
-    setLoading(false)
-    //to edit 
-    $("#dataTable tbody").on("click", "tr .fa-edit", function () {
-      let rowdata = table.row($(this).closest("tr")).data();
-      navigate(
-        `/tender/master/zonemaster/create/${rowdata.id}`
-      );
-    });
 
-    // to delete a row
+    const getList = async () => {
+        const userPermissionList = await axios.get(`${baseUrl}/api/expensetype`);
+
+        var dataSet;
+        if (
+            userPermissionList.status === 200 
+        ) {
+          let list = [...userPermissionList.data.ExpenseType];
+          let listarr = list.map((item, index, arr) => {
+            let editbtn = !!(permission?.expense_type?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+            let deletebtn =  !!(permission?.expense_type?.can_delete)  ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+            return {
+            ...item,
+            // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
+            // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+            status : (item.active_status ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
+            action:  editbtn + deletebtn,
+            sl_no: index + 1,
+          }});
+    
+          dataSet = listarr;
+    
+        } else {
+           dataSet = [];
+        }
+
+        let i = 0;
+        table = $("#dataTable").DataTable({
+            data: dataSet,
+            columns: [
+              {
+                //data: 'sl_no',
+                render: function (data, type, row) {
+                  return ++i;
+                },
+              },
+              { data: "expenseType" },
+              { data: "status" },
+              { data: "action" },
+            ],
+          })
+          setLoading(false)
+
+          $("#dataTable tbody").on("click", "tr .fa-edit", function () {
+            let rowdata = table.row($(this).closest("tr")).data();
+            navigate(
+              `/tender/master/expensetype/edit/${rowdata.id}`
+            );
+          });
+
+          // to delete a row
     $("#dataTable tbody").on("click", "tr .fa-trash-alt", async function () {
       let rowdata = table.row($(this).closest("tr")).data();
       
       Swal.fire({
-        text: `Are You sure, to delete ${rowdata.zone_name}?`,
+        text: `Are You sure, to delete ${rowdata.expenseType}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -102,12 +108,12 @@ const ZoneList = () => {
          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
-              title:"Zone",
-              text: `${rowdata.zone_name} has been removed!`,
+              text: `${rowdata.expenseType} role and its permissions has been removed!`,
               timer: 1500,
               showConfirmButton: false,
             });
 
+           
             //delete in datatable
               table
               .row($(this).parents("tr"))
@@ -118,6 +124,8 @@ const ZoneList = () => {
                 cell.innerHTML = i + 1;
               })
               .draw();
+
+
           }else if (response.data.status === 404) {
             Swal.fire({ // error msg
               icon: "error",
@@ -134,13 +142,10 @@ const ZoneList = () => {
         } 
       });
     });
-  };
+    
+    }
 
-  useEffect(() => {
-    getList();
-  }, []);
-
-  return (
+  return(
     <Fragment>
       <div>
         {loading && <Loader size="lg" backdrop content="Fetching Data..." />}
@@ -155,7 +160,7 @@ const ZoneList = () => {
           <thead className="text-center">
             <tr>
               <th className="">Sl.No</th>
-              <th className="">Zone Name</th>
+              <th className="">ExpenseType Type</th>
               <th className="">Status</th>
               <th className="">Action</th>
             </tr>
@@ -163,8 +168,10 @@ const ZoneList = () => {
           <tbody></tbody>
         </table>
       </div>
-    </Fragment>
-  );
-};
 
-export default ZoneList;
+    </Fragment>
+  )
+
+}
+
+export default ExpenseTypeList

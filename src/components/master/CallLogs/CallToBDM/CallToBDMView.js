@@ -3,12 +3,13 @@ import { Fragment, useContext } from "react"
 import { Link } from "react-router-dom"
 import AuthContext from "../../../../storeAuth/auth-context"
 import { usePageTitle } from "../../../hooks/usePageTitle"
+import CallToBDMList from "./CalltoBDMList"
 
 
 
 
 const CallToBDMView = () => {
-    usePageTitle('Call To BDM');
+    usePageTitle('Assign Calls to BDM');
     const { permission } = useContext(AuthContext);
     return (
         <Fragment>
@@ -33,7 +34,7 @@ const CallToBDMView = () => {
                         </div>
                         <div className="row mt-3">
                             <div className="col-lg-12">
-                                        
+                               <CallToBDMList/>         
                             </div>
                         </div>
                     </div>

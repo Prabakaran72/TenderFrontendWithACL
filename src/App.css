@@ -1052,6 +1052,174 @@ footer a {
     color: #d00000;
 }
 
+
+
+/* Image Upload For CallLogCreation */
+.CallLogsCreation label.font-weight-bold {
+    font-weight: 600 !important;
+ }
+.CallLogsCreation .upload_Documents {
+    padding-top: 27px;
+ }
+.CallLogsCreation .upload_Documents .card {
+   box-shadow: 2px 2px 13px #312e2e23;
+   border-radius: 50px;
+   border: none;
+   margin-top: 15px;
+   /* width: 350px; */
+}
+.CallLogsCreation .upload_Documents .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 21px;
+}
+.CallLogsCreation .upload_Documents .UploadImg {
+    display: flex;
+    justify-content: center;
+    align-items: center;       
+}
+.CallLogsCreation .upload_Documents .UploadImg img{      
+    height: 70px;
+    width: 70px;
+    border-radius: 50px;
+    border: 4px solid #209fe4;
+    box-shadow: 1px 3px 14px #3838341f;
+}
+.CallLogsCreation .upload_Documents .UploadingDetails{      
+    display: flex;
+    justify-content: center;      
+    flex-direction: column;
+    width: 100%;
+ }
+ .CallLogsCreation .upload_Documents .UploadingDetails div{      
+    display: flex;    
+ }
+ .CallLogsCreation .upload_Documents .UploadingDetails div span{      
+    margin-left: 10px;
+ }
+.CallLogsCreation .upload_Documents .UploadingDetails h6{      
+   font-size: 15px;
+   font-weight: 600;
+   width: 50px;
+}
+.CallLogsCreation .upload_Documents .UploadingDetails span{      
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .2px;
+ }
+ .CallLogsCreation .upload_Documents .btns{      
+    display: flex;
+    justify-content: right;
+ }
+
+ .listOfupload {
+    padding: 20px 0;
+    color: #43a458;
+    font-weight: 600;
+    font-size: 19px;
+ }
+ .CallLogsCreation .file_Documents .card {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 1px 1px 16px #6055551c;
+    margin: 10px 0 1px 0;
+}
+.CallLogsCreation .card .card-body {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+}
+ .CallLogsCreation .file_Documents .fileAction{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+ .CallLogsCreation .file_Documents .fileAction .download{
+   border: 1px dashed #15b2da;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   border-radius: 50px;
+   padding-bottom: 4px;
+   margin-right: 10px;
+   height: 34px;
+   width: 34px;
+ }
+ .CallLogsCreation .file_Documents .fileAction .edit{
+    border: 1px dashed #2dc241;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    padding: 8px;
+    margin-right: 10px;
+  }
+  .CallLogsCreation .file_Documents .fileAction .delete{
+    border: 1px dashed #dd4e4e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    padding: 8px;
+  }
+  .CallLogsCreation .file_Documents .fileAction .download svg{
+    color: #15b2da;
+   }
+   .CallLogsCreation .file_Documents .fileAction .edit svg{
+    color: #2dc241;
+   }
+  .CallLogsCreation .file_Documents .fileAction .delete svg{
+   color: #dd4e4e;
+  }
+  .CallLogsCreation .file_Documents .fileAction svg{
+   font-size: 14px;
+  }
+
+  .CallLogsCreation .file_Documents .noOfFiles{
+    background: #7fbedf;
+    height: 30px;
+    width: 34px;
+    display: flex;  
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    color: #fff;
+}
+  .CallLogsCreation .file_Documents .fileDetails{
+    display: flex;
+    width: 100%;
+    justify-content: left;
+    padding: 0 20px;
+    align-items: center;
+   }
+   .CallLogsCreation .file_Documents .fileDetails .pic {
+    margin: 0 30px;
+   }
+  .CallLogsCreation .file_Documents .fileDetails .pic img{
+    height: 50px;
+    width: 50px;
+    box-shadow: 3px 4px 16px #dddddd98;
+    border-radius: 8px;
+   }
+   .CallLogsCreation .file_Documents .fileDetails .text{
+    margin: 0 0 0 25px;
+   }
+  .CallLogsCreation .file_Documents .fileDetails .text div{
+    display: flex;
+   }
+   .CallLogsCreation .file_Documents .fileDetails .text div h6{
+    width: 65px;
+    font-size: 15px;
+    font-weight: 600;
+   }
+
+
+   .save_cancel {
+    display: flex;
+    justify-content: center;
+   }
+
 .popup {
     position: absolute;
     top: 27px;

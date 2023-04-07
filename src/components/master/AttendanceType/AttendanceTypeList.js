@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { Fragment,  useContext,  useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
@@ -26,41 +25,40 @@ import AuthContext from "../../../storeAuth/auth-context";
 
 
 let table;
-const CallLogMainList = () => {
+const AttendanceTypeList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
 
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/callcreation/${id}`)
+    let response =  axios.delete(`${baseUrl}/api/attendancetype/${id}`)
     return response;
   }
 
   const getList = async () => {
-    const usertypelist = await axios.get(`${baseUrl}/api/callcreation`);
-    console.log("usertypelist",usertypelist);
+    const attendancetypelist = await axios.get(`${baseUrl}/api/attendancetype`);
+    console.log(attendancetypelist)
+    
+    // let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+    // if(rolesAndPermission.status === 200){
+    //   userPermissions = rolesAndPermission.data;
+    // }
 
     var dataSet;
     if (
-      usertypelist.status === 200 &&
-      usertypelist.data.status === 200 && 
-      usertypelist.data?.calllog
+      attendancetypelist.status === 200 &&
+      attendancetypelist.data.status === 200
     ) {
-      let list = [...usertypelist.data.calllog];
+      let list = [...attendancetypelist.data.list];
       let listarr = list.map((item, index, arr) => {
-        let editbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> '  : '';
-        let deletebtn =  !!(permission?.['CallLogCreation']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        let editbtn = !!(permission?.['attendance_type']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> '  : '';
+        let deletebtn =  !!(permission?.['attendance_type']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
         return {
         ...item,
-        mode: "Direct",
-        // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
+        status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
         action: ( editbtn + deletebtn),
-        // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
         sl_no: index + 1,
-        completed: item.close_date? item.close_date: '--',
-        next_followup :  item.next_followup_date ? item.next_followup_date :  item.close_date ? "<span class='text-success'>Closed</span>" : "<span class='text-warning'>InLive</span>"
-
       }});
 
       dataSet = listarr;
@@ -80,16 +78,9 @@ const CallLogMainList = () => {
             return ++i;
           },
         },
-        { data: "callid" },
-        { data: "customer_name" },
-        { data: "username"},
-        { data: "mode"},
-      { data: "callname" },        
-      { data: "call_date"},
-      { data: "completed"},
-      { data: "next_followup"},
-      { data: "action" },
-        
+        { data: "attendanceType" },
+        { data: "status" },
+        { data: "action" },
       ],
     })
     setLoading(false)
@@ -97,7 +88,7 @@ const CallLogMainList = () => {
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
       navigate(
-        `/tender/calllog/edit/${rowdata.id}`
+        `/tender/master/attendancetype/edit/${rowdata.id}`
       );
     });
 
@@ -106,7 +97,7 @@ const CallLogMainList = () => {
       let rowdata = table.row($(this).closest("tr")).data();
       
       Swal.fire({
-        text: `Are You sure, to delete ${rowdata.name}?`,
+        text: `Are You sure, to delete ${rowdata.attendanceType}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -120,7 +111,8 @@ const CallLogMainList = () => {
          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
-              text: `${rowdata.name} role has been removed!`,
+              title: `${rowdata.attendanceType}`,
+              text: `Attendance Type has been removed!`,
               timer: 1500,
               showConfirmButton: false,
             });
@@ -143,8 +135,9 @@ const CallLogMainList = () => {
             });
           } else {
             Swal.fire({
-              title: "Cancelled",
+              title: `${rowdata.attendanceType}`,
               icon: "error",
+              text : 'Unable to delete now',
               timer: 1500,
             });
           }
@@ -169,26 +162,19 @@ const CallLogMainList = () => {
           width="100%"
           cellSpacing={0}
         >
-          <thead className="text-center bg-primary text-white">
+          <thead className="text-center">
             <tr>
-              <th className="">#</th>
-              <th className="">Call ID</th>
-              <th className="">Customer Name</th>
-              <th className="">Executive Name</th>
-              <th className="">Mode</th>
-              <th className="">Call Type</th>
-              <th className="">Started</th>
-              <th className="">Completed</th>
-              <th className="">Next Follow Up</th>
+              <th className="">Sl.No</th>
+              <th className="">Attendance Type</th>
+              <th className="">Status</th>
               <th className="">Action</th>
             </tr>
           </thead>
           <tbody></tbody>
-          
         </table>
       </div>
     </Fragment>
   );
 };
 
-export default CallLogMainList;
+export default AttendanceTypeList;

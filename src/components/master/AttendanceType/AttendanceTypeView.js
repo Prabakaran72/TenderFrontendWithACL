@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { motion } from "framer-motion"
 import { Fragment, useContext } from "react"
-import CallLogDashboard from "./CallLogDashboard";
-import CallLogMainList from "./CallLogMainList";
-import CallLogCreation from "./CallLogCreation";
+import { Link } from "react-router-dom"
+import AuthContext from "../../../storeAuth/auth-context"
+import { usePageTitle } from "../../hooks/usePageTitle"
+import AttendanceTypeList from "./AttendanceTypeList"
 
-import "./../../logoicon.css";
-const CallLogMain = () => {
-  return (
-
+const AttendanceTypeView = () => {
+    usePageTitle("Attendance Type List")
+    const {permission} = useContext(AuthContext)
+    return (
     <Fragment>
-       <CallLogDashboard />
       {/* Page Heading */}
       <div className="container-fluid p-0">
         <motion.div className="card shadow mb-4"
@@ -20,7 +18,7 @@ const CallLogMain = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                <Link  
+                <Link  //Have to modify userType-create to AttendanceType-create
                     to="create"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
@@ -34,14 +32,14 @@ const CallLogMain = () => {
             </div>
             <div className="row mt-3">
               <div className="col-lg-12">
-              <CallLogMainList />
+                <AttendanceTypeList/>
               </div>
             </div>
           </div>
         </motion.div>
       </div>
     </Fragment>
-  );
-};
+    )
+}
 
-export default CallLogMain;
+export default AttendanceTypeView
