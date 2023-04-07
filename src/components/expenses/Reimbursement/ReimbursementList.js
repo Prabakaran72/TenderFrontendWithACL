@@ -16,7 +16,7 @@ import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-buttons/js/buttons.print.js";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import UlbViewCity from "./UlbViewCity";
+
 
 import axios from "axios";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
@@ -24,14 +24,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import Swal from "sweetalert2";
 import { usePageTitle } from "../../hooks/usePageTitle";
-//  import UlbViewCity from "./UlbViewCity";
-// import Popup from './Popup';
+
+
 
 let table; 
 
-const UlbReportList = (props) => {
+const ReimbursementList = (props) => {
 
-    usePageTitle('ULB Report List');
+    usePageTitle('List Reimbursement Form');
 
     const [UlbtList, setUlbList] = useState([]);
     
@@ -77,6 +77,7 @@ const UlbReportList = (props) => {
                 { data: 'btw_5_10' },
                 { data: 'btw_3_5' },
                 { data: 'btw_1_3' },
+                { data: 'bel_1' },
                 { data: 'bel_1' },
                 // { data: 'current_stage' },
                 // { data: 'action' },
@@ -225,7 +226,7 @@ const UlbReportList = (props) => {
     return (
       
         <Fragment>
-         <UlbViewCity onData={popup} />
+         
             <PreLoader loading={props.loading}>
                 <ToastContainer />
                 <div className="table-responsive pb-3">
@@ -237,15 +238,15 @@ const UlbReportList = (props) => {
                     >
                         <thead className="text-center bg-gray-200 text-primary">
                             <tr>
-                                {/* <th scope="col">#</th> */}
-                                <th scope="col">ULB List</th>
-                                <th scope="col">Number of City</th>
-                                <th scope="col"> {"> 20 Lakh"}</th>
-                                <th scope="col">{"10 - 20 Lakh"}</th>
-                                <th scope="col">{"5 - 10 Lakh"}</th>
-                                <th scope="col">{"3 - 5 Lakh"}</th>
-                                 <th scope="col">{"1 - 3 Lakh"}</th> 
-                                <th scope="col">{"< 1 Lakh"}</th>
+                                <th scope="col">#</th>
+                                <th scope="col">Entry Date</th>
+                                <th scope="col">Expense Bill No</th>
+                                <th scope="col"> Staff Name</th>
+                                <th scope="col">Total Amount</th>
+                                <th scope="col">HO Approval</th>
+                                <th scope="col">CEO Approal</th>
+                                 <th scope="col">HR Approal</th> 
+                                <th scope="col">View</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -260,4 +261,4 @@ const UlbReportList = (props) => {
     )
 }
 
-export default UlbReportList
+export default ReimbursementList

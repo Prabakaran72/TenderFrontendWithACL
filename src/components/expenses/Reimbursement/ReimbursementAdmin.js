@@ -7,12 +7,11 @@ import { useBaseUrl } from "../../hooks/useBaseUrl";
 import useInputValidation from "../../hooks/useInputValidation";
 import { isNotEmpty, isNotNull } from "../CommonFunctions/CommonFunctions";
 import Select from "react-select";
-import UlbReportList from "./UlbReportList";
- import UlbViewCity from "./UlbViewCity";
+import ReimbursementList from "./ReimbursementList";
+ 
 
 
-
-function UlbReport(props) {
+function ReimbursementAdmin(props) {
 	const initialOptions = {
 		options: [],
 		isLoading: false,
@@ -117,7 +116,7 @@ function UlbReport(props) {
 
 	const goHandler = async () => {
 console.log('grp',groupValue?.value);
-		setLoading(true)
+		// setLoading(true)
 		if(catValue?.value==null){
 			var value1='';
 		}
@@ -145,7 +144,7 @@ console.log('grp',groupValue?.value);
 			group: value3,
 		}
 
-		let response = await axios.post(`${baseUrl}/api/ulbreport/ulblist`, data)
+		let response = await axios.post(`${baseUrl}/api/ulbreport/ulblists`, data)
 		let listarr = await generateListArray(response)
 
 		setListarr(listarr)
@@ -196,14 +195,7 @@ let b_1 =  '<i class=" b_1" style="cursor:pointer" >'+item.bel_1+'</i> ' ;
 		return listarr;
 	}
 
-	const getlist = async () => {
-		setLoading(true)
-		let response = await axios.get(`${baseUrl}/api/bidcreation/creation`);
-		let listarr = await generateListArray(response)
 
-		setListarr(listarr)
-		setLoading(false)
-	}
 
 	//   const FormattedDate = (date) => {
 	//     const targetdate = new Date(date);
@@ -320,7 +312,7 @@ let b_1 =  '<i class=" b_1" style="cursor:pointer" >'+item.bel_1+'</i> ' ;
 								
 								
 								
-	<UlbReportList loading={loading} list={list} getlist={goHandler} />
+	<ReimbursementList loading={loading} list={list} getlist={goHandler} />
 	
 							</div>
 							<div>
@@ -335,4 +327,4 @@ let b_1 =  '<i class=" b_1" style="cursor:pointer" >'+item.bel_1+'</i> ' ;
 	);
 }
 
-export default UlbReport;
+export default ReimbursementAdmin;

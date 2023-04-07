@@ -76,7 +76,16 @@ import CallLogMain from "./components/calllog/CallLogCreation/CallLogMain";
 
 import CallToBDMView from "./components/master/CallLogs/CallToBDM/CallToBDMView";
 import CallToBDM from "./components/master/CallLogs/CallToBDM/CallToBDM";
- 
+//  **************
+
+
+import ReimbursementAdmin from "./components/expenses/Reimbursement/ReimbursementAdmin";
+
+
+
+
+
+// **********************
 
 function App() {
   const authData = useContext(AuthContext);
@@ -376,7 +385,19 @@ function App() {
               </Route>
               <Route path="creation/{id}" element = {<CallLogMain/>}></Route> */}
             </Route> 
+            <Route path="expenses">
             
+           <Route path="Reimbursement" element={!!(permission?.["ReimbursementForm"]?.can_view) ? <ReimbursementAdmin />: <Unauthorized/> }/>
+             
+              {/* <Route path="calltobdm" >
+               <Route index element={!!(permission?.call_to_bdm?.can_view) ? <CallToBDMView/> : <Unauthorized/>} />
+               <Route path="create" element={!!(permission?.call_to_bdm?.can_add) ? <CallToBDM/> : <Unauthorized/>} />
+               <Route path="edit" element={!!(permission?.call_to_bdm?.can_edit) ? <CallToBDM/> : <Unauthorized/>} />
+              </Route> */}
+              {/* <Route path="creation" element = {<CallLogMain/>}>
+              </Route>
+              <Route path="creation/{id}" element = {<CallLogMain/>}></Route> */}
+            </Route> 
           </Route>
           
           {/* )} */}
