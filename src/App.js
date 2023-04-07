@@ -49,6 +49,9 @@ import BidCreationMain from "./components/tender/Bidmanagement/Bidcreation/BidCr
 import BidSubmission from "./components/tender/Bidmanagement/Bidsubmission/BidSubmission";
 import TenderStatus from "./components/tender/Bidmanagement/TenderStatus/TenderStatus";
 import Workorder from "./components/tender/Bidmanagement/Workorder/Workorder";
+// ulb report by navin @ 29-03-2023
+import UlbReport from "./components/tender/UlbReport/UlbReport"
+// 
 import CommunicationFilesView from "./components/Library/CommunicationFiles/CommunicationFilesView";
 import CommunicationFilesCreation from "./components/Library/CommunicationFiles/CommunicationFilesCreation";
 import Unauthorized from "./components/pages/Unauthorized";
@@ -75,7 +78,16 @@ import AttendanceReport from "./components/hr/AttendanceReport/AttendanceReport"
 import AttendanceType from "./components/master/AttendanceType/AttendanceType";
 import AttendanceTypeView from "./components/master/AttendanceType/AttendanceTypeView";
 import CallLogCreation from './components/calllog/CallLogCreation/CallLogCreation';
-import CallLogMain from './components/calllog/CallLogCreation/CallLogMain';
+import CallLogMain from './components/calllog/CallLogCreation/CallLogMain';//  **************
+
+
+import ReimbursementAdmin from "./components/expenses/Reimbursement/ReimbursementAdmin";
+
+
+
+
+
+// **********************
 
 function App() {
   const authData = useContext(AuthContext);
@@ -115,6 +127,8 @@ function App() {
             <Route path="tendertracker" element={!!(permission?.["Tender Tracker"]?.can_view) ? <Tendertracker />: <Unauthorized/> } />
             <Route path="tendercreation" element={!!(permission?.Tenders?.can_add) ? <Tendercreation /> : <Unauthorized/> } />
             <Route path="legacystatement" element={!!(permission?.["Legacy Statements"]?.can_view) ? <Legacystatement /> : <Unauthorized/>} />
+            <Route path="UlbReport" element={!!(permission?.["ULB Report"]?.can_view) ? <UlbReport />: <Unauthorized/> }/>
+          
             <Route path="bidmanagement">
               <Route path="list" element={!!(permission?.['Bids Managements']?.can_view) ? <Bidmanagement /> : <Unauthorized/>} />
               <Route path="list/main" element={(!!(permission?.['Bids Managements']?.can_add) || !!(permission?.['Bids Managements']?.can_edit)) ? <BidmanagementMain /> : <Unauthorized/>}>
@@ -129,6 +143,8 @@ function App() {
                 <Route path="tenderstatus/:id" element={ <TenderStatus /> } />
                 <Route path="workorder" element={ <Workorder /> } />
                 <Route path="workorder/:id" element={ <Workorder /> } />
+                
+                
               </Route>
             </Route>
 
@@ -404,11 +420,21 @@ function App() {
               </Route>
               <Route path="attendancereport" element={!!(permission?.attendance_report?.can_view) ? <AttendanceReport/> : <Unauthorized/>}/>
             </Route>
+            <Route path="expenses">
             
+           <Route path="Reimbursement" element={!!(permission?.["ReimbursementForm"]?.can_view) ? <ReimbursementAdmin />: <Unauthorized/> }/>
+             
+              {/* <Route path="calltobdm" >
+               <Route index element={!!(permission?.call_to_bdm?.can_view) ? <CallToBDMView/> : <Unauthorized/>} />
+               <Route path="create" element={!!(permission?.call_to_bdm?.can_add) ? <CallToBDM/> : <Unauthorized/>} />
+               <Route path="edit" element={!!(permission?.call_to_bdm?.can_edit) ? <CallToBDM/> : <Unauthorized/>} />
+              </Route> */}
+              {/* <Route path="creation" element = {<CallLogMain/>}>
+              </Route>
+              <Route path="creation/{id}" element = {<CallLogMain/>}></Route> */}
+            </Route> 
           </Route>
-
           
-
           {/* )} */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
