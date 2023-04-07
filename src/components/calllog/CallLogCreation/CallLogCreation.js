@@ -11,17 +11,9 @@ import { FaDownload } from "react-icons/fa";
 import { CgSoftwareDownload } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import PreLoader from "../../UI/PreLoader";
-
-
-
-import csv from "../../hooks/imglogo/csv.png";
-import lock from "../../../images/lock.png";
-import blank from "../../hooks/imglogo/blank.png";
-import pdf from "../../hooks/imglogo/pdf.png";
-import msWord from "../../hooks/imglogo/word.png";
-import zip from "../../hooks/imglogo/zip.png";
-import xls from "../../hooks/imglogo/xls.png";
-import rar from "../../hooks/imglogo/archive.png";
+import {ImageConfig} from "../../hooks/Config";
+import {useAllowedMIMEDocType} from "../../hooks/useAllowedMIMEDocType";
+import {useAllowedUploadFileSize} from "../../hooks/useAllowedUploadFileSize";
 
 const selectState = {
   customer: null,
@@ -74,6 +66,9 @@ const CallLogCreation = () => {
   const [fileCheck, setFileCheck] = useState(null);
   const [fileListCheck, setFileListCheck] = useState(null);
   const [fileData, SetFileData] = useState([]);
+  const {MIMEtype: docType} = useAllowedMIMEDocType();
+  const [accFileStorage, setAccFileStorage] = useState(0);
+  const { total : totalStorageSize} = useAllowedUploadFileSize();
 
   const [checked, setChecked] = useState("nextFollowUp");
   const [check, setCheck] = useState(false); //handleing the visibility of procurement type dropdown input field
@@ -313,12 +308,6 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.close_status_id, optionsForCallCloseStatus]);
 
-  // useEffect(()=>{
-  //   if(checked === fet)
-  //   {
-
-  //   }
-  // },[checked, isEdited.callcloseStatus,fetchedData.close_status_id])
 
   useEffect(() => {
     setIsFetching((prev)=>{return{...prev, bizztype: true}})
@@ -453,24 +442,25 @@ const CallLogCreation = () => {
 
 
   const handleFile = (e) => {
+    console.log("File", e.target.files)
+    const fileType =e.target.files[0].type ? e.target.files[0].type : "";
+    if(docType.includes(fileType))
+    {
+      console.log("accFileStorage+fileSize", accFileStorage+e.target.files[0].size);
+      console.log("totalStorageSize", totalStorageSize);
+      if((accFileStorage+e.target.files[0]?.size) <= totalStorageSize)
+      {
+  
     const Files = e.target.files[0];
     const FilesValue = e.target.value;
     const fileName = Files.name;
-    const fileType = Files.type;
+    
     const fileSize = Files.size + " KB";
+    console.log("Tets")
     const url = URL.createObjectURL(Files); // this points to the File object we just created
-    // document.querySelector('img').src = url;
-
-    // FileMatch
-    const pngFile = fileName.match("png");
-    const csvFile = fileName.match("csv");
-    const mswordFile = fileName.match("docx");
-    const zipFile = fileName.match("zip");
-    const pdfFile = fileName.match("pdf");
-    const msxlFile = fileName.match("vnd.ms-excel");
-    const xlFile = fileName.match("xlsx");
-    const osFile = fileName.match("octet-stream");
-    const rarFile = fileName.match("rar");
+    console.log("dvJH")
+    let fileExt = fileType.split("/")[1];
+    let fileMIME = fileType.split("/")[0];
 
     setFile({
       ...file,
@@ -478,28 +468,32 @@ const CallLogCreation = () => {
       type: fileType,
       size: fileSize,
       value: FilesValue,
-      src: pngFile
-        ? url
-        : csvFile
-        ? csv
-        : mswordFile
-        ? msWord
-        : zipFile
-        ? zip
-        : pdfFile
-        ? pdf
-        : msxlFile
-        ? xls
-        : xlFile
-        ? xls
-        : osFile
-        ? zip
-        : rarFile
-        ? rar
-        : blank,
+      src: fileMIME === "image" ? url 
+          : (fileMIME === "octet-stream" && fileExt ==='csv') ? ImageConfig['csv'] 
+          : (fileMIME === "octet-stream" && fileExt ==='rar') ? ImageConfig['rar'] 
+          : ImageConfig[fileExt] 
     });
+    setAccFileStorage(accFileStorage+e.target.files[0].size);
     setFileCheck(true);
-  };
+  }
+  else{
+    Swal.fire({
+      title: "File Storage",
+      text: "Storage size Overflow..",
+      icon: "error",
+      confirmButtonColor: "#2fba5f",
+  })
+  }
+}
+  else{
+    Swal.fire({
+      title: "File Type",
+      text: "Invalid File Type..!",
+      icon: "error",
+      confirmButtonColor: "#2fba5f",
+  })
+}
+}
 
   const objectData = {
     name: file.name,
@@ -1076,13 +1070,11 @@ const CallLogCreation = () => {
                     <div className="col-lg-12">
                       
                       {fileListCheck && (
-                        <>
                           <div className="file_Documents">
                             {fileData.map((t, i) => (
-                              <>
-                                <div className="card">
+                                <div className="card" key={i}>
                                   <div className="card-body">
-                                    <div className="noOfFiles" key={i}>
+                                    <div className="noOfFiles" >
                                       {fileCount++}
                                     </div>
                                     <div className="fileDetails">
@@ -1115,10 +1107,8 @@ const CallLogCreation = () => {
                                     </div>
                                   </div>
                                 </div>
-                              </>
                             ))}
                           </div>
-                        </>
                       )}
                     </div>
                   </div>
