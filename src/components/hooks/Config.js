@@ -7,7 +7,7 @@ import fileCsv from './imglogo/csv.png';
 import fileRar from './imglogo/archive.png';
 
 
-export const ImageConfig = {
+export const ImageConfig = { 
     default: fileDefault,
     pdf: filePdf,
     doc: fileDoc,

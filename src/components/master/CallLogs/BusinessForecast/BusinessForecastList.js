@@ -18,42 +18,55 @@ import "datatables.net-buttons/js/buttons.print.js";
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { useBaseUrl } from "../../hooks/useBaseUrl";
+import { useBaseUrl } from "../../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
-import AuthContext from "../../../storeAuth/auth-context";
-import { can } from "../../UserPermission";
+import AuthContext from "../../../../storeAuth/auth-context";
+// import { can } from "../../../UserPermission";
 
 let table;
-const UserCreationList = () => {
+const BusinessForecastList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
 
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/usercreation/${id}`)
+    let response =  axios.delete(`${baseUrl}/api/bizzforecast/${id}`)
     return response;
   }
 
   const getList = async () => {
-    const userCreationList = await axios.get(`${baseUrl}/api/usercreation`);
-    
-   
+    const bizzforecastlist = await axios.get(`${baseUrl}/api/bizzforecast`);
+  
+    // let userPermissions ;
+    // let data = {
+    //   tokenid : localStorage.getItem('token')
+    // }
 
+    // let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+    // if(rolesAndPermission.status === 200){
+    //   userPermissions = rolesAndPermission.data;
+    // }
+  
     var dataSet;
     if (
-      userCreationList.status === 200 
+      bizzforecastlist.status === 200 &&
+      bizzforecastlist.data.status === 200
     ) {
-      let list = [...userCreationList.data.userlist];
+      let list = [...bizzforecastlist.data.bizzforecast];
       let listarr = list.map((item, index, arr) => {
-        let editbtn = !!(permission?.["User Creation"]?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '' ;
-        let deletebtn =  !!(permission?.["User Creation"]?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        let editbtn = !!(permission?.["BusinessForecast"]?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+            let deletebtn =  !!(permission?.["BusinessForecast"]?.can_delete)  ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+
+        
         return {
+
         ...item,
-        status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
+        // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
         // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
-        action: (item.id === 1 || item.name === 'Admin')  ? '' : editbtn + deletebtn ,
+        // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
+        action:  editbtn + '' + ((item.role_id === 1) ? '' : deletebtn) ,
         sl_no: index + 1,
       }});
 
@@ -63,7 +76,7 @@ const UserCreationList = () => {
        dataSet = [];
     }
 
-    console.log(dataSet)
+    console.log("DATA:"+dataSet);
     let i = 0;
     table = $("#dataTable").DataTable({
       data: dataSet,
@@ -74,13 +87,10 @@ const UserCreationList = () => {
             return ++i;
           },
         },
-        { data: "userName" },
-        { data: "role_name" },
-        { data: "mobile" },
-        { data: "email" },
+        
+        { data: "calltype_name" },
         { data: "name" },
-        { data: "confirm_passsword" },
-        { data: "status" },
+        { data: "activeStatus" },
         { data: "action" },
       ],
     })
@@ -89,7 +99,7 @@ const UserCreationList = () => {
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
       navigate(
-        `/tender/master/usercreation/edit/${rowdata.id}`
+        `/tender/master/businessforecastmaster/edit/${rowdata.id}`
       );
     });
 
@@ -112,7 +122,8 @@ const UserCreationList = () => {
          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
-              text: `${rowdata.name} role has been removed!`,
+              title: `${rowdata.name} `,
+              text: `Business Forecast has been removed!`,
               timer: 1500,
               showConfirmButton: false,
             });
@@ -135,7 +146,8 @@ const UserCreationList = () => {
             });
           } else {
             Swal.fire({
-              title: "Cancelled",
+              title: "Delete",
+              text: response.data.message,
               icon: "error",
               timer: 1500,
             });
@@ -164,21 +176,18 @@ const UserCreationList = () => {
           <thead className="text-center">
             <tr>
               <th className="">Sl.No</th>
-              <th className="">User Name</th>
-              <th className="">User Type (Role)</th>
-              <th className="">Mobile</th>
-              <th className="">E-mail</th>
-              <th className="">Login Id</th>
-              <th className="">Password</th>
+              <th className="">Call Type</th>
+              <th className="">Business Forecast</th>
               <th className="">Status</th>
               <th className="">Action</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+          </tbody>
         </table>
       </div>
     </Fragment>
   );
 };
 
-export default UserCreationList;
+export default BusinessForecastList;

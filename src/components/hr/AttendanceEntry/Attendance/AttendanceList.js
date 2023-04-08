@@ -18,43 +18,56 @@ import "datatables.net-buttons/js/buttons.print.js";
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { useBaseUrl } from "../../hooks/useBaseUrl";
+import { useBaseUrl } from "../../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
-import AuthContext from "../../../storeAuth/auth-context";
-import { can } from "../../UserPermission";
+import AuthContext from "../../../../storeAuth/auth-context";
 
 let table;
-const UserCreationList = () => {
+const AttendanceList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
-
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/usercreation/${id}`)
+    let response =  axios.delete(`${baseUrl}/api/attendanceentry/${id}`)
     return response;
   }
 
   const getList = async () => {
-    const userCreationList = await axios.get(`${baseUrl}/api/usercreation`);
-    
-   
-
+    const zonelist = await axios.get(`${baseUrl}/api/attendanceentry`);
     var dataSet;
+
     if (
-      userCreationList.status === 200 
+        zonelist.status === 200 &&
+        zonelist.data.status === 200
     ) {
-      let list = [...userCreationList.data.userlist];
+      console.log(zonelist.data.list);
+      let list = [...zonelist.data.list];
+
       let listarr = list.map((item, index, arr) => {
-        let editbtn = !!(permission?.["User Creation"]?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '' ;
-        let deletebtn =  !!(permission?.["User Creation"]?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+
+        let editbtn =  !!(permission?.['AttendanceEntry']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '' ;
+        let deletebtn = !!(permission?.['AttendanceEntry']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '' ;
+
+    //  const date = new Date(Date.parse(item.created_at)-(5.5 * 60 * 60 * 1000));
+    const date = new Date(Date.parse(item.created_at));
+     const options = {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
+    };
+    const finalFormattedDate = date.toLocaleString('en-US',options);
         return {
         ...item,
-        status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
-        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
-        action: (item.id === 1 || item.name === 'Admin')  ? '' : editbtn + deletebtn ,
+        action: editbtn + deletebtn,
         sl_no: index + 1,
+        dateTime: finalFormattedDate,
       }});
 
       dataSet = listarr;
@@ -62,8 +75,6 @@ const UserCreationList = () => {
     } else {
        dataSet = [];
     }
-
-    console.log(dataSet)
     let i = 0;
     table = $("#dataTable").DataTable({
       data: dataSet,
@@ -74,14 +85,11 @@ const UserCreationList = () => {
             return ++i;
           },
         },
+        { data: "dateTime" },
         { data: "userName" },
-        { data: "role_name" },
-        { data: "mobile" },
-        { data: "email" },
-        { data: "name" },
-        { data: "confirm_passsword" },
-        { data: "status" },
+        { data: "attendanceTypeName" },
         { data: "action" },
+        
       ],
     })
     setLoading(false)
@@ -89,7 +97,7 @@ const UserCreationList = () => {
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
       navigate(
-        `/tender/master/usercreation/edit/${rowdata.id}`
+        `/tender/hr/attendanceentry/edit/${rowdata.id}`
       );
     });
 
@@ -98,7 +106,7 @@ const UserCreationList = () => {
       let rowdata = table.row($(this).closest("tr")).data();
       
       Swal.fire({
-        text: `Are You sure, to delete ${rowdata.name}?`,
+        text: `Are You sure, to delete ${rowdata.userName}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -112,7 +120,8 @@ const UserCreationList = () => {
          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
-              text: `${rowdata.name} role has been removed!`,
+              title:"Attendance Entry",
+              text: `${rowdata.userName} has been removed!`,
               timer: 1500,
               showConfirmButton: false,
             });
@@ -164,13 +173,9 @@ const UserCreationList = () => {
           <thead className="text-center">
             <tr>
               <th className="">Sl.No</th>
+              <th className="">Date & Time </th>
               <th className="">User Name</th>
-              <th className="">User Type (Role)</th>
-              <th className="">Mobile</th>
-              <th className="">E-mail</th>
-              <th className="">Login Id</th>
-              <th className="">Password</th>
-              <th className="">Status</th>
+              <th className="">Attendance Type</th>
               <th className="">Action</th>
             </tr>
           </thead>
@@ -181,4 +186,4 @@ const UserCreationList = () => {
   );
 };
 
-export default UserCreationList;
+export default AttendanceList;

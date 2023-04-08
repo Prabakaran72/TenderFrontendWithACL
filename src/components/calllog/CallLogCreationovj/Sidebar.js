@@ -2,9 +2,9 @@ import React, { useEffect, useState, useContext, Fragment } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import AuthContext from "../storeAuth/auth-context";
+import { can } from "./UserPermission";
 import { useBaseUrl } from "./hooks/useBaseUrl";
 import axios from "axios";
-
 function Sidebar() {
   const [active, setActive] = useState("");
   const { server1: baseUrl } = useBaseUrl();
@@ -12,7 +12,7 @@ function Sidebar() {
 
   const pathName = "tender";
 
-  const permission = useContext(AuthContext);
+  const authData = useContext(AuthContext);
   // console.log(authData)
   const hideSidebarElement = (menuId, tab) => {
     document.getElementById(menuId).click();
@@ -35,6 +35,8 @@ function Sidebar() {
       setMenu(response.data.menuList || []);
     });
   }, []);
+
+  // console.log(menus)
 
   return (
     <ul
@@ -96,7 +98,7 @@ function Sidebar() {
                 id={`${item.name}Menu`}
               >
                 <i className={item.icoClass}></i>
-                <span>{item.aliasName}</span>
+                <span>{item.name}</span>
               </Link>
               <div
                 id={`collapse${item.name}Menu`}
@@ -124,16 +126,18 @@ function Sidebar() {
         );
       })}
 
+      <motion.li
+        className="nav-item"
+        animate={{ x: 0 }}
+        initial={{ x: -300 }}
+        transition={{ type: "tween" }}
+      >
+        <Link className="nav-link" to="/tender/CallLogCreation">          
+          <i className="fa fa-phone"></i>
+          <span className="font-weight-bold ml-1">Call Creation</span>
+        </Link>
+      </motion.li>      
 
-      <li className="nav-item">
-        <Link
-                className="nav-link"
-                to="/tender/otherExpense/main"
-              >
-                <i className='fas fa-money'></i>
-                <span className="font-weight-bold ml-1">Other Expense</span>
-              </Link>
-      </li>
       <motion.div className="text-center d-none d-md-inline">
         <button className="rounded-circle border-0" id="sidebarToggle"></button>
       </motion.div>

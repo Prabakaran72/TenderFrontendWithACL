@@ -1,13 +1,12 @@
 import { motion } from "framer-motion"
 import { Fragment, useContext } from "react"
 import { Link } from "react-router-dom"
-import AuthContext from "../../../../storeAuth/auth-context"
-import { usePageTitle } from "../../../hooks/usePageTitle"
-import { can } from "../../../UserPermission"
-import CallTypeList from "./CallTypeList"
+import AuthContext from "../../../storeAuth/auth-context"
+import { usePageTitle } from "../../hooks/usePageTitle"
+import AttendanceTypeList from "./AttendanceTypeList"
 
-const CallTypeView = () => {
-    usePageTitle("Call Type List")
+const AttendanceTypeView = () => {
+    usePageTitle("Attendance Type List")
     const {permission} = useContext(AuthContext)
     return (
     <Fragment>
@@ -19,8 +18,8 @@ const CallTypeView = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="float-right">
-                <Link  //Have to modify userType-create to CallType-create
-                    to="calltypecreation"
+                <Link  //Have to modify userType-create to AttendanceType-create
+                    to="create"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >
                     <span className="icon text-white-50">
@@ -33,7 +32,7 @@ const CallTypeView = () => {
             </div>
             <div className="row mt-3">
               <div className="col-lg-12">
-                <CallTypeList/>
+                <AttendanceTypeList/>
               </div>
             </div>
           </div>
@@ -43,4 +42,4 @@ const CallTypeView = () => {
     )
 }
 
-export default CallTypeView
+export default AttendanceTypeView

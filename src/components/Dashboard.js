@@ -531,7 +531,7 @@ function Dashboard() {
         </div>
       </div>
       <div className="DynamicCard">
-        <div className="card shadow mb-4">
+        <div className="card shadow mb-6">
           <div className="card-body">
             <div className="box col-lg-12">
               <div className="slider">
@@ -560,7 +560,7 @@ function Dashboard() {
 
         <div className="row">
           <div className="col-lg-6 col-md-12">
-            <div className="card shadow mb-4">
+            <div className="card shadow mb-5">
               <div className="card-body">
                 <div className="responsive">
                   <Chart

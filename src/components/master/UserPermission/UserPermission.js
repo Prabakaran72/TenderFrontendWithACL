@@ -1,10 +1,11 @@
 import axios from "axios";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import { usePageTitle } from "../../hooks/usePageTitle";
 import Swal from "sweetalert2/src/sweetalert2.js";
 import Select from "react-select";
+import AuthContext from "../../../storeAuth/auth-context";
 
 const initialState = {
     usertype: "",
@@ -34,6 +35,7 @@ const UserPermission = () => {
     const [roleHasPermissions, setRoleHasPermissions] = useState([]);
     const [untouchedMatrix, setUntouchedMatrix] = useState({});
     const [savedData, setSavedData] = useState([])
+    const authcontext = useContext(AuthContext)
 
 
     const [inputValidation, setInputValidation] = useState(initialStateErr);
@@ -44,7 +46,6 @@ const UserPermission = () => {
                 generateOptions(response.data.userType);
             }
         });
-
         if(id){
             getSavedData()
         }
@@ -61,16 +62,13 @@ const UserPermission = () => {
         });
     }, [])
 
-
     const getSavedData = () => {
         axios.get(`${baseUrl}/api/permisions/${id}`).then((resp) => {
             if(resp.data.status === 200){
-            
                 let usertypeValue = {
                     value   : resp.data.roleName.id,
                     label   : resp.data.roleName.name
                 } 
-                
                 setInput({...input, usertype : usertypeValue})
 
                 setSavedData(resp.data.permissions)
@@ -103,8 +101,6 @@ const UserPermission = () => {
         })
     }
     
-
-
     const generateInput = (menuList = []) => {
         let inputMatrix = {}
         menuList.forEach((item, index) => {
@@ -115,7 +111,7 @@ const UserPermission = () => {
             }
         })
 
-        console.log(inputMatrix)
+        // console.log(inputMatrix)
         setUntouchedMatrix(inputMatrix)
         setPermissionMatrix(inputMatrix)
     }
@@ -182,7 +178,7 @@ const UserPermission = () => {
  
         let options = list.map((item, index) => ({
             value: item.id,
-            label: item.name,
+            label: item.aliasName,
         }))
 
         setMenuoptions(options)
@@ -257,8 +253,9 @@ const UserPermission = () => {
                     text:  resp.data.message,
                     confirmButtonColor: "#5156ed",
                   });
-      
+                  authcontext.getpermissions();
                 navigate(`/tender/master/userpermissions`);
+
             }else{
                 Swal.fire({
                     icon: "error",
@@ -379,7 +376,7 @@ const UserPermission = () => {
                             {subMenuList.map((record, index) => {
                                 return (
                                     <tr key={index} >
-                                        <td className="align-middle text-primary font-weight-bold">{record.name}</td>
+                                        <td className="align-middle text-primary font-weight-bold">{record.aliasName}</td>
                                         <td>
                                         {(permissionMatrix[record.id]?.view && 
                                           permissionMatrix[record.id]?.add  &&
