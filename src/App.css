@@ -1257,6 +1257,9 @@ footer a {
   .OtherExpenseMain .otherExpenseMainForm button{
     width: 65px;
   }
+  .OtherExpenseMain .otherExpenseMainForm button.subList{
+    width: 82px;
+  }
    .OtherExpenseMain .otherExpenseMainForm button.go{
     margin-right: 5px;
   }

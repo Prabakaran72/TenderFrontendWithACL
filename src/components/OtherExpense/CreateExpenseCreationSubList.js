@@ -25,7 +25,7 @@ const selectFile = {
   src: undefined,
 };
 
-const CreateExpenseCreationSubList = ({setTable, editData, currentRow, pass, input}) => {
+const CreateExpenseCreationSubList = ({setTable, editData, currentRow, pass, input, img, editCheck, setEditCheck}) => {
   const [inputSub, setInputSub] = useState(selectState);
   const [file, setFile] = useState(selectFile);
   const [eTargFiles, setETargFiles] = useState(null);
@@ -159,6 +159,7 @@ const CreateExpenseCreationSubList = ({setTable, editData, currentRow, pass, inp
     setFile({...file, value: ''});
     setFileCheck(false);
     setBtnCheck(false)
+    setEditCheck(false);
   }
  
   const handleSubmit = (e) => {
@@ -175,7 +176,7 @@ const CreateExpenseCreationSubList = ({setTable, editData, currentRow, pass, inp
       expense_type_id: inputSub.expenseType?.value ?? '',
       amount: inputSub.amount,
       description_sub: inputSub.description,
-      filename: file.name,
+      file: file.name,
       // filetype: file.type,
       // filesize: file.size,
       // file: file,
@@ -183,14 +184,23 @@ const CreateExpenseCreationSubList = ({setTable, editData, currentRow, pass, inp
     }
         
     if (eTargFiles instanceof Blob) {
-      data.filename = new File([eTargFiles], file.name);             
-      console.log('data.filename',data.filename); 
+      data.file = new File([eTargFiles], file.name);             
+      console.log('data.file',data.file); 
     }
     
     for (var key in data) {
       formdata.append(key, data[key]);
     }
-    postData(formdata);    
+
+    if(currentRow.oesid) {
+      putData(formdata)   
+      console.log('sucessPut');   
+    }
+    else {
+      postData(formdata); 
+      console.log('sucessPost');  
+    }                  
+   
     setTriggerTable(true);    
   }
 
@@ -216,12 +226,39 @@ const CreateExpenseCreationSubList = ({setTable, editData, currentRow, pass, inp
     console.log('data',data);      
   }
 
+  const putData = (data) => {
+    axios({
+      url: `${baseUrl}/api/otherexpensesub/${currentRow.oesid}`,
+      data: data,
+      method: 'put'
+    })
+    .then((res) => {
+      if (res.data.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "New SubExpense",
+            text: "Updated Successfully!",
+            confirmButtonColor: "#5156ed",
+          });                 
+        } else if (res.data.status === 400) {
+          Swal.fire({
+            icon: "error",
+            title: "New SubExpense",
+            text: res.data.message,
+            confirmButtonColor: "#5156ed",
+          });          
+      }
+    });
+    console.log('data',data);      
+  }
+
   const optionsForCustomer = [
     { value: 1, label: "Abc" },
     { value: 2, label: "def" },
   ];
   
-  // console.log("input", input);    
+ 
+  console.log("currentRow", currentRow);    
   // console.log("inputSub", inputSub);  
 
   return (
@@ -350,6 +387,9 @@ const CreateExpenseCreationSubList = ({setTable, editData, currentRow, pass, inp
             {btnCheck && <div className="d-flex justify-content-end w-100 pr-3">                      
               <button className="doc-cancel" onClick={handleRemoveDoc}>Click to Cancel</button>          
             </div>}
+            {editCheck && <div className="d-flex justify-content-end w-100 pr-3">                      
+              <button className="doc-cancel" onClick={handleRemoveDoc}>Click to Cancel</button>          
+            </div>}
           </div>
           <div className="col-sm-6 row d-flex align-items-center mb-4 ">
             {fileCheck && (    
@@ -382,14 +422,45 @@ const CreateExpenseCreationSubList = ({setTable, editData, currentRow, pass, inp
               </motion.div>     
               </>              
             )}
+
+            {editCheck && (    
+              <>
+              <div className="col-lg-3 text-dark font-weight-bold">
+                <label className="font-weight-bold">Preview</label>
+              </div>
+              <motion.div className="col-lg-9" 
+                initial={{scale: 0.5, opacity: 0.4}} animate={{scale: 1, opacity: 1}} transition={{type: "tween", stiffness: 10, duration: 0.1, delay: 0.1}}>
+                <>
+                  <div className="upload_Documents">
+                    <div className="card  my-4">
+                      <div className="card-body">
+                        {/* <div className="noOfCountsForUpload">{''}</div> */}
+                        <div className="UploadingDetails">
+                          <div>
+                            <h6> Name : </h6> <span>{currentRow.originalfilename}</span>
+                          </div>
+                          <div>
+                            <h6> Size : </h6> <span>{currentRow.filesize}</span>
+                          </div>
+                        </div>
+                        <div className="UploadImg">
+                          <img src={img} />
+                        </div>
+                      </div>
+                    </div>                 
+                  </div>
+                </>
+              </motion.div>     
+              </>              
+            )}
           </div>
           <div className="col-sm-12 row d-flex align-items-center justify-content-center mb-4">
             <button
-              className="btn btn-success"
+              className="btn btn-success subList"
               type="submit"
               disabled={isFormValid}
             >
-              ADD
+             {editCheck ? 'Update' : 'ADD'}
             </button>
           </div>
         </div>
