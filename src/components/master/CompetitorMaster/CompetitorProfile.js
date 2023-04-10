@@ -34,7 +34,7 @@ const CompetitorProfile = () => {
   const { server1: baseUrl } = useBaseUrl();
   const navigate = useNavigate();
   const [hasError, setHasError] = useState({
-    compNo: null,
+    // compNo: null,
     compName: null,
     registrationType: null,
     registerationYear: null,
@@ -117,6 +117,8 @@ const CompetitorProfile = () => {
     city: false,
   });
   const [fetchLoading, setFetchingLoading] = useState(true);
+
+  console.log("formIsValid",formIsValid)
 
   useEffect(() => {
     if (id) {
@@ -446,6 +448,8 @@ const CompetitorProfile = () => {
   };
 
   useEffect(() => {
+
+    console.log("hasError",hasError)
     if (
       hasError.compName !== null &&
       hasError.compName !== true &&
@@ -488,6 +492,7 @@ const CompetitorProfile = () => {
       setFormIsValid(false);
     }
   }, [hasError]);
+
 
   //Set Text Input Values
   const textInputHandler = (e) => {
@@ -772,6 +777,16 @@ const CompetitorProfile = () => {
           setLoading(false);
         });
       }
+      else{
+        Swal.fire({
+          icon: "error",
+          title: "Competitor",
+          text: res.data.message,
+          confirmButtonColor: "#5156ed",
+        }).then(function () {
+          setLoading(false);
+        });
+      }
     });
   };
 
@@ -846,6 +861,16 @@ const CompetitorProfile = () => {
             title: "Competitor",
             text: res.data.message,
             confirmButtonColor: "#5156ed",
+          });
+        }
+        else{
+          Swal.fire({
+            icon: "error",
+            title: "Competitor Update",
+            text: res.data.message,
+            confirmButtonColor: "#5156ed",
+          }).then(function () {
+            setLoading(false);
           });
         }
         setLoading(false);

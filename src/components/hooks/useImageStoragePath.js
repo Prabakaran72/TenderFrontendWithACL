@@ -3,7 +3,7 @@ import { useBaseUrl } from "./useBaseUrl";
 const useImageStoragePath = () => {
     const { server1: baseUrl } = useBaseUrl();  
     return {
-        //-----Path for File access in  Dev  ----
+        //-----Path for File access in  local storage  ----
         biddocs : baseUrl+'/uploads/BidManagement/biddocs/',        
         qcFile : baseUrl+'/uploads/competitor/qc/',
         woFile : baseUrl+'/uploads/competitor/woFile/',
@@ -16,10 +16,11 @@ const useImageStoragePath = () => {
         commnunicationfile : baseUrl+'/uploads/BidManagement/WorkOrder/CommunicationFiles/',//Bit Management Work Order form
         letterofacceptence : baseUrl+'/uploads/BidManagement/WorkOrder/LetterOfAcceptence/Document/',//Bit Management Work Order form
         techEval: baseUrl+'/uploads/BidManagement/techevaluation/',//Bit Management Tender Status Tech Evaluation form
-        commnunicationfilesmaster: baseUrl+'/uploads/Communicationfiles/',
+        commnunicationfilesmaster: baseUrl+'/uploads/Communicationfiles/',//Communication Files
+        callcreation: baseUrl+'/uploads/CallCreation/CallLog/', //Call Creation Multi File Uploads
 
 
-        //----- Uncomment when build App ----
+        //----- Uncomment when build App & for Server storage ----
         // qcFile : baseUrl+'/public/uploads/competitor/qc/',
         // woFile : baseUrl+'/public/uploads/competitor/woFile/',
         // woCompletionFile : baseUrl+'/public/uploads/competitor/woCompletionFile/',
@@ -33,6 +34,7 @@ const useImageStoragePath = () => {
         // letterofacceptence : baseUrl+'/public/uploads/BidManagement/WorkOrder/LetterOfAcceptence/Document/',//Bit Management Work Order form
         // techEval: baseUrl+'/public/uploads/BidManagement/techevaluation/',
         // commnunicationfilesmaster: baseUrl+'/public/uploads/Communicationfiles/',
+        // callcreation: baseUrl+'/public/uploads/uploads/CallCreation/CallLog/', 
 
 }
 }

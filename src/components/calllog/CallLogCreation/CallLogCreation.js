@@ -11,9 +11,10 @@ import { FaDownload } from "react-icons/fa";
 import { CgSoftwareDownload } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import PreLoader from "../../UI/PreLoader";
-import {ImageConfig} from "../../hooks/Config";
-import {useAllowedMIMEDocType} from "../../hooks/useAllowedMIMEDocType";
-import {useAllowedUploadFileSize} from "../../hooks/useAllowedUploadFileSize";
+import { ImageConfig } from "../../hooks/Config";
+import { useAllowedMIMEDocType } from "../../hooks/useAllowedMIMEDocType";
+import { useAllowedUploadFileSize } from "../../hooks/useAllowedUploadFileSize";
+import {useImageStoragePath} from "../../hooks/useImageStoragePath";
 
 const selectState = {
   customer: null,
@@ -63,12 +64,14 @@ const CallLogCreation = () => {
   const [optionsForExecutive, setOptionsForExecutive] = useState([]);
 
   const [file, setFile] = useState(selectFiles);
+  const [file1, setFile1] = useState(null);
   const [fileCheck, setFileCheck] = useState(null);
   const [fileListCheck, setFileListCheck] = useState(null);
-  const [fileData, SetFileData] = useState([]);
+  const [fileData, setFileData] = useState([]);
   const {MIMEtype: docType} = useAllowedMIMEDocType();
   const [accFileStorage, setAccFileStorage] = useState(0);
-  const { total : totalStorageSize} = useAllowedUploadFileSize();
+  const { total: totalStorageSize } = useAllowedUploadFileSize();
+  const { callcreation: filePath } = useImageStoragePath();
 
   const [checked, setChecked] = useState("nextFollowUp");
   const [check, setCheck] = useState(false); //handleing the visibility of procurement type dropdown input field
@@ -77,7 +80,7 @@ const CallLogCreation = () => {
   const [inputValidation, setInputValidation] = useState(selectStateErr);
   const [dataSending, setDataSending] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-
+  const [mainId, setMainId] = useState(null);
   const [fetchedData, setFetchedData] = useState([]);
   const [isEdited, setEdited] = useState({
     customer: false,
@@ -88,7 +91,7 @@ const CallLogCreation = () => {
     callcloseStatus: false,
     executiveName: false,
   });
-  const [isFetching, setIsFetching]=useState({
+  const [isFetching, setIsFetching] = useState({
     customer: true,
     calltype: true,
     bizztype: true,
@@ -96,8 +99,16 @@ const CallLogCreation = () => {
     procurement: true,
     callcloseStatus: true,
     executiveName: true,
-    formData : true
-  })
+    formData: true,
+    doclist: true
+  });
+
+  const objectData = {
+    name: file.name,
+    size: file.size,
+    pic: file.src,
+  };
+
 
   useEffect(() => {
     if (
@@ -120,27 +131,114 @@ const CallLogCreation = () => {
     }
   }, [input]);
 
+  const getFileList = async ()=>{
+    axios({
+      url: `${baseUrl}/api/callcreation/doclist/${id}`,
+      method: "GET",
+      // responseType: "blob", // important
+      headers: {   //to stop cacheing this response at browsers. otherwise wrongly displayed cached files
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
+    }).then((res) => {
+      if (res.status === 200) {
+        let filelist = [];
+        for(let key in res.data.docs){
+          
+    let fileExt =res.data.docs[key].filetype.split("/")[res.data.docs[key].filetype.split("/").length - 1];
+    let fileMIME = res.data.docs[key].filetype.split("/")[0];    
   
+    let fileobject = {
+            id: res.data.docs[key].id,
+            mainid: res.data.docs[key].mainid,
+            name: res.data.docs[key].originalfilename,
+            size: res.data.docs[key].filesize,
+            pic:  fileMIME === "image"
+              ? filePath+""+res.data.docs[key].hasfilename
+              : fileMIME === "octet-stream" && fileExt === "csv"
+              ? ImageConfig["csv"]
+              : fileMIME === "octet-stream" && fileExt === "rar"
+              ? ImageConfig["rar"]
+              : (res.data.docs[key].filetype ==="text/plain" && res.data.docs[key].originalfilename.split(".")[res.data.docs[key].originalfilename.split(".").length - 1] ==="csv") ? ImageConfig["csv"]
+              :ImageConfig[fileExt],
+          };
+          filelist.push(fileobject);
+      }
+        setFileData(filelist);
+        setFileListCheck(true)
+      }
+    });
+  }
+
+  const downloadDoc = (fileid, filename) =>{
+  
+    axios({
+      url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,
+      method: 'GET',
+      responseType: 'blob', // important
+    }).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${filename}`);
+      document.body.appendChild(link);
+      link.click();
+    });
+  }
+
+  const DeleteDoc = (fileid, filename) =>{
+    axios.delete(`${baseUrl}/api/callfileupload/${fileid}`).then((res)=>{
+      if(res.data.status === 200)
+      {
+        Swal.fire({
+          title: "File",
+          text: "Removed Successfully..",
+          icon: "success",
+          confirmButtonColor: "#2fba5f",
+        });
+        getFileList();
+      }
+      else{
+        Swal.fire({
+          title: "File",
+          text: res.data.message,
+          icon: "error",
+          confirmButtonColor: "#2fba5f",
+        });
+      }
+    });
+
+  }
   const InitialRequest = async () => {
-    
+    getFileList();
+
     await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
       setOptionsForCallList(res.data?.calltype);
-      setIsFetching((prev)=>{return{...prev, calltype: false}})
+      // setIsFetching((prev) => {
+      //   return { ...prev, calltype: false };
+      // });
     });
 
     await axios.get(`${baseUrl}/api/customer/list`).then((res) => {
       setOptionsForCutomerList(res.data?.customerList);
-      setIsFetching((prev)=>{return{...prev,  customer: false}})
+      setIsFetching((prev) => {
+        return { ...prev, customer: false };
+      });
     });
 
     await axios.get(`${baseUrl}/api/user/list`).then((res) => {
       setOptionsForExecutive(res.data?.user);
-      setIsFetching((prev)=>{return{...prev,  executiveName: false}})
+      setIsFetching((prev) => {
+        return { ...prev, executiveName: false };
+      });
     });
 
     await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
       setOptionsForProcurement(res.data?.procurementlist);
-      setIsFetching( (prev)=>{return{...prev, procurement: false}})
+      setIsFetching((prev) => {
+        return { ...prev, procurement: false };
+      });
     });
     if (id) {
       await axios.get(`${baseUrl}/api/callcreation/${id}`).then((res) => {
@@ -150,12 +248,15 @@ const CallLogCreation = () => {
             ...prev,
             entrydate: fetcheddata.call_date,
             addInfo: fetcheddata.additional_info,
-            nxtFollowupDate: fetcheddata.next_followup_date ? fetcheddata.next_followup_date : "",
-            callcloseDate : fetcheddata.close_date ? fetcheddata.close_date : "",
+            nxtFollowupDate: fetcheddata.next_followup_date
+              ? fetcheddata.next_followup_date
+              : "",
+            callcloseDate: fetcheddata.close_date ? fetcheddata.close_date : "",
             remarks: fetcheddata.remarks ? fetcheddata.remarks : "",
           };
         });
-       
+        setMainId(fetcheddata.id);
+
         setEdited({
           customer: false,
           calltype: false,
@@ -166,12 +267,14 @@ const CallLogCreation = () => {
           executiveName: false,
         });
         setFetchedData(res.data.showcall[0]);
-        if(fetcheddata?.calltype?.label !== "General Customer Visit") {
+        if (fetcheddata?.calltype?.label !== "General Customer Visit") {
           setCheck(true);
         }
       });
     }
-    setIsFetching((prev)=>{return {...prev, formData: false}})
+    setIsFetching((prev) => {
+      return { ...prev, formData: false };
+    });
   };
 
   useEffect(() => {
@@ -215,7 +318,6 @@ const CallLogCreation = () => {
   }, [fetchedData.user_id, optionsForExecutive]);
 
   useEffect(() => {
-    
     if (
       id &&
       fetchedData?.call_id &&
@@ -233,7 +335,7 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.call_id, optionsForCallList]);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (
       id &&
       fetchedData?.bizz_id &&
@@ -251,14 +353,14 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.bizz_id, optionsForBizzList]);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (
       id &&
       fetchedData?.bizz_status_id &&
       !isEdited.bizz_status_type &&
       optionsForStatusList?.length > 0
     ) {
-      setInput((prev) => { 
+      setInput((prev) => {
         return {
           ...prev,
           forecastStatus: optionsForStatusList.find(
@@ -269,14 +371,14 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.bizz_status_id, optionsForStatusList]);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (
       id &&
       fetchedData?.proc_id &&
       !isEdited.procurement &&
       optionsForProcurement?.length > 0
     ) {
-      setInput((prev) => { 
+      setInput((prev) => {
         return {
           ...prev,
           procurement: optionsForProcurement.find(
@@ -286,7 +388,6 @@ const CallLogCreation = () => {
       });
     }
   }, [fetchedData.proc_id, optionsForProcurement]);
-
 
   useEffect(() => {
     if (
@@ -304,29 +405,35 @@ const CallLogCreation = () => {
           ),
         };
       });
-      if(fetchedData.close_status_id && fetchedData.close_date) { setChecked("closed")};
+      if (fetchedData.close_status_id && fetchedData.close_date) {
+        setChecked("closed");
+      }
     }
   }, [fetchedData.close_status_id, optionsForCallCloseStatus]);
 
-
   useEffect(() => {
-    setIsFetching((prev)=>{return{...prev, bizztype: true}})
+    setIsFetching((prev) => {
+      return { ...prev, bizztype: true };
+    });
     if (input.calltype?.value) {
       axios
         .get(`${baseUrl}/api/bizzlist/list/${input.calltype?.value}`)
         .then((res) => {
           setOptionsForBizzList(res.data.bizzlist);
-          
         });
     } else {
       setOptionsForBizzList(null);
     }
     setInput({ ...input, businessForecast: null });
-    setIsFetching((prev)=>{return{...prev,  bizztype: false}})
+    setIsFetching((prev) => {
+      return { ...prev, bizztype: false };
+    });
   }, [input.calltype]);
 
   useEffect(() => {
-    setIsFetching((prev)=>{return{...prev,  bizz_status_type: true}})
+    setIsFetching((prev) => {
+      return { ...prev, bizz_status_type: true };
+    });
     if (input.businessForecast?.value) {
       axios
         .get(`${baseUrl}/api/statuslist/list/${input.businessForecast?.value}`)
@@ -337,7 +444,9 @@ const CallLogCreation = () => {
       setOptionsForStatusList(null);
     }
     setInput({ ...input, forecastStatus: null });
-    setIsFetching((prev)=>{return{...prev,  bizz_status_type: false}})
+    setIsFetching((prev) => {
+      return { ...prev, bizz_status_type: false };
+    });
   }, [input.businessForecast]);
 
   useEffect(() => {
@@ -355,53 +464,45 @@ const CallLogCreation = () => {
   }, [checked]);
 
   const inputHandlerFortext = (e) => {
-    if(e.target.name == 'nxtFollowupDate')
-    {
+    if (e.target.name == "nxtFollowupDate") {
       let today = new Date();
       const year = today.getFullYear();
-      const month = ('0' + (today.getMonth() + 1)).slice(-2);
-      const day = ('0' + today.getDate()).slice(-2);
+      const month = ("0" + (today.getMonth() + 1)).slice(-2);
+      const day = ("0" + today.getDate()).slice(-2);
       const curr = `${year}-${month}-${day}`;
-      if(e.target.value < curr)
-      {
+      if (e.target.value < curr) {
         setInputValidation({ ...inputValidation, [e.target.name]: true });
         setInput((prev) => {
           return { ...prev, [e.target.name]: curr };
         });
-      }
-      else{
+      } else {
         setInputValidation({ ...inputValidation, [e.target.name]: false });
         setInput((prev) => {
           return { ...prev, [e.target.name]: e.target.value };
         });
       }
-    }
-    else if(e.target.name == 'callcloseDate')
-    {
+    } else if (e.target.name == "callcloseDate") {
       let today = new Date();
       const year = today.getFullYear();
-      const month = ('0' + (today.getMonth() + 1)).slice(-2);
-      const day = ('0' + today.getDate()).slice(-2);
+      const month = ("0" + (today.getMonth() + 1)).slice(-2);
+      const day = ("0" + today.getDate()).slice(-2);
       const curr = `${year}-${month}-${day}`;
-      if(e.target.value > curr)
-      {
+      if (e.target.value > curr) {
         setInputValidation({ ...inputValidation, [e.target.name]: true });
-         setInput((prev) => {
-      return { ...prev, [e.target.name]: curr };
-    });
-      } 
-      else{
+        setInput((prev) => {
+          return { ...prev, [e.target.name]: curr };
+        });
+      } else {
         setInputValidation({ ...inputValidation, [e.target.name]: false });
         setInput((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
+          return { ...prev, [e.target.name]: e.target.value };
+        });
       }
+    } else {
+      setInput((prev) => {
+        return { ...prev, [e.target.name]: e.target.value };
+      });
     }
-    else{
-    setInput((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-  }
   };
 
   const inputHandlerForSelect = (value, action) => {
@@ -415,7 +516,10 @@ const CallLogCreation = () => {
       setInputValidation({ ...inputValidation, [action.name]: false });
     }
 
-    if (action.name == "calltype" && value?.label !== "General Customer Visit") {
+    if (
+      action.name == "calltype" &&
+      value?.label !== "General Customer Visit"
+    ) {
       setCheck(true);
     } else if (
       action.name == "calltype" &&
@@ -432,89 +536,128 @@ const CallLogCreation = () => {
       setEdited({ ...isEdited, bizz_status_type: true });
     }
     if (action.name === "callcloseStatus") {
-      setEdited({ ...isEdited, callcloseStatus: true});
+      setEdited({ ...isEdited, callcloseStatus: true });
     }
   };
 
-  const cancelHandler = () =>{
+  const cancelHandler = () => {
     navigate("/tender/calllog/");
-  }
-
-
-  const handleFile = (e) => {
-    console.log("File", e.target.files)
-    const fileType =e.target.files[0].type ? e.target.files[0].type : "";
-    if(docType.includes(fileType))
-    {
-      console.log("accFileStorage+fileSize", accFileStorage+e.target.files[0].size);
-      console.log("totalStorageSize", totalStorageSize);
-      if((accFileStorage+e.target.files[0]?.size) <= totalStorageSize)
-      {
-  
-    const Files = e.target.files[0];
-    const FilesValue = e.target.value;
-    const fileName = Files.name;
-    
-    const fileSize = Files.size + " KB";
-    console.log("Tets")
-    const url = URL.createObjectURL(Files); // this points to the File object we just created
-    console.log("dvJH")
-    let fileExt = fileType.split("/")[1];
-    let fileMIME = fileType.split("/")[0];
-
-    setFile({
-      ...file,
-      name: fileName,
-      type: fileType,
-      size: fileSize,
-      value: FilesValue,
-      src: fileMIME === "image" ? url 
-          : (fileMIME === "octet-stream" && fileExt ==='csv') ? ImageConfig['csv'] 
-          : (fileMIME === "octet-stream" && fileExt ==='rar') ? ImageConfig['rar'] 
-          : ImageConfig[fileExt] 
-    });
-    setAccFileStorage(accFileStorage+e.target.files[0].size);
-    setFileCheck(true);
-  }
-  else{
-    Swal.fire({
-      title: "File Storage",
-      text: "Storage size Overflow..",
-      icon: "error",
-      confirmButtonColor: "#2fba5f",
-  })
-  }
-}
-  else{
-    Swal.fire({
-      title: "File Type",
-      text: "Invalid File Type..!",
-      icon: "error",
-      confirmButtonColor: "#2fba5f",
-  })
-}
-}
-
-  const objectData = {
-    name: file.name,
-    size: file.size,
-    pic: file.src,
   };
 
+  const handleFile = (e) => {
+    
+    const fileType = e.target.files[0].type ? e.target.files[0].type : e.target.files[0].type==="" ? "application/x-rar-compressed" : "";
+    if (docType.includes(fileType)) {
+      if (accFileStorage + e.target.files[0]?.size <= totalStorageSize) {
+        const Files = e.target.files[0];
+        const FilesValue = e.target.value;
+        const fileName = Files.name;
+        const fileSize = Files.size + " KB";
+        const url = URL.createObjectURL(Files); // this points to the File object we just created
+        let fileExt = fileType.split("/")[1];
+        let fileMIME = fileType.split("/")[0];
+        // setFile1(e.target.files[0]);
+        setFile({
+          // ...file,
+          file: e.target.files[0],
+          name: fileName,
+          type: fileType,
+          size: fileSize,
+          value: FilesValue,
+          src:
+            fileMIME === "image"
+              ? url
+              : fileMIME === "octet-stream" && fileExt === "csv"
+              ? ImageConfig["csv"]
+              : (fileMIME === "octet-stream" || fileMIME ==="application") && (fileExt === "rar" || fileExt === "x-rar-compressed")
+              ? ImageConfig["rar"]
+              : ImageConfig[fileExt],
+        });
+        setAccFileStorage(accFileStorage + e.target.files[0].size);
+        setFileCheck(true);
+      } else {
+        Swal.fire({
+          title: "File Storage",
+          text: "Storage size Overflow..",
+          icon: "error",
+          confirmButtonColor: "#2fba5f",
+        });
+      }
+    } else {
+      Swal.fire({
+        title: "File Type",
+        text: "Invalid File Type..!",
+        icon: "error",
+        confirmButtonColor: "#2fba5f",
+      });
+    }
+  };
+
+  
+
+  //for Preview purpose only
+  const addfiles= ()=> {
+    console.log("fileData",fileData);
+    let updated = [...fileData];
+    updated.push(objectData);
+    setFileData(updated);
+    setFileListCheck(true);
+    setFileCheck(false);
+  }
+
+  
   const handleFileAdd = (e) => {
     e.preventDefault();
     
-    let updated = [...fileData];
-    updated.push(objectData);
-    SetFileData(updated);
-    setFileListCheck(true);
-    setFileCheck(false);
-    Swal.fire({
-      text: "Uploaded Successfully",
-      icon: "success",
-      confirmButtonColor: "#12c350",
-    });
+    addfiles();
+    uploadFiles();
+    
+    
+
+    // Swal.fire({
+    //   text: "Uploaded Successfully",
+    //   icon: "success",
+    //   confirmButtonColor: "#12c350",
+    // });
   };
+  // console.log("FileData", fileData);
+
+const uploadFiles = () =>{
+  const formData = new FormData();
+  // console.log("file",file);
+  formData.append('file',file.file);
+  formData.append('mainid',mainId);
+  formData.append('tokenId',localStorage.getItem('token'));
+  console.log("formData",formData);
+
+  if (formData instanceof FormData) {
+    console.log("Form Data is a FormData")
+  }
+  else{
+    console.log("Form Data is not a FormData")
+  }
+  axios
+      .post(`${baseUrl}/api/callfileupload/`, formData) // Create an Axios request
+      .then((res) => {
+        if (res.data.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "File",
+            text: "Uploaded Successfully!",
+            confirmButtonColor: "#5156ed",
+          });
+          getFileList();
+        }
+       else{
+        Swal.fire({
+          icon: "error",
+          title: "File",
+          text: "Upload Failed..!",
+          confirmButtonColor: "#5156ed",
+        });
+       } 
+      })
+}
 
   const removePreview = (e) => {
     e.preventDefault();
@@ -522,7 +665,6 @@ const CallLogCreation = () => {
   };
 
   let fileCount = 1;
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -537,14 +679,16 @@ const CallLogCreation = () => {
       bizz_forecast_status_id: input.forecastStatus.value,
       additional_info: input.addInfo ? input.addInfo : null,
       next_followup_date: input.nxtFollowupDate ? input.nxtFollowupDate : null,
-      close_status_id: input.nxtFollowupDate ? "" : (input?.callcloseStatus?.value),
+      close_status_id: input.nxtFollowupDate
+        ? ""
+        : input?.callcloseStatus?.value,
       close_date: input.callcloseDate ? input.callcloseDate : null,
       remarks: input.remarks ? input.remarks : null,
       tokenid: localStorage.getItem("token"),
     };
     setDataSending(true);
     if (id) {
-      putData(data,id);
+      putData(data, id);
     } else {
       postData(data);
     }
@@ -561,7 +705,8 @@ const CallLogCreation = () => {
             text: "Created Successfully!",
             confirmButtonColor: "#5156ed",
           });
-          navigate("/tender/calllog");
+          setMainId(res.data.mainid);
+          // navigate("/tender/calllog");
           setDataSending(false);
         } else if (res.data.status === 400) {
           Swal.fire({
@@ -599,8 +744,7 @@ const CallLogCreation = () => {
   };
 
   return (
-    
-    <PreLoader loading = {isFetching.formData}>
+    <PreLoader loading={isFetching.formData}>
       <div className="CallLogsCreation">
         <div className="card shadow p-2 mb-4">
           <div className="card-body">
@@ -937,12 +1081,12 @@ const CallLogCreation = () => {
                           value={input.callcloseDate}
                         />
                         {inputValidation.callcloseDate && (
-                        <div className="pt-1">
-                          <span className="text-danger font-weight-bold">
-                            Date sholud be today or past Date
-                          </span>
-                        </div>
-                      )}
+                          <div className="pt-1">
+                            <span className="text-danger font-weight-bold">
+                              Date sholud be today or past Date
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       <div className="col-lg-4 text-dark ">
@@ -977,11 +1121,21 @@ const CallLogCreation = () => {
                     type="submit"
                     disabled={dataSending || !isFormValid}
                   >
-                    {!id ? (dataSending ? "Saving" : "Save") : (dataSending ? "Updating": "Update")}
+                    {!id
+                      ? dataSending
+                        ? "Saving"
+                        : "Save"
+                      : dataSending
+                      ? "Updating"
+                      : "Update"}
                   </button>
-                  <button className="btn btn-secondary" onClick={cancelHandler} disabled = {dataSending}>
-                                            Cancel
-                                        </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={cancelHandler}
+                    disabled={dataSending}
+                  >
+                    Cancel
+                  </button>
                 </div>
 
                 <div className="inputgroup col-lg-6 mb-4">
@@ -1068,47 +1222,40 @@ const CallLogCreation = () => {
                       )}
                     </div>
                     <div className="col-lg-12">
-                      
                       {fileListCheck && (
-                          <div className="file_Documents">
-                            {fileData.map((t, i) => (
-                                <div className="card" key={i}>
-                                  <div className="card-body">
-                                    <div className="noOfFiles" >
-                                      {fileCount++}
+                        <div className="file_Documents">
+                          {fileData.map((t, i) => (
+                            <div className="card" key={i}>
+                              <div className="card-body">
+                                <div className="noOfFiles">{fileCount++}</div>
+                                <div className="fileDetails">
+                                  <div className="pic">
+                                    <img src={t.pic} alt="" />
+                                  </div>
+                                  <div className="text">
+                                    <div>
+                                      <h6>Name: </h6>
+                                      <p>{t.name}</p>
                                     </div>
-                                    <div className="fileDetails">
-                                      <div className="pic">
-                                        <img src={t.pic} alt="" />
-                                      </div>
-                                      <div className="text">
-                                        <div>
-                                          <h6>Name: </h6>
-                                          <p>{t.name}</p>
-                                        </div>
-                                        <div>
-                                          <h6>Size: </h6>
-                                          <p>{t.size}</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="fileAction">
-                                      <div className="download">
-                                        <a href="#" download>
-                                          <FaDownload />
-                                        </a>
-                                      </div>
-                                      <div className="edit">
-                                        <FiEdit />
-                                      </div>
-                                      <div className="delete">
-                                        <RiDeleteBin5Fill />
-                                      </div>
+                                    <div>
+                                      <h6>Size: </h6>
+                                      <p>{t.size}</p>
                                     </div>
                                   </div>
                                 </div>
-                            ))}
-                          </div>
+                                <div className="fileAction">
+                                  <div className="download" >
+                                      <FaDownload onClick={()=>downloadDoc(t.id, t.name)}/>
+                                  </div>
+                               
+                                  <div className="delete">
+                                    <RiDeleteBin5Fill onClick={()=>DeleteDoc(t.id, t.name)}/>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       )}
                     </div>
                   </div>
@@ -1118,7 +1265,7 @@ const CallLogCreation = () => {
           </div>
         </div>
       </div>
-      </PreLoader>
+    </PreLoader>
   );
 };
 
