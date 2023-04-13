@@ -33,6 +33,7 @@ const UnitMaster = () => {
   },[id])
 
   const inputHandler = (e) => {
+    console.log(e);
     e.persist();
     setunitInput({ ...unitInput, [e.target.name]: e.target.value });
   };

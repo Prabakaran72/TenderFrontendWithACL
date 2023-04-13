@@ -350,8 +350,13 @@ function App() {
                   element={!!(permission?.['ZoneMaster']?.can_add) ? <ZoneMaster /> : <Unauthorized/>}
                 />
                 <Route
+<<<<<<< HEAD
                   path="create/:id"
                   element={!!(permission?.['ZoneMaster']?.can_edit) ? <ZoneMaster /> : <Unauthorized/>}
+=======
+                  path="edit/:id"
+                  element={can('tenderType-edit' , (authData.permission || []))  ?  <BusinessForecast /> : <Unauthorized/>}
+>>>>>>> 62189f34224bae44e33746a5545823b6a06d873b
                 />
               </Route>
               <Route path="calltypemaster">  

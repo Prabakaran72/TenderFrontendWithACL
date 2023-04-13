@@ -38,16 +38,16 @@ const BusinessForecastList = () => {
 
   const getList = async () => {
     const bizzforecastlist = await axios.get(`${baseUrl}/api/bizzforecast`);
-  
-    // let userPermissions ;
-    // let data = {
-    //   tokenid : localStorage.getItem('token')
-    // }
+    console.log('bizzforecastlist',bizzforecastlist)
+    let userPermissions ;
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
 
-    // let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
-    // if(rolesAndPermission.status === 200){
-    //   userPermissions = rolesAndPermission.data;
-    // }
+    let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+    if(rolesAndPermission.status === 200){
+      userPermissions = rolesAndPermission.data;
+    }
   
     var dataSet;
     if (
@@ -122,8 +122,7 @@ const BusinessForecastList = () => {
          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
-              title: `${rowdata.name} `,
-              text: `Business Forecast has been removed!`,
+              text: `${rowdata.name} Business Forecast has been removed!`,
               timer: 1500,
               showConfirmButton: false,
             });

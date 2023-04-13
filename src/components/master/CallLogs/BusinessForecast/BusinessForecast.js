@@ -5,8 +5,13 @@ import { useBaseUrl } from "../../../hooks/useBaseUrl";
 import { usePageTitle } from "../../../hooks/usePageTitle";
 import Swal from "sweetalert2/src/sweetalert2.js";
 import Select from "react-select";
+import Select from "react-select";
 
 const initialState = {
+  calltype: null,
+  bizzforecast: "",
+  activeStatus: "Active",
+};
   calltype: null,
   bizzforecast: "",
   activeStatus: "Active",
@@ -22,9 +27,24 @@ const BusinessForecast = () => {
   usePageTitle("Business Forecast Creation");
   const navigate = useNavigate();
   const { id } = useParams();
+  usePageTitle("Business Forecast Creation");
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   const { server1: baseUrl } = useBaseUrl();
+  const { server1: baseUrl } = useBaseUrl();
 
+  const [dataSending, setDataSending] = useState(false);
+  const [input, setInput] = useState(initialState);
+  const [inputValidation, setInputValidation] = useState(initialStateErr);
+  const [savedData, setSavedData] = useState({});
+  const [calltypeList, setCallTypeList] = useState([]);
+
+  useEffect(() => {
+    axios.get(`${baseUrl}/api/calltype/list`).then((resp) => {
+      setCallTypeList(resp.data.calltype);
+    });
+  }, []);
   const [dataSending, setDataSending] = useState(false);
   const [input, setInput] = useState(initialState);
   const [inputValidation, setInputValidation] = useState(initialStateErr);
@@ -40,11 +60,8 @@ const BusinessForecast = () => {
   useEffect(() => {
     if (id) {
       axios.get(`${baseUrl}/api/bizzforecast/${id}`).then((resp) => {
-        console.log("resp",resp)
         if (resp.data.status === 200) {
-          console.log("Checkpoint");
           setSavedData(resp.data?.bizzforecast[0]);
-          console.log("Checkpoint");
           setInput((prev) => {
             return {
               ...prev,
@@ -53,6 +70,26 @@ const BusinessForecast = () => {
             };
           });
         }
+      });
+    }
+  }, [id,baseUrl]);
+
+  useEffect(() => {
+    if (calltypeList.length > 0) {
+      setInput((prev) => {
+        return {
+          ...prev,
+          calltype: calltypeList.find((x) => x.value == savedData.id),
+        };
+      });
+    }
+  }, [savedData]);
+
+  const inputHandler = (e) => {
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
       });
     }
   }, [id,baseUrl]);
@@ -100,7 +137,21 @@ const BusinessForecast = () => {
   };
 
   
+  };
 
+  
+
+  const postData = (data) => {
+    axios
+      .post(`${baseUrl}/api/bizzforecast`, data)
+      .then((resp) => {
+        if (resp.data.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Bussiness Forecast",
+            text: resp.data.message,
+            confirmButtonColor: "#5156ed",
+          });
   const postData = (data) => {
     axios
       .post(`${baseUrl}/api/bizzforecast`, data)
@@ -182,11 +233,19 @@ const BusinessForecast = () => {
   };
 
   let formIsValid = false;
+  let formIsValid = false;
 
   if (input.bizzforecast !== "") {
     formIsValid = true;
   }
+  if (input.bizzforecast !== "") {
+    formIsValid = true;
+  }
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    setDataSending(true);
   const submitHandler = (e) => {
     e.preventDefault();
 
