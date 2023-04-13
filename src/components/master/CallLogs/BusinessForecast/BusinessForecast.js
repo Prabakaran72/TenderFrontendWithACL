@@ -13,6 +13,7 @@ const initialState = {
 };
 
 const initialStateErr = {
+  calltypeErr: "",
   bizzforecastErr: "",
   activeStatusErr: "",
 };
@@ -85,10 +86,16 @@ const BusinessForecast = () => {
       setInput((prev) => {
         return { ...prev, calltype: selectedOption };
       });
+      setInputValidation((prev) => {
+        return {...prev ,calltypeErr: false};
+       })
     } else {
       setInput((prev) => {
         return { ...prev, calltype: null };
       });
+      setInputValidation((prev) => {
+        return {...prev ,calltypeErr: true};
+       })
     }
   };
 
@@ -234,6 +241,14 @@ const BusinessForecast = () => {
                       value={input.calltype}
                       // isLoading={calltypeList.isLoading}
                     ></Select>
+                    {inputValidation.calltypeErr && (
+                      <div className="pt-1">
+                        <span className="text-danger font-weight-bold">
+                          Enter Call Type 
+                        </span>
+                      </div>
+                    )}
+
                   </div>
                 </div>
               </div>

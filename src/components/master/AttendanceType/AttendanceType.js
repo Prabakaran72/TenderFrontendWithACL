@@ -195,7 +195,7 @@ const AttendanceType = () => {
                                         {inputValidation.attendancetype && (
                                             <div className="pt-1">
                                                 <span className="text-danger font-weight-bold">
-                                                    Enter Attendance Type abc
+                                                    Enter Attendance Type
                                                 </span>
                                             </div>
                                         )}
