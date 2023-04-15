@@ -18,6 +18,7 @@ const useImageStoragePath = () => {
         techEval: baseUrl+'/uploads/BidManagement/techevaluation/',//Bit Management Tender Status Tech Evaluation form
         commnunicationfilesmaster: baseUrl+'/uploads/Communicationfiles/',//Communication Files
         callcreation: baseUrl+'/uploads/CallCreation/CallLog/', //Call Creation Multi File Uploads
+        expense: baseUrl+'/uploads/OtherExpenseSub/OtherExpSubFiles/', //Expense Creation File Uploads
 
 
         //----- Uncomment when build App & for Server storage ----
@@ -35,7 +36,7 @@ const useImageStoragePath = () => {
         // techEval: baseUrl+'/public/uploads/BidManagement/techevaluation/',
         // commnunicationfilesmaster: baseUrl+'/public/uploads/Communicationfiles/',
         // callcreation: baseUrl+'/public/uploads/uploads/CallCreation/CallLog/', 
-
+        // expense: baseUrl+'/public/uploads/OtherExpenseSub/OtherExpSubFiles/', 
 }
 }
 export {useImageStoragePath};

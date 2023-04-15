@@ -78,44 +78,17 @@ import AttendanceReport from "./components/hr/AttendanceReport/AttendanceReport"
 import AttendanceType from "./components/master/AttendanceType/AttendanceType";
 import AttendanceTypeView from "./components/master/AttendanceType/AttendanceTypeView";
 import CallLogCreation from './components/calllog/CallLogCreation/CallLogCreation';
-import CallLogMain from './components/calllog/CallLogCreation/CallLogMain';//  **************
-
-
+import CallLogMain from './components/calllog/CallLogCreation/CallLogMain';
+import OtherExpenseMain from "./components/expenses/OtherExpenses/OtherExpenseMain";
+import ExpenseCreation from "./components/expenses/OtherExpenses/ExpenseCreation";
 import ReimbursementAdmin from "./components/expenses/Reimbursement/ReimbursementAdmin";
-
-
-
-
 
 // **********************
 
 function App() {
   const authData = useContext(AuthContext);
   const {permission} = useContext(AuthContext)
-  // const [role, setRole] = useState([]); 
-  // const [permission, setPermission] = useState([]); 
-
-  // useEffect(() => {
-  //   const rolesPermission = async () => {
-  //     if(localStorage.getItem('token')){
-
-  //     let data = {
-  //       tokenid : localStorage.getItem('token')
-  //     }
-
-        
-  //     let rolesAndPermission = await axios.post(`http://localhost:8000/api/getrolesandpermision`, data)
-  //       if(rolesAndPermission.status === 200){
-  //         console.log('sdada', rolesAndPermission.data)
-  //         setRole(rolesAndPermission.data.role);
-  //         setPermission(rolesAndPermission.data.permission) 
-  //       }
-  //     }
-  //   }
-
-  //   rolesPermission()
-  // }, [])
-
+ 
   return (
    
       <BrowserRouter>
@@ -421,17 +394,13 @@ function App() {
               <Route path="attendancereport" element={!!(permission?.attendance_report?.can_view) ? <AttendanceReport/> : <Unauthorized/>}/>
             </Route>
             <Route path="expenses">
-            
+              <Route path="otherExpense" >
+                <Route index element={!!(permission?.['OtherExpenses']?.can_view) ? <OtherExpenseMain /> : <Unauthorized/> } />
+                <Route path="create" element={!!(permission?.['OtherExpenses']?.can_add) ?  <ExpenseCreation />  : <Unauthorized/> } />
+                <Route path="edit/:id" element={!!(permission?.['OtherExpenses']?.can_edit) ?  <ExpenseCreation />  : <Unauthorized/> } />
+              </Route >
            <Route path="Reimbursement" element={!!(permission?.["ReimbursementForm"]?.can_view) ? <ReimbursementAdmin />: <Unauthorized/> }/>
              
-              {/* <Route path="calltobdm" >
-               <Route index element={!!(permission?.call_to_bdm?.can_view) ? <CallToBDMView/> : <Unauthorized/>} />
-               <Route path="create" element={!!(permission?.call_to_bdm?.can_add) ? <CallToBDM/> : <Unauthorized/>} />
-               <Route path="edit" element={!!(permission?.call_to_bdm?.can_edit) ? <CallToBDM/> : <Unauthorized/>} />
-              </Route> */}
-              {/* <Route path="creation" element = {<CallLogMain/>}>
-              </Route>
-              <Route path="creation/{id}" element = {<CallLogMain/>}></Route> */}
             </Route> 
           </Route>
           

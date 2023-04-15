@@ -32,7 +32,8 @@ const ZoneMaster = () => {
       const [dataSending, setDataSending] = useState(false);
 
       useEffect(()=>{
-        axios.get(`${baseUrl}/api/state/list/105`).then((resp)=> {
+        // axios.get(`${baseUrl}/api/state/list/105`).then((resp)=> {
+        axios.get(`${baseUrl}/api/state/zonefilteredlist/105/${id}`).then((resp)=> {
           setOptions(resp.data.stateList);
         })
       },[])

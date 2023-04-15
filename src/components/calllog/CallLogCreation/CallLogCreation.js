@@ -44,12 +44,18 @@ const selectStateErr = {
   calltype: "",
   businessForecast: "",
   forecastStatus: "",
+  date: "",
 };
 
 const optionsForCallCloseStatus = [
   { value: "1", label: "Completed" },
   { value: "2", label: "Order List" },
 ];
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 
 const CallLogCreation = () => {
   usePageTitle("Call Log Creation");
@@ -62,7 +68,7 @@ const CallLogCreation = () => {
   const [optionsForStatusList, setOptionsForStatusList] = useState([]);
   const [optionsForProcurement, setOptionsForProcurement] = useState([]);
   const [optionsForExecutive, setOptionsForExecutive] = useState([]);
-
+  const userName = capitalizeFirstLetter(localStorage.getItem('userName'))
   const [file, setFile] = useState(selectFiles);
   const [file1, setFile1] = useState(null);
   const [fileCheck, setFileCheck] = useState(null);
@@ -103,6 +109,8 @@ const CallLogCreation = () => {
     doclist: true
   });
 
+  let token= localStorage.getItem('token');
+
   const objectData = {
     name: file.name,
     size: file.size,
@@ -115,8 +123,8 @@ const CallLogCreation = () => {
       input.customer?.value &&
       input.entrydate &&
       input.calltype?.value &&
-      input.executiveName?.value &&
-      input.procurement?.value &&
+      // input.executiveName?.value &&
+      // input.procurement?.value &&
       input.businessForecast?.value &&
       input.forecastStatus?.value &&
       // input.addInfo.value &&
@@ -211,28 +219,30 @@ const CallLogCreation = () => {
 
   }
   const InitialRequest = async () => {
+    if(mainId)
+    {
     getFileList();
-
+    }
     await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
       setOptionsForCallList(res.data?.calltype);
       // setIsFetching((prev) => {
       //   return { ...prev, calltype: false };
       // });
     });
-
-    await axios.get(`${baseUrl}/api/customer/list`).then((res) => {
+    
+    axios.get(`${baseUrl}/api/customer/list/${token}`).then((res) => {
       setOptionsForCutomerList(res.data?.customerList);
       setIsFetching((prev) => {
         return { ...prev, customer: false };
       });
     });
 
-    await axios.get(`${baseUrl}/api/user/list`).then((res) => {
-      setOptionsForExecutive(res.data?.user);
-      setIsFetching((prev) => {
-        return { ...prev, executiveName: false };
-      });
-    });
+    // await axios.get(`${baseUrl}/api/user/list`).then((res) => {
+    //   setOptionsForExecutive(res.data?.user);
+    //   setIsFetching((prev) => {
+    //     return { ...prev, executiveName: false };
+    //   });
+    // });
 
     await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
       setOptionsForProcurement(res.data?.procurementlist);
@@ -299,23 +309,23 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.cust_id, optionsForCutomerList]);
 
-  useEffect(() => {
-    if (
-      id &&
-      fetchedData?.user_id &&
-      !isEdited.executiveName &&
-      optionsForExecutive?.length > 0
-    ) {
-      setInput((prev) => {
-        return {
-          ...prev,
-          executiveName: optionsForExecutive.find(
-            (x) => x.value === fetchedData.user_id
-          ),
-        };
-      });
-    }
-  }, [fetchedData.user_id, optionsForExecutive]);
+  // useEffect(() => {
+  //   if (
+  //     id &&
+  //     fetchedData?.user_id &&
+  //     !isEdited.executiveName &&
+  //     optionsForExecutive?.length > 0
+  //   ) {
+  //     setInput((prev) => {
+  //       return {
+  //         ...prev,
+  //         executiveName: optionsForExecutive.find(
+  //           (x) => x.value === fetchedData.user_id
+  //         ),
+  //       };
+  //     });
+  //   }
+  // }, [fetchedData.user_id, optionsForExecutive]);
 
   useEffect(() => {
     if (
@@ -426,7 +436,7 @@ const CallLogCreation = () => {
     }
     setInput({ ...input, businessForecast: null });
     setIsFetching((prev) => {
-      return { ...prev, bizztype: false };
+      return { ...prev,calltype:false, bizztype: false };
     });
   }, [input.calltype]);
 
@@ -608,17 +618,18 @@ const CallLogCreation = () => {
   
   const handleFileAdd = (e) => {
     e.preventDefault();
-    
+    if(mainId) {
     addfiles();
     uploadFiles();
-    
-    
-
-    // Swal.fire({
-    //   text: "Uploaded Successfully",
-    //   icon: "success",
-    //   confirmButtonColor: "#12c350",
-    // });
+    }
+    else{  
+    Swal.fire({
+      title: "Form Not Submit",
+      text: "Please Submit Form Before Add Files..!",
+      icon: "warning",
+      confirmButtonColor: "#12c350",
+    });
+  }
   };
   // console.log("FileData", fileData);
 
@@ -673,8 +684,8 @@ const uploadFiles = () =>{
       customer_id: input.customer.value,
       call_date: input.entrydate,
       call_type_id: input.calltype.value,
-      executive_id: input.executiveName.value,
-      procurement_type_id: input.procurement.value,
+      // executive_id: input.executiveName.value,
+      procurement_type_id: input.procurement?.value ,
       bizz_forecast_id: input.businessForecast.value,
       bizz_forecast_status_id: input.forecastStatus.value,
       additional_info: input.addInfo ? input.addInfo : null,
@@ -754,7 +765,7 @@ const uploadFiles = () =>{
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark">
                       <label htmlFor="customer" className="font-weight-bold">
-                        Customer Name
+                        Customer Name <span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -771,7 +782,7 @@ const uploadFiles = () =>{
                       {inputValidation.customer && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
-                            Enter Customer Name
+                            Select Customer Name 
                           </span>
                         </div>
                       )}
@@ -782,7 +793,7 @@ const uploadFiles = () =>{
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark">
                       <label htmlFor="date" className="font-weight-bold">
-                        Date
+                        Date <span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -794,6 +805,14 @@ const uploadFiles = () =>{
                         onChange={(e) => inputHandlerFortext(e)}
                         value={input.entrydate}
                       />
+
+                      {inputValidation.Date && (
+                        <div className="pt-1">
+                          <span className="text-danger font-weight-bold">
+                            Please Select Date..! 
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -801,7 +820,7 @@ const uploadFiles = () =>{
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark">
                       <label htmlFor="calltype" className="font-weight-bold">
-                        Call Type{" "}
+                        Call Type <span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -818,7 +837,7 @@ const uploadFiles = () =>{
                       {inputValidation.calltype && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
-                            Enter CallType List
+                            Select CallType List..!
                           </span>
                         </div>
                       )}
@@ -832,23 +851,40 @@ const uploadFiles = () =>{
                         htmlFor="executiveName"
                         className="font-weight-bold"
                       >
-                        Executive Name
+                        Executive Name <span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
-                      <Select
+                      <input 
                         id="executiveName"
                         name="executiveName"
-                        isSearchable="true"
-                        isClearable="true"
-                        isLoading={isFetching.executiveName}
-                        options={optionsForExecutive}
-                        value={input.executiveName}
-                        onChange={inputHandlerForSelect}
-                      ></Select>
-                    </div>
-                  </div>
-                </div>
+                        value={userName}
+                        disabled={true}
+                        className="form-control"
+                      />
+</div></div></div>
+                      {/* // <Select  
+                      //   id="executiveName"
+                      //   name="executiveName"
+                      //   isSearchable="true"
+                      //   isClearable="true"
+                      //   // isLoading={isFetching.executiveName}
+                      //   // options={optionsForExecutive}
+                      //   // value={input.executiveName}
+                      //   value={userName}
+                      //   isDisable={true}
+                      //   onChange={inputHandlerForSelect}
+                      // ></Select>
+                      // {inputValidation.customer && (
+                      //   <div className="pt-1">
+                      //     <span className="text-danger font-weight-bold">
+                      //       Please Select Executive Name..! 
+                      //     </span>
+                      //   </div>
+                      // )}
+                    // </div>
+                  // </div>
+                // </div> */}
                 <div className="inputgroup col-lg-6 mb-4">
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark">
@@ -856,7 +892,7 @@ const uploadFiles = () =>{
                         htmlFor="businessForecast"
                         className="font-weight-bold"
                       >
-                        Business Forecast
+                        Business Forecast <span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -873,7 +909,7 @@ const uploadFiles = () =>{
                       {inputValidation.businessForecast && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
-                            Enter BusinessForecast
+                            Please Select BusinessForecast..!
                           </span>
                         </div>
                       )}
@@ -888,7 +924,8 @@ const uploadFiles = () =>{
                           htmlFor="procurement"
                           className="font-weight-bold"
                         >
-                          Procurement Type
+                          Procurement Type 
+                          {/* <span className="text-danger ">*</span> */}
                         </label>
                       </div>
                       <div className="col-lg-8">
@@ -902,6 +939,13 @@ const uploadFiles = () =>{
                           value={input.procurement}
                           onChange={inputHandlerForSelect}
                         ></Select>
+                        {inputValidation.customer && (
+                        <div className="pt-1">
+                          <span className="text-danger font-weight-bold">
+                          Please Procurement Type Select ..! 
+                          </span>
+                        </div>
+                      )}
                       </div>
                     </div>
                   </div>
@@ -919,7 +963,8 @@ const uploadFiles = () =>{
                         htmlFor="forecastStatus"
                         className="font-weight-bold"
                       >
-                        Status
+                        Status 
+<span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -936,7 +981,7 @@ const uploadFiles = () =>{
                       {inputValidation.forecastStatus && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
-                            Enter Status
+                            Please Select Status..!
                           </span>
                         </div>
                       )}
@@ -947,7 +992,8 @@ const uploadFiles = () =>{
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark ">
                       <label htmlFor="action " className="font-weight-bold">
-                        Action
+                        Action 
+<span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
