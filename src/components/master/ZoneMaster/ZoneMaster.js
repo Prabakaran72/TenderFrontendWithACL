@@ -32,7 +32,8 @@ const ZoneMaster = () => {
       const [dataSending, setDataSending] = useState(false);
 
       useEffect(()=>{
-        axios.get(`${baseUrl}/api/state/list/105`).then((resp)=> {
+        // axios.get(`${baseUrl}/api/state/list/105`).then((resp)=> {
+        axios.get(`${baseUrl}/api/state/zonefilteredlist/105/${id}`).then((resp)=> {
           setOptions(resp.data.stateList);
         })
       },[])
@@ -186,6 +187,7 @@ const ZoneMaster = () => {
                                             options={options}
                                             value={statelist}
                                             onChange={(value, action) => { setStateList(value) }}
+                                            closeMenuOnSelect={false}
                                         ></Select>
                         </div>
                         <div className="col-6 ml-n5 mt-2">

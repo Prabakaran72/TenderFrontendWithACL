@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { Fragment,  useContext,  useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
@@ -26,41 +25,50 @@ import AuthContext from "../../../storeAuth/auth-context";
 
 
 let table;
-const CallLogMainList = () => {
+const OtherExpenseMainList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
-
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/callcreation/${id}`)
+    let response =  axios.delete(`${baseUrl}/api/attendanceentry/${id}`)
     return response;
   }
 
   const getList = async () => {
-    const usertypelist = await axios.get(`${baseUrl}/api/callcreation/getCallMainList/${localStorage.getItem("token")}`);
-    console.log("usertypelist",usertypelist);
-
+    const zonelist = await axios.get(`${baseUrl}/api/attendanceentry`);
     var dataSet;
+
     if (
-      usertypelist.status === 200 &&
-      usertypelist.data.status === 200 && 
-      usertypelist.data?.calllog
+        zonelist.status === 200 &&
+        zonelist.data.status === 200
     ) {
-      let list = [...usertypelist.data.calllog];
+      console.log(zonelist.data.list);
+      let list = [...zonelist.data.list];
+
       let listarr = list.map((item, index, arr) => {
-        let editbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> '  : '';
-        let deletebtn =  !!(permission?.['CallLogCreation']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+
+        let editbtn =  !!(permission?.['AttendanceEntry']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '' ;
+        let deletebtn = !!(permission?.['AttendanceEntry']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '' ;
+
+    //  const date = new Date(Date.parse(item.created_at)-(5.5 * 60 * 60 * 1000));
+    const date = new Date(Date.parse(item.created_at));
+     const options = {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
+    };
+    const finalFormattedDate = date.toLocaleString('en-US',options);
         return {
         ...item,
-        mode: "Direct",
-        // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
-        action: ( editbtn + deletebtn),
-        // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
+        action: editbtn + deletebtn,
         sl_no: index + 1,
-        completed: item.close_date? item.close_date: '--',
-        next_followup :  item.next_followup_date ? item.next_followup_date :  item.close_date ? "<span class='text-success'>Closed</span>" : "<span class='text-warning'>InLive</span>"
-
+        dateTime: finalFormattedDate,
       }});
 
       dataSet = listarr;
@@ -68,8 +76,6 @@ const CallLogMainList = () => {
     } else {
        dataSet = [];
     }
-
-    console.log(dataSet)
     let i = 0;
     table = $("#dataTable").DataTable({
       data: dataSet,
@@ -80,15 +86,10 @@ const CallLogMainList = () => {
             return ++i;
           },
         },
-        { data: "callid" },
-        { data: "customer_name" },
-        { data: "username"},
-        { data: "mode"},
-      { data: "callname" },        
-      { data: "call_date"},
-      { data: "completed"},
-      { data: "next_followup"},
-      { data: "action" },
+        { data: "dateTime" },
+        { data: "userName" },
+        { data: "attendanceTypeName" },
+        { data: "action" },
         
       ],
     })
@@ -97,7 +98,7 @@ const CallLogMainList = () => {
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
       navigate(
-        `/tender/calllog/edit/${rowdata.id}`
+        `/tender/hr/attendanceentry/edit/${rowdata.id}`
       );
     });
 
@@ -106,7 +107,7 @@ const CallLogMainList = () => {
       let rowdata = table.row($(this).closest("tr")).data();
       
       Swal.fire({
-        text: `Are You sure, to delete ${rowdata.name}?`,
+        text: `Are You sure, to delete ${rowdata.userName}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -120,7 +121,8 @@ const CallLogMainList = () => {
          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
-              text: `${rowdata.name} role has been removed!`,
+              title:"Attendance Entry",
+              text: `${rowdata.userName} has been removed!`,
               timer: 1500,
               showConfirmButton: false,
             });
@@ -169,26 +171,23 @@ const CallLogMainList = () => {
           width="100%"
           cellSpacing={0}
         >
-          <thead className="text-center bg-primary text-white">
+          <thead className="text-center">
             <tr>
-              <th className="">#</th>
-              <th className="">Call ID</th>
-              <th className="">Customer Name</th>
-              <th className="">Executive Name</th>
-              <th className="">Mode</th>
-              <th className="">Call Type</th>
-              <th className="">Started</th>
-              <th className="">Completed</th>
-              <th className="">Next Follow Up</th>
+              <th className="">Sl.No</th>
+              <th className="">Entry Date </th>
+              <th className="">Expense No</th>
+              <th className="">Branch Name / Staff Name</th>
+              <th className="">Total Amount</th>
               <th className="">Action</th>
             </tr>
           </thead>
           <tbody></tbody>
-          
         </table>
       </div>
     </Fragment>
   );
 };
 
-export default CallLogMainList;
+
+
+export default OtherExpenseMainList

@@ -186,7 +186,7 @@ const PrebidQueries = () => {
 
         let data = {
             date: DateValue,
-            file: file, 
+            file: file,
             tokenid: localStorage.getItem("token"),
             bid_creation_mainid: id,
         }

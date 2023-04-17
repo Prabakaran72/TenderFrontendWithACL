@@ -9,11 +9,12 @@ function Sidebar() {
   const [active, setActive] = useState("");
   const { server1: baseUrl } = useBaseUrl();
   const [menus, setMenu] = useState([])
-  const [menushasPermission, setMenuHasPermission] = useState([])
 
   const pathName = "tender";
 
-  const {permission} = useContext(AuthContext)
+
+  const permission = useContext(AuthContext);
+  // console.log(authData)
   const hideSidebarElement = (menuId, tab) => {
     document.getElementById(menuId).click();
     setActive(tab);
@@ -32,32 +33,12 @@ function Sidebar() {
 
   useEffect(() => {
     axios.get(`${baseUrl}/api/menus`).then((response) => {
+      // console.log(response.data.menuList)
       setMenu(response.data.menuList || [])
     });
   }, [])
 
-  useEffect(() => {
-
-    if(menus && permission)
-    {
-   
-    let permittedMenuList =[]; // get the menus list which has minunimum of one submenus
-    
-    menus.map((element)=>{
-      let menuHasSubmenu = []; // get the submenus for menus who's submenus has minimum of one permission(add, edit,view, delete)
-      element.sub_menus.map((submenu)=>{
-        if(!!(permission?.[submenu.name]?.can_view) ||  !!(permission?.[submenu.name]?.can_add) || !!(permission?.[submenu.name]?.can_edit) || !!(permission?.[submenu.name]?.can_delete))
-        {
-          menuHasSubmenu.push(submenu.name);
-        }
-      })
-      permittedMenuList[element.name]=menuHasSubmenu;
-    })
-    setMenuHasPermission(permittedMenuList);
-  }
-  }, [menus,permission])
-
-    
+  
   return (
     <ul
       className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion SideNav"
@@ -92,19 +73,16 @@ function Sidebar() {
           <span className="font-weight-bold ml-1">Dashboard</span>
         </Link>
       </motion.li>
-     
+      {/* $$$$ */}
      
       {menus.map((item,index) => {
-       if(menushasPermission[item.name]?.length > 0) 
-       {
+       
        return (
-        
         <Fragment key={index}>
-        
+
         <hr className="sidebar-divider my-0" />
         <motion.li className="nav-item "
         animate={{x:0}} initial={{x:-300}} transition={{type: 'tween', delay: 0.1 }}>
-          
         <Link
         className="nav-link collapsed"
         to="#"
@@ -124,8 +102,7 @@ function Sidebar() {
         >
         <div className="bg-white py-2 collapse-inner rounded">  
             {item.sub_menus.map((subMenu, i)=> {
-              if(menushasPermission[item.name]?.includes(subMenu.name)) 
-              {
+              
               return(
         
               <NavLink
@@ -137,14 +114,12 @@ function Sidebar() {
                {subMenu.aliasName}   
               </NavLink>
               )
-              }
             }) }
         </div>
 
         </div>
         </motion.li>
-      </Fragment> )
-       }
+        </Fragment> )
       })}
 
       <motion.div className="text-center d-none d-md-inline">

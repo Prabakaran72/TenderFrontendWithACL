@@ -18,10 +18,10 @@ import "datatables.net-buttons/js/buttons.print.js";
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { useBaseUrl } from "../hooks/useBaseUrl";
+import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
-import AuthContext from "../../storeAuth/auth-context";
+import AuthContext from "../../../storeAuth/auth-context";
 
 
 let table;

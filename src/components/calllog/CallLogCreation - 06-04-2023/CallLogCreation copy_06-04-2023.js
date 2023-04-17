@@ -11,10 +11,17 @@ import { FaDownload } from "react-icons/fa";
 import { CgSoftwareDownload } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import PreLoader from "../../UI/PreLoader";
-import { ImageConfig } from "../../hooks/Config";
-import { useAllowedMIMEDocType } from "../../hooks/useAllowedMIMEDocType";
-import { useAllowedUploadFileSize } from "../../hooks/useAllowedUploadFileSize";
-import { useImageStoragePath } from "../../hooks/useImageStoragePath";
+// import DocumentUpload from './DocumentUpload';
+
+
+// import csv from "../../hooks/imglogo/csv.png";
+// import lock from "../../../images/lock.png";
+// import blank from "../../hooks/imglogo/blank.png";
+// import pdf from "../../hooks/imglogo/pdf.png";
+// import msWord from "../../hooks/imglogo/word.png";
+// import zip from "../../hooks/imglogo/zip.png";
+// import xls from "../../hooks/imglogo/xls.png";
+// import rar from "../../hooks/imglogo/archive.png";
 
 const selectState = {
   customer: null,
@@ -31,30 +38,25 @@ const selectState = {
   remarks: "",
 };
 
-const selectFiles = {
-  name: "",
-  size: "",
-  type: "",
-  value: "",
-  src: undefined,
-};
+// const selectFiles = {
+//   name: "",
+//   size: "",
+//   type: "",
+//   value: "",
+//   src: undefined,
+// };
 
 const selectStateErr = {
   customer: "",
   calltype: "",
   businessForecast: "",
   forecastStatus: "",
-  date: "",
 };
 
 const optionsForCallCloseStatus = [
   { value: "1", label: "Completed" },
   { value: "2", label: "Order List" },
 ];
-
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 const CallLogCreation = () => {
   usePageTitle("Call Log Creation");
@@ -67,16 +69,12 @@ const CallLogCreation = () => {
   const [optionsForStatusList, setOptionsForStatusList] = useState([]);
   const [optionsForProcurement, setOptionsForProcurement] = useState([]);
   const [optionsForExecutive, setOptionsForExecutive] = useState([]);
-  const userName = capitalizeFirstLetter(localStorage.getItem("userName"));
-  const [file, setFile] = useState(selectFiles);
-  const [file1, setFile1] = useState(null);
-  const [fileCheck, setFileCheck] = useState(null);
-  const [fileListCheck, setFileListCheck] = useState(false);
-  const [fileData, setFileData] = useState([]);
-  const { MIMEtype: docType } = useAllowedMIMEDocType();
-  const [accFileStorage, setAccFileStorage] = useState(0);
-  const { total: totalStorageSize } = useAllowedUploadFileSize();
-  const { callcreation: filePath } = useImageStoragePath();
+  const ref = useRef();
+  const wrapperRef = useRef(null);
+  // const [file, setFile] = useState(selectFiles);
+  // const [fileCheck, setFileCheck] = useState(null);
+  // const [fileListCheck, setFileListCheck] = useState(null);
+  // const [fileData, SetFileData] = useState([]);
 
   const [checked, setChecked] = useState("nextFollowUp");
   const [check, setCheck] = useState(false); //handleing the visibility of procurement type dropdown input field
@@ -85,7 +83,7 @@ const CallLogCreation = () => {
   const [inputValidation, setInputValidation] = useState(selectStateErr);
   const [dataSending, setDataSending] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-  const [mainId, setMainId] = useState(null);
+
   const [fetchedData, setFetchedData] = useState([]);
   const [isEdited, setEdited] = useState({
     customer: false,
@@ -96,7 +94,7 @@ const CallLogCreation = () => {
     callcloseStatus: false,
     executiveName: false,
   });
-  const [isFetching, setIsFetching] = useState({
+  const [isFetching, setIsFetching]=useState({
     customer: true,
     calltype: true,
     bizztype: true,
@@ -104,25 +102,16 @@ const CallLogCreation = () => {
     procurement: true,
     callcloseStatus: true,
     executiveName: true,
-    formData: true,
-    doclist: true,
-  });
-
-  let token = localStorage.getItem("token");
-
-  const objectData = {
-    name: file.name,
-    size: file.size,
-    pic: file.src,
-  };
+    formData : true
+  })
 
   useEffect(() => {
     if (
       input.customer?.value &&
       input.entrydate &&
       input.calltype?.value &&
-      // input.executiveName?.value &&
-      // input.procurement?.value &&
+      input.executiveName?.value &&
+      input.procurement?.value &&
       input.businessForecast?.value &&
       input.forecastStatus?.value &&
       // input.addInfo.value &&
@@ -137,122 +126,27 @@ const CallLogCreation = () => {
     }
   }, [input]);
 
-  const getFileList = async () => {
-    axios({
-      url: `${baseUrl}/api/callcreation/doclist/${mainId}`,
-      method: "GET",
-      // responseType: "blob", // important
-      headers: {
-        //to stop cacheing this response at browsers. otherwise wrongly displayed cached files
-        "Cache-Control": "no-cache",
-        Pragma: "no-cache",
-        Expires: "0",
-      },
-    }).then((res) => {
-      if (res.status === 200) {
-        let filelist = [];
-        for (let key in res.data.docs) {
-          let fileExt =
-            res.data.docs[key].filetype.split("/")[
-              res.data.docs[key].filetype.split("/").length - 1
-            ];
-          let fileMIME = res.data.docs[key].filetype.split("/")[0];
-
-          let fileobject = {
-            id: res.data.docs[key].id,
-            mainid: res.data.docs[key].mainid,
-            name: res.data.docs[key].originalfilename,
-            size: res.data.docs[key].filesize,
-            pic:
-              fileMIME === "image"
-                ? filePath + "" + res.data.docs[key].hasfilename
-                : fileMIME === "octet-stream" && fileExt === "csv"
-                ? ImageConfig["csv"]
-                : fileMIME === "octet-stream" && fileExt === "rar"
-                ? ImageConfig["rar"]
-                : res.data.docs[key].filetype === "text/plain" &&
-                  res.data.docs[key].originalfilename.split(".")[
-                    res.data.docs[key].originalfilename.split(".").length - 1
-                  ] === "csv"
-                ? ImageConfig["csv"]
-                : ImageConfig[fileExt],
-          };
-          filelist.push(fileobject);
-        }
-        
-        setFileData(filelist);
-        setFileListCheck(true);
-      }
-    });
-  };
-
   
-  const downloadDoc = (fileid, filename) => {
-    axios({
-      url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,
-      method: "GET",
-      responseType: "blob", // important
-    }).then((response) => {
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `${filename}`);
-      document.body.appendChild(link);
-      link.click();
-    });
-  };
-
-  const DeleteDoc = (fileid, filename) => {
-    axios.delete(`${baseUrl}/api/callfileupload/${fileid}`).then((res) => {
-      if (res.data.status === 200) {
-        Swal.fire({
-          title: "File",
-          text: "Removed Successfully..",
-          icon: "success",
-          confirmButtonColor: "#2fba5f",
-        });
-        getFileList();
-      } else {
-        Swal.fire({
-          title: "File",
-          text: res.data.message,
-          icon: "error",
-          confirmButtonColor: "#2fba5f",
-        });
-      }
-    });
-  };
   const InitialRequest = async () => {
-    if (mainId) {
-      getFileList();
-    }
+    
     await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
       setOptionsForCallList(res.data?.calltype);
-      // setIsFetching((prev) => {
-      //   return { ...prev, calltype: false };
-      // });
+      setIsFetching((prev)=>{return{...prev, calltype: false}})
     });
 
-    axios.get(`${baseUrl}/api/customer/list/${token}`).then((res) => {
+    await axios.get(`${baseUrl}/api/customer/list`).then((res) => {
       setOptionsForCutomerList(res.data?.customerList);
-      console.log('res.data?.customerList',res.data);
-      setIsFetching((prev) => {
-        return { ...prev, customer: false };
-      });
+      setIsFetching((prev)=>{return{...prev,  customer: false}})
     });
 
-    // await axios.get(`${baseUrl}/api/user/list`).then((res) => {
-    //   setOptionsForExecutive(res.data?.user);
-    //   setIsFetching((prev) => {
-    //     return { ...prev, executiveName: false };
-    //   });
-    // });
+    await axios.get(`${baseUrl}/api/user/list`).then((res) => {
+      setOptionsForExecutive(res.data?.user);
+      setIsFetching((prev)=>{return{...prev,  executiveName: false}})
+    });
 
     await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
       setOptionsForProcurement(res.data?.procurementlist);
-      setIsFetching((prev) => {
-        return { ...prev, procurement: false };
-      });
+      setIsFetching( (prev)=>{return{...prev, procurement: false}})
     });
     if (id) {
       await axios.get(`${baseUrl}/api/callcreation/${id}`).then((res) => {
@@ -262,15 +156,12 @@ const CallLogCreation = () => {
             ...prev,
             entrydate: fetcheddata.call_date,
             addInfo: fetcheddata.additional_info,
-            nxtFollowupDate: fetcheddata.next_followup_date
-              ? fetcheddata.next_followup_date
-              : "",
-            callcloseDate: fetcheddata.close_date ? fetcheddata.close_date : "",
+            nxtFollowupDate: fetcheddata.next_followup_date ? fetcheddata.next_followup_date : "",
+            callcloseDate : fetcheddata.close_date ? fetcheddata.close_date : "",
             remarks: fetcheddata.remarks ? fetcheddata.remarks : "",
           };
         });
-        setMainId(fetcheddata.id);
-
+       
         setEdited({
           customer: false,
           calltype: false,
@@ -281,26 +172,18 @@ const CallLogCreation = () => {
           executiveName: false,
         });
         setFetchedData(res.data.showcall[0]);
-        if (fetcheddata?.calltype?.label !== "General Customer Visit") {
+        if(fetcheddata?.calltype?.label !== "General Customer Visit") {
           setCheck(true);
         }
       });
     }
-    setIsFetching((prev) => {
-      return { ...prev, formData: false };
-    });
+    setIsFetching((prev)=>{return {...prev, formData: false}})
   };
-
-  useEffect(() => {
-    getFileList();
-  }, [mainId]);
-  
 
   useEffect(() => {
     InitialRequest();
   }, []);
 
-  console.log("optionsForCutomerList",optionsForCutomerList)
   useEffect(() => {
     if (
       id &&
@@ -308,9 +191,6 @@ const CallLogCreation = () => {
       !isEdited.customer &&
       optionsForCutomerList?.length > 0
     ) {
-      console.log('fetchedData',fetchedData);
-      console.log('isEdited',isEdited);
-      console.log('optionsForCutomerList',optionsForCutomerList);
       setInput((prev) => {
         return {
           ...prev,
@@ -322,25 +202,26 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.cust_id, optionsForCutomerList]);
 
-  // useEffect(() => {
-  //   if (
-  //     id &&
-  //     fetchedData?.user_id &&
-  //     !isEdited.executiveName &&
-  //     optionsForExecutive?.length > 0
-  //   ) {
-  //     setInput((prev) => {
-  //       return {
-  //         ...prev,
-  //         executiveName: optionsForExecutive.find(
-  //           (x) => x.value === fetchedData.user_id
-  //         ),
-  //       };
-  //     });
-  //   }
-  // }, [fetchedData.user_id, optionsForExecutive]);
+  useEffect(() => {
+    if (
+      id &&
+      fetchedData?.user_id &&
+      !isEdited.executiveName &&
+      optionsForExecutive?.length > 0
+    ) {
+      setInput((prev) => {
+        return {
+          ...prev,
+          executiveName: optionsForExecutive.find(
+            (x) => x.value === fetchedData.user_id
+          ),
+        };
+      });
+    }
+  }, [fetchedData.user_id, optionsForExecutive]);
 
   useEffect(() => {
+    
     if (
       id &&
       fetchedData?.call_id &&
@@ -358,7 +239,7 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.call_id, optionsForCallList]);
 
-  useEffect(() => {
+  useEffect(() => { 
     if (
       id &&
       fetchedData?.bizz_id &&
@@ -376,14 +257,14 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.bizz_id, optionsForBizzList]);
 
-  useEffect(() => {
+  useEffect(() => { 
     if (
       id &&
       fetchedData?.bizz_status_id &&
       !isEdited.bizz_status_type &&
       optionsForStatusList?.length > 0
     ) {
-      setInput((prev) => {
+      setInput((prev) => { 
         return {
           ...prev,
           forecastStatus: optionsForStatusList.find(
@@ -394,14 +275,14 @@ const CallLogCreation = () => {
     }
   }, [fetchedData.bizz_status_id, optionsForStatusList]);
 
-  useEffect(() => {
+  useEffect(() => { 
     if (
       id &&
       fetchedData?.proc_id &&
       !isEdited.procurement &&
       optionsForProcurement?.length > 0
     ) {
-      setInput((prev) => {
+      setInput((prev) => { 
         return {
           ...prev,
           procurement: optionsForProcurement.find(
@@ -411,6 +292,7 @@ const CallLogCreation = () => {
       });
     }
   }, [fetchedData.proc_id, optionsForProcurement]);
+
 
   useEffect(() => {
     if (
@@ -428,51 +310,46 @@ const CallLogCreation = () => {
           ),
         };
       });
-      if (fetchedData.close_status_id && fetchedData.close_date) {
-        setChecked("closed");
-      }
+      if(fetchedData.close_status_id && fetchedData.close_date) { setChecked("closed")};
     }
   }, [fetchedData.close_status_id, optionsForCallCloseStatus]);
 
+  // useEffect(()=>{
+  //   if(checked === fet)
+  //   {
+
+  //   }
+  // },[checked, isEdited.callcloseStatus,fetchedData.close_status_id])
+
   useEffect(() => {
-    setIsFetching((prev) => {
-      return { ...prev, bizztype: true };
-    });
-    if (input.calltype?.value ) {
+    setIsFetching((prev)=>{return{...prev, bizztype: true}})
+    if (input.calltype?.value) {
       axios
-        .get(`${baseUrl}/api/bizzlist/list/${input.calltype?.value }`)
+        .get(`${baseUrl}/api/bizzlist/list/${input.calltype?.value}`)
         .then((res) => {
           setOptionsForBizzList(res.data.bizzlist);
+          
         });
     } else {
-      setOptionsForBizzList([]);
-      // console.log('Kindly Select CallType');
+      setOptionsForBizzList(null);
     }
     setInput({ ...input, businessForecast: null });
-    setIsFetching((prev) => {
-      return { ...prev, calltype: false, bizztype: false };
-    });
-
-  }, [input.calltype]);  
+    setIsFetching((prev)=>{return{...prev,  bizztype: false}})
+  }, [input.calltype]);
 
   useEffect(() => {
-    setIsFetching((prev) => {
-      return { ...prev, bizz_status_type: true };
-    });
+    setIsFetching((prev)=>{return{...prev,  bizz_status_type: true}})
     if (input.businessForecast?.value) {
       axios
         .get(`${baseUrl}/api/statuslist/list/${input.businessForecast?.value}`)
         .then((res) => {
           setOptionsForStatusList(res.data?.statuslist);
         });
-    } else {      
-      setOptionsForStatusList([]);
-      // console.log('Kindly Select Business Forecast');
+    } else {
+      setOptionsForStatusList(null);
     }
     setInput({ ...input, forecastStatus: null });
-    setIsFetching((prev) => {
-      return { ...prev, bizz_status_type: false };
-    });
+    setIsFetching((prev)=>{return{...prev,  bizz_status_type: false}})
   }, [input.businessForecast]);
 
   useEffect(() => {
@@ -490,45 +367,53 @@ const CallLogCreation = () => {
   }, [checked]);
 
   const inputHandlerFortext = (e) => {
-    if (e.target.name == "nxtFollowupDate") {
+    if(e.target.name == 'nxtFollowupDate')
+    {
       let today = new Date();
       const year = today.getFullYear();
-      const month = ("0" + (today.getMonth() + 1)).slice(-2);
-      const day = ("0" + today.getDate()).slice(-2);
+      const month = ('0' + (today.getMonth() + 1)).slice(-2);
+      const day = ('0' + today.getDate()).slice(-2);
       const curr = `${year}-${month}-${day}`;
-      if (e.target.value < curr) {
+      if(e.target.value < curr)
+      {
         setInputValidation({ ...inputValidation, [e.target.name]: true });
         setInput((prev) => {
           return { ...prev, [e.target.name]: curr };
         });
-      } else {
+      }
+      else{
         setInputValidation({ ...inputValidation, [e.target.name]: false });
         setInput((prev) => {
           return { ...prev, [e.target.name]: e.target.value };
         });
       }
-    } else if (e.target.name == "callcloseDate") {
-      let today = new Date();
-      const year = today.getFullYear();
-      const month = ("0" + (today.getMonth() + 1)).slice(-2);
-      const day = ("0" + today.getDate()).slice(-2);
-      const curr = `${year}-${month}-${day}`;
-      if (e.target.value > curr) {
-        setInputValidation({ ...inputValidation, [e.target.name]: true });
-        setInput((prev) => {
-          return { ...prev, [e.target.name]: curr };
-        });
-      } else {
-        setInputValidation({ ...inputValidation, [e.target.name]: false });
-        setInput((prev) => {
-          return { ...prev, [e.target.name]: e.target.value };
-        });
-      }
-    } else {
-      setInput((prev) => {
-        return { ...prev, [e.target.name]: e.target.value };
-      });
     }
+    else if(e.target.name == 'callcloseDate')
+    {
+      let today = new Date();
+      const year = today.getFullYear();
+      const month = ('0' + (today.getMonth() + 1)).slice(-2);
+      const day = ('0' + today.getDate()).slice(-2);
+      const curr = `${year}-${month}-${day}`;
+      if(e.target.value > curr)
+      {
+        setInputValidation({ ...inputValidation, [e.target.name]: true });
+         setInput((prev) => {
+      return { ...prev, [e.target.name]: curr };
+    });
+      } 
+      else{
+        setInputValidation({ ...inputValidation, [e.target.name]: false });
+        setInput((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+      }
+    }
+    else{
+    setInput((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  }
   };
 
   const inputHandlerForSelect = (value, action) => {
@@ -542,10 +427,7 @@ const CallLogCreation = () => {
       setInputValidation({ ...inputValidation, [action.name]: false });
     }
 
-    if (
-      action.name == "calltype" &&
-      value?.label !== "General Customer Visit"
-    ) {
+    if (action.name == "calltype" && value?.label !== "General Customer Visit") {
       setCheck(true);
     } else if (
       action.name == "calltype" &&
@@ -562,134 +444,93 @@ const CallLogCreation = () => {
       setEdited({ ...isEdited, bizz_status_type: true });
     }
     if (action.name === "callcloseStatus") {
-      setEdited({ ...isEdited, callcloseStatus: true });
+      setEdited({ ...isEdited, callcloseStatus: true});
     }
   };
 
-  const cancelHandler = () => {
+  const cancelHandler = () =>{
     navigate("/tender/calllog/");
-  };
+  }
 
-  const handleFile = (e) => {
-    const fileType = e.target.files[0].type
-      ? e.target.files[0].type
-      : e.target.files[0].type === ""
-      ? "application/x-rar-compressed"
-      : "";
-    if (docType.includes(fileType)) {
-      if (accFileStorage + e.target.files[0]?.size <= totalStorageSize) {
-        const Files = e.target.files[0];
-        const FilesValue = e.target.value;
-        const fileName = Files.name;
-        const fileSize = Files.size + " KB";
-        const url = URL.createObjectURL(Files); // this points to the File object we just created
-        let fileExt = fileType.split("/")[1];
-        let fileMIME = fileType.split("/")[0];
-        // setFile1(e.target.files[0]);
-        setFile({
-          // ...file,
-          file: e.target.files[0],
-          name: fileName,
-          type: fileType,
-          size: fileSize,
-          value: FilesValue,
-          src:
-            fileMIME === "image"
-              ? url
-              : fileMIME === "octet-stream" && fileExt === "csv"
-              ? ImageConfig["csv"]
-              : (fileMIME === "octet-stream" || fileMIME === "application") &&
-                (fileExt === "rar" || fileExt === "x-rar-compressed")
-              ? ImageConfig["rar"]
-              : ImageConfig[fileExt],
-        });
-        setAccFileStorage(accFileStorage + e.target.files[0].size);
-        setFileCheck(true);
-      } else {
-        Swal.fire({
-          title: "File Storage",
-          text: "Storage size Overflow..",
-          icon: "error",
-          confirmButtonColor: "#2fba5f",
-        });
-      }
-    } else {
-      Swal.fire({
-        title: "File Type",
-        text: "Invalid File Type..!",
-        icon: "error",
-        confirmButtonColor: "#2fba5f",
-      });
-    }
-  };
 
-  //for Preview purpose only
-  const addfiles = () => {
-    let updated = [...fileData];
-    updated.push(objectData);
-    setFileData(updated);
-    setFileListCheck(true);
-    setFileCheck(false);   
-  };
+//   const handleFile = (e) => {
+//     const Files = e.target.files[0];
+//     const FilesValue = e.target.value;
+//     const fileName = Files.name;
+//     const fileType = Files.type;
+//     const fileSize = Files.size + " KB";
+//     const url = URL.createObjectURL(Files); // this points to the File object we just created
+//     // document.querySelector('img').src = url;
 
-  const handleFileAdd = (e) => {
-    e.preventDefault();
-    if (mainId) {
-      addfiles();
-      uploadFiles();
-    } else {
-      Swal.fire({
-        title: "Form Not Submit",
-        text: "Please Submit Form Before Add Files..!",
-        icon: "warning",
-        confirmButtonColor: "#12c350",
-      });
-    }
-  };
-  // console.log("FileData", fileData);
+//     // FileMatch
+//     const pngFile = fileName.match("png");
+//     const csvFile = fileName.match("csv");
+//     const mswordFile = fileName.match("docx");
+//     const zipFile = fileName.match("zip");
+//     const pdfFile = fileName.match("pdf");
+//     const msxlFile = fileName.match("vnd.ms-excel");
+//     const xlFile = fileName.match("xlsx");
+//     const osFile = fileName.match("octet-stream");
+//     const rarFile = fileName.match("rar");
 
-  const uploadFiles = () => {
-    const formData = new FormData();
-    // console.log("file",file);
-    formData.append("file", file.file);
-    formData.append("mainid", mainId);
-    formData.append("tokenId", localStorage.getItem("token"));
-    // console.log("formData", formData);
+//     setFile({
+//       ...file,
+//       name: fileName,
+//       type: fileType,
+//       size: fileSize,
+//       value: FilesValue,
+//       src: pngFile
+//         ? url
+//         : csvFile
+//         ? csv
+//         : mswordFile
+//         ? msWord
+//         : zipFile
+//         ? zip
+//         : pdfFile
+//         ? pdf
+//         : msxlFile
+//         ? xls
+//         : xlFile
+//         ? xls
+//         : osFile
+//         ? zip
+//         : rarFile
+//         ? rar
+//         : blank,
+//     });
+//     setFileCheck(true);
+//   };
 
-    if (formData instanceof FormData) {
-      console.log("Form Data is a FormData");
-    } else {
-      console.log("Form Data is not a FormData");
-    }
-    axios
-      .post(`${baseUrl}/api/callfileupload/`, formData) // Create an Axios request
-      .then((res) => {
-        if (res.data.status === 200) {
-          Swal.fire({
-            icon: "success",
-            title: "File",
-            text: "Uploaded Successfully!",
-            confirmButtonColor: "#5156ed",
-          });
-          
-          getFileList();
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "File",
-            text: "Upload Failed..!",
-            confirmButtonColor: "#5156ed",
-          });
-        }
-      });
-  };
+//   const objectData = {
+//     name: file.name,
+//     size: file.size,
+//     pic: file.src,
+//   };
+// console.log(fileData);
+//   const handleFileAdd = (e) => {
+//     e.preventDefault();
+//     let updated = [...fileData];
+//     console.log("file",file);
+//     updated.push(objectData);
+// //$$$
+//     SetFileData(updated);
+//     setFileListCheck(true);
+//     setFileCheck(false);
+//     Swal.fire({
+//       text: "Uploaded Successfully",
+//       icon: "success",
+//       confirmButtonColor: "#12c350",
+//     });
+//   };
 
-  const removePreview = (e) => {
-    e.preventDefault();
-    setFileCheck(false);
-  };
+//   const removePreview = (e) => {
+//     e.preventDefault();
+//     setFileCheck(false);
+//   };
 
-  let fileCount = 1;
+//   let fileCount = 1;
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -698,26 +539,23 @@ const CallLogCreation = () => {
       customer_id: input.customer.value,
       call_date: input.entrydate,
       call_type_id: input.calltype.value,
-      // executive_id: input.executiveName.value,
-      procurement_type_id: input.procurement?.value,
+      executive_id: input.executiveName.value,
+      procurement_type_id: input.procurement.value,
       bizz_forecast_id: input.businessForecast.value,
       bizz_forecast_status_id: input.forecastStatus.value,
       additional_info: input.addInfo ? input.addInfo : null,
       next_followup_date: input.nxtFollowupDate ? input.nxtFollowupDate : null,
-      close_status_id: input.nxtFollowupDate
-        ? ""
-        : input?.callcloseStatus?.value,
+      close_status_id: input.nxtFollowupDate ? "" : (input?.callcloseStatus?.value),
       close_date: input.callcloseDate ? input.callcloseDate : null,
       remarks: input.remarks ? input.remarks : null,
       tokenid: localStorage.getItem("token"),
     };
     setDataSending(true);
     if (id) {
-      putData(data, id);
+      putData(data,id);
     } else {
       postData(data);
     }
-    
   };
 
   const postData = (data) => {
@@ -731,9 +569,7 @@ const CallLogCreation = () => {
             text: "Created Successfully!",
             confirmButtonColor: "#5156ed",
           });
-          
-          setMainId(res.data.mainid);
-          // navigate("/tender/calllog");
+          navigate("/tender/calllog");
           setDataSending(false);
         } else if (res.data.status === 400) {
           Swal.fire({
@@ -746,7 +582,7 @@ const CallLogCreation = () => {
         }
       });
   };
-  
+
   const putData = (data, id) => {
     axios.put(`${baseUrl}/api/callcreation/${id}`, data).then((res) => {
       if (res.data.status === 200) {
@@ -770,10 +606,9 @@ const CallLogCreation = () => {
     });
   };
 
-  console.log("input.customer",input.customer);
-
   return (
-    <PreLoader loading={isFetching.formData}>
+    
+    <PreLoader loading = {isFetching.formData}>
       <div className="CallLogsCreation">
         <div className="card shadow p-2 mb-4">
           <div className="card-body">
@@ -783,7 +618,7 @@ const CallLogCreation = () => {
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark">
                       <label htmlFor="customer" className="font-weight-bold">
-                        Customer Name <span className="text-danger ">*</span>
+                        Customer Name
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -800,7 +635,7 @@ const CallLogCreation = () => {
                       {inputValidation.customer && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
-                            Select Customer Name
+                            Enter Customer Name
                           </span>
                         </div>
                       )}
@@ -811,7 +646,7 @@ const CallLogCreation = () => {
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark">
                       <label htmlFor="date" className="font-weight-bold">
-                        Date <span className="text-danger ">*</span>
+                        Date
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -823,14 +658,6 @@ const CallLogCreation = () => {
                         onChange={(e) => inputHandlerFortext(e)}
                         value={input.entrydate}
                       />
-
-                      {inputValidation.Date && (
-                        <div className="pt-1">
-                          <span className="text-danger font-weight-bold">
-                            Please Select Date..!
-                          </span>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -838,7 +665,7 @@ const CallLogCreation = () => {
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark">
                       <label htmlFor="calltype" className="font-weight-bold">
-                        Call Type <span className="text-danger ">*</span>
+                        Call Type{" "}
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -855,7 +682,7 @@ const CallLogCreation = () => {
                       {inputValidation.calltype && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
-                            Select CallType List..!
+                            Enter CallType List
                           </span>
                         </div>
                       )}
@@ -869,42 +696,23 @@ const CallLogCreation = () => {
                         htmlFor="executiveName"
                         className="font-weight-bold"
                       >
-                        Executive Name <span className="text-danger ">*</span>
+                        Executive Name
                       </label>
                     </div>
                     <div className="col-lg-8">
-                      <input
+                      <Select
                         id="executiveName"
                         name="executiveName"
-                        value={userName}
-                        disabled={true}
-                        className="form-control"
-                      />
+                        isSearchable="true"
+                        isClearable="true"
+                        isLoading={isFetching.executiveName}
+                        options={optionsForExecutive}
+                        value={input.executiveName}
+                        onChange={inputHandlerForSelect}
+                      ></Select>
                     </div>
                   </div>
                 </div>
-                {/* // <Select  
-                      //   id="executiveName"
-                      //   name="executiveName"
-                      //   isSearchable="true"
-                      //   isClearable="true"
-                      //   // isLoading={isFetching.executiveName}
-                      //   // options={optionsForExecutive}
-                      //   // value={input.executiveName}
-                      //   value={userName}
-                      //   isDisable={true}
-                      //   onChange={inputHandlerForSelect}
-                      // ></Select>
-                      // {inputValidation.customer && (
-                      //   <div className="pt-1">
-                      //     <span className="text-danger font-weight-bold">
-                      //       Please Select Executive Name..! 
-                      //     </span>
-                      //   </div>
-                      // )}
-                    // </div>
-                  // </div>
-                // </div> */}
                 <div className="inputgroup col-lg-6 mb-4">
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark">
@@ -912,8 +720,7 @@ const CallLogCreation = () => {
                         htmlFor="businessForecast"
                         className="font-weight-bold"
                       >
-                        Business Forecast{" "}
-                        <span className="text-danger ">*</span>
+                        Business Forecast
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -930,7 +737,7 @@ const CallLogCreation = () => {
                       {inputValidation.businessForecast && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
-                            Please Select BusinessForecast..!
+                            Enter BusinessForecast
                           </span>
                         </div>
                       )}
@@ -946,7 +753,6 @@ const CallLogCreation = () => {
                           className="font-weight-bold"
                         >
                           Procurement Type
-                          {/* <span className="text-danger ">*</span> */}
                         </label>
                       </div>
                       <div className="col-lg-8">
@@ -960,13 +766,6 @@ const CallLogCreation = () => {
                           value={input.procurement}
                           onChange={inputHandlerForSelect}
                         ></Select>
-                        {inputValidation.procurement && (
-                          <div className="pt-1">
-                            <span className="text-danger font-weight-bold">
-                              Please Procurement Type Select ..!
-                            </span>
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -985,7 +784,6 @@ const CallLogCreation = () => {
                         className="font-weight-bold"
                       >
                         Status
-                        <span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -1002,7 +800,7 @@ const CallLogCreation = () => {
                       {inputValidation.forecastStatus && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
-                            Please Select Status..!
+                            Enter Status
                           </span>
                         </div>
                       )}
@@ -1014,7 +812,6 @@ const CallLogCreation = () => {
                     <div className="col-lg-4 text-dark ">
                       <label htmlFor="action " className="font-weight-bold">
                         Action
-                        <span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -1084,7 +881,7 @@ const CallLogCreation = () => {
                           htmlFor="activeStatus "
                           className="font-weight-bold"
                         >
-                          Next Follow Up<span className="text-danger ">*</span>
+                          Next Follow Up
                         </label>
                       </div>
                       <div className="col-lg-8 mb-3">
@@ -1148,12 +945,12 @@ const CallLogCreation = () => {
                           value={input.callcloseDate}
                         />
                         {inputValidation.callcloseDate && (
-                          <div className="pt-1">
-                            <span className="text-danger font-weight-bold">
-                              Date sholud be today or past Date
-                            </span>
-                          </div>
-                        )}
+                        <div className="pt-1">
+                          <span className="text-danger font-weight-bold">
+                            Date sholud be today or past Date
+                          </span>
+                        </div>
+                      )}
                       </div>
 
                       <div className="col-lg-4 text-dark ">
@@ -1188,21 +985,11 @@ const CallLogCreation = () => {
                     type="submit"
                     disabled={dataSending || !isFormValid}
                   >
-                    {!id
-                      ? dataSending
-                        ? "Saving"
-                        : "Save"
-                      : dataSending
-                      ? "Updating"
-                      : "Update"}
+                    {!id ? (dataSending ? "Saving" : "Save") : (dataSending ? "Updating": "Update")}
                   </button>
-                  <button
-                    className="btn btn-secondary"
-                    onClick={cancelHandler}
-                    disabled={dataSending}
-                  >
-                    Cancel
-                  </button>
+                  <button className="btn btn-secondary" onClick={cancelHandler} disabled = {dataSending}>
+                                            Cancel
+                                        </button>
                 </div>
 
                 <div className="inputgroup col-lg-6 mb-4">
@@ -1289,45 +1076,53 @@ const CallLogCreation = () => {
                       )}
                     </div>
                     <div className="col-lg-12">
-                      {fileListCheck && (
-                        <div className="file_Documents">
-                          {fileData.map((t, i) => (
-                            <div className="card" key={i}>
-                              <div className="card-body">
-                                <div className="noOfFiles">{fileCount++}</div>
-                                <div className="fileDetails">
-                                  <div className="pic">
-                                    <img src={t.pic} alt="" />
-                                  </div>
-                                  <div className="text">
-                                    <div>
-                                      <h6>Name: </h6>
-                                      <p>{t.name}</p>
+                      {/* <DocumentUpload id={id} fileData={fileData} /> */}
+                      <DocList ref={ref} BidCreationId={id} onEdit={editHandler} setTotalSize={setTotal_size}/>
+                      {/* {fileListCheck && (
+                        
+                          <div className="file_Documents">
+                            {fileData.map((t, i) => (
+                        
+                                <div className="card" key={i}>
+                                  <div className="card-body">
+                                    <div className="noOfFiles" >
+                                      {fileCount++}
                                     </div>
-                                    <div>
-                                      <h6>Size: </h6>
-                                      <p>{t.size}</p>
+                                    <div className="fileDetails">
+                                      <div className="pic">
+                                        <img src={t.pic} alt="" />
+                                      </div>
+                                      <div className="text">
+                                        <div>
+                                          <h6>Name: </h6>
+                                          <p>{t.name}</p>
+                                        </div>
+                                        <div>
+                                          <h6>Size: </h6>
+                                          <p>{t.size}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="fileAction">
+                                      <div className="download">
+                                        <a href="#" download>
+                                          <FaDownload />
+                                        </a>
+                                      </div>
+                                      <div className="edit">
+                                        <FiEdit />
+                                      </div>
+                                      <div className="delete">
+                                        <RiDeleteBin5Fill />
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                                <div className="fileAction">
-                                  <div className="download">
-                                    <FaDownload
-                                      onClick={() => downloadDoc(t.id, t.name)}
-                                    />
-                                  </div>
-
-                                  <div className="delete">
-                                    <RiDeleteBin5Fill
-                                      onClick={() => DeleteDoc(t.id, t.name)}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                              
+                            ))}
+                          </div>
+                        
+                      )} */}
                     </div>
                   </div>
                 </div>
@@ -1336,7 +1131,7 @@ const CallLogCreation = () => {
           </div>
         </div>
       </div>
-    </PreLoader>
+      </PreLoader>
   );
 };
 

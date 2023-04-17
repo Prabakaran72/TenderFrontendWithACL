@@ -221,7 +221,6 @@ const CallToBDM = () => {
                                             isClearable="true"
                                             options={userOptions}
                                             value={input.staffName}
-                                           
                                             onChange={(value, action) => { inputHandlerForSelect(value, action); resetCusomer()}}
                                         ></Select>
                                         {inputValidation.staffName && (
@@ -249,6 +248,7 @@ const CallToBDM = () => {
                                             value={input.customer}
                                             isMulti
                                             onChange={(value, action) => { inputHandlerForSelect(value, action); }}
+                                            closeMenuOnSelect={false}
                                         ></Select>
                                         {inputValidation.customer && (
                                             <div className="pt-1">

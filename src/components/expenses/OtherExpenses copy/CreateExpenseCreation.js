@@ -4,9 +4,11 @@ import Select from "react-select";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useParams } from 'react-router-dom';
-import { useBaseUrl } from "../hooks/useBaseUrl";
+import { useBaseUrl } from "../../hooks/useBaseUrl";
+import {useImageStoragePath} from "../../hooks/useImageStoragePath";
+import { ImageConfig } from "../../hooks/Config";
 
-const selectState = {
+const initailState = {
   staff: "",
   entryDate: "",
   description: "",
@@ -15,7 +17,7 @@ const selectState = {
 const CreateExpenseCreation = () => {
   const { id } = useParams();
   const { server1: baseUrl } = useBaseUrl();
-  const [input, setInput] = useState(selectState);
+  const [input, setInput] = useState(initailState);
   const [optionsForStaff, setOptionsForStaff] = useState([]);
 
   const [table, setTable] = useState([]);
@@ -26,7 +28,8 @@ const CreateExpenseCreation = () => {
   const [editCheck, setEditCheck] = useState(false);
 
   const [img, setImg] = useState([]);
-
+  const {expense : filePath} = useImageStoragePath();
+  
   useEffect(() => {
     const imgFile = [];
     axios.get(`${baseUrl}/api/user/list`).then((res) => {
@@ -37,35 +40,57 @@ const CreateExpenseCreation = () => {
 
     axios.get(`${baseUrl}/api/otherexpensesub`).then((res) => {
       if (res.status === 200) {
-        setTable(res.data.otherexpensesub);
-        res.data.otherexpensesub.map((t) => {
-          const splitHasFileName = t.hasfilename;
-          const hasfilename = splitHasFileName.split(".").slice(0, -1).join(".");          
-          axios({
-            url: `${baseUrl}/api/otherexpsubfiledownload/${t.oesid}/${hasfilename}`,
-            method: "get",
-            responseType: "blob",
-          }).then((res) => {
-            if (res.status === 200) {
-              const img = URL.createObjectURL(res.data); 
-              imgFile.push(img);                           
-               setImg(imgFile);             
-            }
-          });        
-        });
+        // console.log(res);
+
+        let filelist = [];
+        for(let key in res.data.otherexpensesub){
+          
+    let fileExt =res.data.otherexpensesub[key].filetype.split("/")[res.data.otherexpensesub[key].filetype.split("/").length - 1];
+    let fileMIME = res.data.otherexpensesub[key].filetype.split("/")[0];    
+  
+    let fileobject = { 
+            id: res.data.otherexpensesub[key].id,
+            mainid: res.data.otherexpensesub[key].mainid,
+            need_call_against_expense:res.data.otherexpensesub[key].need_call_against_expense,
+            customer_id: res.data.otherexpensesub[key].customer_id,
+            call_no: res.data.otherexpensesub[key].call_no,
+            expense_type_id: res.data.otherexpensesub[key].expense_type_id,
+            filetype: res.data.otherexpensesub[key].filetype,
+            amount : res.data.otherexpensesub[key].amount,
+            description_sub: res.data.otherexpensesub[key].description_sub,
+            expenseType: res.data.otherexpensesub[key].expenseType,
+            // oesid: res.data.otherexpensesub[key].oesid,
+            etid: res.data.otherexpensesub[key].etid,
+            hasfilename: res.data.otherexpensesub[key].hasfilename,
+            originalfilename: res.data.otherexpensesub[key].originalfilename,
+            name: res.data.otherexpensesub[key].originalfilename,
+            filesize: res.data.otherexpensesub[key].filesize,
+            pic: fileMIME === "image"
+              ? filePath+""+res.data.otherexpensesub[key].hasfilename
+              : fileMIME === "octet-stream" && fileExt === "csv"
+              ? ImageConfig["csv"]
+              : fileMIME === "octet-stream" && fileExt === "rar"
+              ? ImageConfig["rar"]
+              : (res.data.otherexpensesub[key].filetype ==="text/plain" && res.data.otherexpensesub[key].originalfilename.split(".")[res.data.otherexpensesub[key].originalfilename.split(".").length - 1] ==="csv") ? ImageConfig["csv"]
+              :ImageConfig[fileExt],
+          };
+          filelist.push(fileobject);
+      }
+      setTable(filelist);
+
       }
     });
   }, []);
 
-  useEffect(()=> {
-    axios.get(`${baseUrl}/api/otherexpensesub`)
-    .then((res)=>{           
-      if(res.status === 200) {
-        setTable(res.data.otherexpensesub);
-        console.log('del',del);  
-      }
-    })     
-  },[del]) // del state gets true this hook will render *** initially works in handleDel
+  // useEffect(()=> {
+  //   axios.get(`${baseUrl}/api/otherexpensesub`)
+  //   .then((res)=>{           
+  //     if(res.status === 200) {
+  //       setTable(res.data.otherexpensesub);
+  //       // console.log('del',del);  
+  //     }
+  //   })     
+  // },[del]) // del state gets true this hook will render *** initially works in handleDel
 
   const inputHandlerForSelect = (value, action) => {
     setInput({ ...input, [action.name]: value });
@@ -76,13 +101,15 @@ const CreateExpenseCreation = () => {
   };
 
   const handleEdit = (tab,index) => {
+    // console.log("Edit ", tab);
     setCurrentRow(tab,index);
-    console.log('tab,index',index)
+    // console.log('tab,index',index)
     setPass(true);
     setEditCheck(true);
   };
 
   const handleDel = (tab) => {
+    // console.log("Delete ", tab);
     setCurrentRow(tab);
     setDel(true);    
     axios.delete(`${baseUrl}/api/otherexpensesub/${currentRow.oesid}`)
@@ -113,7 +140,7 @@ const CreateExpenseCreation = () => {
   };
 
   let incre = 1;
- 
+//  console.log("Table", table);
   // console.log("currentRow", currentRow);
   return (
     <>
@@ -180,22 +207,21 @@ const CreateExpenseCreation = () => {
                         <th className="">Expense Type </th>
                         <th className="">Amount</th>
                         <th className="">Description</th>
-                        <th className="">Document Upload</th>
+                        <th className="">Document</th>
                         <th className="">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {table.map((tab,index) => (
-                        <>
-                        {/* {img.map((pic)=> ( */}
-                        <tr key={tab.oesid}>
+     {/* {img.map((pic)=> ( */}
+                        {/* <tr key={tab.oesid}>
                           <td>{incre++}</td>
                           <td>{tab.expenseType}</td>
                           <td>{tab.amount}</td>
                           <td>{tab.description_sub}</td>                            
                           <td>
                             <img
-                              src={img[index]}
+                              // src={img[index]}
+                              src={tab.pic}
                               alt="uploaded img"
                               width={50}
                               height={50}
@@ -217,9 +243,42 @@ const CreateExpenseCreation = () => {
                               Delete
                             </button>
                           </td>
-                        </tr>
-                        {/* ))} */}
-                        </>
+                        </tr> */}
+                 {/* ))} */}
+
+                      {table.map((tab,index) => (
+                       
+                        <tr key={tab.id}>
+                          <td>{tab.id}</td>
+                          <td>{tab.expenseType}</td>
+                          <td>{tab.amount}</td>
+                          <td>{tab.description_sub}</td>                            
+                          <td>
+                            <img
+                              // src={img[index]}
+                              src={tab.pic}
+                              alt="Uploaded img"
+                              width={50}
+                              height={50}
+                            />
+                          </td>                              
+                          <td>
+                            <button
+                              onClick={() => {
+                                handleEdit(tab,index);
+                              }}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => {
+                                handleDel(tab);
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>                    
                       ))}                                            
                     </tbody>
                   </table>

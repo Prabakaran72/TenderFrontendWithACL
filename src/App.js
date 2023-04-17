@@ -49,6 +49,9 @@ import BidCreationMain from "./components/tender/Bidmanagement/Bidcreation/BidCr
 import BidSubmission from "./components/tender/Bidmanagement/Bidsubmission/BidSubmission";
 import TenderStatus from "./components/tender/Bidmanagement/TenderStatus/TenderStatus";
 import Workorder from "./components/tender/Bidmanagement/Workorder/Workorder";
+// ulb report by navin @ 29-03-2023
+import UlbReport from "./components/tender/UlbReport/UlbReport"
+// 
 import CommunicationFilesView from "./components/Library/CommunicationFiles/CommunicationFilesView";
 import CommunicationFilesCreation from "./components/Library/CommunicationFiles/CommunicationFilesCreation";
 import Unauthorized from "./components/pages/Unauthorized";
@@ -76,36 +79,16 @@ import AttendanceType from "./components/master/AttendanceType/AttendanceType";
 import AttendanceTypeView from "./components/master/AttendanceType/AttendanceTypeView";
 import CallLogCreation from './components/calllog/CallLogCreation/CallLogCreation';
 import CallLogMain from './components/calllog/CallLogCreation/CallLogMain';
-import OtherExpenseMain from "./components/OtherExpense/OtherExpenseMain";
-import CreateExpenseCreation from "./components/OtherExpense/CreateExpenseCreation";
+import OtherExpenseMain from "./components/expenses/OtherExpenses/OtherExpenseMain";
+import ExpenseCreation from "./components/expenses/OtherExpenses/ExpenseCreation";
+import ReimbursementAdmin from "./components/expenses/Reimbursement/ReimbursementAdmin";
+
+// **********************
 
 function App() {
   const authData = useContext(AuthContext);
   const {permission} = useContext(AuthContext)
-  // const [role, setRole] = useState([]); 
-  // const [permission, setPermission] = useState([]); 
-
-  // useEffect(() => {
-  //   const rolesPermission = async () => {
-  //     if(localStorage.getItem('token')){
-
-  //     let data = {
-  //       tokenid : localStorage.getItem('token')
-  //     }
-
-        
-  //     let rolesAndPermission = await axios.post(`http://localhost:8000/api/getrolesandpermision`, data)
-  //       if(rolesAndPermission.status === 200){
-  //         console.log('sdada', rolesAndPermission.data)
-  //         setRole(rolesAndPermission.data.role);
-  //         setPermission(rolesAndPermission.data.permission) 
-  //       }
-  //     }
-  //   }
-
-  //   rolesPermission()
-  // }, [])
-
+ 
   return (
    
       <BrowserRouter>
@@ -117,6 +100,8 @@ function App() {
             <Route path="tendertracker" element={!!(permission?.["Tender Tracker"]?.can_view) ? <Tendertracker />: <Unauthorized/> } />
             <Route path="tendercreation" element={!!(permission?.Tenders?.can_add) ? <Tendercreation /> : <Unauthorized/> } />
             <Route path="legacystatement" element={!!(permission?.["Legacy Statements"]?.can_view) ? <Legacystatement /> : <Unauthorized/>} />
+            <Route path="UlbReport" element={!!(permission?.["ULB Report"]?.can_view) ? <UlbReport />: <Unauthorized/> }/>
+          
             <Route path="bidmanagement">
               <Route path="list" element={!!(permission?.['Bids Managements']?.can_view) ? <Bidmanagement /> : <Unauthorized/>} />
               <Route path="list/main" element={(!!(permission?.['Bids Managements']?.can_add) || !!(permission?.['Bids Managements']?.can_edit)) ? <BidmanagementMain /> : <Unauthorized/>}>
@@ -131,13 +116,12 @@ function App() {
                 <Route path="tenderstatus/:id" element={ <TenderStatus /> } />
                 <Route path="workorder" element={ <Workorder /> } />
                 <Route path="workorder/:id" element={ <Workorder /> } />
+                
+                
               </Route>
             </Route>
 
-            <Route path="otherExpense" >
-              <Route path="main" element={ <OtherExpenseMain /> } />
-              <Route path="create" element={ <CreateExpenseCreation /> } />
-            </Route >
+           
 
 
             <Route path="master">
@@ -409,11 +393,17 @@ function App() {
               </Route>
               <Route path="attendancereport" element={!!(permission?.attendance_report?.can_view) ? <AttendanceReport/> : <Unauthorized/>}/>
             </Route>
-            
+            <Route path="expenses">
+              <Route path="otherExpense" >
+                <Route index element={!!(permission?.['OtherExpenses']?.can_view) ? <OtherExpenseMain /> : <Unauthorized/> } />
+                <Route path="create" element={!!(permission?.['OtherExpenses']?.can_add) ?  <ExpenseCreation />  : <Unauthorized/> } />
+                <Route path="edit/:id" element={!!(permission?.['OtherExpenses']?.can_edit) ?  <ExpenseCreation />  : <Unauthorized/> } />
+              </Route >
+           <Route path="Reimbursement" element={!!(permission?.["ReimbursementForm"]?.can_view) ? <ReimbursementAdmin />: <Unauthorized/> }/>
+             
+            </Route> 
           </Route>
-
           
-
           {/* )} */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

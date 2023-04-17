@@ -23,7 +23,7 @@ import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
 import AuthContext from "../../../storeAuth/auth-context";
-import { can } from "../../UserPermission";
+
 
 let table;
 const CallLogMainList = () => {
@@ -33,29 +33,34 @@ const CallLogMainList = () => {
   const {permission} = useContext(AuthContext)
 
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/usertype/${id}`)
+    let response =  axios.delete(`${baseUrl}/api/callcreation/${id}`)
     return response;
   }
 
   const getList = async () => {
-    const usertypelist = await axios.get(`${baseUrl}/api/usertype`);
-    
+    const usertypelist = await axios.get(`${baseUrl}/api/callcreation`);
+    console.log("usertypelist",usertypelist);
 
     var dataSet;
     if (
       usertypelist.status === 200 &&
-      usertypelist.data.status === 200
+      usertypelist.data.status === 200 && 
+      usertypelist.data?.calllog
     ) {
-      let list = [...usertypelist.data.userType];
+      let list = [...usertypelist.data.calllog];
       let listarr = list.map((item, index, arr) => {
-        let editbtn =`<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i>` ;
-        let deletebtn =  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' ;
+        let editbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> '  : '';
+        let deletebtn =  !!(permission?.['CallLogCreation']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
         return {
         ...item,
-        status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
-        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
-        action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
+        mode: "Direct",
+        // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
+        action: ( editbtn + deletebtn),
+        // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
         sl_no: index + 1,
+        completed: item.close_date? item.close_date: '--',
+        next_followup :  item.next_followup_date ? item.next_followup_date :  item.close_date ? "<span class='text-success'>Closed</span>" : "<span class='text-warning'>InLive</span>"
+
       }});
 
       dataSet = listarr;
@@ -75,9 +80,16 @@ const CallLogMainList = () => {
             return ++i;
           },
         },
-        { data: "name" },
-        { data: "status" },
-        { data: "action" },
+        { data: "callid" },
+        { data: "customer_name" },
+        { data: "username"},
+        { data: "mode"},
+      { data: "callname" },        
+      { data: "call_date"},
+      { data: "completed"},
+      { data: "next_followup"},
+      { data: "action" },
+        
       ],
     })
     setLoading(false)
@@ -85,7 +97,7 @@ const CallLogMainList = () => {
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
       navigate(
-        `/tender/master/usertype/edit/${rowdata.id}`
+        `/tender/calllog/edit/${rowdata.id}`
       );
     });
 
@@ -159,13 +171,20 @@ const CallLogMainList = () => {
         >
           <thead className="text-center bg-primary text-white">
             <tr>
-              <th className="">Sl.No</th>
-              <th className="">User Type (role)</th>
-              <th className="">Status</th>
+              <th className="">#</th>
+              <th className="">Call ID</th>
+              <th className="">Customer Name</th>
+              <th className="">Executive Name</th>
+              <th className="">Mode</th>
+              <th className="">Call Type</th>
+              <th className="">Started</th>
+              <th className="">Completed</th>
+              <th className="">Next Follow Up</th>
               <th className="">Action</th>
             </tr>
           </thead>
           <tbody></tbody>
+          
         </table>
       </div>
     </Fragment>
