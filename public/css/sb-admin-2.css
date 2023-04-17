@@ -10968,13 +10968,13 @@ form.user .btn-user {
   box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5);
 }
 
-.error {
+/* .error {
   color: #5a5c69;
   font-size: 7rem;
   position: relative;
   line-height: 1;
-  width: 12.5rem;
-}
+  width: 100%;
+} */
 
 @-webkit-keyframes noise-anim {
   0% {
@@ -11108,7 +11108,7 @@ form.user .btn-user {
   }
 }
 
-.error:after {
+/* .error:after {
   content: attr(data-text);
   position: absolute;
   left: 2px;
@@ -11119,7 +11119,7 @@ form.user .btn-user {
   overflow: hidden;
   clip: rect(0, 900px, 0, 0);
   animation: noise-anim 2s infinite linear alternate-reverse;
-}
+} */
 
 @-webkit-keyframes noise-anim-2 {
   0% {
@@ -11253,7 +11253,7 @@ form.user .btn-user {
   }
 }
 
-.error:before {
+/* .error:before {
   content: attr(data-text);
   position: absolute;
   left: -2px;
@@ -11264,7 +11264,7 @@ form.user .btn-user {
   overflow: hidden;
   clip: rect(0, 900px, 0, 0);
   animation: noise-anim-2 3s infinite linear alternate-reverse;
-}
+} */
 
 footer.sticky-footer {
   padding: 2rem 0;
