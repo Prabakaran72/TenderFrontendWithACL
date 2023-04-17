@@ -10300,7 +10300,7 @@ form.user .btn-user {
     clip: rect(67px, 9999px, 68px, 0);
   }
 }
-.error:before {
+/* .error:before {
   content: attr(data-text);
   position: absolute;
   left: -2px;
@@ -10311,7 +10311,7 @@ form.user .btn-user {
   overflow: hidden;
   clip: rect(0, 900px, 0, 0);
   animation: noise-anim-2 3s infinite linear alternate-reverse;
-}
+} */
 footer.sticky-footer {
   padding: 2rem 0;
   flex-shrink: 0;
