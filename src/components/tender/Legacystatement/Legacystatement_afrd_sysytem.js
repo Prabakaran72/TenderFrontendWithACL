@@ -14,16 +14,12 @@ const initialOptions = {
 
 
 const statusOptions = [
-	
+	{ value: 'Retender', label: 'Retender' },
 	{ value: 'To be Opened', label: 'To be Opened' },
-    { value: 'Technical Evaluation in Progress', label: 'In Technical Evaluation' },
-    { value: 'Financial Bid Opening in Progress', label: 'In Financial Evaluation' },
+	{ value: 'Tender Cancel', label: 'Tender Cancel' },
 	{ value: 'LoA yet to be awarded', label: 'LoA yet to be awarded' },
-    { value: 'Awarded', label: 'Awarded' },
-	{ value: 'Tender Cancelled', label: 'Tender Cancelled' },
-    { value: 'Retendered', label: 'Retendered' },
-	
-	
+	{ value: 'Financial Bid Opening in Progress', label: 'Financial Bid Opening in Progress' },
+	{ value: 'Technical Evaluation in Progress', label: 'Technical Evaluation in Progress' },
   ]
 
 function Legacystatement() {
@@ -115,26 +111,7 @@ function Legacystatement() {
 		settenderparticipationValue(e.target.value);
 	};
 	
-	const generateListArray = async (response) =>{
-		console.log("type",typeof(response.data?.legacylist));
-        let list = [...response.data.legacylist];
-
-		let listarr = list.map((item, index, arr)=> ({
-		  ...item,
-		  NITdate:FormattedDate(item.nitdate),
-		  quality: (item.quality) ? item.quality.toLocaleString('en-IN') : '',
-		  projectvalue: (item.estprojectvalue) ? item.estprojectvalue.toLocaleString('en-IN') : '',
-		  status:`<span class="font-weight-bold" style="color:orange;">${item.tenderStatus}</span>`,
-		//   action:`
-		//   <i class="fa fa-print text-info mr-2 h6" style="cursor:pointer; font-size: 1.25rem" title="Print"></i>`,
-		//   <i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> 
-		//   <i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>
-		
-		  sl_no : index+1
-		}))
 	
-		return listarr;
-	  }
 
 	  const FormattedDate = (date) => {
 		const targetdate = new Date(date);
@@ -153,15 +130,46 @@ function Legacystatement() {
 		setLoading(true)
 
 		let response =  await axios.post(`${baseUrl}/api/legacystatement`, data);
-		 console.log(response.data.legacylist)
+		console.log("fsdfsdgdf",response);
 		// console.log(response.data.sql)
 		let listarr = await generateListArray(response)
 		
 		setListarr(listarr)
 		setLoading(false)
 	}
+	// const generateListArray = async (response) =>{
+	// 	console.log('list',response.status);
+	// 	let list = [response.data.status];
+	// 	console.log('list',list);
+	// 	if (!response || !response.data || !Array.isArray(response.data.list)) {
+	// 	  // Handle missing or invalid response
+	// 	  return [];
+	// 	}
+	// 	// Rest of the code
+	//   }
+	  
 
+	const generateListArray = async (response) =>{
+		console.log('list',response);
+		// console.log(typeof response.data?.list);
+		 let list = [...response.data.legacylist];
+		
+		let listarr = list.map((item, index, arr)=> ({
+		  ...item,
+		  NITdate:FormattedDate(item.nitdate),
+		  quality: (item.quality) ? item.quality.toLocaleString('en-IN') : '',
+		  projectvalue: (item.estprojectvalue) ? item.estprojectvalue.toLocaleString('en-IN') : '',
+		  status:`<span class="font-weight-bold" style="color:orange;">${item.tenderStatus}</span>`,
+		//   action:`
+		//   <i class="fa fa-print text-info mr-2 h6" style="cursor:pointer; font-size: 1.25rem" title="Print"></i>`,
+		//   <i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> 
+		//   <i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>
+		
+		  sl_no : index+1
+		}))
 	
+		return listarr;
+	  }
 	const getStateData = async (savedState) => {
 		let response = await axios.get(`${baseUrl}/api/state-list/${savedState}`);
 		return { options: response.data.stateList, isLoading: false };

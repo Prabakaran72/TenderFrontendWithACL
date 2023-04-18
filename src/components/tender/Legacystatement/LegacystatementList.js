@@ -26,6 +26,7 @@ const LegacystatementList = (props) => {
     const [legacylist, setlegacylist] = useState([])
     const location = useLocation();
 
+
     useEffect(() => {
         table =  $('#dataTable').DataTable({
             data : legacylist,
@@ -111,3 +112,5 @@ return (
 }
 
 export default LegacystatementList
+
+
