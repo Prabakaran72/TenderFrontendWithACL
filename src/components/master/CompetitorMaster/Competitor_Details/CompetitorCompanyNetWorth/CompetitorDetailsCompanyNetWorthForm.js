@@ -78,7 +78,12 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
 
   //check Form is Valid or not
   useEffect(() => {
-    if (hasError.accValue !== true && hasError.accountYear !== true) {
+
+    if (
+      (hasError.accValue !== true && hasError.accValue != null ) &&
+      (hasError.accountYear !== true && hasError.accountYear != null )
+      ) {
+    
       setFormIsValid(true);
     } else {
       setFormIsValid(false);
@@ -254,6 +259,18 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
               setLoading(false);
               setIsBtnClicked(false);
             });
+          }else{
+
+            Swal.fire({
+              icon: "error",
+              title: "Competitor Networth",
+              text: "Unable to Add",
+              confirmButtonColor: "#5156ed",
+            }).then(function () {
+              setLoading(false);
+              setIsBtnClicked(false);
+            });
+            
           }
         });
     }

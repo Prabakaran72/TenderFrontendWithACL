@@ -26,7 +26,7 @@ const useInputValidation = (validateValue) => {
 
   const valueIsValid = validateValue(inputState.value);
   const hasError = !valueIsValid && inputState.isTouched;
-
+// console.log("hasError", hasError);
   const valueChangeHandler = (event) => {
     dispatch({ type: "INPUT", value: event.target.value });
   };

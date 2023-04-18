@@ -82,9 +82,10 @@ const CompetitorDetailsTurnOverForm = (props) => {
   //check Form is Valid or not
 useEffect(() => {
   if (
-    hasError.accValue !== true &&
-    hasError.accountYear !== true 
-  ) {
+    (hasError.accValue !== true && hasError.accValue != null ) &&
+    (hasError.accountYear !== true && hasError.accountYear != null )
+    ) {
+ 
     setFormIsValid(true);
   }
   else{
@@ -235,11 +236,11 @@ useEffect(()=>{
           setCompetitorTurnOverInput({...competitorTurnOverInput, accValue: "", accountYear: null});
           getTurnOverList();
         });
-      } else if (resp.data.status === 404) {
+      } else {
         Swal.fire({
           icon: "error",
           title: "Competitor Turn Over",
-          text: resp.data.message,
+          text: "Unable To Add Competitor Turn Over",
           confirmButtonColor: "#5156ed",
         }).then(function () {
           setLoading(false);
@@ -299,7 +300,7 @@ useEffect(()=>{
         Swal.fire({
           icon: "error",
           title: "Competitor Turn Over",
-          text: "Something went wrong!",
+          text: "unable To Update Competitor Turn Over",
           confirmButtonColor: "#5156ed",
         }).then(function () {
           setLoading(false);

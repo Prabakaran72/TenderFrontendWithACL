@@ -118,8 +118,6 @@ const CompetitorProfile = () => {
   });
   const [fetchLoading, setFetchingLoading] = useState(true);
 
-  console.log("formIsValid",formIsValid)
-
   useEffect(() => {
     if (id) {
       editCompetitor();
@@ -448,8 +446,6 @@ const CompetitorProfile = () => {
   };
 
   useEffect(() => {
-
-    console.log("hasError",hasError)
     if (
       hasError.compName !== null &&
       hasError.compName !== true &&

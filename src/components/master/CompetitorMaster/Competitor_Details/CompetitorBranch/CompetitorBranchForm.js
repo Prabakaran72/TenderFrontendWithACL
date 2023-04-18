@@ -35,6 +35,8 @@ const CompetitorBranchForm = (props) => {
   const [formIsValid, setFormIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [branchList, setBranchList] = useState([]);
+  const [Com, setCom] = useState([]);
+  
   const [editableRow, setEditableRow] = useState({
     branchId: null,
     compNo: null,
@@ -73,13 +75,17 @@ const CompetitorBranchForm = (props) => {
 
 
   useEffect(() => {
-    if (props.compNo) {
+    
+   
+   
+    if (props.compNo1) {
+      setCom(props.compNo1);
       setCompetitorBranchInput({
         ...competitorBranchInput,
-        compNo: props.compNo,
+        compNo: props.compNo1,
       });
     }
-  }, [props.compNo]);
+  }, [props.compNo1]);
   // const getCompNo = async () => {
   //   await axios
   //     .get(`${baseUrl}/api/competitorprofile/getcompno/${compid}`)
@@ -300,12 +306,15 @@ useEffect(()=>{
 
 //check Form is Valid or not
 useEffect(() => {
+  
+
+  
   if (
-    hasError.country !== true &&
-    hasError.state !== true &&
-    hasError.district !== true &&
-    hasError.city !== true 
-  ) {
+    (hasError.country !== true && hasError.country != null ) &&
+    (hasError.state !== true && hasError.state != null ) &&
+    (hasError.district !== true && hasError.district != null ) &&
+    (hasError.city !== true && hasError.city != null )
+    ) {
     setFormIsValid(true);
   }
   else{
@@ -315,8 +324,7 @@ useEffect(() => {
 
 
   const onDelete = (data) => {
-    // console.log(data);
-    
+   
     Swal.fire({
       text: `Are You sure, to delete ?`,
       icon: "warning",
@@ -411,18 +419,20 @@ useEffect(() => {
   };
 
   const submitHandler = (e) => {
+  
     e.preventDefault();
     setLoading(true);
     let tokenId = localStorage.getItem("token");
     const datatosend = {
       compId: compid,
-      compNo: competitorBranchInput.compNo,
+      compNo: Com,
       country: competitorBranchInput.country.value,
       state: competitorBranchInput.state.value,
       district: competitorBranchInput.district.value,
       city: competitorBranchInput.city.value,
       tokenId: tokenId,
     };
+   
     if (
       datatosend.compId !== null &&
       datatosend.compNo !== null &&
@@ -444,11 +454,11 @@ useEffect(() => {
           setCompetitorBranchInput(initialValue);
           getBranchList();
         });
-      } else if (resp.data.status === 404) {
+      } else {
         Swal.fire({
           icon: "error",
           title: "Competitor Branch",
-          text: resp.data.message,
+          text: "Unable Add the Competitor",
           confirmButtonColor: "#5156ed",
         }).then(function () {
           setLoading(false);
@@ -466,7 +476,7 @@ useEffect(() => {
     const datatosend = {
       compId: compid,
       brnachId: competitorBranchInput.branchId,
-      compNo: competitorBranchInput.compNo,
+      compNo: Com,
       country: competitorBranchInput.country.value,
       state: competitorBranchInput.state.value,
       district: competitorBranchInput.district.value,
@@ -502,26 +512,17 @@ useEffect(() => {
 
           // navigate(`/tender/master/competitorcreation/competitor/details`);
         });
-      } else if (resp.data.status === 404) {
+      } else {
         Swal.fire({
           icon: "error",
           title: "Competitor Branch",
-          text: resp.data.errors,
+          text: 'Unable to Update',
           confirmButtonColor: "#5156ed",
         }).then(function () {
           setLoading(false);
         });
       }
-      else{
-        Swal.fire({
-          icon: "error",
-          title: "Competitor Branch",
-          text: "Something went wrong!",
-          confirmButtonColor: "#5156ed",
-        }).then(function () {
-          setLoading(false);
-        });
-      }
+    
     });
   }
   };

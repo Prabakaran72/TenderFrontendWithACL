@@ -14,8 +14,8 @@ import {
 import { useBaseUrl } from "../../../hooks/useBaseUrl";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-// import { isMobileValidation, isPincodeValid, isEmailValid, isPanValid, isgstNoValid, isUrlValid } from "../CommonValidation";
-import { isMobileValidation, isPincodeValid, isEmailValid, isPanValid, isgstNoValid, isUrlValid } from "../CommonValidation_copy";
+import { isMobileValidation, isPincodeValid, isEmailValid, isPanValid, isgstNoValid, isUrlValid } from "../CommonValidation";
+// import { isMobileValidation, isPincodeValid, isEmailValid, isPanValid, isgstNoValid, isUrlValid } from "../CommonValidation_copy";
 
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useDispatch } from 'react-redux';
@@ -28,15 +28,15 @@ import { bankDetailsActions } from "../store/BankDetailsSlice";
 
 
 
-// const isNotEmpty = (value) => value.trim() !== "";
-const isNotEmpty = (value) => {return true};
+const isNotEmpty = (value) => value.trim() !== "";
+// const isNotEmpty = (value) => {return true};
 const isEmail = (value) => value.includes("@");
 const isNotNull = (value) => {
-  // if (value === null) {
-  //   return false;
-  // } else if (value === "") {
-  //   return false;
-  // }
+  if (value === null) {
+    return false;
+  } else if (value === "") {
+    return false;
+  }
   return true;
 };
 
@@ -84,6 +84,8 @@ const CustomerCreationProfile = () => {
     setInputValue: setcustomernoValue,
     reset: resetcustomerno,
   } = useInputValidation(isNotEmpty);
+
+  console.log('useInputValidation',useInputValidation(isNotNull));
 
   // const {
   //   value: customercategoryValue,
@@ -855,29 +857,29 @@ const CustomerCreationProfile = () => {
   //   { value: "silver", label: "Silver" },
   // ];
 
-  let formIsValid = true;
+  let formIsValid = false;
 
-  // if (
-  //   customernoValue &&
-  //   customernameIsValid &&
-  //   customersubcategoryIsValid &&
-  //   stateIsValid &&
-  //   countryIsValid &&
-  //   cityIsValid &&
-  //   districtIsValid &&
-  //   addressIsValid &&
-  //   pincodeIsValid &&
-  //   phoneIsValid &&
-  //   panIsValid &&
-  //   mobilenoIsValid &&
-  //   // currentyrdateIsValid &&
-  //   emailIsValid &&
-  //   (gstnoIsValid || GstNoDisable) &&
-  //   // populationyrdataIsValid &&
-  //   websiteIsValid
-  // ) {
-  //   formIsValid = true;
-  // }
+  if (
+    customernoValue &&
+    customernameIsValid &&
+    customersubcategoryIsValid &&
+    stateIsValid &&
+    countryIsValid &&
+    cityIsValid &&
+    districtIsValid &&
+    addressIsValid &&
+    pincodeIsValid &&
+    phoneIsValid &&
+    panIsValid &&
+    mobilenoIsValid &&
+    // currentyrdateIsValid &&
+    emailIsValid &&
+    (gstnoIsValid || GstNoDisable) &&
+    // populationyrdataIsValid &&
+    websiteIsValid
+  ) {
+    formIsValid = true;
+  }
 
   const resetall = () => {
     resetcustomerno();

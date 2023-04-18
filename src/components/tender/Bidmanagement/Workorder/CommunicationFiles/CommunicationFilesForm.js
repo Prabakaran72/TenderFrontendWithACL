@@ -11,6 +11,7 @@ import { useImageStoragePath } from "../../../../hooks/useImageStoragePath";
 import CollapseCard from "../../../../UI/CollapseCard";
 import "./UploadDoc.css";
 import Select from "react-select";
+import { ImageConfig } from "../../../../hooks/Config";
 
 //Medium Options
 const options = [
@@ -85,8 +86,9 @@ const CommunicationFilesForm = () => {
   };
   const openInNewTab = (url, id) => {
     onmouseover = window.open(
-      "http://192.168.1.29:8000/uploads/BidManagement/WorkOrder/CommunicationFiles/" +
-        id,
+      filePath+id,
+      // "http://192.168.1.29:8000/uploads/BidManagement/WorkOrder/CommunicationFiles/" +
+      //   id,
       "",
       "height=550,width=800,scrollbars=yes,left=320,top=120,toolbar=no,location=no,directories=no,status=no,menubar=no"
     );
@@ -116,26 +118,37 @@ const CommunicationFilesForm = () => {
   // console.log("iMGlIST :", ImgaeList);
 
   FILELIST = ImgaeList.map((item, index) => {
-    if (item.filetype == "pdf") {
-      imageurl = "assets/icons/pdf_logo.png";
-    } else if (item.filetype == "docx" || item.filetype == "doc") {
-      imageurl = "assets/icons/doc-icon.png";
-    } else if (
-      item.filetype == "jpeg" ||
-      item.filetype == "jpg" ||
-      item.filetype == "png" ||
-      item.filetype == "img"
-    ) {
-      imageurl =
-        "http://192.168.1.29:8000/uploads/BidManagement/WorkOrder/CommunicationFiles/" +
-        item.comfile;
-    } else {
-      imageurl = "assets/icons/excelicon.png";
-    }
+    // if (item.filetype == "pdf") {
+    //   imageurl = "assets/icons/pdf_logo.png";
+    // } else if (item.filetype == "docx" || item.filetype == "doc") {
+    //   imageurl = "assets/icons/doc-icon.png";
+    // } else if (
+    //   item.filetype == "jpeg" ||
+    //   item.filetype == "jpg" ||
+    //   item.filetype == "png" ||
+    //   item.filetype == "img"
+    // ) {
+    //   imageurl = filePath+item.comfile;
+    //     // "http://192.168.1.29:8000/uploads/BidManagement/WorkOrder/CommunicationFiles/" +
+    //     // item.comfile;
+    // } else {
+    //   imageurl = "assets/icons/excelicon.png";
+    // }
+
+    imageurl = (item.filetype =="jpeg" ||item.filetype == "jpg" ||item.filetype == "png" || item.filetype == "img"
+    ? filePath+item.comfile
+    : item.filetype === "csv"
+    ? ImageConfig["csv"]
+    : item.filetype === "rar"
+    ? ImageConfig["rar"]
+    : item.filetype === "zip"
+    ? ImageConfig["zip"]
+    :ImageConfig[item.filetype]);
+// });
 
     return (
-      <div className="col-lg-2 mb-2 card border-left-info ml-4">
-        <div className=" text-center card-body row" key={+index + 1}>
+      <div className="col-lg-2 mb-2 card border-left-info ml-4" key={+index + 1}>
+        <div className=" text-center card-body row" >
           <div className="col-lg-10">
           <Link onClick={(url) => openInNewTab(url, item.comfile)}>
             <img
@@ -353,13 +366,13 @@ const CommunicationFilesForm = () => {
     setFormIsValid(true);
     setTimeout(() => { setInput({
       ...input,
-      commId: data.id,
-      date: data.date,
-      refrence_no: data.refrenceno,
-      from: data.from,
-      to: data.to,
-      subject: data.subject,
-      med_refrence_no: data.med_refrenceno,
+      commId: data.id ? data.id : "",
+      date: data.date? data.date: "",
+      refrence_no: data.refrenceno ? data.refrenceno :"",
+      from: data.from ? data.from: "",
+      to: data.to ? data.to : "",
+      subject: data.subject ? data.subject : "",
+      med_refrence_no: data.med_refrenceno ? data.med_refrenceno : "",
     });
   }, 500);
     setNum(data.randomno);

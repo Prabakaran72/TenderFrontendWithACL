@@ -134,6 +134,18 @@ function Dashboard() {
           console.log("error");
         }
       });
+      
+      axios
+      .get(`${baseUrl}/api/dashboard/getCallCountAnalysis`, { params: {tokenid: localStorage.getItem('token')} })
+      .then((resp) => {
+        if (resp.data.status === 200) {
+          console.log("Call Count : ",resp.data);
+        }
+        else{
+          console.log("Call Count : ",resp);
+        }
+      });
+
   }, []);
 
   

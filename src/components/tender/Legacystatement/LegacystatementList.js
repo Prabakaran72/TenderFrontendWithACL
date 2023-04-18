@@ -15,10 +15,19 @@ import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-buttons/js/buttons.print.js";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import moment from 'moment';
+import 'datatables.net';
+// import 'datatables.net-dt/css/jquery.dataTables.css';
 
 import { useLocation, useNavigate } from "react-router-dom";
 
+
+
 let table;
+// Define the custom sorting type for the NITdate column
+$.fn.dataTable.ext.type.order['date-format-pre'] = function (value) {
+  return moment(value, 'DD/MM/YYYY').format('YYYYMMDD');
+};
 
 const LegacystatementList = (props) => {
 
@@ -28,23 +37,25 @@ const LegacystatementList = (props) => {
 
     useEffect(() => {
         table =  $('#dataTable').DataTable({
+          columnDefs: [
+            { targets: 1, type: 'date-format' }
+          ],
             data : legacylist,
             columns: [
                 { data: 'sl_no' },
-                { data: 'NITdate' },
+                { data: 'NITdate', type: 'date-format'  },
                 { data: 'location' },
-                { data: 'quality' },
+                { data: 'quality'},
                 { data: 'unit' },
-                { data: 'projectvalue' },
-                { data: 'status' },
+                { data: 'projectvalue'},
+                { data: 'status'},
                 // { data: 'action' },
             ],
             dom:
             //   "<'row'<'col-sm-12'l>>" +
               "<'row'<'col-sm-12   col-md-6 pl-4'l>  <'col-sm-12 col-md-6 pr-4'f>>" +
               "<'row'<'col-sm-12'tr>>" +
-              "<'row'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",
-    
+              "<'row'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",    
         })
     
         $('#dataTable tbody').on('click', 'tr .fa-edit', function () {
