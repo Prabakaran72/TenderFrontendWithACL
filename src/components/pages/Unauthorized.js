@@ -4,7 +4,6 @@ import { usePageTitle } from "../hooks/usePageTitle"
 
 const Unauthorized = () => {
     usePageTitle('')
-
     let errMag = "Access Denied";
     return (
         <Fragment>
