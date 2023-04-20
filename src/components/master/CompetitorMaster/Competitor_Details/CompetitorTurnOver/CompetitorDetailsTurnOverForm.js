@@ -231,10 +231,12 @@ useEffect(()=>{
           text: resp.data.message,
           timer: 2000,
         }).then(function () {
+          setFormIsValid(false);
           setLoading(false);
           setIsBtnClicked(false);
           setCompetitorTurnOverInput({...competitorTurnOverInput, accValue: "", accountYear: null});
           getTurnOverList();
+          
         });
       } else {
         Swal.fire({
@@ -282,6 +284,7 @@ useEffect(()=>{
         }).then(function () {
           setCompetitorTurnOverInput({...competitorTurnOverInput,accYearId:null, accValue: "", accountYear: null});
           getTurnOverList();
+           setFormIsValid(false);
           setIsBtnClicked(false);
           setLoading(false);
         });

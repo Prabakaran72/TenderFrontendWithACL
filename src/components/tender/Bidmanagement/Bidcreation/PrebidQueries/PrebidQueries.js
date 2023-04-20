@@ -240,7 +240,7 @@ const PrebidQueries = () => {
                             <div className="row align-items-center font-weight-bold">
                                 <div className="col-lg-4 text-dark">
                                     <label htmlFor="Date" className="pr-3">
-                                        Date :
+                                        Date <span className="text-danger">*</span> : 
                                     </label>
                                 </div>
                                 <div className="col-lg-8">
@@ -278,7 +278,7 @@ const PrebidQueries = () => {
                         <div className="inputgroup col-lg-6 mb-4">
                             <div className="row ">
                                 <div className="col-lg-4 text-dark font-weight-bold">
-                                    <label htmlFor="customername">Document Upload :</label>
+                                    <label htmlFor="customername">Document Upload <span className="text-danger">*</span> :</label>
                                 </div>
                                 <div className="col-lg-8">
                                     <div className={`border-primary d-flex flex-column align-items-center justify-content-center   bg-gray-200 ${styles.height_of_dropbox} ${styles.boderradius__dropbox} ${styles.dashed} ${styles.drop_file_input} `}

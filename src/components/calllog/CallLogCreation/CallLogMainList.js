@@ -104,9 +104,9 @@ const CallLogMainList = () => {
     // to delete a row
     $("#dataTable tbody").on("click", "tr .fa-trash-alt", async function () {
       let rowdata = table.row($(this).closest("tr")).data();
-      
+      console.log("rowdata -",rowdata);
       Swal.fire({
-        text: `Are You sure, to delete ${rowdata.name}?`,
+        text: `Are You sure, to delete ${rowdata.callid}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -120,8 +120,9 @@ const CallLogMainList = () => {
          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
-              text: `${rowdata.name} role has been removed!`,
-              timer: 1500,
+              title: "Delete Call",
+              text: `${rowdata.callid} has been removed!`,
+              timer: 1000,
               showConfirmButton: false,
             });
 

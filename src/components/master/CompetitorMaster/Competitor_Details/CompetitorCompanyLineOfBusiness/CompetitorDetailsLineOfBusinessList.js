@@ -66,8 +66,8 @@ const CompetitorDetailsLineOfBusinessList = (props) => {
           <thead className="text-center bg-primary text-white">
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Accounting Year</th>
-              <th scope="col">Value in Rupees</th>
+              <th scope="col">Line Of Business</th>
+              <th scope="col">Remarks</th>
               <th scope="col">Action</th>
             </tr>
           </thead>

@@ -9,7 +9,16 @@ export const isMobileValidation = (value) => {
     )){
       return false;
     }
-    // return true;
+    return true;
+}
+export const phoneValidation = (value) => { 
+if(
+    !/^(0|[6-9])\d{9,12}$/.test(
+    value
+  )){
+    return false;
+  }
+  return true;
 }
 
 export const isIFSCvalid = (value) => {

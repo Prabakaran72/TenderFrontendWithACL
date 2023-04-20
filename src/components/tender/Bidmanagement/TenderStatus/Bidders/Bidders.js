@@ -265,7 +265,38 @@ const Bidders = (props) => {
     }
   };
 
+// console.log("Input",input)
+//   useEffect(()=>{
+//     let allNotNullOrUndefined = false;
 
+// for(const prop in input){
+  
+//   for(const obj in input[prop]){
+    
+//     for(const objprop in input[prop].obj){
+//       console.log("objprop", objprop);
+//   if (input[prop].hasOwnProperty(obj)) {
+//     const val = input[prop].obj.objprop;
+    
+//     if (val === null || val === undefined || val === "") {
+//       allNotNullOrUndefined = false;
+//       break;
+//     }
+//   }
+// }
+//   }
+// }
+// console.log("allNotNullOrUndefined", allNotNullOrUndefined);
+// if(allNotNullOrUndefined)
+// {
+//   setFormIsValid(true);
+// }
+// else{
+//   setFormIsValid(false);
+// }
+
+// },[input])
+// console.log("formIsValid", formIsValid);
   return (
     <Fragment>
       {/* <LockCard locked={props.tenderStatus==='Cancel'} text="Tender Cancelled" textClass="text-danger font-weight-bold h4"> */}
@@ -325,6 +356,7 @@ const Bidders = (props) => {
                 bidders={bidders}
                 setBidders={setBidders}
                 fetchedData={fetchedData}
+                
               />
             </div>
 

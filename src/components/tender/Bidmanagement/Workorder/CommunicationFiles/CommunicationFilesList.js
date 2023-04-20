@@ -38,6 +38,7 @@ const CommunicationFilesList = (props) => {
 
     $('#communicationfiles tbody').on('click', 'tr .fa-edit', function () {
       let rowdata = table.row($(this).closest('tr')).data();
+      
       props.onEdit(rowdata)
 
     });

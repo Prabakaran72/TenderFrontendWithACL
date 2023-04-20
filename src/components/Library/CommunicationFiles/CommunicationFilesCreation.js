@@ -452,10 +452,10 @@ const CommunicationFilesCreation = () => {
         let data = {
             date            : (input.date || ''),
             refrence_no     : input.refrence_no,
-            from            : (input.from.value || input.from || ''),
-            to              : (input.to.value || input.to || ''),
+            from            : (input.from?.value || input.from || ''),
+            to              : (input.to?.value || input.to || ''),
             subject         : input.subject,
-            medium          : (input.medium.value || ''),
+            medium          : (input.medium?.value || ''),
             med_refrence_no : input.med_refrence_no,
             fileName        : input.fileName,
             toselect        : (input.toselect?.value || ""),

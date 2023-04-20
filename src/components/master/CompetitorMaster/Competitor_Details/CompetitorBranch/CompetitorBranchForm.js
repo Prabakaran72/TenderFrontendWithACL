@@ -295,7 +295,10 @@ useEffect(()=>{
     setCompetitorBranchInput((prev) => {
       return { ...prev,city: cityList.find((x) => x.value === editableRow.city),  branchId: editableRow.branchId, compNo: editableRow.compNo, };
         }); 
-  }
+  
+        
+
+      }
   else if(competitorBranchInput.district ===null){
     setCompetitorBranchInput((prev) => {
       return { ...prev,  branchId: editableRow.branchId};
@@ -306,21 +309,22 @@ useEffect(()=>{
 
 //check Form is Valid or not
 useEffect(() => {
+    // if (
+  //   (hasError.country !== true && hasError.country != null ) &&
+  //   (hasError.state !== true && hasError.state != null ) &&
+  //   (hasError.district !== true && hasError.district != null ) &&
+  //   (hasError.city !== true && hasError.city != null )
+  //   ) 
   
-
-  
-  if (
-    (hasError.country !== true && hasError.country != null ) &&
-    (hasError.state !== true && hasError.state != null ) &&
-    (hasError.district !== true && hasError.district != null ) &&
-    (hasError.city !== true && hasError.city != null )
-    ) {
+if(competitorBranchInput.country?.value>0 && competitorBranchInput.state?.value>0 && 
+  competitorBranchInput.district?.value>0 && competitorBranchInput.city?.value>0)
+    {
     setFormIsValid(true);
   }
   else{
     setFormIsValid(false);
   }
-}, [hasError]);
+}, [competitorBranchInput]);
 
 
   const onDelete = (data) => {
@@ -453,6 +457,7 @@ useEffect(() => {
           setLoading(false);
           setCompetitorBranchInput(initialValue);
           getBranchList();
+          setFormIsValid(false);
         });
       } else {
         Swal.fire({
@@ -509,7 +514,7 @@ useEffect(() => {
             district: null,
             city: null});
           getBranchList();
-
+          setFormIsValid(false);
           // navigate(`/tender/master/competitorcreation/competitor/details`);
         });
       } else {

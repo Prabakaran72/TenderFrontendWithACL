@@ -15,11 +15,11 @@ import { ImageConfig } from "../../../../hooks/Config";
 
 //Medium Options
 const options = [
-  { value: "Courier", label: "Courier" },
-  { value: "Mail", label: "Mail" },
-  { value: "Physical Handover", label: "Physical Handover" },
-  { value: "Registered Post", label: "Registered Post"},  
-  { value: "Whatsapp", label: "Whatsapp" },
+  { value: 0, label: "Courier" },
+  { value: 1, label: "Mail" },
+  { value: 2, label: "Physical Handover" },
+  { value: 3, label: "Registered Post"},  
+  { value: 4, label: "Whatsapp" },
 ];
 
 const CommunicationFilesForm = () => {
@@ -38,6 +38,7 @@ const CommunicationFilesForm = () => {
   };
 
   const [input, setInput] = useState(initialValue);
+  const [dataForEdit, setDataForEdit] = useState(null);
   const [formIsValid, setFormIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [commFilesList, setCommFilesList] = useState([]);
@@ -104,7 +105,7 @@ const CommunicationFilesForm = () => {
     };
     axios
       .post(
-        `${baseUrl}/api/workorder/creation/communicationfileUploadlist/`,
+        `${baseUrl}/api/workorder/creation/communicationfileUploadlist`,
         datatosend
       )
       .then((res) => {
@@ -215,7 +216,7 @@ const CommunicationFilesForm = () => {
         from: input.from,
         to: input.to,
         subject: input.subject,
-        medium: input.medium,
+        medium: input.medium ? input.medium.value : "",
         medrefrenceno: input.med_refrence_no,
 
         sub_id: sub_id,
@@ -233,7 +234,7 @@ const CommunicationFilesForm = () => {
       // formData.append('file', file);
       axios
         .post(
-          `${baseUrl}/api/workorder/creation/communicationfileUpload/`,
+          `${baseUrl}/api/workorder/creation/communicationfileUpload`,
           formdata
         )
         .then((res) => {
@@ -325,6 +326,7 @@ const CommunicationFilesForm = () => {
     axios
       .get(`${baseUrl}/api/competitordetails/commFilesList/${id}`)
       .then((resp) => {
+        // console.log("resp.data.comm", resp.data.comm);
         let list = [...resp.data.comm];
         let listarr = list.map((item, index) => ({
           ...item,
@@ -357,46 +359,61 @@ const CommunicationFilesForm = () => {
       setPreviewForEdit("");
     }
   };
-
+  // console.log("Input", input)
   const onEdit = (data) => {
-    setFile("");
-   
-    setInput(initialValue);
+    // console.log("Data", data)
+
+    setFile("");     
+    setInput(initialValue);  
     var imgUrl = getImageUrl(data.comfile);
     setFormIsValid(true);
-    setTimeout(() => { setInput({
-      ...input,
-      commId: data.id ? data.id : "",
-      date: data.date? data.date: "",
-      refrence_no: data.refrenceno ? data.refrenceno :"",
-      from: data.from ? data.from: "",
-      to: data.to ? data.to : "",
-      subject: data.subject ? data.subject : "",
-      med_refrence_no: data.med_refrenceno ? data.med_refrenceno : "",
-    });
-  }, 500);
+  //   setTimeout(() => { setInput({
+  //     ...input,
+  //     commId: data.id ? data.id : "",
+  //     date: data.date? data.date: "",
+  //     refrence_no: data.refrenceno ? data.refrenceno :"",
+  //     from: data.from ? data.from: "",
+  //     to: data.to ? data.to : "",
+  //     subject: data.subject ? data.subject : "",
+  //     med_refrence_no: data.med_refrenceno ? data.med_refrenceno : "",
+  //   });
+  // }, 500);
+
+  setInput((prev) =>{
+    return {
+    ...prev,
+    commId: data.id ? data.id : "",
+    date: data.date? data.date: "",
+    refrence_no: data.refrenceno ? data.refrenceno :"",
+    from: data.from ? data.from: "",
+    to: data.to ? data.to : "",
+    subject: data.subject ? data.subject : "",
+    med_refrence_no: data.med_refrenceno ? data.med_refrenceno : "",
+  }});
+
     setNum(data.randomno);
     setTimeout(() => {
       imageList();
-    }, 1000);
-
-    // var pattern = /[a-zA-z0-9]*\.(?:png|jpeg|jpg|pdf)/;
-    // var img_url = data.comfile.match(pattern);
-    // var splited = img_url[0].split(".");
-    // if (splited[1] === "pdf") {
-    //   setIsPdfFile(true);
-    // }
-    // else {
-    //   setIsPdfFile(false);
-    // }
-
-    setInput((prev) => {
-      return {
-        ...prev,
-        medium: options.find((x) => x.value === data.medium),
-      };
-    });
+    }, 500);
+    
+    setDataForEdit(data);    
   };
+
+  useEffect(()=>{
+    if(dataForEdit?.medium)
+    {
+      let medium = JSON.parse(dataForEdit.medium);
+      // console.log("medium", medium);
+      setInput((prev) => {
+        return { 
+          ...prev,
+          medium: options.find((x) => x.value == medium),
+        };
+      });
+    }
+    
+  },[dataForEdit])
+
 
   const onPreview = (data) => {
     var pattern = /[a-zA-z0-9]*\.(?:png|jpeg|jpg|pdf)/;
@@ -434,7 +451,7 @@ const CommunicationFilesForm = () => {
                 icon: "success",
                 title: "Communication Files",
                 text: `removed!`,
-                timer: 2000,
+                timer: 1000,
                 showConfirmButton: false,
               });
               getCompFilesList();
@@ -449,7 +466,7 @@ const CommunicationFilesForm = () => {
               Swal.fire({
                 icon: "error",
                 text: "Something went wrong!",
-                timer: 2000,
+                timer: 1000,
               });
             }
           });
@@ -457,7 +474,7 @@ const CommunicationFilesForm = () => {
         Swal.fire({
           title: "Cancelled",
           icon: "error",
-          timer: 1500,
+          timer: 1000,
         });
       }
     });
@@ -494,6 +511,7 @@ const CommunicationFilesForm = () => {
     getCompFilesList();
     setFile("");
     setPreviewObjURL("");
+    setImagePreviews([]);
   };
 
   const submitHandler = (e) => {
@@ -519,7 +537,7 @@ const CommunicationFilesForm = () => {
         from: input.from,
         to: input.to,
         subject: input.subject,
-        medium: input.medium,
+        medium: input.medium ? input.medium.value : "",
         medrefrenceno: input.med_refrence_no,
         tokenid: tokenId,
         bidid: id,
@@ -545,9 +563,9 @@ const CommunicationFilesForm = () => {
               icon: "success",
               title: "Communication Files",
               text: resp.data.message,
-              timer: 2000,
+              timer: 1000,
             }).then(function () {
-              resetForm();
+              resetForm(); 
               setLoading(false);
               setIsBtnClicked(false);
             });
@@ -556,7 +574,7 @@ const CommunicationFilesForm = () => {
             setNum("wrk-" + Math.floor(100000 + Math.random() * 900000));
             setTimeout(() => {
               imageList();
-            }, 1000);
+            }, 500);
           } else if (resp.data.status === 404) {
             Swal.fire({
               icon: "error",
@@ -581,37 +599,39 @@ const CommunicationFilesForm = () => {
       });
     }
   };
+
   const updateHandler = (e) => {
     e.preventDefault();
     setLoading(true);
     setIsBtnClicked(true);
     let tokenId = localStorage.getItem("token");
-
+// console.log(input.medium.value);
     if (
-      input.date !== "" ||
-      id !== "" ||
+      (input.date !== "" ) && 
+      (id !== "" ||
       input.refrence_no !== "" ||
       input.from !== "" ||
       input.to !== "" ||
       input.subject !== "" ||
       input.medium !== "" ||
       input.med_refrence_no !== "" ||
-      tokenId !== ""
+      tokenId !== "")
     ) {
+      // console.log("When Image is not changed on update");
       //When Image is not changed on update
       if (previewForEdit !== "" && file === "") {
         const datatosend = {
           date: input.date,
-          refrenceno: input.refrence_no ? input.refrence_no.value :"",
+          refrenceno: input.refrence_no ? input.refrence_no :"",
           from: input.from ? input.from :"",
           to: input.to ? input.to :"",
           subject: input.subject ? input.subject :"",
-          medium: input.medium ? input.medium :"",
+          medium: input.medium ? input.medium?.value :"",
           med_refrenceno: input.med_refrence_no ? input.med_refrence_no :"",
           tokenid: tokenId,
           bidid: id,
         };
-
+        // console.log("DatatoSend 633 ",datatosend);
         axios
           .patch(
             `${baseUrl}/api/workorder/creation/communicationfiles/${input.commId}`,
@@ -623,7 +643,7 @@ const CommunicationFilesForm = () => {
                 icon: "success",
                 title: "Communication Files",
                 text: resp.data.message,
-                timer: 2000,
+                timer: 1000,
               }).then(function () {
                 resetForm();
                 setPreviewForEdit("");
@@ -658,20 +678,21 @@ const CommunicationFilesForm = () => {
       }
       //When Image is changed/reuploaded on update
       else if (previewForEdit === "" && file !== "") {
+        // console.log("When Image is changed/reuploaded on update");
         const datatosend = {
           date: input.date,
           refrenceno: input.refrence_no ? input.refrence_no.value :"",
           from: input.from ? input.from :"",
           to: input.to ? input.to :"",
           subject: input.subject ? input.subject :"",
-          medium: input.medium ? input.medium :"",
+          medium: input.medium ? input.medium?.value :"",
           med_refrenceno: input.med_refrence_no ? input.med_refrence_no :"",
           tokenid: tokenId,
           bidid: id,
           file: file,
           _method: "PUT",
         };
-
+// console.log("Datatosend 694 -", datatosend)
         const formdata = new FormData();
         for (var key in datatosend) {
           formdata.append(key, datatosend[key]);
@@ -689,7 +710,7 @@ const CommunicationFilesForm = () => {
                 icon: "success",
                 title: "Communication Files",
                 text: resp.data.message,
-                timer: 2000,
+                timer: 1000,
               }).then(function () {
                 resetForm();
                 setPreviewForEdit("");
@@ -755,7 +776,7 @@ const CommunicationFilesForm = () => {
             <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-4 text-dark">
-                  <label htmlFor="date">Date</label>
+                  <label htmlFor="date">Date <span className="text-danger"> *</span></label>
                 </div>
                 <div className="col-lg-8">
                   <input

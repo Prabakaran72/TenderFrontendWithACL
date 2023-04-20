@@ -152,7 +152,7 @@ const TenderParticipation = () => {
             <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
-                  <label htmlFor="tenderParticipation">Tender Participation :</label>
+                  <label htmlFor="tenderParticipation">Tender Participation <span className="text-danger">*</span> </label>
                 </div>
                 <div className="col-lg-8">
                   <Select

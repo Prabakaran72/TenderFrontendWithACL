@@ -67,8 +67,8 @@ function Tendertracker(props) {
   const goHandler = async () => {
     setLoading(true)
     let data = {
-      state : stateValue.value,
-      quality : qtyValue.value,
+      state : stateValue?.value,
+      quality : qtyValue?.value,
     }
 
 

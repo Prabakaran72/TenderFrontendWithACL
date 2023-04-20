@@ -14,7 +14,7 @@ import {
 import { useBaseUrl } from "../../../hooks/useBaseUrl";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { isMobileValidation, isPincodeValid, isEmailValid, isPanValid, isgstNoValid, isUrlValid } from "../CommonValidation";
+import { isMobileValidation, phoneValidation, isPincodeValid, isEmailValid, isPanValid, isgstNoValid, isUrlValid } from "../CommonValidation";
 // import { isMobileValidation, isPincodeValid, isEmailValid, isPanValid, isgstNoValid, isUrlValid } from "../CommonValidation_copy";
 
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
@@ -28,8 +28,8 @@ import { bankDetailsActions } from "../store/BankDetailsSlice";
 
 
 
-const isNotEmpty = (value) => value.trim() !== "";
-// const isNotEmpty = (value) => {return true};
+// const isNotEmpty = (value) => value.trim() !== "";
+const isNotEmpty = (value) => {return true};
 const isEmail = (value) => value.includes("@");
 const isNotNull = (value) => {
   if (value === null) {
@@ -83,9 +83,9 @@ const CustomerCreationProfile = () => {
     inputBlurHandler: customernoBlurHandler,
     setInputValue: setcustomernoValue,
     reset: resetcustomerno,
-  } = useInputValidation(isNotEmpty);
+  } = useInputValidation(isNotNull);
 
-  console.log('useInputValidation',useInputValidation(isNotNull));
+  // console.log('useInputValidation',useInputValidation(isNotNull));
 
   // const {
   //   value: customercategoryValue,
@@ -104,7 +104,7 @@ const CustomerCreationProfile = () => {
     inputBlurHandler: customernameBlurHandler,
     setInputValue: setcustomernameValue,
     reset: resetcustomername,
-  } = useInputValidation(isNotEmpty);
+  } = useInputValidation(isNotNull);
 
   const [customercategoryValue, setcustomercategoryValue] = useState("state");
   const [smartcity, setSmartCity] = useState("yes");
@@ -177,7 +177,7 @@ const CustomerCreationProfile = () => {
     inputBlurHandler: phoneBlurHandler,
     setInputValue: setphoneValue,
     reset: resetphone,
-  } = useInputValidation(isMobileValidation);
+  } = useInputValidation(phoneValidation);
 
   const {
     value: panValue,
@@ -247,7 +247,7 @@ const CustomerCreationProfile = () => {
     inputBlurHandler: addressBlurHandler,
     setInputValue: setaddressValue,
     reset: resetaddress,
-  } = useInputValidation(isNotEmpty);
+  } = useInputValidation(isNotNull);
 
   const {
     value: websiteValue,
@@ -869,14 +869,15 @@ const CustomerCreationProfile = () => {
     districtIsValid &&
     addressIsValid &&
     pincodeIsValid &&
-    phoneIsValid &&
+    // phoneIsValid &&
     panIsValid &&
     mobilenoIsValid &&
     // currentyrdateIsValid &&
     emailIsValid &&
-    (gstnoIsValid || GstNoDisable) &&
+    (gstnoIsValid || GstNoDisable)
+     // &&
     // populationyrdataIsValid &&
-    websiteIsValid
+    //websiteIsValid
   ) {
     formIsValid = true;
   }
@@ -1195,7 +1196,7 @@ catch(ex){
             <div className="row align-items-center">
               <div className="col-lg-5 ">
                 <label htmlFor="customersubcategory">
-                  Customer Sub Category:
+                  Customer Sub Category<span className="text-danger">&nbsp;*</span>
                 </label>
               </div>
               <div className="col-lg-7">
@@ -1377,7 +1378,7 @@ catch(ex){
             transition={{ delay: .5, type:'spring', stiffness: 180}} >
             <div className="row font-weight-bold">
               <div className="col-lg-5  mt-2">
-                <label htmlFor="address">Address &nbsp;</label>
+                <label htmlFor="address">Address<span className="text-danger">&nbsp;*</span></label>
                 <p className="text-info font-weight-bold mt-n3"><small><b>({addresslen} Characters Remaining) </b></small></p> 
               </div>
               <div className="col-lg-7">
@@ -1433,7 +1434,7 @@ catch(ex){
             </div>
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="pan">Pan &nbsp;</label>
+                <label htmlFor="pan">Pan<span className="text-danger">&nbsp;*</span></label>
                 <p className="text-info font-weight-bold mt-n3"><small><b>(Example: FDTPM0000D)</b></small></p> 
               </div>
               <div className="col-lg-7">
@@ -1463,7 +1464,7 @@ catch(ex){
             transition={{ delay: .6, type:'spring', stiffness: 180}} >
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="mobile">Mobile No &nbsp;</label>
+                <label htmlFor="mobile">Mobile No <span className="text-danger">&nbsp;*</span></label>
               </div>
               <div className="col-lg-7">
                 <input
@@ -1518,7 +1519,7 @@ catch(ex){
             transition={{ delay: .6, type:'spring', stiffness: 180}} >
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="email">Email &nbsp;</label>
+                <label htmlFor="email">Email<span className="text-danger">&nbsp;*</span></label>
               </div>
               <div className="col-lg-7">
                 <input
@@ -1621,7 +1622,7 @@ catch(ex){
             transition={{ delay: .8, type:'spring', stiffness: 180}} >
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="gstno">GST No. &nbsp;</label>
+                <label htmlFor="gstno">GST No.<span className="text-danger">&nbsp;*</span></label>
                 {!GstNoDisable && <p className="text-info font-weight-bold mt-n3"><small><b>(Ex : 22AAAAA0000A1Z5)</b></small></p> }
               </div>
               <div className="col-lg-7">

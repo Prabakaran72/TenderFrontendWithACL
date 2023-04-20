@@ -810,7 +810,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
             confirmButtonColor: "#5156ed",
           }).then(function () {
             setLoading(false);
-            setIsBtnClicked(false);
+            setIsBtnClicked(false);    
           });
         } else {
           Swal.fire({
@@ -1472,7 +1472,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                                   alt="No Image"
                                   width="75px"
                                   height="75px"
-                                  title="Click for Dwonload"
+                                  title="Click for Download"
                                 />
                               </a>
 

@@ -118,8 +118,9 @@ const Mobilization = () => {
       .then((resp) => {
         if (resp.data.status === 200) {
           toastSuccess(resp.data.message);
-          resetform();
-          navigate("/tender/bidmanagement/list/main/workorder/" + id);
+          setmobId(resp?.data?.Mobilization?.id);
+          // resetform();
+          // navigate("/tender/bidmanagement/list/main/workorder/" + id);
         } else if (resp.data.status === 400) {
           toastError(resp.data.message);
         }

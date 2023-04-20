@@ -240,6 +240,7 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
               text: resp.data.message,
               timer: 2000,
             }).then(function () {
+              setFormIsValid(false);
               setLoading(false);
               setIsBtnClicked(false);
               setCompetitorNetWorthInput({
@@ -314,6 +315,7 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
                 accValue: "",
                 accountYear: null,
               });
+              setFormIsValid(false);
               getNetWorthList();
               setIsBtnClicked(false);
               setLoading(false);

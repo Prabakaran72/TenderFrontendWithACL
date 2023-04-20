@@ -785,20 +785,22 @@ const CompetitorProfile = () => {
       }
     });
   };
+console.log("id" , id)
+console.log("compId" , competitorFormInput?.compNo)
 
   const updateHandler = (e) => {
     e.preventDefault();
     setLoading(true);
     let tokenId = localStorage.getItem("token");
     const data = {
-      compNo: competitorFormInput.compNo,
-      compName: competitorFormInput.compName,
-      registrationType: competitorFormInput.registrationType.value,
+      compNo: competitorFormInput?.compNo,
+      compName: competitorFormInput?.compName,
+      registrationType: competitorFormInput?.registrationType?.value,
       registerationYear: competitorFormInput.registerationYear,
-      country: competitorFormInput.country.value,
-      state: competitorFormInput.state.value,
-      district: competitorFormInput.district.value,
-      city: competitorFormInput.city.value,
+      country: competitorFormInput.country?.value,
+      state: competitorFormInput.state?.value,
+      district: competitorFormInput.district?.value,
+      city: competitorFormInput.city?.value,
       address: competitorFormInput.address,
       pincode: competitorFormInput.pincode,
       panNo: competitorFormInput.panNo,
@@ -812,7 +814,7 @@ const CompetitorProfile = () => {
     };
 
     if (
-      data.compName === fetchingData.compName &&
+      data.compName === fetchingData?.compName &&
       data.registerationYear === fetchingData.registerationYear &&
       data.registrationType === parseInt(fetchingData.registrationType) &&
       data.country === fetchingData.country &&
@@ -847,8 +849,11 @@ const CompetitorProfile = () => {
             confirmButtonColor: "#5156ed",
           }).then(function () {
             setLoading(false);
+            // navigate(
+            //   "/tender/master/competitorcreation/competitor/details/${res.data.inserted_id}"
+            // );
             navigate(
-              "/tender/master/competitorcreation/competitor/details/${res.data.inserted_id}"
+              `/tender/master/competitorcreation/competitor/details/${id}`
             );
           });
         } else if (res.data.status === 404) {

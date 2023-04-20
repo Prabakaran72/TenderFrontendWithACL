@@ -13,6 +13,8 @@ import { Slider } from "@mui/material";
 import AreaChart from "./AreaChart";
 import BarChart from "./BarChart";
 import Chart from "react-apexcharts";
+import Unauthorized from "./pages/Unauthorized";
+
 
 function valueLabelFormat(value) {
   const units = [
@@ -41,6 +43,8 @@ function Dashboard() {
   const [options, setOptions] = useState({});
   const [series, setSeries] = useState([]);
 
+  const [getRole, setGetRole] = useState([]);
+  const [checkRole, setCheckRole] = useState(null);
   const [Live_tenders_count, setLive_tenders_count] = useState(0);
   const [fresh_tenders_count, setfresh_tenders_count] = useState(0);
   const [awarded_tenders_count, setawarded_tenders_count] = useState(0);
@@ -139,13 +143,14 @@ function Dashboard() {
       .get(`${baseUrl}/api/dashboard/getCallCountAnalysis`, { params: {tokenid: localStorage.getItem('token')} })
       .then((resp) => {
         if (resp.data.status === 200) {
-          console.log("Call Count : ",resp.data);
+          console.log("Call Count IF: ",resp.data);
         }
         else{
-          console.log("Call Count : ",resp);
+          console.log("Call Count Else: ",resp);
         }
       });
-
+ setGetRole(authCtx?.role);
+      authCtx?.role == 'BDM' ? setCheckRole(false) : setCheckRole(true);
   }, []);
 
   
@@ -542,7 +547,8 @@ function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="DynamicCard">
+
+      {checkRole ? <div className="DynamicCard">
         <div className="card shadow mb-6">
           <div className="card-body">
             <div className="box col-lg-12">
@@ -665,7 +671,7 @@ function Dashboard() {
             
           </div>
         </div>
-      </div>
+      </div> : null }
     </>
   );
 }

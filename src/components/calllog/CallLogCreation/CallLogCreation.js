@@ -14,7 +14,7 @@ import PreLoader from "../../UI/PreLoader";
 import { ImageConfig } from "../../hooks/Config";
 import { useAllowedMIMEDocType } from "../../hooks/useAllowedMIMEDocType";
 import { useAllowedUploadFileSize } from "../../hooks/useAllowedUploadFileSize";
-import {useImageStoragePath} from "../../hooks/useImageStoragePath";
+import { useImageStoragePath } from "../../hooks/useImageStoragePath";
 
 const selectState = {
   customer: null,
@@ -56,7 +56,6 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-
 const CallLogCreation = () => {
   usePageTitle("Call Log Creation");
   const { server1: baseUrl } = useBaseUrl();
@@ -68,13 +67,13 @@ const CallLogCreation = () => {
   const [optionsForStatusList, setOptionsForStatusList] = useState([]);
   const [optionsForProcurement, setOptionsForProcurement] = useState([]);
   const [optionsForExecutive, setOptionsForExecutive] = useState([]);
-  const userName = capitalizeFirstLetter(localStorage.getItem('userName'))
+  const userName = capitalizeFirstLetter(localStorage.getItem("userName"));
   const [file, setFile] = useState(selectFiles);
   const [file1, setFile1] = useState(null);
   const [fileCheck, setFileCheck] = useState(null);
-  const [fileListCheck, setFileListCheck] = useState(null);
+  const [fileListCheck, setFileListCheck] = useState(false);
   const [fileData, setFileData] = useState([]);
-  const {MIMEtype: docType} = useAllowedMIMEDocType();
+  const { MIMEtype: docType } = useAllowedMIMEDocType();
   const [accFileStorage, setAccFileStorage] = useState(0);
   const { total: totalStorageSize } = useAllowedUploadFileSize();
   const { callcreation: filePath } = useImageStoragePath();
@@ -85,6 +84,7 @@ const CallLogCreation = () => {
   const [input, setInput] = useState(selectState);
   const [inputValidation, setInputValidation] = useState(selectStateErr);
   const [dataSending, setDataSending] = useState(false);
+  const [fileuploading, setFileUploading] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const [mainId, setMainId] = useState(null);
   const [fetchedData, setFetchedData] = useState([]);
@@ -106,10 +106,10 @@ const CallLogCreation = () => {
     callcloseStatus: true,
     executiveName: true,
     formData: true,
-    doclist: true
+    doclist: true,
   });
 
-  let token= localStorage.getItem('token');
+  let token = localStorage.getItem("token");
 
   const objectData = {
     name: file.name,
@@ -117,6 +117,7 @@ const CallLogCreation = () => {
     pic: file.src,
   };
 
+  console.log("customer list", optionsForCutomerList);
 
   useEffect(() => {
     if (
@@ -139,66 +140,72 @@ const CallLogCreation = () => {
     }
   }, [input]);
 
-  const getFileList = async ()=>{
+  const getFileList = async () => {
     axios({
-      url: `${baseUrl}/api/callcreation/doclist/${id}`,
+      url: `${baseUrl}/api/callcreation/doclist/${mainId}`,
       method: "GET",
       // responseType: "blob", // important
-      headers: {   //to stop cacheing this response at browsers. otherwise wrongly displayed cached files
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-        'Expires': '0',
+      headers: {
+        //to stop cacheing this response at browsers. otherwise wrongly displayed cached files
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        Expires: "0",
       },
     }).then((res) => {
       if (res.status === 200) {
         let filelist = [];
-        for(let key in res.data.docs){
-          
-    let fileExt =res.data.docs[key].filetype.split("/")[res.data.docs[key].filetype.split("/").length - 1];
-    let fileMIME = res.data.docs[key].filetype.split("/")[0];    
-  
-    let fileobject = {
+        for (let key in res.data.docs) {
+          let fileExt =
+            res.data.docs[key].filetype.split("/")[
+              res.data.docs[key].filetype.split("/").length - 1
+            ];
+          let fileMIME = res.data.docs[key].filetype.split("/")[0];
+
+          let fileobject = {
             id: res.data.docs[key].id,
             mainid: res.data.docs[key].mainid,
             name: res.data.docs[key].originalfilename,
             size: res.data.docs[key].filesize,
-            pic:  fileMIME === "image"
-              ? filePath+""+res.data.docs[key].hasfilename
-              : fileMIME === "octet-stream" && fileExt === "csv"
-              ? ImageConfig["csv"]
-              : fileMIME === "octet-stream" && fileExt === "rar"
-              ? ImageConfig["rar"]
-              : (res.data.docs[key].filetype ==="text/plain" && res.data.docs[key].originalfilename.split(".")[res.data.docs[key].originalfilename.split(".").length - 1] ==="csv") ? ImageConfig["csv"]
-              :ImageConfig[fileExt],
+            pic:
+              fileMIME === "image"
+                ? filePath + "" + res.data.docs[key].hasfilename
+                : fileMIME === "octet-stream" && fileExt === "csv"
+                ? ImageConfig["csv"]
+                : fileMIME === "octet-stream" && fileExt === "rar"
+                ? ImageConfig["rar"]
+                : res.data.docs[key].filetype === "text/plain" &&
+                  res.data.docs[key].originalfilename.split(".")[
+                    res.data.docs[key].originalfilename.split(".").length - 1
+                  ] === "csv"
+                ? ImageConfig["csv"]
+                : ImageConfig[fileExt],
           };
           filelist.push(fileobject);
-      }
+        }
         setFileData(filelist);
-        setFileListCheck(true)
+        setFileListCheck(true);
       }
     });
-  }
+  };
 
-  const downloadDoc = (fileid, filename) =>{
-  
+  const downloadDoc = (fileid, filename) => {
     axios({
       url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,
-      method: 'GET',
-      responseType: 'blob', // important
+      method: "GET",
+      responseType: "blob", // important
     }).then((response) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', `${filename}`);
+      link.setAttribute("download", `${filename}`);
       document.body.appendChild(link);
       link.click();
     });
-  }
+  };
 
-  const DeleteDoc = (fileid, filename) =>{
-    axios.delete(`${baseUrl}/api/callfileupload/${fileid}`).then((res)=>{
-      if(res.data.status === 200)
-      {
+  const DeleteDoc = (fileid, filename) => {
+    axios.delete(`${baseUrl}/api/callfileupload/${fileid}`).then((res) => {
+      if (res.data.status === 200) {
         Swal.fire({
           title: "File",
           text: "Removed Successfully..",
@@ -206,8 +213,7 @@ const CallLogCreation = () => {
           confirmButtonColor: "#2fba5f",
         });
         getFileList();
-      }
-      else{
+      } else {
         Swal.fire({
           title: "File",
           text: res.data.message,
@@ -216,12 +222,10 @@ const CallLogCreation = () => {
         });
       }
     });
-
-  }
+  };
   const InitialRequest = async () => {
-    if(mainId)
-    {
-    getFileList();
+    if (mainId) {
+      getFileList();
     }
     await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
       setOptionsForCallList(res.data?.calltype);
@@ -229,7 +233,7 @@ const CallLogCreation = () => {
       //   return { ...prev, calltype: false };
       // });
     });
-    
+
     axios.get(`${baseUrl}/api/customer/list/${token}`).then((res) => {
       setOptionsForCutomerList(res.data?.customerList);
       setIsFetching((prev) => {
@@ -263,6 +267,7 @@ const CallLogCreation = () => {
               : "",
             callcloseDate: fetcheddata.close_date ? fetcheddata.close_date : "",
             remarks: fetcheddata.remarks ? fetcheddata.remarks : "",
+            callid: fetcheddata.callid ? fetcheddata.callid : "",
           };
         });
         setMainId(fetcheddata.id);
@@ -286,6 +291,10 @@ const CallLogCreation = () => {
       return { ...prev, formData: false };
     });
   };
+
+  useEffect(() => {
+    getFileList();
+  }, [mainId]);
 
   useEffect(() => {
     InitialRequest();
@@ -432,11 +441,11 @@ const CallLogCreation = () => {
           setOptionsForBizzList(res.data.bizzlist);
         });
     } else {
-      setOptionsForBizzList(null);
+      setOptionsForBizzList([]);
     }
     setInput({ ...input, businessForecast: null });
     setIsFetching((prev) => {
-      return { ...prev,calltype:false, bizztype: false };
+      return { ...prev, calltype: false, bizztype: false };
     });
   }, [input.calltype]);
 
@@ -451,7 +460,7 @@ const CallLogCreation = () => {
           setOptionsForStatusList(res.data?.statuslist);
         });
     } else {
-      setOptionsForStatusList(null);
+      setOptionsForStatusList([]);
     }
     setInput({ ...input, forecastStatus: null });
     setIsFetching((prev) => {
@@ -555,8 +564,12 @@ const CallLogCreation = () => {
   };
 
   const handleFile = (e) => {
-    
-    const fileType = e.target.files[0].type ? e.target.files[0].type : e.target.files[0].type==="" ? "application/x-rar-compressed" : "";
+    setFile("");
+    const fileType = e.target.files[0].type
+      ? e.target.files[0].type
+      : e.target.files[0].type === ""
+      ? "application/x-rar-compressed"
+      : "";
     if (docType.includes(fileType)) {
       if (accFileStorage + e.target.files[0]?.size <= totalStorageSize) {
         const Files = e.target.files[0];
@@ -579,7 +592,8 @@ const CallLogCreation = () => {
               ? url
               : fileMIME === "octet-stream" && fileExt === "csv"
               ? ImageConfig["csv"]
-              : (fileMIME === "octet-stream" || fileMIME ==="application") && (fileExt === "rar" || fileExt === "x-rar-compressed")
+              : (fileMIME === "octet-stream" || fileMIME === "application") &&
+                (fileExt === "rar" || fileExt === "x-rar-compressed")
               ? ImageConfig["rar"]
               : ImageConfig[fileExt],
         });
@@ -603,52 +617,42 @@ const CallLogCreation = () => {
     }
   };
 
-  
-
+  console.log("File Check ", fileCheck);
+  console.log("File List Check ", fileListCheck);
+  console.log("fileuploading ", fileuploading);
   //for Preview purpose only
-  const addfiles= ()=> {
-    console.log("fileData",fileData);
+  const addfiles = () => {
     let updated = [...fileData];
     updated.push(objectData);
     setFileData(updated);
     setFileListCheck(true);
-    setFileCheck(false);
-  }
+  };
 
-  
   const handleFileAdd = (e) => {
     e.preventDefault();
-    if(mainId) {
-    addfiles();
-    uploadFiles();
+    if (mainId) {
+      addfiles();
+      uploadFiles();
+    } else {
+      Swal.fire({
+        title: "Form Not Submit",
+        text: "Please Submit Form Before Add Files..!",
+        icon: "warning",
+        confirmButtonColor: "#12c350",
+      });
+      setFileCheck(false);
     }
-    else{  
-    Swal.fire({
-      title: "Form Not Submit",
-      text: "Please Submit Form Before Add Files..!",
-      icon: "warning",
-      confirmButtonColor: "#12c350",
-    });
-  }
   };
-  // console.log("FileData", fileData);
 
-const uploadFiles = () =>{
-  const formData = new FormData();
-  // console.log("file",file);
-  formData.append('file',file.file);
-  formData.append('mainid',mainId);
-  formData.append('tokenId',localStorage.getItem('token'));
-  console.log("formData",formData);
+  const uploadFiles = () => {
+    const formData = new FormData();
 
-  if (formData instanceof FormData) {
-    console.log("Form Data is a FormData")
-  }
-  else{
-    console.log("Form Data is not a FormData")
-  }
-  axios
-      .post(`${baseUrl}/api/callfileupload/`, formData) // Create an Axios request
+    formData.append("file", file.file);
+    formData.append("mainid", mainId);
+    formData.append("tokenId", localStorage.getItem("token"));
+
+    axios
+      .post(`${baseUrl}/api/callfileupload`, formData) // Create an Axios request
       .then((res) => {
         if (res.data.status === 200) {
           Swal.fire({
@@ -657,18 +661,32 @@ const uploadFiles = () =>{
             text: "Uploaded Successfully!",
             confirmButtonColor: "#5156ed",
           });
+
+          setFile({
+            // ...file,
+            file: "",
+            name: "",
+            type: "",
+            size: "",
+            value: "",
+            src: "",
+          });
+
           getFileList();
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "File",
+            text: "Upload Failed..!",
+            confirmButtonColor: "#5156ed",
+          });
         }
-       else{
-        Swal.fire({
-          icon: "error",
-          title: "File",
-          text: "Upload Failed..!",
-          confirmButtonColor: "#5156ed",
-        });
-       } 
       })
-}
+      .then(() => {
+        setFileCheck(false);
+        setFileUploading(false);
+      });
+  };
 
   const removePreview = (e) => {
     e.preventDefault();
@@ -685,7 +703,7 @@ const uploadFiles = () =>{
       call_date: input.entrydate,
       call_type_id: input.calltype.value,
       // executive_id: input.executiveName.value,
-      procurement_type_id: input.procurement?.value ,
+      procurement_type_id: input.procurement?.value,
       bizz_forecast_id: input.businessForecast.value,
       bizz_forecast_status_id: input.forecastStatus.value,
       additional_info: input.addInfo ? input.addInfo : null,
@@ -698,8 +716,13 @@ const uploadFiles = () =>{
       tokenid: localStorage.getItem("token"),
     };
     setDataSending(true);
-    if (id) {
-      putData(data, id);
+
+    if (id || mainId) {
+      if (id) {
+        putData(data, id);
+      } else {
+        putData(data, mainId);
+      }
     } else {
       postData(data);
     }
@@ -717,6 +740,9 @@ const uploadFiles = () =>{
             confirmButtonColor: "#5156ed",
           });
           setMainId(res.data.mainid);
+          setInput((prev)=>{
+            return{...prev, callid : res.data.callid}
+          });
           // navigate("/tender/calllog");
           setDataSending(false);
         } else if (res.data.status === 400) {
@@ -760,6 +786,25 @@ const uploadFiles = () =>{
         <div className="card shadow p-2 mb-4">
           <div className="card-body">
             <form onSubmit={handleSubmit}>
+              {input.callid && (
+                <div className="row align-items-center">
+                  <div className="inputgroup col-lg-6 mb-4">
+                  <div className="row align-items-center">
+                  <div className="col-lg-4 text-dark">
+                      <label htmlFor="Callid" className="font-weight-bold">
+                      Call ID 
+                      </label>
+                    </div>
+                    <div className="col-lg-6">
+                    <span className="text-danger font-weight-bold">{input.callid}</span>
+                    </div>
+                    </div>
+                  </div>
+                  {/* <div className="inputgroup col-lg-6 mb-4">
+                    CALL ID : {input.callid}
+                  </div> */}
+                </div>
+              )}
               <div className="row align-items-center">
                 <div className="inputgroup col-lg-6 mb-4">
                   <div className="row align-items-center">
@@ -782,7 +827,7 @@ const uploadFiles = () =>{
                       {inputValidation.customer && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
-                            Select Customer Name 
+                            Select Customer Name
                           </span>
                         </div>
                       )}
@@ -809,7 +854,7 @@ const uploadFiles = () =>{
                       {inputValidation.Date && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
-                            Please Select Date..! 
+                            Please Select Date..!
                           </span>
                         </div>
                       )}
@@ -855,15 +900,17 @@ const uploadFiles = () =>{
                       </label>
                     </div>
                     <div className="col-lg-8">
-                      <input 
+                      <input
                         id="executiveName"
                         name="executiveName"
                         value={userName}
                         disabled={true}
                         className="form-control"
                       />
-</div></div></div>
-                      {/* // <Select  
+                    </div>
+                  </div>
+                </div>
+                {/* // <Select  
                       //   id="executiveName"
                       //   name="executiveName"
                       //   isSearchable="true"
@@ -892,7 +939,8 @@ const uploadFiles = () =>{
                         htmlFor="businessForecast"
                         className="font-weight-bold"
                       >
-                        Business Forecast <span className="text-danger ">*</span>
+                        Business Forecast{" "}
+                        <span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -924,7 +972,7 @@ const uploadFiles = () =>{
                           htmlFor="procurement"
                           className="font-weight-bold"
                         >
-                          Procurement Type 
+                          Procurement Type
                           {/* <span className="text-danger ">*</span> */}
                         </label>
                       </div>
@@ -939,13 +987,13 @@ const uploadFiles = () =>{
                           value={input.procurement}
                           onChange={inputHandlerForSelect}
                         ></Select>
-                        {inputValidation.customer && (
-                        <div className="pt-1">
-                          <span className="text-danger font-weight-bold">
-                          Please Procurement Type Select ..! 
-                          </span>
-                        </div>
-                      )}
+                        {inputValidation.procurement && (
+                          <div className="pt-1">
+                            <span className="text-danger font-weight-bold">
+                              Please Procurement Type Select ..!
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -963,8 +1011,8 @@ const uploadFiles = () =>{
                         htmlFor="forecastStatus"
                         className="font-weight-bold"
                       >
-                        Status 
-<span className="text-danger ">*</span>
+                        Status
+                        <span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -992,8 +1040,8 @@ const uploadFiles = () =>{
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark ">
                       <label htmlFor="action " className="font-weight-bold">
-                        Action 
-<span className="text-danger ">*</span>
+                        Action
+                        <span className="text-danger ">*</span>
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -1063,7 +1111,7 @@ const uploadFiles = () =>{
                           htmlFor="activeStatus "
                           className="font-weight-bold"
                         >
-                          Next Follow Up
+                          Next Follow Up<span className="text-danger ">*</span>
                         </label>
                       </div>
                       <div className="col-lg-8 mb-3">
@@ -1167,13 +1215,13 @@ const uploadFiles = () =>{
                     type="submit"
                     disabled={dataSending || !isFormValid}
                   >
-                    {!id
+                    {mainId || id
                       ? dataSending
-                        ? "Saving"
-                        : "Save"
+                        ? "Updating"
+                        : "Update"
                       : dataSending
-                      ? "Updating"
-                      : "Update"}
+                      ? "Saving"
+                      : "Save"}
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -1203,6 +1251,7 @@ const uploadFiles = () =>{
                           type="file"
                           value={file.value}
                           name="image"
+                          id="image"
                           className="h-100 w-100 position-absolute top-50 start-50 pointer"
                           // accept={`image/*`}
                           onChange={(e) => handleFile(e)}
@@ -1233,16 +1282,25 @@ const uploadFiles = () =>{
                                   </div>
                                 </div>
                                 <div className="UploadImg">
-                                  <img src={file.src} />
+                                  <img
+                                    src={file.src}
+                                    onClick={() =>
+                                      window.open(file.src, "_blank")
+                                    }
+                                  />
                                 </div>
                               </div>
                             </div>
                             <div className="btns">
                               <button
                                 className="btn btn-info mr-2"
-                                onClick={(e) => handleFileAdd(e)}
+                                // onClick={(e) => handleFileAdd(e)}
+                                onClick={(e) => {
+                                  handleFileAdd(e);
+                                  setFileUploading(true);
+                                }}
                               >
-                                Add
+                                {fileuploading ? "Adding..." : "Add"}
                               </button>
                               <button
                                 className="btn btn-dark"
@@ -1290,12 +1348,16 @@ const uploadFiles = () =>{
                                   </div>
                                 </div>
                                 <div className="fileAction">
-                                  <div className="download" >
-                                      <FaDownload onClick={()=>downloadDoc(t.id, t.name)}/>
+                                  <div className="download">
+                                    <FaDownload
+                                      onClick={() => downloadDoc(t.id, t.name)}
+                                    />
                                   </div>
-                               
+
                                   <div className="delete">
-                                    <RiDeleteBin5Fill onClick={()=>DeleteDoc(t.id, t.name)}/>
+                                    <RiDeleteBin5Fill
+                                      onClick={() => DeleteDoc(t.id, t.name)}
+                                    />
                                   </div>
                                 </div>
                               </div>
