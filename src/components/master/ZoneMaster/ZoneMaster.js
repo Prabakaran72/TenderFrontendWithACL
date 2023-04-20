@@ -20,6 +20,7 @@ const ZoneMaster = () => {
 
     const initialState = {
         zonename: "",
+        statelist: "",
         status: "active",
       };
     
@@ -30,7 +31,7 @@ const ZoneMaster = () => {
         statelistErr :""
       });
       const [dataSending, setDataSending] = useState(false);
-
+      const [formIsValid ,setFormIsValid] = useState(false);
       useEffect(()=>{
         axios.get(`${baseUrl}/api/state/list/105`).then((resp)=> {
           setOptions(resp.data.stateList);
@@ -96,41 +97,57 @@ const ZoneMaster = () => {
         });
       }
 
+      
+      useEffect(()=>{
+          console.log("statelist",statelist);
+          if(statelist.length > 0 || validation.statelistErr ==="")
+          {
+            setInputValidation({...validation,statelistErr: false})
+          }
+          else{
+            setInputValidation({...validation,statelistErr: true})
+          }
+      },[statelist])
 
       const inputHandler = (e) => {
-        e.persist();
-        setInput({ ...input , [e.target.name]: e.target.value });
+        setInput({
+          ...input,
+          [e.target.name]: e.target.value,
+        });
+    
+        if (e.target.value === "") {
+          setInputValidation({ ...validation, [e.target.name]: true });
+        } else {
+          setInputValidation({ ...validation, [e.target.name]: false });
+        }
       };
 
+
+      useEffect(()=>{
+        
+        if(validation.statelistErr=== false && validation.zonenameErr == false && input.zonename && statelist.length > 0)
+        {
+          setFormIsValid(true);
+        }
+        else{
+          setFormIsValid(false);
+        }
+      },[validation])
+      
    
     const submitHandler = (e) => {
         e.preventDefault();
         setDataSending(true)
-        var errors = { ...validation };
     
-        if (input.zonename.trim() === "") {
-          errors.zonenameErr = "Please Enter Zone Name";
-        
-        } else {
-          errors.zonenameErr = "";
-        }
-    
-        const { zonenameErr } = errors;
-    
-        setInputValidation(errors);
-    
-        if (zonenameErr !== "") {
-          setDataSending(false)
-          return;
-        }
-    
-        if (zonenameErr === "") {
+        if (input.zonename && statelist.length > 0) {
           const data = {
             zonename: input.zonename,
             statelist: statelist,
             status: input.status,
             tokenId: localStorage.getItem('token'),
           };
+
+    
         
     
           if(!id){
@@ -139,8 +156,18 @@ const ZoneMaster = () => {
             putData(data, id);
           }
         }
+        else{
+          setDataSending(false)
+          Swal.fire({
+            icon: "error",
+            title: "Zone ",
+            text: "Invalid Credentials. Try again Later",
+            confirmButtonColor: "#5156ed",
+          });
+        }
     };
 
+  
     return (
         <Fragment>
         <div className="container-fluid">
@@ -161,12 +188,20 @@ const ZoneMaster = () => {
                             onChange={inputHandler}
                             value={input.zonename}
                         />
+
+                    {validation.zonename && (
+                      <div className="pt-1">
+                        <span className="text-danger font-weight-bold">
+                          Enter Zone NAME
+                        </span>
+                      </div>
+                    )}
                         </div>
-                        <div className="col-6 ml-n5 mt-2">
+                        {/* <div className="col-6 ml-n5 mt-2">
                         <span style={{ color: "red" }}>
                             {validation.zonenameErr}
                         </span>
-                        </div>
+                        </div> */}
                     </div>
                     </div>
                 </div>
@@ -185,15 +220,25 @@ const ZoneMaster = () => {
                                             isMulti='true'
                                             options={options}
                                             value={statelist}
-                                            onChange={(value, action) => { setStateList(value) }}
+                                            onChange={(value,e, action) => { 
+                                              setStateList(value)
+                                              // inputHandlerForSelect(e);
+                                             }}
                                             closeMenuOnSelect={false}
                                         ></Select>
-                        </div>
-                        <div className="col-6 ml-n5 mt-2">
-                        <span style={{ color: "red" }}>
-                            {validation.zonenameErr}
+                      {validation.statelistErr && (
+                      <div className="pt-1">
+                        <span className="text-danger font-weight-bold">
+                          Please Select State..!  
                         </span>
+                      </div>
+                    )}
                         </div>
+                        {/* <div className="col-6 ml-n5 mt-2">
+                        <span style={{ color: "red" }}>
+                            {validation.statelistErr}
+                        </span>
+                        </div> */}
                     </div>
                     </div>
                 </div>
@@ -244,9 +289,9 @@ const ZoneMaster = () => {
                 <div className="row text-center">
                     <div className="col-12">
                     {id ? (
-                        <button className="btn btn-primary" disabled ={dataSending} > {dataSending ? "Updating..." : "Update"}</button>
+                        <button className="btn btn-primary" disabled ={dataSending || !formIsValid} > {dataSending ? "Updating..." : "Update"}</button>
                     ) : (
-                        <button className="btn btn-primary" disabled = {dataSending}> {dataSending ? "Submitting..." : "Submit"}</button>
+                        <button className="btn btn-primary" disabled = {dataSending || !formIsValid}> {dataSending ? "Submitting..." : "Submit"}</button>
                     )}
                     </div>
                 </div>

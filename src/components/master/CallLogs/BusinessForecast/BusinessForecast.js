@@ -34,6 +34,7 @@ const BusinessForecast = () => {
   const [inputValidation, setInputValidation] = useState(initialStateErr);
   const [savedData, setSavedData] = useState({});
   const [calltypeList, setCallTypeList] = useState([]);
+  const [formIsValid, setFormIsValid] = useState(false);
 
   useEffect(() => {
     axios.get(`${baseUrl}/api/calltype/list`).then((resp) => {
@@ -43,6 +44,9 @@ const BusinessForecast = () => {
 
   useEffect(() => {
     if (id) {
+    
+      
+    
       axios.get(`${baseUrl}/api/bizzforecast/${id}`).then((resp) => {
         if (resp.data.status === 200) {
           setSavedData(resp.data?.bizzforecast[0]);
@@ -136,7 +140,6 @@ const BusinessForecast = () => {
         setDataSending(false);
       })
       .catch((err) => {
-        // console.log("err", err.response.data.message);
         Swal.fire({
           icon: "error",
           title: "Bussiness Forecast",
@@ -171,7 +174,7 @@ const BusinessForecast = () => {
         }
       })
       .catch((err) => {
-        // console.log("err", err.response.data.message);
+
         Swal.fire({
           icon: "error",
           title: "Bussiness Forecast",
@@ -183,36 +186,54 @@ const BusinessForecast = () => {
   };
 
   
-  let formIsValid = false;
+  useEffect(()=>{
+   
+    if(input.calltype!==null && input.bizzforecast !== "")
+    {
+    
+     
+      setFormIsValid(true);
+    }
+    else{ 
+       
 
-  if (input.bizzforecast !== "") {
-    formIsValid = true;
-  }
-  
+      setFormIsValid(false);
+    }
+  },[inputValidation])
 
   const submitHandler = (e) => {
     e.preventDefault();
-
     setDataSending(true);
 
-    if (!formIsValid) {
-      setDataSending(false);
-      return;
-    }
-
+    
     let data = {
       call_type_id: input.calltype?.value,
       name: input.bizzforecast,
       activeStatus: input.activeStatus,
       tokenId: localStorage.getItem("token"),
     };
-
+  
+    if(data.call_type_id && data.name)
+    {
     if (!id) {
       postData(data);
     } else {
       putData(data, id);
     }
+  }
+  else{
+    setDataSending(false)
+    Swal.fire({
+      icon: "error",
+      title: "Bussiness Forecast",
+      text:"Fill the Form First!!",
+      confirmButtonColor: "#5156ed",
+    });
+  }
   };
+
+
+
 
   const cancelHandler = () => {
     navigate(`/tender/master/businessforecastmaster`);
