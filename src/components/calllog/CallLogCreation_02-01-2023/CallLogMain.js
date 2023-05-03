@@ -21,8 +21,8 @@ const CallLogMain = () => {
               <div className="col-lg-12">
                 <div className="float-right">
                 <Link  
-                    to="callcreation/callDetails"
-                    className="btn btn-primary btn-icon-split"
+                    to="create"
+                    className="btn btn-primary btn-icon-split rounded-pill"
                   >
                     <span className="icon text-white-50">
                       <i className="fas fa-plus-circle" />

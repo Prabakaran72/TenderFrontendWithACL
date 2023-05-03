@@ -4,13 +4,6 @@ body {
     font-family: 'Exo 2', sans-serif;
 }
 
-:root {
-    --popup: #00000078;
-    --primary: #6eb821;
-    --thead: #69b73deb;
-    --text-color: #5a5c69;    
-}
-
 #wrapper {
     display: flex;
     overflow: hidden;
@@ -861,22 +854,11 @@ body {
     background-color : #f7f7f7;
 }
 .bg-greeny {
-    background-color : var(--thead);
+    background-color : #69b73deb;
 }
 
 .table tbody tr:nth-child(even) {
     background: #fafafabe;
-}
-.table thead {
-    font-size: 13px;
-    font-weight: 500;
-}
-.table tbody {
-    font-size: 13px;
-}
-.table tbody td {
-    padding: 0.65rem !important;
-    vertical-align: middle !important;
 }
 /* .table tbody tr:hover {
     transform: scale(1.015);
@@ -1548,45 +1530,6 @@ footer a {
   } 
 
 
-.CallLogHistory .card-body {
-    display: flex;
-    justify-content: space-between;    
-}
-.CallLogHistory .card-body h5{
-    font-size: 16px; 
-    font-weight: 600;
-    color: #3c8713eb;
-}
-.CallLogHistory .card-body h6{
-    font-size: 14px; 
-    font-weight: 500;
-    color: var(--text-color);
-}
-.CallLogHistory .card-body div:nth-child(1){
-    text-align: left;
-}
-.CallLogHistory .card-body div:nth-child(2){
-    text-align: center;
-}
-.CallLogHistory .card-body div:nth-child(3){
-    text-align: right;
-}
-
-
-.CallLogHistory table thead {
-    font-size: 12.4px;
-}
-.CallLogHistory table tbody {
-    font-size: 12.4px;
-}
-
-
-
-
-
-
-
-  /* FOR MODAL */
 
   .modal.fade.show::before {
     content: '';

@@ -385,8 +385,7 @@ const UserPermission = () => {
                                         ) ? 
                                         <button className="btn btn-success btn-circle btn-lg"
                                         onClick={() => toggleAll(record.id, 0)}
-                                        >
-                                            <i className="fas fa-check"></i>
+                                        ><i className="fas fa-check"></i>
                                         </button>
                                         :
                                         <button className="btn btn-outline-danger btn-circle btn-lg"

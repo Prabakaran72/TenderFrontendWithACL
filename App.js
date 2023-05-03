@@ -7,7 +7,7 @@ import Tendertracker from "./components/tender/Tendertracker/Tendertracker";
 import Tendercreation from "./components/tender/Tendercreation/Tendercreation";
 import Legacystatement from "./components/tender/Legacystatement/Legacystatement";
 import Bidmanagement from "./components/tender/Bidmanagement/Bidmanagement";
-import Test from "./components/tender/test/test";
+import UserCreation from "./components/tender/test/test";
 import { AuthContextProvider } from "./storeAuth/auth-context";
 import AuthContext from "./storeAuth/auth-context";
 // import Master from "./components/master/Master";

@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { Fragment,  createContext,  useContext,  useEffect, useState } from "react";
+import { Fragment,  useContext,  useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
 // import Swal from "sweetalert2";
 
@@ -23,16 +23,12 @@ import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
 import AuthContext from "../../../storeAuth/auth-context";
-import CallLogCreation from "./CallLogCreation";
-import CallLogHistory from "./CallLogHistory";
 
 
 let table;
 const CallLogMainList = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
-  const [btnNxtFlw, setNxtFlw] = useState(null);
-  const [actBtn, setActBtn] = useState([]);
   const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
 
@@ -40,50 +36,33 @@ const CallLogMainList = () => {
     let response =  axios.delete(`${baseUrl}/api/callcreation/${id}`)
     return response;
   }
-  
-  console.log( btnNxtFlw);    
+
   const getList = async () => {
     const usertypelist = await axios.get(`${baseUrl}/api/callcreation/getCallMainList/${localStorage.getItem("token")}`);
-   // const callhislist = await axios.get(`${baseUrl}/api/callhistory/72/`);
-    // console.log("usertypelist",usertypelist);
-    const nxtFlw = usertypelist.data.calllog.map(user => ({      
-      actionBtn: user.action         
-    }));
-    setActBtn(nxtFlw);   
-    // console.log( nxtFlw);    
-
-   
-   // console.log("callhislist",callhislist);
+    console.log("usertypelist",usertypelist);
 
     var dataSet;
     if (
       usertypelist.status === 200 &&
       usertypelist.data.status === 200 && 
-      usertypelist.data?.calllog 
-      // callhislist.status === 200 &&
-      // callhislist.data.status === 200 && 
-      // callhislist.data?.showcallhistory
+      usertypelist.data?.calllog
     ) {
       let list = [...usertypelist.data.calllog];
-      // let list1 = [callhislist.data.showcallhistory];
-      // let list3 = [...list,...list1];
-      // console.log('LIST1:',list1)      
       let listarr = list.map((item, index, arr) => {
-        let nxtfollowupbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fas fa-user text-success mr-1 h6" style="cursor:pointer;" title="nxtFollowUp"></i> '  : '';
-        let editbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fa-edit text-info mx-1 h6" style="cursor:pointer; " title="Edit"></i> '  : '';
-        let deletebtn =  !!(permission?.['CallLogCreation']?.can_delete) ? '<i class="fas fa-trash-alt text-danger ml-1 h6" style="cursor:pointer; "  title="Delete"></i>' : '';
-        // setNxtFlw(nxtfollowupbtn);        
+        let editbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> '  : '';
+        let deletebtn =  !!(permission?.['CallLogCreation']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
         return {
         ...item,
-        btn : item.next_followup_date == null ? nxtfollowupbtn : 'closed',
         mode: "Direct",
         // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
-        action: (item.next_followup_date ? nxtfollowupbtn : '') + editbtn + deletebtn ,
+        action: ( editbtn + deletebtn),
         // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
         sl_no: index + 1,
         completed: item.close_date? item.close_date: '--',
-        next_followup :  item.next_followup_date ? item.next_followup_date :  item.close_date ? "<span class='text-success'>Closed</span>" : "<span class='text-warning'>InLive</span>",                              
-      }});                 
+        next_followup :  item.next_followup_date ? item.next_followup_date :  item.close_date ? "<span class='text-success'>Closed</span>" : "<span class='text-warning'>InLive</span>"
+
+      }});
+
       dataSet = listarr;
 
     } else {
@@ -114,28 +93,11 @@ const CallLogMainList = () => {
       ],
     })
     setLoading(false)
-
-
-
-     //to followup 
-     $("#dataTable tbody").on("click", "tr .fa-user", function () {
-     // let rowdata = axios.get(`${baseUrl}/api/callhistory/72/`);
-      let rowdata = table.row($(this).closest("tr")).data();
-     // nxt(rowdata)
-      navigate(
-        `/tender/calllog/callcreation/callDetails/${rowdata.id}/nxtFlw`
-      );
-      console.log('rowdata',rowdata.next_followup );
-    });
-
-
-
-
     //to edit 
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
       navigate(
-        `/tender/calllog/callcreation/callDetails/${rowdata.id}/edit`
+        `/tender/calllog/edit/${rowdata.id}`
       );
     });
 
@@ -196,12 +158,6 @@ const CallLogMainList = () => {
     getList();
   }, []);
 
-  const nxtFlwCtx = createContext();
-
-  <nxtFlwCtx.Provider value={btnNxtFlw}>
-  <CallLogCreation />
-</nxtFlwCtx.Provider>
-
   return (
     <Fragment>
       <div>
@@ -214,7 +170,7 @@ const CallLogMainList = () => {
           width="100%"
           cellSpacing={0}
         >
-          <thead className="text-center bg-greeny text-white">
+          <thead className="text-center bg-primary text-white">
             <tr>
               <th className="">#</th>
               <th className="">Call ID</th>
@@ -232,7 +188,6 @@ const CallLogMainList = () => {
           
         </table>
       </div>
-    
     </Fragment>
   );
 };

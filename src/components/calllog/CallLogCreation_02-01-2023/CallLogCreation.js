@@ -9,13 +9,12 @@ import { RiDeleteBin5Fill } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
 import { FaDownload } from "react-icons/fa";
 import { CgSoftwareDownload } from "react-icons/fa";
-import { useNavigate, useParams, useOutletContext } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PreLoader from "../../UI/PreLoader";
 import { ImageConfig } from "../../hooks/Config";
 import { useAllowedMIMEDocType } from "../../hooks/useAllowedMIMEDocType";
 import { useAllowedUploadFileSize } from "../../hooks/useAllowedUploadFileSize";
 import { useImageStoragePath } from "../../hooks/useImageStoragePath";
-import CallLogTab from "./CallLogTab";
 
 const selectState = {
   customer: null,
@@ -30,7 +29,6 @@ const selectState = {
   callcloseStatus: null,
   callcloseDate: "",
   remarks: "",
-  action: "",
 };
 
 const selectFiles = {
@@ -59,12 +57,10 @@ function capitalizeFirstLetter(string) {
 }
 
 const CallLogCreation = () => {
-  usePageTitle("Call Details");
-
+  usePageTitle("Call Log Creation");
   const { server1: baseUrl } = useBaseUrl();
-  const { id, mode } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [navMode, setNavMode, callId, setCallId] = useOutletContext();
   const [optionsForCallList, setOptionsForCallList] = useState([]);
   const [optionsForCutomerList, setOptionsForCutomerList] = useState([]);
   const [optionsForBizzList, setOptionsForBizzList] = useState([]);
@@ -84,8 +80,6 @@ const CallLogCreation = () => {
 
   const [checked, setChecked] = useState("nextFollowUp");
   const [check, setCheck] = useState(false); //handleing the visibility of procurement type dropdown input field
-  const [isDisable, setIsDisable] = useState(null);
-  const [nxtFlw, setNxtFlw] = useState(null);
 
   const [input, setInput] = useState(selectState);
   const [inputValidation, setInputValidation] = useState(selectStateErr);
@@ -122,6 +116,8 @@ const CallLogCreation = () => {
     size: file.size,
     pic: file.src,
   };
+
+  console.log("customer list", optionsForCutomerList);
 
   useEffect(() => {
     if (
@@ -228,152 +224,80 @@ const CallLogCreation = () => {
     });
   };
   const InitialRequest = async () => {
-    //if mode is Edit
-    if (mode === "edit") {
+    if (mainId) {
       getFileList();
-
-      await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
-        setOptionsForCallList(res.data?.calltype);
-      });
-
-      axios.get(`${baseUrl}/api/customer/list/${token}`).then((res) => {
-        setOptionsForCutomerList(res.data?.customerList);
-        setIsFetching((prev) => {
-          return { ...prev, customer: false };
-        });
-      });
-
-      await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
-        setOptionsForProcurement(res.data?.procurementlist);
-        setIsFetching((prev) => {
-          return { ...prev, procurement: false };
-        });
-      });
-      if (id) {
-        await axios.get(`${baseUrl}/api/callhistory/${id}`).then((res) => {
-          let fetcheddata = res.data.showcallhistory;
-
-          setInput((prev) => {
-            return {
-              ...prev,
-              entrydate: fetcheddata.call_date,
-              addInfo: fetcheddata.additional_info,
-              nxtFollowupDate: fetcheddata.next_followup_date
-                ? fetcheddata.next_followup_date
-                : "",
-              callcloseDate: fetcheddata.close_date
-                ? fetcheddata.close_date
-                : "",
-              remarks: fetcheddata.remarks ? fetcheddata.remarks : "",
-              callid: fetcheddata.callid ? fetcheddata.callid : "",
-              action: fetcheddata.action ? fetcheddata.action : "",
-            };
-          });
-          setMainId(fetcheddata.main_id);
-
-          setEdited({
-            customer: false,
-            calltype: false,
-            bizztype: false,
-            bizz_status_type: false,
-            procurement: false,
-            callcloseStatus: false,
-            executiveName: false,
-          });
-          setFetchedData(res.data.showcallhistory);
-          if (fetcheddata?.calltype?.label !== "General Customer Visit") {
-            setCheck(true);
-          }
-        });
-      }
-    } else { //Execute here if  mode is not Edit ie., nxtFlw or Create a call
-      await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
-        setOptionsForCallList(res.data?.calltype);
-        // setIsFetching((prev) => {
-        //   return { ...prev, calltype: false };
-        // });
-      });
-
-      axios.get(`${baseUrl}/api/customer/list/${token}`).then((res) => {
-        setOptionsForCutomerList(res.data?.customerList);
-        setIsFetching((prev) => {
-          return { ...prev, customer: false };
-        });
-      });
-
-      await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
-        setOptionsForProcurement(res.data?.procurementlist);
-        setIsFetching((prev) => {
-          return { ...prev, procurement: false };
-        });
-      });
-      if (id) {
-        await axios.get(`${baseUrl}/api/callhistory/${id}`).then((res) => {
-          let histdata = res.data.showcallhistory;
-          setInput((prev) => {
-            return {
-              ...prev,
-              entrydate: histdata.call_date,
-              addInfo: histdata.additional_info,
-              nxtFollowupDate: histdata.next_followup_date
-                ? histdata.next_followup_date
-                : "",
-              callcloseDate: histdata.close_date ? histdata.close_date : "",
-              remarks: histdata.remarks ? histdata.remarks : "",
-              callid: histdata.callid ? histdata.callid : "",
-              action: histdata.action ? histdata.action : "",
-            };
-          });
-          setMainId(histdata.main_id);
-
-          setEdited({
-            customer: false,
-            calltype: false,
-            bizztype: false,
-            bizz_status_type: false,
-            procurement: false,
-            callcloseStatus: false,
-            executiveName: false,
-          });
-          setFetchedData(res.data.showcallhistory);
-          if (histdata?.calltype?.label !== "General Customer Visit") {
-            setCheck(true);
-          }
-        });
-      }
     }
+    await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
+      setOptionsForCallList(res.data?.calltype);
+      // setIsFetching((prev) => {
+      //   return { ...prev, calltype: false };
+      // });
+    });
+
+    axios.get(`${baseUrl}/api/customer/list/${token}`).then((res) => {
+      setOptionsForCutomerList(res.data?.customerList);
+      setIsFetching((prev) => {
+        return { ...prev, customer: false };
+      });
+    });
+
+    // await axios.get(`${baseUrl}/api/user/list`).then((res) => {
+    //   setOptionsForExecutive(res.data?.user);
+    //   setIsFetching((prev) => {
+    //     return { ...prev, executiveName: false };
+    //   });
+    // });
+
+    await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
+      setOptionsForProcurement(res.data?.procurementlist);
+      setIsFetching((prev) => {
+        return { ...prev, procurement: false };
+      });
+    });
+    if (id) {
+      await axios.get(`${baseUrl}/api/callcreation/${id}`).then((res) => {
+        let fetcheddata = res.data.showcall[0];
+        setInput((prev) => {
+          return {
+            ...prev,
+            entrydate: fetcheddata.call_date,
+            addInfo: fetcheddata.additional_info,
+            nxtFollowupDate: fetcheddata.next_followup_date
+              ? fetcheddata.next_followup_date
+              : "",
+            callcloseDate: fetcheddata.close_date ? fetcheddata.close_date : "",
+            remarks: fetcheddata.remarks ? fetcheddata.remarks : "",
+            callid: fetcheddata.callid ? fetcheddata.callid : "",
+          };
+        });
+        setMainId(fetcheddata.id);
+
+        setEdited({
+          customer: false,
+          calltype: false,
+          bizztype: false,
+          bizz_status_type: false,
+          procurement: false,
+          callcloseStatus: false,
+          executiveName: false,
+        });
+        setFetchedData(res.data.showcall[0]);
+        if (fetcheddata?.calltype?.label !== "General Customer Visit") {
+          setCheck(true);
+        }
+      });
+    }
+    setIsFetching((prev) => {
+      return { ...prev, formData: false };
+    });
   };
 
   useEffect(() => {
     getFileList();
-    setCallId(mainId);
-    if ((mode !== "" || mode !== null) && mainId) {
-      if (mode !== "edit" && mode !== "nxtFlw") {
-        setNavMode("edit");
-      } else {
-        setNavMode(mode);
-      }
-    }
   }, [mainId]);
-
-  const getInfo = () => {
-    mode == "nxtFlw" ? setNxtFlw(true) : setNxtFlw(false);
-  };
 
   useEffect(() => {
     InitialRequest();
-    if (id) {
-      setCallId(id);
-      if (mode) {
-        setNavMode(mode);
-      }
-    }
-
-    getInfo();
-
-    setIsFetching((prev) => {
-      return { ...prev, formData: false };
-    });
   }, []);
 
   useEffect(() => {
@@ -693,6 +617,9 @@ const CallLogCreation = () => {
     }
   };
 
+  console.log("File Check ", fileCheck);
+  console.log("File List Check ", fileListCheck);
+  console.log("fileuploading ", fileuploading);
   //for Preview purpose only
   const addfiles = () => {
     let updated = [...fileData];
@@ -791,11 +718,11 @@ const CallLogCreation = () => {
     setDataSending(true);
 
     if (id || mainId) {
-      if (mode == "nxtFlw") {
-        data = { ...data, main_id: id };
+      if (id) {
+        putData(data, id);
+      } else {
+        putData(data, mainId);
       }
-      putData(data, id);
-      // }
     } else {
       postData(data);
     }
@@ -813,9 +740,8 @@ const CallLogCreation = () => {
             confirmButtonColor: "#5156ed",
           });
           setMainId(res.data.mainid);
-          setNavMode("edit");
-          setInput((prev) => {
-            return { ...prev, callid: res.data.callid };
+          setInput((prev)=>{
+            return{...prev, callid : res.data.callid}
           });
           // navigate("/tender/calllog");
           setDataSending(false);
@@ -831,87 +757,52 @@ const CallLogCreation = () => {
       });
   };
 
-  const displaySwal = (status, err="")=>{
-    
-    if (status === 200) {
-      Swal.fire({
-        icon: "success",
-        title: "Call Log",
-        text: "Updated Successfully!",
-        confirmButtonColor: "#5156ed",
-      });
-      // navigate('/tender/calllog')
-      setDataSending(false);
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Call Log",
-        text: err,
-        confirmButtonColor: "#5156ed",
-      });
-      setDataSending(false);
-    }
-
-  }
-
   const putData = (data, id) => {
-    let res = "";
-    if (mode == "edit") {
-      axios.put(`${baseUrl}/api/callcreation/${id}`, data).then((res)=>{
-      
-        console.log("Status",res)
-        displaySwal(res.data.status,res?.data?.message);
-      });
-      
-    } else {
-      axios.post(`${baseUrl}/api/callhistory`, data).then((res)=>{
-        console.log("Status",res)
-        displaySwal(res.data.status,res?.data?.message);
-      });
-    }
-console.log("Res",res);
-    // if (res.data.status === 200) {
-    //   Swal.fire({
-    //     icon: "success",
-    //     title: "Call Log",
-    //     text: "Updated Successfully!",
-    //     confirmButtonColor: "#5156ed",
-    //   });
-    //   // navigate('/tender/calllog')
-    //   setDataSending(false);
-    // } else if (res.data.status === 400) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Call Log",
-    //     text: res.data.errors,
-    //     confirmButtonColor: "#5156ed",
-    //   });
-    //   setDataSending(false);
-    // }
+    axios.put(`${baseUrl}/api/callcreation/${id}`, data).then((res) => {
+      if (res.data.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Call Log",
+          text: "Updated Successfully!",
+          confirmButtonColor: "#5156ed",
+        });
+        // navigate('/tender/calllog')
+        setDataSending(false);
+      } else if (res.data.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Call Log",
+          text: res.data.errors,
+          confirmButtonColor: "#5156ed",
+        });
+        setDataSending(false);
+      }
+    });
   };
 
   return (
     <PreLoader loading={isFetching.formData}>
       <div className="CallLogsCreation">
-        <div className="card shadow p-2">
+        <div className="card shadow p-2 mb-4">
           <div className="card-body">
             <form onSubmit={handleSubmit}>
               {input.callid && (
                 <div className="row align-items-center">
                   <div className="inputgroup col-lg-6 mb-4">
-                    <div className="row align-items-center">
-                      <div className="col-lg-4 text-dark">
-                        <label htmlFor="Callid" className="font-weight-bold">
-                          Call ID
-                        </label>
-                      </div>
-                      <div className="col-lg-6">
-                        <span className="text-danger font-weight-bold">
-                          {input.callid}
-                        </span>
-                      </div>
+                  <div className="row align-items-center">
+                  <div className="col-lg-4 text-dark">
+                      <label htmlFor="Callid" className="font-weight-bold">
+                      Call ID 
+                      </label>
+                    </div>
+                    <div className="col-lg-6">
+                    <span className="text-danger font-weight-bold">{input.callid}</span>
+                    </div>
                     </div>
                   </div>
+                  {/* <div className="inputgroup col-lg-6 mb-4">
+                    CALL ID : {input.callid}
+                  </div> */}
                 </div>
               )}
               <div className="row align-items-center">
@@ -932,7 +823,6 @@ console.log("Res",res);
                         options={optionsForCutomerList}
                         value={input.customer}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
                       ></Select>
                       {inputValidation.customer && (
                         <div className="pt-1">
@@ -959,8 +849,8 @@ console.log("Res",res);
                         name="entrydate"
                         onChange={(e) => inputHandlerFortext(e)}
                         value={input.entrydate}
-                        disabled = {mode === 'nxtFlw' ? true : false}
                       />
+
                       {inputValidation.Date && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
@@ -988,7 +878,6 @@ console.log("Res",res);
                         options={optionsForCallList}
                         value={input.calltype}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
                       ></Select>
                       {inputValidation.calltype && (
                         <div className="pt-1">
@@ -1021,7 +910,28 @@ console.log("Res",res);
                     </div>
                   </div>
                 </div>
-               
+                {/* // <Select  
+                      //   id="executiveName"
+                      //   name="executiveName"
+                      //   isSearchable="true"
+                      //   isClearable="true"
+                      //   // isLoading={isFetching.executiveName}
+                      //   // options={optionsForExecutive}
+                      //   // value={input.executiveName}
+                      //   value={userName}
+                      //   isDisable={true}
+                      //   onChange={inputHandlerForSelect}
+                      // ></Select>
+                      // {inputValidation.customer && (
+                      //   <div className="pt-1">
+                      //     <span className="text-danger font-weight-bold">
+                      //       Please Select Executive Name..! 
+                      //     </span>
+                      //   </div>
+                      // )}
+                    // </div>
+                  // </div>
+                // </div> */}
                 <div className="inputgroup col-lg-6 mb-4">
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark">
@@ -1043,7 +953,6 @@ console.log("Res",res);
                         options={optionsForBizzList}
                         value={input.businessForecast}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
                       ></Select>
                       {inputValidation.businessForecast && (
                         <div className="pt-1">
@@ -1077,7 +986,6 @@ console.log("Res",res);
                           options={optionsForProcurement}
                           value={input.procurement}
                           onChange={inputHandlerForSelect}
-                          isDisabled = {mode === "nxtFlw" ? true : false}
                         ></Select>
                         {inputValidation.procurement && (
                           <div className="pt-1">
@@ -1117,7 +1025,6 @@ console.log("Res",res);
                         options={optionsForStatusList}
                         value={input.forecastStatus}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
                       ></Select>
                       {inputValidation.forecastStatus && (
                         <div className="pt-1">
@@ -1191,7 +1098,6 @@ console.log("Res",res);
                         cols="50"
                         value={input.addInfo}
                         onChange={(e) => inputHandlerFortext(e)}
-                        disabled = {mode === 'nxtFlw' ? true : false}
                       />
                     </div>
                   </div>
@@ -1309,9 +1215,7 @@ console.log("Res",res);
                     type="submit"
                     disabled={dataSending || !isFormValid}
                   >
-                    {nxtFlw
-                      ? "Submit"
-                      : mainId || id
+                    {mainId || id
                       ? dataSending
                         ? "Updating"
                         : "Update"

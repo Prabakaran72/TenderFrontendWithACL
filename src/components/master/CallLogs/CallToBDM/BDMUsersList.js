@@ -24,7 +24,7 @@ import AuthContext from "../../../../storeAuth/auth-context";
 import { useBaseUrl } from "../../../hooks/useBaseUrl";
 
 let table;
-const CallToBDMList = () => {
+const BDMUsersList = () => {
     const { server1: baseUrl } = useBaseUrl();
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -55,20 +55,20 @@ const CallToBDMList = () => {
     }
 
     const getList = async () => {
-        const List = await axios.get(`${baseUrl}/api/calltobdm`);
+        const List = await axios.get(`${baseUrl}/api/bdmoptions`);
 
         var dataSet;
         if (
             List.status === 200
         ) {
-            let list = [...List.data.callToBdmList];
+            let list = [...List.data.user];
+            
             let listarr = list.map((item, index, arr) => {
                 let editbtn = !!(permission?.call_to_bdm?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
                 let deletebtn = !!(permission?.call_to_bdm?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
                 return {
                     ...item,
-                    staffName : item.user.name,
-                    CustomerName : generateCustomerList(item.customer),
+                    staffName : item.userName,
                     action: editbtn + deletebtn,
                     sl_no: index + 1,
                 }
@@ -91,13 +91,14 @@ const CallToBDMList = () => {
                     },
                 },
                 { data: "staffName" },
-                { data: "CustomerName" },
+                // { data: "CustomerName" },
                 { data: "action" },
             ],
         })
         setLoading(false)
 
         $("#dataTable tbody").on("click", "tr .fa-edit", function () {
+            
             let rowdata = table.row($(this).closest("tr")).data();
             navigate(
                 `/tender/calllog/calltobdm/edit/${rowdata.id}`
@@ -162,11 +163,11 @@ const CallToBDMList = () => {
 
 
     return(
-        <div className="card p-4">
+        <Fragment>
             <div>
                 {loading && <Loader size="lg" backdrop content="Fetching Data..." />}
             </div>
-            <div className="table-responsive">
+            <div className="table-responsive card p-4">
                 <table
                 className="table table-bordered text-center"
                 id="dataTable"
@@ -176,17 +177,16 @@ const CallToBDMList = () => {
                 <thead className="p-3 mb-2 text-center bg-greeny text-white">
                     <tr>
                     <th className="">Sl.No</th>
-                    <th className="">User/Staff name</th>
-                    <th className="">Customer</th>
+                    <th className="">BDM name</th>
                     <th className="">Action</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
                 </table>
             </div>
-        </div>
+        </Fragment>
     )
 
 }
 
-export default CallToBDMList
+export default BDMUsersList;

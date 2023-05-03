@@ -67,7 +67,7 @@ import BusinessForecastView from "./components/master/CallLogs/BusinessForecast/
 import BusinessForecast from "./components/master/CallLogs/BusinessForecast/BusinessForecast";
 import UserPermission from "./components/master/UserPermission/UserPermission";
 import UserPermissionView from "./components/master/UserPermission/UserPermissionView";
-//import CallLogMain from "./components/calllog/CallLogCreation_old 01-04-2023/CallLogMain";
+import BDMUsersList from "./components/master/CallLogs/CallToBDM/BDMUsersList";
 import CallToBDMView from "./components/master/CallLogs/CallToBDM/CallToBDMView";
 import CallToBDM from "./components/master/CallLogs/CallToBDM/CallToBDM";
 import ExpenseTypeView from "./components/master/ExpenseType/ExpenseTypeView";
@@ -79,6 +79,8 @@ import AttendanceType from "./components/master/AttendanceType/AttendanceType";
 import AttendanceTypeView from "./components/master/AttendanceType/AttendanceTypeView";
 import CallLogCreation from './components/calllog/CallLogCreation/CallLogCreation';
 import CallLogMain from './components/calllog/CallLogCreation/CallLogMain';
+import CallLogHistory from "./components/calllog/CallLogCreation/CallLogHistory";
+import CallLogTab from "./components/calllog/CallLogCreation/CallLogTab";
 import OtherExpenseMain from "./components/expenses/OtherExpenses/OtherExpenseMain";
 import ExpenseCreation from "./components/expenses/OtherExpenses/ExpenseCreation";
 import ReimbursementAdmin from "./components/expenses/Reimbursement/ReimbursementAdmin";
@@ -373,11 +375,16 @@ function App() {
 
             <Route path="calllog">
               <Route index element={!!(permission?.['CallLogCreation']?.can_view) ? <CallLogMain/> : <Unauthorized/>} />
-                <Route path="create" element={!!(permission?.['CallLogCreation']?.can_add) ? <CallLogCreation/> : <Unauthorized/>}/>
-                <Route path="edit/:id" element={!!(permission?.['CallLogCreation']?.can_edit) ? <CallLogCreation/> : <Unauthorized/>}/>
+                <Route path="callcreation" element={ <CallLogTab/> }>
+                  <Route path="callDetails" element={!!(permission?.['CallLogCreation']?.can_add) ? <CallLogCreation/> : <Unauthorized/>}/>
+                  <Route path="callDetails/:id/:mode" element={!!(permission?.['CallLogCreation']?.can_add) ? <CallLogCreation/> : <Unauthorized/>}/>
+                  <Route path="callHistory" element={<CallLogHistory/>}/>
+                  <Route path="callHistory/:id/:mode" element={<CallLogHistory/>}/>
+                </Route>
 
               <Route path="calltobdm" >
-               <Route index element={!!(permission?.call_to_bdm?.can_view) ? <CallToBDMView/> : <Unauthorized/>} />
+               {/* <Route index element={!!(permission?.call_to_bdm?.can_view) ? <CallToBDMView/> : <Unauthorized/>} /> */}
+               <Route index element={!!(permission?.call_to_bdm?.can_view) ? <BDMUsersList/> : <Unauthorized/>} />
                <Route path="create" element={!!(permission?.call_to_bdm?.can_add) ? <CallToBDM/> : <Unauthorized/>} />
                <Route path="edit/:id" element={!!(permission?.call_to_bdm?.can_edit) ? <CallToBDM/> : <Unauthorized/>} />
               </Route>
