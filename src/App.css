@@ -9,6 +9,34 @@ body {
     --primary: #6eb821;
     --thead: #69b73deb;
     --text-color: #5a5c69;    
+    --white: #ffffff;
+    --btn-bg: #528b17;
+}
+
+.btn-tender {
+    background: var(--btn-bg);
+    color: #fff;
+    border-radius: 4px;
+    border: none;
+    padding: 6px 14px;
+    transition: .2s ease-in-out;
+}
+.btn-tender:hover {
+    box-shadow: 3px 3px 10px #302c2c54;
+}
+
+.btn-tender-block {
+    display: block;
+    background: var(--btn-bg);
+    color: #fff;
+    border-radius: 4px;
+    border: none;
+    padding: 9px 14px;
+    transition: .2s ease-in-out;
+    width: 100%;
+}
+.btn-tender-block:hover {
+    box-shadow: 3px 3px 10px #302c2c54;
 }
 
 #wrapper {
@@ -1115,9 +1143,12 @@ footer a {
  }
  .CallLogsCreation .upload_Documents .UploadingDetails div span{      
     margin-left: 10px;
-    width: 100%;
+    width: 153px;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     font-size: 13px;
+    text-transform: capitalize;
  }
 .CallLogsCreation .upload_Documents .UploadingDetails h6{      
    font-size: 15px;
@@ -1264,7 +1295,7 @@ footer a {
     border-radius: 8px;
    }
    .CallLogsCreation .file_Documents .fileDetails .text{
-    margin: 0 0 0 25px;
+    margin: 0 0 0 25px;    
    }
   .CallLogsCreation .file_Documents .fileDetails .text div{
     display: flex;
@@ -1272,7 +1303,10 @@ footer a {
    .CallLogsCreation .file_Documents .fileDetails .text div h6{
     width: 65px;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 600;    
+   }
+   .CallLogsCreation .file_Documents .fileDetails .text div p{    
+    text-transform: capitalize;
    }
 
 
@@ -1579,6 +1613,298 @@ footer a {
 .CallLogHistory table tbody {
     font-size: 12.4px;
 }
+
+
+.back a {
+    text-decoration: none;
+}
+
+.back button {    
+    display: flex;    
+    justify-content: space-evenly;
+    align-items: center;
+    position: relative;
+    right: 0px;   
+    transition: .5s ease-in-out;    
+    box-shadow: 1px 1px 12px #1d1c1c1f;
+    height: 30px;
+    width: 50px;
+    margin: 0 0 15px 0;
+    border-radius: 4px;
+    background: var(--btn-bg);
+    color: var(--white);    
+    text-decoration: none;
+} 
+
+.back span { 
+    display: none;     
+    transition: 5s ease-in-out;    
+    transition-delay: 1s;
+}
+
+.back:hover button{    
+    position: relative;
+    right: 0px;        
+    width: 100px;
+    box-shadow: 1px 1px 12px #1d1c1c48;    
+}
+
+.back:hover button span{ 
+    display: block;   
+}    
+
+
+
+
+
+/*      Call Report     */
+
+/* .callReport .section-1 .layer-1{
+    display: flex;   
+}
+.callReport .section-1 .layer-2{
+    display: flex;    
+} */
+
+.callReport .section-1 .layer-2 .srchBtn{
+    display: flex; 
+    justify-content: center;   
+    align-items: center;
+    height: 100%;
+} 
+
+
+
+/* Attendance Report */
+.AttendanceEntry .form-control label#time {
+    margin: 0;
+    padding-left: 2px;
+}
+
+
+
+
+
+
+
+
+/* Image Upload */
+ label.font-weight-bold {
+    font-weight: 600 !important;
+ }
+ .upload_Documents {
+    padding-top: 27px;
+ }
+ .upload_Documents .card {
+   box-shadow: 2px 2px 13px #312e2e23;
+   border-radius: 50px;
+   border: none;
+   margin-top: 15px;
+   /* width: 350px; */
+}
+ .upload_Documents .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 21px;
+}
+ .upload_Documents .UploadImg {
+    display: flex;
+    justify-content: center;
+    align-items: center;       
+}
+ .upload_Documents .UploadImg img{      
+    height: 70px;
+    width: 70px;
+    border-radius: 50px;
+    border: 4px solid #209fe4;
+    box-shadow: 1px 3px 14px #3838341f;
+}
+ .upload_Documents .UploadingDetails{      
+    display: flex;
+    justify-content: center;      
+    flex-direction: column;
+    width: 100%;
+ }
+  .upload_Documents .UploadingDetails div{      
+    display: flex;    
+ }
+  .upload_Documents .UploadingDetails div span{      
+    margin-left: 10px;
+    width: 153px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 13px;
+    text-transform: capitalize;
+ }
+ .upload_Documents .UploadingDetails h6{      
+   font-size: 15px;
+   font-weight: 600;
+   width: 50px;
+}
+ .upload_Documents .UploadingDetails span{      
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .2px;
+ }
+  .upload_Documents .btns{      
+    display: flex;
+    justify-content: right;
+ }
+
+ .listOfupload {
+    padding: 20px 0;
+    color: #43a458;
+    font-weight: 600;
+    font-size: 19px;
+ }
+  .file_Documents .card {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 1px 1px 16px #6055551c;
+    margin: 10px 0 1px 0;
+}
+.file_Documents .card .card-body {
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+}
+
+  .file_Documents .fileAction{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+  .file_Documents .fileAction .download{
+   border: 1px dashed #15b2da;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   border-radius: 50px;
+   padding-bottom: 4px;
+   margin-right: 10px;
+   height: 34px;
+   width: 34px;
+ }
+  .file_Documents .fileAction .edit{
+    border: 1px dashed #2dc241;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    padding: 8px;
+    margin-right: 10px;
+  }
+   .file_Documents .fileAction .delete{
+    border: 1px dashed #dd4e4e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    padding: 8px;
+  }
+   .file_Documents .fileAction .download svg{
+    color: #15b2da;
+   }
+    .file_Documents .fileAction .edit svg{
+    color: #2dc241;
+   }
+   .file_Documents .fileAction .delete svg{
+   color: #dd4e4e;
+  }
+   .file_Documents .fileAction svg{
+   font-size: 14px;
+  }
+
+   .file_Documents .fileAction .download:hover{
+    box-shadow: 1px 1px 13px #e9e4e4;
+    cursor: pointer;
+    border: 1px dashed #15b2da;
+    animation: reflect .5s infinite linear;
+  }
+   .file_Documents .fileAction .delete:hover{
+    box-shadow: 1px 1px 13px #e9e4e4;
+    cursor: pointer;
+    border: 1px dashed #dd4e4e;
+    animation: shake .2s infinite linear;
+  }
+
+  @keyframes reflect {
+    0% {
+        box-shadow: 1px 1px 13px #e9e4e4;
+    }
+    50% {
+        box-shadow: 1px 1px 13px #c2b9b9;
+    }
+    100% {
+        box-shadow: 1px 1px 13px #e9e4e4;
+    }
+  }
+
+  @keyframes shake {
+    0% {
+       transform: translateX(0px);
+    }
+    40% {
+        transform: translateX(3px);
+    }
+    70% {
+        transform: translateX(-3px);
+    }
+    100% {
+        transform: translateX(0px);
+    }
+  }
+
+   .file_Documents .noOfFiles{
+    background: #7fbedf;
+    height: 30px;
+    width: 34px;
+    display: flex;  
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    color: #fff;
+}
+   .file_Documents .fileDetails{
+    display: flex;
+    width: 100%;
+    justify-content: left;
+    padding: 0 20px;
+    align-items: center;
+   }
+    .file_Documents .fileDetails .pic {
+    margin: 0 30px;
+   }
+   .file_Documents .fileDetails .pic img{
+    height: 50px;
+    width: 50px;
+    box-shadow: 3px 4px 16px #dddddd98;
+    border-radius: 8px;
+   }
+    .file_Documents .fileDetails .text{
+    margin: 0 0 0 25px;    
+   }
+   .file_Documents .fileDetails .text div{
+    display: flex;
+   }
+    .file_Documents .fileDetails .text div h6{
+    width: 65px;
+    font-size: 15px;
+    font-weight: 600;    
+   }
+    .file_Documents .fileDetails .text div p{    
+    text-transform: capitalize;
+   }
+
+
+
+
+
+
+
+
 
 
 

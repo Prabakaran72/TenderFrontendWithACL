@@ -336,7 +336,7 @@ const CityCreation = () => {
                     isClearable="true"
                     options={stateList.options}
                     onChange={inputHandlerForSelect}
-                    // onBlur={countrylistBlurHandler}
+                    
                     isLoading={stateList.isLoading}
                     value={input.state}
                   ></Select>

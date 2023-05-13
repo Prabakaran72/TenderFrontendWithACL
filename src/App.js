@@ -81,6 +81,7 @@ import CallLogCreation from './components/calllog/CallLogCreation/CallLogCreatio
 import CallLogMain from './components/calllog/CallLogCreation/CallLogMain';
 import CallLogHistory from "./components/calllog/CallLogCreation/CallLogHistory";
 import CallLogTab from "./components/calllog/CallLogCreation/CallLogTab";
+import CallReport from "./components/calllog/CallReport/CallReport";
 import OtherExpenseMain from "./components/expenses/OtherExpenses/OtherExpenseMain";
 import ExpenseCreation from "./components/expenses/OtherExpenses/ExpenseCreation";
 import ReimbursementAdmin from "./components/expenses/Reimbursement/ReimbursementAdmin";
@@ -381,6 +382,8 @@ function App() {
                   <Route path="callHistory" element={<CallLogHistory/>}/>
                   <Route path="callHistory/:id/:mode" element={<CallLogHistory/>}/>
                 </Route>
+
+                <Route path="callReport" element={ <CallReport/> } />
 
               <Route path="calltobdm" >
                {/* <Route index element={!!(permission?.call_to_bdm?.can_view) ? <CallToBDMView/> : <Unauthorized/>} /> */}

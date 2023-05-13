@@ -13,7 +13,6 @@ const initailState = {
   entryDate: "",
   description: "",
 };
-
 const CreateExpenseCreation = () => {
   const { id } = useParams();
   const { server1: baseUrl } = useBaseUrl();

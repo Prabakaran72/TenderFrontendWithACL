@@ -37,22 +37,41 @@ const CallLogHistory = () => {
     });
   }, []);
 
-  const CallHistory = getCallHistory.map((callHis, i) => (
-    <tr key={i}>
-      <td>{++i}</td>
-      <td>{callHis.call_date.split(" ")[0]}</td>
-      <td>{callHis.callname}</td>
-      <td>{callHis.bizzname}</td>
-      <td>{callHis.bizzstatusname}</td>
-      <td>{callHis.additional_info ? callHis.additional_info : "--"}</td>
-      <td>{callHis.remarks ? callHis.remarks : "--"}</td>
-      <td>{callHis.call_date.split(" ")[0]}</td>
-      <td>{callHis.close_date ? callHis.close_date : "--"}</td>
-      <td>
-        {callHis.next_followup_date ? callHis.next_followup_date : "Closed"}
-      </td>
-    </tr>
-  ));
+  // const CallHistory = getCallHistory.map((callHis, i) => (
+  //   <tr key={i}>
+  //     <td>{++i}</td>
+  //     <td>{callHis.call_date.split(" ")[0]}</td>
+  //     <td>{callHis.callname}</td>
+  //     <td>{callHis.bizzname}</td>
+  //     <td>{callHis.bizzstatusname}</td>
+  //     <td>{callHis.additional_info ? callHis.additional_info : "--"}</td>
+  //     <td>{callHis.remarks ? callHis.remarks : "--"}</td>
+  //     <td>{callHis.call_date.split(" ")[0]}</td>
+  //     <td>{callHis.close_date ? callHis.close_date : "--"}</td>
+  //     <td>
+  //       {callHis.next_followup_date ? callHis.next_followup_date : "Closed"}
+  //     </td>
+  //   </tr>
+  // ));
+
+  const CallHistory = getCallHistory.map((callHis, i, array) => {
+    const prev = array[i - 1];
+    const prevNxtFlwDate = prev ? prev.next_followup_date : '--';
+    return (
+      <tr key={i}>
+        <td>{++i}</td>
+        <td>{prevNxtFlwDate}</td>
+        <td>{callHis.callname}</td>
+        <td>{callHis.bizzname}</td>
+        <td>{callHis.bizzstatusname}</td>
+        <td>{callHis.additional_info ? callHis.additional_info : '--'}</td>
+        <td>{callHis.remarks ? callHis.remarks : '--'}</td>
+        <td>{callHis.call_date.split(" ")[0]}</td>
+        <td>{callHis.close_date ? callHis.close_date : '--'}</td>
+        <td>{callHis.next_followup_date ? callHis.next_followup_date : 'Closed'}</td>                    
+      </tr>
+    )
+  });
 
   return (
     <>

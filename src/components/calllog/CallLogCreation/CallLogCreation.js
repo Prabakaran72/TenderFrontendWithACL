@@ -84,7 +84,7 @@ const CallLogCreation = () => {
 
   const [checked, setChecked] = useState("nextFollowUp");
   const [check, setCheck] = useState(false); //handleing the visibility of procurement type dropdown input field
-  const [isDisable, setIsDisable] = useState(null);
+  const [fileSizeLimit, setFileSizeLimit]= useState({error: ''});
   const [nxtFlw, setNxtFlw] = useState(null);
 
   const [input, setInput] = useState(selectState);
@@ -169,7 +169,7 @@ const CallLogCreation = () => {
             id: res.data.docs[key].id,
             mainid: res.data.docs[key].mainid,
             name: res.data.docs[key].originalfilename,
-            size: res.data.docs[key].filesize,
+            size: ((res.data.docs[key].filesize / 1000).toString().slice(0,-5) + ' MB'),
             pic:
               fileMIME === "image"
                 ? filePath + "" + res.data.docs[key].hasfilename
@@ -651,7 +651,11 @@ const CallLogCreation = () => {
         const Files = e.target.files[0];
         const FilesValue = e.target.value;
         const fileName = Files.name;
-        const fileSize = Files.size + " KB";
+        // const fileSize = Files.size + " KB";
+        const fileSize = (Files.size.toString().length > 6 ? (Files.size / 1e+6).toString().slice(0,-5) + ' MB' :  (Files.size / 1000).toString().slice(0,-1) + ' KB');        
+        console.log('Files.size.length', Files.size.toString().length);
+        // const fileSize = ((Files.size / 1e+6).toString().slice(0,-4) + " MB");
+
         const url = URL.createObjectURL(Files); // this points to the File object we just created
         let fileExt = fileType.split("/")[1];
         let fileMIME = fileType.split("/")[0];
@@ -691,6 +695,51 @@ const CallLogCreation = () => {
         confirmButtonColor: "#2fba5f",
       });
     }
+
+
+    // checkFileSize
+    const checkFile = e.target.files[0];
+    const fileSizeCheck = checkFile.size;
+
+    // checkListUploadSize
+    const totListSize = fileData.map((lis)=> ({
+      size : lis.size,      
+    }));   
+    const checkFSize = Object.values(totListSize).map((lit)=> parseFloat(lit.size));
+    let totalFSize = 0;
+    for (let i = 0; i < checkFSize.length; i++) {
+      totalFSize += checkFSize[i];
+    }    
+
+
+    //checkPreviewFileSize
+    const files = e.target.files[0];          
+    const prevFileSize = ((files.size / 1e+6).toString().slice(0,-5));              
+    const mergeTwoFileSize = parseInt(prevFileSize) + totalFSize;     
+
+
+
+    // if(fileSizeCheck > 50000000 || totalFSize > 50.0) {      
+    //   setFileSizeLimit({...fileSizeLimit, error: 'File Size across the Limit (Limit : 50MB)'})
+    //   setFileCheck(false);
+    //   setFile({...file, value: ''});       
+    // }
+
+    if(fileSizeCheck > 50000000 || totalFSize > 50.0 || mergeTwoFileSize > 50.0) {      
+      setFileSizeLimit({...fileSizeLimit, error: 'File Size across the Limit (Limit : 50MB)'})
+      setFileCheck(false);
+      setFile({...file, value: ''});       
+    }
+
+
+    else {
+      setFileCheck(true);      
+    }
+
+    // console.log('totalFSize',totalFSize); 
+    // console.log('checkFSize',checkFSize); 
+    // console.log(" totalFSize > 50.0 ", totalFSize > 50.0);
+    // console.log('mergeTwoFileSize',mergeTwoFileSize); 
   };
 
   //for Preview purpose only
@@ -699,6 +748,7 @@ const CallLogCreation = () => {
     updated.push(objectData);
     setFileData(updated);
     setFileListCheck(true);
+    setFileSizeLimit({...fileSizeLimit, error: ''})
   };
 
   const handleFileAdd = (e) => {
@@ -764,6 +814,7 @@ const CallLogCreation = () => {
   const removePreview = (e) => {
     e.preventDefault();
     setFileCheck(false);
+    setFile({...file, value:""});
   };
 
   let fileCount = 1;
@@ -1359,7 +1410,7 @@ console.log("Res",res);
                 </div>
 
                 <div className="inputgroup col-lg-6 mb-4 ">
-                  {fileCheck && (
+                  {fileCheck ?
                     <div className="row align-items-center">
                       <div className="col-lg-4">
                         <label className="font-weight-bold">Preview</label>
@@ -1408,8 +1459,8 @@ console.log("Res",res);
                           </div>
                         </>
                       </div>
-                    </div>
-                  )}
+                    </div> :  fileSizeLimit.error
+                  }
                 </div>
 
                 <div className="inputgroup col-lg-12 mb-4 ">

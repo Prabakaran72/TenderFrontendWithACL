@@ -1,6 +1,6 @@
 import { usePageTitle } from "../../hooks/usePageTitle";
 import { Fragment, useState, useEffect } from "react";
-import { useParams, Outlet, NavLink, useLocation } from "react-router-dom";
+import { useParams, Outlet, NavLink, useLocation, Link } from "react-router-dom";
 
 const CallLogTab = () => {
   usePageTitle("Call Creation");
@@ -24,6 +24,9 @@ const CallLogTab = () => {
 
   return (
     <Fragment>
+      <div className="d-flex justify-content-end back">
+        <Link to='/tender/calllog'><button><i className="fas fa-chevron-circle-left" /><span>Back</span></button></Link>
+      </div>
       <div className="container-fluid p-0">
         <div className="row">
           <div className="col-lg-12">
