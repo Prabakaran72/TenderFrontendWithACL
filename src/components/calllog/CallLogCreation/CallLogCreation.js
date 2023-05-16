@@ -235,8 +235,8 @@ const CallLogCreation = () => {
       await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
         setOptionsForCallList(res.data?.calltype);
       });
-
-      axios.get(`${baseUrl}/api/customer/list/${token}`).then((res) => {
+    let data = {'tokenid' : token};
+      axios.post(`${baseUrl}/api/customer/list`, data).then((res) => {
         setOptionsForCutomerList(res.data?.customerList);
         setIsFetching((prev) => {
           return { ...prev, customer: false };
@@ -293,8 +293,8 @@ const CallLogCreation = () => {
         //   return { ...prev, calltype: false };
         // });
       });
-
-      axios.get(`${baseUrl}/api/customer/list/${token}`).then((res) => {
+let datatosend = {"tokenid": token};
+      axios.post(`${baseUrl}/api/customer/list`,datatosend).then((res) => {
         setOptionsForCutomerList(res.data?.customerList);
         setIsFetching((prev) => {
           return { ...prev, customer: false };

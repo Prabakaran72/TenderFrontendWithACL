@@ -144,7 +144,7 @@ console.log('grp',groupValue?.value);
 			group: value3,
 		}
 
-		let response = await axios.post(`${baseUrl}/api/expensesapp/expapp`, data)
+		let response = await axios.post(`${baseUrl}/api/ulbreport/ulblists`, data)
 		let listarr = await generateListArray(response)
 
 		setListarr(listarr)
@@ -153,12 +153,10 @@ console.log('grp',groupValue?.value);
 
 	const generateListArray = async (response) => {
 
-		let list = [...response.data.exp_app];
+		let list = [...response.data.list];
 
 		let listarr = list.map((item, index, arr) => {
-			let ho_app='';
-			let ceo_app='';
-			let hr_app='';
+
 			 let ViewCustomer = item.customers;
 // let ViewCustomer =  <UlbViewCity />;
 // let editbtn ='<i calss="customer" style="cursor:pointer">'+item.customers+'</i> ';
@@ -168,58 +166,29 @@ let m20 =  '<i class=" m20" style="cursor:pointer" >'+item.more_20+'</i> ' ;
 let b10_20 =  '<i class=" b10_20" style="cursor:pointer" >'+item.btw_10_20+'</i> ' ;
 let b_5_10 =  '<i class=" b_5_10" style="cursor:pointer" >'+item.btw_5_10+'</i> ' ;
 let b_3_5 =  '<i class=" b_3_5" style="cursor:pointer" >'+item.btw_3_5+'</i> ' ;
-let print =  '<i class="fas fa-solid fa-print print" style={{color: "#70e60f"}} ></i>' ;
-/**********HO approval********** */
-if(item.ho_approval=='pending'){
-	ho_app =  '<i class="fas fa-p  pending" style={{color: "#70e60f"}} data-action="HOApprove"></i>' ;
-}else if(item.ho_approval=='approved'){
-	ho_app =  '<i class="fas fa-check approve" style={{color: "#70e60f"}}  ></i>' ;
-}
-else if(item.ho_approval=='rejected'){
-	ho_app =  '<i class="fas fa-xmark fade reject" style={{color: "#70e60f"}} data-action="HOApprove_reject" ></i>' ;
-}
+let b_1_3 =  '<i class=" b_1_3" style="cursor:pointer" >'+item.btw_1_3+'</i> ' ;
+let b_1 =  '<i class=" b_1" style="cursor:pointer" >'+item.bel_1+'</i> ' ;
 
-/**********ceo approval********** */
-if(item.ceo_approval=='pending'){
-
-	ceo_app =  '<i class="fas fa-p  pending" style={{color: "#70e60f"}} data-action="CEOApprove" ></i>' ;
-}else if(item.ceo_approval=='approved'){
-	ceo_app =  '<i class="fas fa-check  approve" style={{color: "#70e60f"}} ></i>' ;
-
-}
-else if(item.ceo_approval=='rejected'){
-	ceo_app =  '<i class="fas fa-xmark fade reject" style={{color: "#70e60f"}} data-action="CEOApprove_reject"></i>' ;
-}
-
-/**********HR approval********** */
-if(item.hr_approval=='pending'){
-	hr_app =  '<i class="fas fa-p  pending" style={{color: "#70e60f"}} data-action="HRApprove" ></i>' ;
-}else if(item.hr_approval=='approved'){
-	hr_app =  '<i class="fas fa-check  approve" style={{color: "#70e60f"}} ></i>' ;
-}
-else if(item.hr_approval=='rejected'){
-	hr_app =  '<i class="fas fa-xmark fade reject" style={{color: "#70e60f"}} data-action="HRApprove_reject" ></i>' ;
-}
-
-
-
+      
 			return {
 				...item, 
-				entry_date: item.entry_date,
-				bill_no:item.ex_app_no ,
-				staff_name: item.Staff_id,
-				total_amount: item.total_amount,
-				ho_app: ho_app,
+				ulblist: item.customersubcategory,
+				customers:cust ,
+				more_20: m20,
+				btw_10_20: b10_20,
+				btw_5_10: b_5_10,
 
-				ceo_app: ceo_app,
-				hr_app: hr_app,
-				view: print,
-				
-				
+				btw_3_5: b_3_5,
+				btw_1_3: b_1_3,
+				bel_1: b_1,
+				filter_cat:catValue?.value,
+				filter_state:stateValue?.value,
+				filter_group:groupValue?.value,
+				popup: [],
 
 
 
-				sl_no : index+1
+				//   sl_no : index+1
 			}
 		})
 		// <i class="fa fa-print text-info mr-2 h6" style="cursor:pointer; font-size: 1.25rem" title="Print"></i>  -- To add @ line 72 
@@ -249,45 +218,55 @@ else if(item.hr_approval=='rejected'){
 						<div className="card shadow mb-4 pt-2">
 							<div className="card-body">
 								<div className="row d-flex">
-									<div className="col-sm-3 row d-flex align-items-center mb-4">
+									<div className="col-sm-4 row d-flex align-items-center mb-4">
 										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="From">From :</label>
-										</div>
-										<div className="col-lg-7">
-										<input
-                          type="date"
-                          className="form-control"
-                          id="fromdate"
-                          placeholder="From Date"
-                          name="fromdate"
-                          value={fromdateValue}
-                          onChange={fromdateChangeHandler}
-                          max={todateValue}
-                        />
-										</div>
-									</div>
-									<div className="col-sm-3 row d-flex align-items-center mb-4">
-										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="From">To :</label>
+											<label htmlFor="From">Category :</label>
 										</div>
 										<div className="col-lg-9">
-										<input
-                          type="date"
-                          className="form-control"
-                          id="todate"
-                          placeholder="To Date"
-                          name="todate"
-                          value={todateValue}
-                          onChange={todateChangeHandler}
-                          min={fromdateValue}
-                        />
+											<Select
+												name="cat"
+												id="cat"
+												isSearchable="true"
+												isClearable="true"
+												options={cust_category}
+												onChange={(selectedOptions) => {
+													catChangeHandler(selectedOptions);
+													// getcustno(selectedOptions);
+												}}
+												onBlur={catBlurHandler}
+												value={catValue}
+												isLoading={CategoryOptions.isLoading}
+
+											></Select>
 										</div>
 									</div>
-									<div className="col-sm-5 row d-flex align-items-center mb-4">
-										<div className="col-lg-4 text-dark font-weight-bold">
-											<label htmlFor="Group">Executive Name :</label>
+									<div className="col-sm-4 row d-flex align-items-center mb-4">
+										<div className="col-lg-3 text-dark font-weight-bold">
+											<label htmlFor="From">State :</label>
 										</div>
-										<div className="col-lg-6">
+										<div className="col-lg-9">
+											<Select
+												name="state"
+												id="state"
+												isSearchable="true"
+												isClearable="true"
+												options={StateOptions.options}
+												onChange={(selectedOptions) => {
+													stateChangeHandler(selectedOptions);
+													// getcustno(selectedOptions);
+												}}
+												onBlur={stateBlurHandler}
+												value={stateValue}
+												isLoading={StateOptions.isLoading}
+
+											></Select>
+										</div>
+									</div>
+									<div className="col-sm-4 row d-flex align-items-center mb-4">
+										<div className="col-lg-3 text-dark font-weight-bold">
+											<label htmlFor="Group">Group :</label>
+										</div>
+										<div className="col-lg-9">
 											<Select
 												name="group"
 												id="group"
@@ -309,24 +288,14 @@ else if(item.hr_approval=='rejected'){
 
 
 
-									<div className="col-sm-1 row d-flex align-items-center mb-4">
-										{/* <div className="col-sm-2"> */}
+									<div className="col-sm-3 row d-flex align-items-center mb-4">
+										<div className="col-sm-2">
 											<button className={`btn ${(!filterValid) && 'btn-outline-primary'} ${(filterValid) && 'btn-primary'} rounded-pill px-4`} onClick={goHandler} disabled={!filterValid}> Go </button>
-										{/* </div> */}
-									</div>
-									<div className="col-sm-1 row d-flex align-items-center mb-4">
-									{!!(permission?.['ReimbursementForm']?.can_add) && <Link
-                    to="Create"
-                    className="btn btn-primary btn-icon-split rounded-pill"
-                  >
-                    <span className="icon text-white-50">
-                      <i className="fas fa-plus-circle" />
-                    </span>
-                    <span className="text">New</span>
-                  </Link>}
+										</div>
 									</div>
 									<div className="col-lg-7 row">
-								{/* <div className="col-sm-2">
+
+										{/* <div className="col-sm-2">
 										<button className={`btn ${(!filterValid) && 'btn-outline-primary' } ${(filterValid) && 'btn-primary' } rounded-pill`} onClick={goHandler} disabled={!filterValid}> Go </button>
 										</div> */}
 									</div>
@@ -339,11 +308,6 @@ else if(item.hr_approval=='rejected'){
                       <span className="text">New</span>
                     </Link> */}
 									</div>
-									<div >
-									
-									</div>
-									
-							
 								</div>
 								
 								

@@ -10,6 +10,7 @@ import Swal from "sweetalert2/src/sweetalert2";
 import { Input, Loader } from "rsuite";
 import AuthContext from "../../../../storeAuth/auth-context";
 import { useBaseUrl } from "../../../hooks/useBaseUrl";
+// import AssignedCustomerModal from './AssignedCustomerModal';
 import "./callDataTable.css";
 
 
@@ -20,7 +21,8 @@ const CustomerList1 = (props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
   const { server1: baseUrl } = useBaseUrl();
-const selectAllRef = useRef(0);
+  const showModel = useRef(0);
+  const selectAllRef = useRef(0);
   useEffect(() => {
     setData(props.data);
   }, [props]);
@@ -41,7 +43,7 @@ const selectAllRef = useRef(0);
       datarow.id == row.original.id
         ? {
             ...row.original,
-            assign_status: row.original.assign_status == 0 ? 1 : 0,
+            assign_status: row.original.assign_status != 1 ? 1 : 0,
           }
         : datarow
     )
@@ -49,7 +51,7 @@ const selectAllRef = useRef(0);
     setInput((prev) => {
       return {
         ...prev,
-        [row.original.id]: row.original.assign_status == 0 ? 1 : 0,
+        [row.original.id]: row.original.assign_status != 1 ? 1 : 0,
       };
     });
 
@@ -81,6 +83,10 @@ const handlePrint = () => {
   window.print();
 };
 
+const updateRef = () =>{
+  showModel.current = showModel.current != 1 ? 1 : 0;
+}
+
 const handleExport = () => {
   // const headers = columns.map(column => column.name);
   const headers = ['Sno', 'Customer Name', 'Country', 'State', 'District', 'City','BDM Name','Assign Status'];
@@ -92,10 +98,14 @@ const handleExport = () => {
     ...data.map((row,index) => {
       if(row.assign_status == '1')
       {
-        return `${index + 1},${row.customer_name},${row.country_name},${row.state_name},${row.district_name}, ${row.city_name},"Assigned"`; 
+        return `${index + 1},${row.customer_name},${row.country_name},${row.state_name},${row.district_name}, ${row.city_name},${props.userName.current},"Assigned"`; 
+      }
+      else{
+        return null; // Return null for the empty row
       }
     })   
-  ].join('\n');
+  ].filter(row => row !== null) // Filter out the null values
+  .join('\n');
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
@@ -109,7 +119,6 @@ const handleExport = () => {
     document.body.removeChild(link);
   }
 };
-
 
 
   const columns = useMemo(
@@ -167,7 +176,7 @@ const handleExport = () => {
                 : "btn btn-outline-danger btn-circle btn-sm"
             }
             onClick={(e) => updateStatus(e, row)}
-            value = {value}
+           
           >
             <i className={value == 1 ? "fas fa-check" : "fas fa-close"}></i>
           </button>
@@ -264,7 +273,7 @@ const handleExport = () => {
   }
 
   return (
-    // <>
+    <>
     <div className="table-responsive pb-3">
       <div className="d-flex justify-content-between mb-2">
         <div className="">
@@ -284,8 +293,9 @@ const handleExport = () => {
         </div>
 
         <div className="d-flex ">
-          <button name="print" onClick={handlePrint}>Print</button>
-        <button name="export" className="mx-3" onClick={handleExport}>Excel</button>
+          {/* <button name="modal" className="btn" onClick={updateRef}><i className="fas fa-info-circle fa-lg text-warning" aria-hidden="true"></i></button> */}
+          {/* <button name="print" className="btn" onClick={handlePrint}><i className="fas fa-print fa-lg text-success" aria-hidden="true"></i></button> */}
+          <button name="export" className="btn" onClick={handleExport}><i className="fas fa-file-excel fa-lg text-success"></i></button>
           <input
             value={globalFilter || ""}
             onChange={(e) => setGlobalFilter(e.target.value)}
@@ -399,11 +409,19 @@ const handleExport = () => {
                                             Cancel
                                         </button>
                                     </div>
-
+s
                                 </div>
                             </div>
+                            
     </div>
+    {/* <AssignedCustomerModal showModal = {showModel} updateRef={updateRef} data={data}/> */}
+    </>
     
-  );
+    );
 };
 export default CustomerList1;
+
+
+
+
+

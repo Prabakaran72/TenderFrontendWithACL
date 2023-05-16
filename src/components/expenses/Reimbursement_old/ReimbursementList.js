@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import PreLoader from "../../UI/PreLoader";
 
-import wating from "./image/wait_f.gif"
+
 //For DataTable
 import "jquery/dist/jquery.min.js";
 import $ from "jquery";
@@ -24,7 +24,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import Swal from "sweetalert2";
 import { usePageTitle } from "../../hooks/usePageTitle";
-import family from "./image/wait_f.gif";
+
 
 
 let table; 
@@ -42,7 +42,7 @@ const ReimbursementList = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const [popup, setpopup] = useState('');
     const [popupfor, setpopupfor] = useState('');
-    const [ResponseStatus, setResponseStatus] = useState('');
+    
     const handleOpenPopup = () => {
       setIsOpen(true);
     };
@@ -65,49 +65,20 @@ const ReimbursementList = (props) => {
     const clearPopupData = () => {
       setpopup({});
     };
-   
-   const  handleApprove=()=>{
-
-    console.log("affagg");
-
-    // swal({
-    //   title: "Are you sure?",
-    //   text: "You won't be able to revert this!",
-    //   icon: "warning",
-    //   buttons: ["Reject", "Approve"],
-    // })
-    // .then((value) => {
-    //   if (value === true) {
-    //     // User clicked "Approve"
-    //   } else {
-    //     // User clicked "Reject"
-    //   }
-    // });
-    
-
-
-   }
-   // Incorrect usage
-
-
-// Correct usage
-
-
     useEffect(() => {
-     
-     
-        table =  $('#reimdataTable').DataTable({
+      
+        table =  $('#ulbdataTable').DataTable({
             data : UlbtList,
             columns: [
-                { data: 'sl_no' },
-                { data: 'entry_date' },
-                { data: 'bill_no' },
-                { data: 'staff_name' },
-                { data: 'total_amount' },
-                { data: 'ho_app' },
-                { data: 'ceo_app' },
-                { data: 'hr_app' },
-                { data: 'view.' },
+                { data: 'ulblist' },
+                { data: 'customers' },
+                { data: 'more_20' },
+                { data: 'btw_10_20' },
+                { data: 'btw_5_10' },
+                { data: 'btw_3_5' },
+                { data: 'btw_1_3' },
+                { data: 'bel_1' },
+                { data: 'bel_1' },
                 // { data: 'current_stage' },
                 // { data: 'action' },
             ],
@@ -118,211 +89,44 @@ const ReimbursementList = (props) => {
             //   "<'row'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",
     
         })
-        let ApproveStatus = '';
-
-        $('#reimdataTable tbody').on('click', 'td', function(event) {
-          const btn = event.target;
-          const action = btn.getAttribute('data-action');
-              let rowdata = table.row($(event.target).closest('tr')).data();
-        
+        let currentPopup = null;
+        $('#ulbdataTable tbody').on('click', 'td',function (event) {
+          // console.log('class name ::  ',$(event.target).attr('class')); // check the class name
+         
+          let rowdata = table.row($(event.target).closest('tr')).data();
+          console.log(rowdata);
          
 
-if((action!=null)&&(action!='')){
-  console.log('action',action);
-  
-  if((action=='HOApprove')||(action=='CEOApprove')||(action=='HRApprove'))
-{
-
-/*********
- * sucess 
- * https://content.presentermedia.com/content/animsp/00023000/23935/business_man_emote_thumbs_up_md_nwm_v2.gif
- * reject
- * https://content.presentermedia.com/content/animsp/00024000/24178/business_grant_emote_confused_md_nwm_v2.gif
- */
-  Swal.fire({
-    title: 'Update Your Approval Status',
-     imageUrl: "https://content.presentermedia.com/content/animsp/00024000/24508/business_grant_emote_waiting_md_nwm_v2.gif",
-    imageHeight: 200, // Set the height of the image
-    showCancelButton: true,
-    confirmButtonText: 'Approve',
-    cancelButtonText: 'Reject'
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      // handle "approve" action
-      ApproveStatus='approved';
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-      // handle "reject" action
-      ApproveStatus='rejected';
-    }
-
-
-
-    let data = {
-      ApproveStatus: ApproveStatus,
-      rowdata :rowdata.id,
-      action:action,
-      token:localStorage.getItem("token"),
-}
-
-  let response = await axios.post(`${baseUrl}/api/expensesapp/UpdateApproval`, data)
-  
-  console.log("response",response.data.status);
-  
-  if(response.data.status===200){
-    if( ApproveStatus=='approved'){
-
-      Swal.fire({
-        imageUrl: "https://content.presentermedia.com/content/animsp/00023000/23935/business_man_emote_thumbs_up_md_nwm_v2.gif",
-        imageHeight: 200, // Set the height of the image
-        title: "Approved",
-        timer: 4000 // auto close after 2 seconds
-       
-    });
-
-    }
-    else{
-
-      Swal.fire({
-        imageUrl: "https://content.presentermedia.com/content/animsp/00024000/24178/business_grant_emote_confused_md_nwm_v2.gif",
-        imageHeight: 200, // Set the height of the image
-        title: "Rejected",
-        timer: 4000 // auto close after 2 seconds
-       
-    });
-    }
-   
-    props.getlist();
-  }
-
-  })
-
-
-}else{
-
-
-  Swal.fire({
-    title: 'Change Status',
-     imageUrl: "https://content.presentermedia.com/content/animsp/00024000/24508/business_grant_emote_waiting_md_nwm_v2.gif",
-    imageHeight: 200, // Set the height of the image
-    
-    showCancelButton: true,
-    confirmButtonText: 'Approve',
-    cancelButtonText: 'Colse'
-  }).then(async (result) => {
-    
-    if (result.isConfirmed) {
-      // handle "approve" action
-      ApproveStatus='approved';
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-      // handle "reject" action
-      ApproveStatus='Close';
-    }
-if( ApproveStatus=='approved'){
-
-  let data = {
-    ApproveStatus: ApproveStatus,
-    rowdata :rowdata.id,
-    action:action,
-    token:localStorage.getItem("token"),
-}
-
-let response = await axios.post(`${baseUrl}/api/expensesapp/UpdateApproval`, data)
-
-console.log("response",response.data.status);
-if(response.data.status===200){
-   Swal.fire({
-    imageUrl: "https://content.presentermedia.com/content/animsp/00023000/23935/business_man_emote_thumbs_up_md_nwm_v2.gif",
-    imageHeight: 200, // Set the height of the image
-    title: "Approved",
-    timer: 4000 // auto close after 2 seconds
-   
-});
-  props.getlist();
-}
-
-
-
-
-}
-  
-
-  })
-
-
-
-
-
-
-
-
-}
-
-
-
-  // Swal.fire({
-  //   title: 'Loading...',
-  //   imageUrl: {family},
-  //   imageHeight: 200, // Set the height of the image
-  //   imageAlt: 'Loading', // Set the alt text for the image
-  //   showCancelButton: true,
-  //   cancelButtonText: 'Cancel',
-  //   confirmButtonText: 'Confirm',
-  // }).then((result) => {
-  //   if (result.isConfirmed) {
-  //     // User clicked Confirm button
-  //   } else if (result.dismiss === Swal.DismissReason.cancel) {
-  //     // User clicked Cancel button
-  //   }
-  // });
-  
-
-
-
-
-
-
-
-
-}
-
-        });
-      //   $('#ulbdataTable tbody').on('click', 'td',function (event) {
-      //     // console.log('class name ::  ',$(event.target).attr('class')); // check the class name
-         
-      //     let rowdata = table.row($(event.target).closest('tr')).data();
-      //     console.log(rowdata);
-         
-
-      //     rowdata.popup.splice(0, rowdata.popup.length);
-      //     if ($(event.target).hasClass('customer')) {
-      //         rowdata.popup.push('customer');
+          rowdata.popup.splice(0, rowdata.popup.length);
+          if ($(event.target).hasClass('customer')) {
+              rowdata.popup.push('customer');
              
-      //     }
-      //      else if ($(event.target).hasClass('m20')) {
-      //         rowdata.popup.push('m20');
+          }
+           else if ($(event.target).hasClass('m20')) {
+              rowdata.popup.push('m20');
              
-      //     } else if ($(event.target).hasClass('b10_20')) {
-      //         rowdata.popup.push('b10_20');
+          } else if ($(event.target).hasClass('b10_20')) {
+              rowdata.popup.push('b10_20');
              
-      //     } else if ($(event.target).hasClass('b_5_10')) {
-      //         rowdata.popup.push('b_5_10');
+          } else if ($(event.target).hasClass('b_5_10')) {
+              rowdata.popup.push('b_5_10');
               
-      //     } else if ($(event.target).hasClass('b_3_5')) {
-      //         rowdata.popup.push('b_3_5');
+          } else if ($(event.target).hasClass('b_3_5')) {
+              rowdata.popup.push('b_3_5');
               
-      //     } else if ($(event.target).hasClass('b_1_3')) {
-      //         rowdata.popup.push('b_1_3');
+          } else if ($(event.target).hasClass('b_1_3')) {
+              rowdata.popup.push('b_1_3');
              
-      //     } else if ($(event.target).hasClass('b_1')) {
-      //         rowdata.popup.push('b_1');
+          } else if ($(event.target).hasClass('b_1')) {
+              rowdata.popup.push('b_1');
              
-      //     }
-      //     if (currentPopup) {
-      //       currentPopup.close();
-      //   }
+          }
+          if (currentPopup) {
+            currentPopup.close();
+        }
 
-      //   handlePopup(rowdata);
-      // });
+        handlePopup(rowdata);
+      });
       
       
         // $('#dataTable tbody').on('click', '.m20', function () {
@@ -378,7 +182,7 @@ if(response.data.status===200){
         //     deleteList(rowdata)
         //   // props.onDelete(rowdata)
         // });
-      }, [ResponseStatus])
+      }, [])
 
 
       useEffect(() => {
@@ -428,7 +232,7 @@ if(response.data.status===200){
                 <div className="table-responsive pb-3">
                     <table
                         className="table text-center"
-                        id="reimdataTable"
+                        id="ulbdataTable"
                         width="100%"
                         cellSpacing={0}
                     >

@@ -35,15 +35,15 @@ const AttendanceList = () => {
   }
 
   const getList = async () => {
-    const zonelist = await axios.get(`${baseUrl}/api/attendanceentry`);
+    const zonelist = await axios.get(`${baseUrl}/api/attendanceregister`);
     var dataSet;
 
     if (
         zonelist.status === 200 &&
         zonelist.data.status === 200
     ) {
-      console.log(zonelist.data.list);
-      let list = [...zonelist.data.list];
+      
+      let list = [...zonelist.data.leaveregister];
 
       let listarr = list.map((item, index, arr) => {
 
@@ -85,9 +85,9 @@ const AttendanceList = () => {
             return ++i;
           },
         },
-        { data: "dateTime" },
-        { data: "userName" },
-        { data: "attendanceTypeName" },
+        { data: "leavedate" },
+        { data: "user_name" },
+        { data: "leavetype" },
         { data: "action" },
         
       ],

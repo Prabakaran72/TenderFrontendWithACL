@@ -19,7 +19,8 @@ const useImageStoragePath = () => {
         commnunicationfilesmaster: baseUrl+'/uploads/Communicationfiles/',//Communication Files
         callcreation: baseUrl+'/uploads/CallCreation/CallLog/', //Call Creation Multi File Uploads
         expense: baseUrl+'/uploads/OtherExpenseSub/OtherExpSubFiles/', //Expense Creation File Uploads
-
+        attendance: baseUrl+'/uploads/attendanceregisterfiles/', //Attendane Entry File Uploads
+        expense: baseUrl+'/uploads/Expensecreation/documentsupload/',//Expense Creation
 
         //----- Uncomment when build App & for Server storage ----
         // qcFile : baseUrl+'/public/uploads/competitor/qc/',
@@ -37,6 +38,8 @@ const useImageStoragePath = () => {
         // commnunicationfilesmaster: baseUrl+'/public/uploads/Communicationfiles/',
         // callcreation: baseUrl+'/public/uploads/CallCreation/CallLog/', 
         // expense: baseUrl+'/public/uploads/OtherExpenseSub/OtherExpSubFiles/', 
+        // attendance: baseUrl+'/public/uploads/attendanceregisterfiles/', //Attendane Entry File Uploads
+        // expense: baseUrl+'/public/uploads/Expensecreation/documentsupload/',//Expense Creation
 }
 }
 export {useImageStoragePath};

@@ -83,11 +83,8 @@ import CallLogHistory from "./components/calllog/CallLogCreation/CallLogHistory"
 import CallLogTab from "./components/calllog/CallLogCreation/CallLogTab";
 import CallReport from "./components/calllog/CallReport/CallReport";
 import OtherExpenseMain from "./components/expenses/OtherExpenses/OtherExpenseMain";
-import ExpenseCreation from "./components/expenses/OtherExpenses/CreateExpenseCreation";
-import CreateExpenseCreation  from "./components/expenses/OtherExpenses/CreateExpenseCreation";
-
+import ExpenseCreation from "./components/expenses/OtherExpenses/ExpenseCreation";
 import ReimbursementAdmin from "./components/expenses/Reimbursement/ReimbursementAdmin";
-import  ReimbursementCreate from "./components/expenses/Reimbursement/ReimbursementCreate";
 
 // **********************
 
@@ -407,19 +404,13 @@ function App() {
               <Route path="attendancereport" element={!!(permission?.attendance_report?.can_view) ? <AttendanceReport/> : <Unauthorized/>}/>
             </Route>
             <Route path="expenses">
-            
               <Route path="otherExpense" >
                 <Route index element={!!(permission?.['OtherExpenses']?.can_view) ? <OtherExpenseMain /> : <Unauthorized/> } />
-                <Route path="create" element={!!(permission?.['OtherExpenses']?.can_add) ?  <CreateExpenseCreation />  : <Unauthorized/> } />
-                <Route path="edit/:id" element={!!(permission?.['OtherExpenses']?.can_edit) ?  <CreateExpenseCreation />  : <Unauthorized/> } />
+                <Route path="create" element={!!(permission?.['OtherExpenses']?.can_add) ?  <ExpenseCreation />  : <Unauthorized/> } />
+                <Route path="edit/:id" element={!!(permission?.['OtherExpenses']?.can_edit) ?  <ExpenseCreation />  : <Unauthorized/> } />
               </Route >
-           {/* <Route path="Reimbursement" element={!!(permission?.["ReimbursementForm"]?.can_view) ? <ReimbursementAdmin />: <Unauthorized/> }/> */}
+           <Route path="Reimbursement" element={!!(permission?.["ReimbursementForm"]?.can_view) ? <ReimbursementAdmin />: <Unauthorized/> }/>
              
-          <Route path="Reimbursement" >
-            <Route index element={!!(permission?.["ReimbursementForm"]?.can_view) ? <ReimbursementAdmin />: <Unauthorized/> }/>
-           <Route path="Create" element={!!(permission?.["ReimbursementForm"]?.can_add) ? <ReimbursementCreate />: <Unauthorized/> }/>
-           <Route path="edit/:id" element={!!(permission?.["ReimbursementForm"]?.can_edit) ? <ReimbursementCreate />: <Unauthorized/> }/>
-            </Route>
             </Route> 
           </Route>
           

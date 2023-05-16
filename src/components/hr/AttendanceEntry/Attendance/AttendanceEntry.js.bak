@@ -46,7 +46,7 @@ const AttendanceEntry = () => {
   const { MIMEtype: docType } = useAllowedMIMEDocType();
   const [accFileStorage, setAccFileStorage] = useState(0);
   const { total: totalStorageSize } = useAllowedUploadFileSize();
-  const { attendance: filePath } = useImageStoragePath();
+  const { callcreation: filePath } = useImageStoragePath();
   const [dateTime, setDateTime] = useState(new Date());
 
   const [formIsValid, setFormIsValid] = useState(false);
@@ -60,7 +60,7 @@ const AttendanceEntry = () => {
   const [employeeList, setEmployeeList] = useState([]);
   const [attendanceList, setAttendanceList] = useState([]);
 
-  const [files, setFiles] = useState({});
+  const [files, setFiles] = useState([]);
   const [fileData, setFileData] = useState([]);
   const [fileCheck, setFileCheck] = useState(null);
   const [fileSizeLimit, setFileSizeLimit] = useState({ error: '' });
@@ -68,8 +68,6 @@ const AttendanceEntry = () => {
   const [file, setFile] = useState(selectFiles);
   const [fileListCheck, setFileListCheck] = useState(false);
   const [fileuploading, setFileUploading] = useState(false);  
-
-  const [savedData, setSavedData] = useState({});
 
 
 
@@ -82,69 +80,30 @@ const AttendanceEntry = () => {
       setAttendanceList(resp.data.attendancetypelist);
     })
 
+    // const Time = dateTime.toLocaleTimeString('en-US',{ hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' }).toString().slice(0,8);
+    // // setTime(Time);
+    // setInput({...input, startTime: Time})
   }, [])  
 
+  // useEffect(() => {
+  //   let timer = setInterval(() => {
+  //     setDateTime(new Date());
+  //   }, 1000);
+  //   return function cleanup() {
+  //     clearInterval(timer);
+  //   }
+  // }, [dateTime])
+
   useEffect(() => {
-    let fileCount = 1;
-  
-    if (id && employeeList.length >0 && attendanceList.length > 0) {
-     getSavedList();
-    }
-  }, [id, baseUrl,employeeList, attendanceList])
-
-
-const getSavedList = ()=>{
-    axios.get(`${baseUrl}/api/attendanceregister/${id}`).then((resp) => {
-        
-      let setuserid = employeeList.find((x) => x.value == resp.data?.showattendance?.user_id);
-      let setAttendanceType = attendanceList.find((x) => x.value == resp.data?.showattendance?.attendance_type_id);
-console.log("Resp",resp);
-      setInput({
-        userId: setuserid,
-        attendanceType: setAttendanceType,
-        fromDate: resp.data.showattendance.from_date,
-        toDate: resp.data.showattendance.to_date,
-        startTime: resp.data.showattendance?.start_time ? resp.data.showattendance.start_time : '',
-        reason: resp.data.showattendance.reason,              
+    if (id) {
+      axios.get(`${baseUrl}/api/attendanceentry/${id}`).then((resp) => {
+        setInput({
+          userId: employeeList.find((x) => x.value == resp.data?.attendance?.userId),
+          attendanceType: attendanceList.find((x) => x.value == resp.data?.attendance?.attendanceType)
+        })
       })
-      // setFileData()
-
-      let PreviweList=[];
-      resp.data.attendanceFiles.forEach((item)=>{
-        
-
-        let fileTypeRow = item.filetype? item.filetype: item.filetype === "" ? "application/x-rar-compressed": "";
-        let fileNameExt = item.hasfilename.split('.')[item.hasfilename.split('.').length-1];
-        let imgfilePath = filePath+item.hasfilename;
-        // let urlRow = URL.createObjectURL(imgfilePath); 
-        let fileExt = fileTypeRow.split("/")[1];
-        let fileMIME = fileTypeRow.split("/")[0];
-        let src = fileMIME === "image"
-            ? imgfilePath
-            : (fileMIME === "octet-stream" || (fileMIME === 'text' && (fileExt ==='csv' || fileExt ==='plain') && fileNameExt==='csv' ))
-              ? ImageConfig["csv"]
-              : (fileMIME === "octet-stream" || fileMIME === "application") &&
-                (fileExt === "rar" || fileExt === "x-rar-compressed")
-                ? ImageConfig["rar"]
-                : ImageConfig[fileExt];
-      
-                PreviweList.push({
-            name : item.filename,
-            size: item.filesize,
-            pic: src,
-            rowId : item.id
-            });
-      
-      }) 
-      //Set fileData For Show preview of files
-      setFileData((prev)=>{
-        return{
-          ...prev,...PreviweList
-        }
-      });
-    })
-  }
-
+    }
+  }, [id, baseUrl])
 
   useEffect(() => {
     const errors = validation;
@@ -201,19 +160,31 @@ console.log("Resp",resp);
       setDataSending(false)
     })
 
+    // axios.post(`${baseUrl}/api/attendanceregister`, formData).then((res) => {
+    //   console.log('res',res);
+    //   setDataSending(false)
+    //   if (res.data.status === 200) {
+    //     Swal.fire({
+    //       icon: "success",
+    //       title: "Attendance",
+    //       text: "Status Updated Successfully!",
+    //       confirmButtonColor: "#5156ed",
+    //     });       
+    //     setInput(initialState)
+    //     navigate('/tender/hr/attendanceentry')
+    //   } else if (res.data.status === 400) {
+    //     Swal.fire({
+    //       icon: "error",
+    //       title: "Attendance",
+    //       text: res.data.errors,
+    //       confirmButtonColor: "#5156ed",
+    //     });        
+    //   }
+    // });
   }
 
   const putData = (data, id) => {
-
-     axios({
-      method: 'post',
-      url: `${baseUrl}/api/attendanceregister/${id}`,
-      data: data,
-      headers:{
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then((res) =>{
-    // axios.put(`${baseUrl}/api/attendanceregister/${id}`, data).then((res) => {
+    axios.put(`${baseUrl}/api/attendanceentry/${id}`, data).then((res) => {
       if (res.data.status === 200) {
         Swal.fire({
           icon: "success",
@@ -221,37 +192,18 @@ console.log("Resp",resp);
           text: "Status Updated Successfully!",
           confirmButtonColor: "#5156ed",
         });
-        // setInput(initialState)
-        // navigate('/tender/hr/attendanceentry')
+        setInput(initialState)
+        navigate('/tender/hr/attendanceentry')
       } else if (res.data.status === 400) {
         Swal.fire({
           icon: "error",
           title: "Attendance",
-          text: res.data.message,
+          text: res.data.errors,
           confirmButtonColor: "#5156ed",
         });
-       
+        setDataSending(false)
       }
-      else{
-        Swal.fire({
-          icon: "error",
-          title: "Attendance",
-          text: "Unable to Update Record Now..!",
-          confirmButtonColor: "#5156ed",
-        });
-      }
-      setDataSending(false)
     });
-  }
-
-  const getFileList = () =>{
-    let senddata = {
-      "id": id,
-      "tokenid": localStorage.getItem('token')
-    }
-    axios.post(`${baseUrl}/api/attendanceregister/fileList`, senddata).then((resp)=>{
-      console.log("resp",resp);
-    })
   }
 
   
@@ -274,17 +226,25 @@ console.log("Resp",resp);
     
     formData.append('tokenid',localStorage.getItem('token')); 
 
-    if(id)
-    {
-      formData.append('_method',"PUT"); 
-    }
+   
 
-          
+    const data = {
+      user_id: input.userId?.value,
+      attendance_type_id: input.attendanceType?.value,
+      from_date: input.fromDate,
+      to_date: input.toDate,      
+      reason: input.reason,
+      start_time: input.startTime,
+      file: files,
+      tokenid: localStorage.getItem('token'),
+    };
+
+        
 
     if (!id) {
       postData(formData);
     } else {
-      putData(formData, id);
+      putData(data, id);
     }
 
   };
@@ -299,100 +259,252 @@ console.log("Resp",resp);
 
 
   useEffect(()=>{
-        let PreviweList = [];      
-      Object.values(files).forEach((item)=>{
-        
-        const fileType = item.type
-        ? item.type
-        : item.type === ""
-          ? "application/x-rar-compressed"
-          : "";
-  
-      if (docType.includes(fileType)) {
-        
-      //to skip text file. MIME type of text file and csv file are same. so we get the extension of a file to stop uploading .txt file
-        if((fileType == "text/plain" && item.name.split('.').length[item.name.split('.').length]-1) =='txt')
-      {
-        
-        Swal.fire({
-          title: "File Type",
-          text: "Invalid File Type..!",
-          icon: "error",
-          confirmButtonColor: "#2fba5f",
-        });
-      }
-      else{
+    
+    let PreviweList= [];
+    Object.values(files).forEach((item)=>{
+      const fileType = item.type
+      ? item.type
+      : item.type === ""
+        ? "application/x-rar-compressed"
+        : "";
+
+    if (docType.includes(fileType)) {
       
-        // if (docType.includes(fileType)) {
-        if (accFileStorage + item?.size <= totalStorageSize) {
-          const Files = item;
-          const FilesValue =item;
-          const fileName = Files.name;
-          const fileSize = (Files.size.toString().length > 6 ? (Files.size / 1e+6).toString().slice(0, -5) + ' MB' : (Files.size / 1000).toString().slice(0, -1) + ' KB');
-  
-          //Set fileData For Show preview of files
-    let fileTypeRow = item.type? item.type: item.type === "" ? "application/x-rar-compressed": "";
-    let urlRow = URL.createObjectURL(item); //
-    let fileExt = fileTypeRow.split("/")[1];
-    let fileMIME = fileTypeRow.split("/")[0];
-    let src = fileMIME === "image"
-        ? urlRow
-        : fileMIME === "octet-stream" && fileExt === "csv"
-          ? ImageConfig["csv"]
-          : (fileMIME === "octet-stream" || fileMIME === "application") &&
-            (fileExt === "rar" || fileExt === "x-rar-compressed")
-            ? ImageConfig["rar"]
-            : ImageConfig[fileExt];
-  
-            PreviweList.push({
-        name : item.name,
-        size: item.size,
-        pic: src,
-        rowId : ''
-        });
-  
-        // accFileStorage
-          setAccFileStorage((prev)=> {return prev + item.size});
-          // setFileCheck(true);
-            }
-         else {
-          Swal.fire({
-            title: "File Storage",
-            text: "Storage size Overflow..",
-            icon: "error",
-            confirmButtonColor: "#2fba5f",
-          });
-        }
-      } }else {
+    //to skip text file. MIME type of text file and csv file are same. so we get the extension of a file to stop uploading .txt file
+      if((fileType == "text/plain" && item.name.split('.').length[item.name.split('.').length]-1) =='txt')
+    {
+      
+      Swal.fire({
+        title: "File Type",
+        text: "Invalid File Type..!",
+        icon: "error",
+        confirmButtonColor: "#2fba5f",
+      });
+    }
+    else{
+    
+      // if (docType.includes(fileType)) {
+      if (accFileStorage + item?.size <= totalStorageSize) {
+        const Files = item;
+        const FilesValue =item;
+        const fileName = Files.name;
+        const fileSize = (Files.size.toString().length > 6 ? (Files.size / 1e+6).toString().slice(0, -5) + ' MB' : (Files.size / 1000).toString().slice(0, -1) + ' KB');
+
         
+      
+
+        
+        //Set fileData For Show preview of files
+  let fileTypeRow = item.type? item.type: item.type === "" ? "application/x-rar-compressed": "";
+  let urlRow = URL.createObjectURL(item); //
+  let fileExt = fileTypeRow.split("/")[1];
+  let fileMIME = fileTypeRow.split("/")[0];
+  let src = fileMIME === "image"
+      ? urlRow
+      : fileMIME === "octet-stream" && fileExt === "csv"
+        ? ImageConfig["csv"]
+        : (fileMIME === "octet-stream" || fileMIME === "application") &&
+          (fileExt === "rar" || fileExt === "x-rar-compressed")
+          ? ImageConfig["rar"]
+          : ImageConfig[fileExt];
+
+          PreviweList.push({
+      name : item.name,
+      size: item.size,
+      pic: src});
+
+      // accFileStorage
+        setAccFileStorage((prev)=> {return prev + item.size});
+        // setFileCheck(true);
+          }
+       else {
         Swal.fire({
-          title: "File Type",
-          text: "Invalid File Type..!",
+          title: "File Storage",
+          text: "Storage size Overflow..",
           icon: "error",
           confirmButtonColor: "#2fba5f",
         });
       }
-      })
-      if(Object.keys(fileData).length > 0)
-      {
-          Object.values(fileData).forEach((obj)=>{
-            PreviweList.push(obj);
-          })
+    } }else {
+      
+      Swal.fire({
+        title: "File Type",
+        text: "Invalid File Type..!",
+        icon: "error",
+        confirmButtonColor: "#2fba5f",
+      });
+    }
+    })
+    
+    setFileData((prev)=>{
+      return{
+        ...prev,...PreviweList
       }
-      //Eliminate File Duplication 
-      const uniqueArray = PreviweList.filter((obj, index, self) =>
-      index === self.findIndex((o) => o.size === obj.size && o.name === obj.name));
-      setFileData({...uniqueArray});
-  
+    });
   },[files])
 
-  
+
+
+
   const handleFile = (e) => {
-    let filelist = Object.values(e.target.files).map((fileQ)=>{
-      return fileQ;
-    })
-   setFiles((prev)=>{return{...prev, ...filelist}});    
+    
+    setFiles(e.target.files);
+    
+    // setFile(e.target.files);    
+
+
+    //******** */
+    // const fileTypeArr = Array.from(e.target.files).map((fileQ) => ({
+    //     fileQ
+    //   //  fileName :  fileQ.name,
+    //   //  fileType : fileQ.type ? fileQ.type : fileQ.type === "" ? "application/x-rar-compressed" : "",
+    //   //  fileSize : fileQ.size
+    // }));
+    // setFiles(fileTypeArr);
+    // setFiles(e.target.files);
+    // console.log("FileTyp", fileTypeArr)    
+    
+    // Object.keys(e.target.files).forEach((item)=>{
+    //   console.log("item", item);
+    // })
+    // const fileType = e.target.files[0].type
+    //   ? e.target.files[0].type
+    //   : e.target.files[0].type === ""
+    //     ? "application/x-rar-compressed"
+    //     : "";
+    // if (docType.includes(fileType) && (fileType == "text/plain" && Files.name.split('.').length[Files.name.split('.').length]-1) !='txt') {
+    // if (docType.includes(fileType)) {
+    //   if (accFileStorage + e.target.files[0]?.size <= totalStorageSize) {
+    //     const Files = e.target.files[0];
+    //     const FilesValue = e.target.value;
+    //     const fileName = Files.name;
+    //     const fileSize = (Files.size.toString().length > 6 ? (Files.size / 1e+6).toString().slice(0, -5) + ' MB' : (Files.size / 1000).toString().slice(0, -1) + ' KB');
+
+    //     // console.log('Files.size.length', Files.size.toString().length);
+    //     // const fileSize = ((Files.size / 1e+6).toString().slice(0,-4) + " MB");
+    //     const url = URL.createObjectURL(Files); // this points to the File object we just created
+    //     let fileExt = fileType.split("/")[1];
+    //     let fileMIME = fileType.split("/")[0];
+    //     // setFile1(e.target.files[0]);
+    //     // console.log('e.target.files[0]',e.target.files[0]);        
+    //     setFile({
+    //       // ...file,
+    //       file: e.target.files[0],
+    //       name: fileName,
+    //       type: fileType,
+    //       size: fileSize,
+    //       value: FilesValue,
+    //       src:
+    //         fileMIME === "image"
+    //           ? url
+    //           : fileMIME === "octet-stream" && fileExt === "csv"
+    //             ? ImageConfig["csv"]
+    //             : (fileMIME === "octet-stream" || fileMIME === "application") &&
+    //               (fileExt === "rar" || fileExt === "x-rar-compressed")
+    //               ? ImageConfig["rar"]
+    //               : ImageConfig[fileExt],
+    //     });
+    //     setAccFileStorage(accFileStorage + e.target.files[0].size);
+    //     setFileCheck(true);
+
+        
+
+
+
+
+
+
+
+    //   } else {
+    //     Swal.fire({
+    //       title: "File Storage",
+    //       text: "Storage size Overflow..",
+    //       icon: "error",
+    //       confirmButtonColor: "#2fba5f",
+    //     });
+    //   }
+    // } else {
+    //   Swal.fire({
+    //     title: "File Type",
+    //     text: "Invalid File Type..!",
+    //     icon: "error",
+    //     confirmButtonColor: "#2fba5f",
+    //   });
+    // }
+
+    // checkFileSize
+    // const checkFile = e.target.files[0];
+    // const fileSizeCheck = checkFile.size;
+
+
+    // // checkListUploadSize
+    // const totListSize = Object.values(fileData).map((lis) => ({
+    //   size: lis.size,
+    // }));
+    // const checkFSize = Object.values(totListSize).map((lit) => parseFloat(lit.size));
+    // let totalFSize = 0;
+    // for (let i = 0; i < checkFSize.length; i++) {
+    //   totalFSize += checkFSize[i];
+    // }
+
+
+    //checkPreviewFileSize
+//     const files = e.target.files[0];
+//     const prevFileSize = ((files.size / 1e+6).toString().slice(0, -5));
+//     const mergeTwoFileSize = parseInt(prevFileSize) + totalFSize;
+// console.log("totalFSize",totalFSize)
+// console.log("mergeTwoFileSize",mergeTwoFileSize)
+//     // if (fileSizeCheck > 50000000 || totalFSize > 50.0 || mergeTwoFileSize > 50.0) {
+//     if (fileSizeCheck > 50000000 || totalFSize > 50000000 || mergeTwoFileSize > 50000000) {
+//       setFileSizeLimit({ ...fileSizeLimit, error: 'File Size across the Limit (Limit : 50MB)' })
+//       setFileCheck(false);
+//       setFile({ ...file, value: '' });
+//     }
+//     else {
+//       setFileCheck(true);
+//     }
+
+
+    
   };
+
+// useEffect(()=>{
+
+// let PreviweList= [];
+// console.log("Files",files);
+// if(files.length>0)
+// {
+//     Object.values(files).forEach((row)=>{
+      
+//   let fileTypeRow = row.type? row.type: row.type === "" ? "application/x-rar-compressed": "";
+//   let urlRow = URL.createObjectURL(row); //
+//   let fileExt = fileTypeRow.split("/")[1];
+//   let fileMIME = fileTypeRow.split("/")[0];
+//   let src = fileMIME === "image"
+//       ? urlRow
+//       : fileMIME === "octet-stream" && fileExt === "csv"
+//         ? ImageConfig["csv"]
+//         : (fileMIME === "octet-stream" || fileMIME === "application") &&
+//           (fileExt === "rar" || fileExt === "x-rar-compressed")
+//           ? ImageConfig["rar"]
+//           : ImageConfig[fileExt];
+
+//           PreviweList.push({
+//       name : row.name,
+//       size: row.size,
+//       pic: src});
+//   })
+// }
+
+//   console.log("PreviweList",PreviweList)
+//   setFileData((prev)=>{
+//     return{
+//       ...prev,...PreviweList
+//     }
+//   })
+// },[files])
+
+
 
   const objectData = {
     name: file.name,
@@ -423,59 +535,12 @@ console.log("Resp",resp);
     setFileSizeLimit('');
   };
 
-  // const downloadDoc = (fileid, filename) => {
-  //   axios({
-  //     url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,
-  //     method: "GET",
-  //     responseType: "blob", // important
-  //   }).then((response) => {
-  //     const url = window.URL.createObjectURL(new Blob([response.data]));
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.setAttribute("download", `${filename}`);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //   });
-  // };
-
-  const DeleteDoc = (fileid, filename) => {
-    if(fileid==="")
-    {
-      const fileArray = Object.values(files);
-      const filteredFiles = fileArray.filter((x) => x.filename !== filename);
-      
-      setFiles(filteredFiles);
-      const fileArray1 = Object.values(fileData);
-      const filteredFiles1 = fileArray1.filter((x) => x.filename !== filename);
-      
-      setFileData({...filteredFiles1}); 
-    }
-    else{    
-    axios.delete(`${baseUrl}/api/destroyfile/${fileid}`).then((res) => {
-      if (res.data.status === 200) {
-        Swal.fire({
-          title: "File",
-          text: "Removed Successfully..",
-          icon: "success",
-          confirmButtonColor: "#2fba5f",
-        });
-        getSavedList();
-        getFileList();
-      } else {
-        Swal.fire({
-          title: "File",
-          text: res.data.message,
-          icon: "error",
-          confirmButtonColor: "#2fba5f",
-        });
-      }
-    });
-  }
-  };
-
   const inputChangeHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value })
   }
+
+  console.log('filData', fileData);
+  
 
   return (
     <Fragment>
@@ -662,10 +727,9 @@ console.log("Resp",resp);
                   </h6>
                 )}
               </div>
-              <div className="col-lg-12">
+              <div className="col-lg-12">Length : {Object.keys(fileData).length} :::
                 {/* {fileListCheck && ( */}
                   <div className="file_Documents">
-                    
                     {Object.keys(fileData).length > 0 && (
                     Object.values(fileData).map((t, i) => (
                   
@@ -690,14 +754,14 @@ console.log("Resp",resp);
                           <div className="fileAction">
                             <div className="download">
                               {/* <FaDownload
-                                onClick={() => downloadDoc(t.rowId, t.name)}
+                                onClick={() => downloadDoc(t.id, t.name)}
                               /> */}
                             </div>
 
                             <div className="delete">
-                              <RiDeleteBin5Fill
-                                onClick={() => DeleteDoc(t.rowId, t.name)}
-                              />
+                              {/* <RiDeleteBin5Fill
+                                onClick={() => DeleteDoc(t.id, t.name)}
+                              /> */}
                             </div>
                           </div>
                         </div>

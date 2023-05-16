@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import PreLoader from "../../UI/PreLoader";
 
-import wating from "./image/wait_f.gif"
+
 //For DataTable
 import "jquery/dist/jquery.min.js";
 import $ from "jquery";
@@ -20,19 +20,19 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 
 import axios from "axios";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate,generatePath } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import Swal from "sweetalert2";
 import { usePageTitle } from "../../hooks/usePageTitle";
-import family from "./image/wait_f.gif";
+
 
 
 let table; 
 
-const ReimbursementList = (props) => {
+const OtherExpenseMainList = (props) => {
 
-    usePageTitle('List Reimbursement Form');
-
+    usePageTitle('List Expense Creation');
+   
     const [UlbtList, setUlbList] = useState([]);
     
     const { server1: baseUrl } = useBaseUrl();
@@ -101,13 +101,12 @@ const ReimbursementList = (props) => {
             columns: [
                 { data: 'sl_no' },
                 { data: 'entry_date' },
-                { data: 'bill_no' },
+                { data: 'exp_no' },
                 { data: 'staff_name' },
                 { data: 'total_amount' },
-                { data: 'ho_app' },
-                { data: 'ceo_app' },
-                { data: 'hr_app' },
-                { data: 'view.' },
+                { data: 'view' },
+                { data: 'action' },
+               
                 // { data: 'current_stage' },
                 // { data: 'action' },
             ],
@@ -129,124 +128,27 @@ const ReimbursementList = (props) => {
 
 if((action!=null)&&(action!='')){
   console.log('action',action);
-  
-  if((action=='HOApprove')||(action=='CEOApprove')||(action=='HRApprove'))
-{
+  if(action=='EDIT'){
 
-/*********
- * sucess 
- * https://content.presentermedia.com/content/animsp/00023000/23935/business_man_emote_thumbs_up_md_nwm_v2.gif
- * reject
- * https://content.presentermedia.com/content/animsp/00024000/24178/business_grant_emote_confused_md_nwm_v2.gif
- */
-  Swal.fire({
-    title: 'Update Your Approval Status',
-     imageUrl: "https://content.presentermedia.com/content/animsp/00024000/24508/business_grant_emote_waiting_md_nwm_v2.gif",
-    imageHeight: 200, // Set the height of the image
-    showCancelButton: true,
-    confirmButtonText: 'Approve',
-    cancelButtonText: 'Reject'
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      // handle "approve" action
-      ApproveStatus='approved';
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-      // handle "reject" action
-      ApproveStatus='rejected';
-    }
+    navigate(`/tender/expenses/otherExpense/edit/`+rowdata.id);
 
-
+  }
+  else if(action=='DELETE'){
 
     let data = {
-      ApproveStatus: ApproveStatus,
-      rowdata :rowdata.id,
-      action:action,
-      token:localStorage.getItem("token"),
-}
-
-  let response = await axios.post(`${baseUrl}/api/expensesapp/UpdateApproval`, data)
-  
-  console.log("response",response.data.status);
-  
-  if(response.data.status===200){
-    if( ApproveStatus=='approved'){
-
-      Swal.fire({
-        imageUrl: "https://content.presentermedia.com/content/animsp/00023000/23935/business_man_emote_thumbs_up_md_nwm_v2.gif",
-        imageHeight: 200, // Set the height of the image
-        title: "Approved",
-        timer: 4000 // auto close after 2 seconds
-       
-    });
-
+      delete_id: rowdata.id,
     }
-    else{
+    axios.delete(`${baseUrl}/api/deleteMain/${rowdata.id}`).then((res) => {
+			if (res.status === 200) {
+	  
+        props.getlist();
+			}
+		  });
 
-      Swal.fire({
-        imageUrl: "https://content.presentermedia.com/content/animsp/00024000/24178/business_grant_emote_confused_md_nwm_v2.gif",
-        imageHeight: 200, // Set the height of the image
-        title: "Rejected",
-        timer: 4000 // auto close after 2 seconds
-       
-    });
-    }
-   
-    props.getlist();
+
+
   }
 
-  })
-
-
-}else{
-
-
-  Swal.fire({
-    title: 'Change Status',
-     imageUrl: "https://content.presentermedia.com/content/animsp/00024000/24508/business_grant_emote_waiting_md_nwm_v2.gif",
-    imageHeight: 200, // Set the height of the image
-    
-    showCancelButton: true,
-    confirmButtonText: 'Approve',
-    cancelButtonText: 'Colse'
-  }).then(async (result) => {
-    
-    if (result.isConfirmed) {
-      // handle "approve" action
-      ApproveStatus='approved';
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-      // handle "reject" action
-      ApproveStatus='Close';
-    }
-if( ApproveStatus=='approved'){
-
-  let data = {
-    ApproveStatus: ApproveStatus,
-    rowdata :rowdata.id,
-    action:action,
-    token:localStorage.getItem("token"),
-}
-
-let response = await axios.post(`${baseUrl}/api/expensesapp/UpdateApproval`, data)
-
-console.log("response",response.data.status);
-if(response.data.status===200){
-   Swal.fire({
-    imageUrl: "https://content.presentermedia.com/content/animsp/00023000/23935/business_man_emote_thumbs_up_md_nwm_v2.gif",
-    imageHeight: 200, // Set the height of the image
-    title: "Approved",
-    timer: 4000 // auto close after 2 seconds
-   
-});
-  props.getlist();
-}
-
-
-
-
-}
-  
-
-  })
 
 
 
@@ -283,9 +185,9 @@ if(response.data.status===200){
 
 
 
-}
+});
 
-        });
+        
       //   $('#ulbdataTable tbody').on('click', 'td',function (event) {
       //     // console.log('class name ::  ',$(event.target).attr('class')); // check the class name
          
@@ -436,13 +338,12 @@ if(response.data.status===200){
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Entry Date</th>
-                                <th scope="col">Expense Bill No</th>
-                                <th scope="col"> Staff Name</th>
+                                <th scope="col">Expense No</th>
+                                <th scope="col">Branch Name / Staff Name</th>
                                 <th scope="col">Total Amount</th>
-                                <th scope="col">HO Approval</th>
-                                <th scope="col">CEO Approal</th>
-                                 <th scope="col">HR Approal</th> 
                                 <th scope="col">View</th>
+                                <th scope="col">Action</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -457,4 +358,4 @@ if(response.data.status===200){
     )
 }
 
-export default ReimbursementList
+export default OtherExpenseMainList
