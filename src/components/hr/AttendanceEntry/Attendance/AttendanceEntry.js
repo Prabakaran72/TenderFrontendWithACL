@@ -76,6 +76,7 @@ const AttendanceEntry = () => {
   useEffect(() => {
     axios.get(`${baseUrl}/api/employeelist`).then((resp) => {
       setEmployeeList(resp.data.employeelist);
+     
     })
 
     axios.get(`${baseUrl}/api/attendancetypelist`).then((resp) => {
@@ -90,6 +91,11 @@ const AttendanceEntry = () => {
     if (id && employeeList.length >0 && attendanceList.length > 0) {
      getSavedList();
     }
+    else{
+      if(employeeList.find((x) => x.label == localStorage.getItem('userName'))){
+        setInput((prev)=>{return{...prev, userId: employeeList.find((x) => x.label == localStorage.getItem('userName'))}});
+      }
+    }
   }, [id, baseUrl,employeeList, attendanceList])
 
 
@@ -98,7 +104,7 @@ const getSavedList = ()=>{
         
       let setuserid = employeeList.find((x) => x.value == resp.data?.showattendance?.user_id);
       let setAttendanceType = attendanceList.find((x) => x.value == resp.data?.showattendance?.attendance_type_id);
-console.log("Resp",resp);
+
       setInput({
         userId: setuserid,
         attendanceType: setAttendanceType,
@@ -107,16 +113,23 @@ console.log("Resp",resp);
         startTime: resp.data.showattendance?.start_time ? resp.data.showattendance.start_time : '',
         reason: resp.data.showattendance.reason,              
       })
-      // setFileData()
+
+getAttendanceFiles(resp.data.attendanceFiles, 1);
+})
+}
+
+
+//get the submittd file list
+//here mode == 1  ---> file action happend for not submitted file. ie., locally added file have to be delete
+//here mode == 0  ---> file action happend for submitted file. ie., no file is added locally added 
+
+const getAttendanceFiles = (fileList, mode = 0) =>{
 
       let PreviweList=[];
-      resp.data.attendanceFiles.forEach((item)=>{
-        
-
+      fileList.forEach((item)=>{
         let fileTypeRow = item.filetype? item.filetype: item.filetype === "" ? "application/x-rar-compressed": "";
         let fileNameExt = item.hasfilename.split('.')[item.hasfilename.split('.').length-1];
-        let imgfilePath = filePath+item.hasfilename;
-        // let urlRow = URL.createObjectURL(imgfilePath); 
+        let imgfilePath = filePath+item.hasfilename; 
         let fileExt = fileTypeRow.split("/")[1];
         let fileMIME = fileTypeRow.split("/")[0];
         let src = fileMIME === "image"
@@ -136,15 +149,21 @@ console.log("Resp",resp);
             });
       
       }) 
+      
       //Set fileData For Show preview of files
+      if(mode === 1)
+      {
       setFileData((prev)=>{
         return{
           ...prev,...PreviweList
         }
       });
-    })
-  }
-
+    }
+    else{
+      setFileData({...PreviweList});
+    }
+  
+    }
 
   useEffect(() => {
     const errors = validation;
@@ -157,7 +176,6 @@ console.log("Resp",resp);
       errors.attendanceTypeErr = true;
     } else {
       errors.attendanceTypeErr = false;
-      // BsFillArrowLeftSquareFill;
     }
     setInputValidation((prev) => { return { ...prev, userIdErr: errors.userIdErr, attendanceTypeErr: errors.attendanceTypeErr } });
 
@@ -185,6 +203,16 @@ console.log("Resp",resp);
           title: "Attendance Details",
           text: "Submitted Successfully...!",
           icon: "success",
+          confirmButtonColor: "#2fba5f",
+          timer: 1000,
+        });
+        getFileList();
+      }
+      else if(res.data.status === 400){
+        Swal.fire({
+          title: "Attendance Details",
+          text: res.data.message,
+          icon: "error",
           confirmButtonColor: "#2fba5f",
           timer: 1000,
         });
@@ -221,6 +249,7 @@ console.log("Resp",resp);
           text: "Status Updated Successfully!",
           confirmButtonColor: "#5156ed",
         });
+        getFileList();
         // setInput(initialState)
         // navigate('/tender/hr/attendanceentry')
       } else if (res.data.status === 400) {
@@ -245,13 +274,14 @@ console.log("Resp",resp);
   }
 
   const getFileList = () =>{
+    
     let senddata = {
       "id": id,
       "tokenid": localStorage.getItem('token')
     }
     axios.post(`${baseUrl}/api/attendanceregister/fileList`, senddata).then((resp)=>{
-      console.log("resp",resp);
-    })
+      getAttendanceFiles(resp.data.attendanceFiles);
+    }) 
   }
 
   
@@ -423,31 +453,57 @@ console.log("Resp",resp);
     setFileSizeLimit('');
   };
 
-  // const downloadDoc = (fileid, filename) => {
-  //   axios({
-  //     url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,
-  //     method: "GET",
-  //     responseType: "blob", // important
-  //   }).then((response) => {
-  //     const url = window.URL.createObjectURL(new Blob([response.data]));
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.setAttribute("download", `${filename}`);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //   });
-  // };
+  const downloadDoc = (fileid, filename) => {
+    if(fileid!="")
+    {
+    let sendData={
+      "id" : fileid,
+      "fileName": filename
+    }
+    axios({
+      url: `${baseUrl}/api/attendance/docdownload`,
+      data: sendData,
+      method: "POST",
+      responseType: "blob", // important
+    }).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${filename}`);
+      document.body.appendChild(link);
+      link.click();
+    });
+  }
+  else{
+
+    let blobFile = Object.values(files).find((x)=> x.name == filename);
+    const url = window.URL.createObjectURL(new Blob([blobFile]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${filename}`);
+      document.body.appendChild(link);
+      link.click();
+  }
+  };
 
   const DeleteDoc = (fileid, filename) => {
+    
     if(fileid==="")
     {
+
+      //files has newly added files alone not stored/submitted files
       const fileArray = Object.values(files);
-      const filteredFiles = fileArray.filter((x) => x.filename !== filename);
+
+      const filteredFiles = fileArray.filter((x) => x.name != filename);
       
       setFiles(filteredFiles);
+
+
+      //fileData has both newly added and stored/submitted files 
+      //fileData used to display the list of files
       const fileArray1 = Object.values(fileData);
-      const filteredFiles1 = fileArray1.filter((x) => x.filename !== filename);
-      
+      const filteredFiles1 = fileArray1.filter((x) => x.name != filename);
+
       setFileData({...filteredFiles1}); 
     }
     else{    
@@ -459,8 +515,14 @@ console.log("Resp",resp);
           icon: "success",
           confirmButtonColor: "#2fba5f",
         });
-        getSavedList();
-        getFileList();
+        // getSavedList(); 
+        //here parameter '0' indicates the function that, file removed from server and have to update the list
+        // getFileList(0);
+      
+        const fileArray2 = Object.values(fileData);
+        const filteredFiles2 = fileArray2.filter((x) => (x.name != filename && x.rowId != fileid));
+        setFileData({...filteredFiles2}); 
+
       } else {
         Swal.fire({
           title: "File",
@@ -656,11 +718,11 @@ console.log("Resp",resp);
 
             <div className="row align-items-center mb-4">
               <div className="col-lg-12">
-                {fileListCheck && (
+               
                   <h6 className="listOfupload">
                     List of Uploaded documents
                   </h6>
-                )}
+               
               </div>
               <div className="col-lg-12">
                 {/* {fileListCheck && ( */}
@@ -679,25 +741,21 @@ console.log("Resp",resp);
                             <div className="text">
                               <div>
                                 <h6>Name: </h6>
-                                <p>{t.name}</p>
+                                <p>{t.name} &nbsp;&nbsp; {!t.rowId && <i className="fa fa-info-circle text-warning" aria-hidden="true" title="File not Stored"></i>}</p>
                               </div>
                               <div>
                                 <h6>Size: </h6>
-                                <p>{t.size}</p>
+                                <p>{(Math.round((t.size/1024) * 100) / 100).toFixed(2)} KB</p>
                               </div>
                             </div>
                           </div>
                           <div className="fileAction">
-                            <div className="download">
-                              {/* <FaDownload
-                                onClick={() => downloadDoc(t.rowId, t.name)}
-                              /> */}
+                            <div className="download" onClick={() => downloadDoc(t.rowId, t.name)}>
+                              <FaDownload/>
                             </div>
 
-                            <div className="delete">
-                              <RiDeleteBin5Fill
-                                onClick={() => DeleteDoc(t.rowId, t.name)}
-                              />
+                            <div className="delete" onClick={() => DeleteDoc(t.rowId, t.name)}> 
+                              <RiDeleteBin5Fill/>
                             </div>
                           </div>
                         </div>
