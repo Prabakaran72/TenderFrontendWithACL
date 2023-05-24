@@ -6,15 +6,15 @@ import "jquery/dist/jquery.min.js";
 import $ from "jquery";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-bs4";
-import jsZip from "jszip";
+//import jsZip from "jszip";
 import "datatables.net-buttons-bs4";
 import "datatables.net-buttons/js/dataTables.buttons.js";
 import "datatables.net-buttons/js/buttons.colVis.js";
 import "datatables.net-buttons/js/buttons.flash.js";
 import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-buttons/js/buttons.print.js";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+//import pdfMake from "pdfmake/build/pdfmake";
+//import pdfFonts from "pdfmake/build/vfs_fonts";
 
 import axios from "axios";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
@@ -40,24 +40,49 @@ const BidManagementList = (props) => {
       
         table =  $('#dataTable').DataTable({
             data : BidManagementList,
+            
             columns: [
                 { data: 'sl_no' },
                 { data: 'NITdate' },
                 { data: 'customer_name' },
+                { data: 'state_name' },
                 { data: 'quality' },
                 { data: 'unit' },
                 { data: 'submissiondate' },
                 { data: 'status' },
                 // { data: 'current_stage' },
-                { data: 'action' },
+                { 
+                  data: "action",
+                  className: "exclude-action",  
+                },
             ],
-            dom:
-            //   "<'row'<'col-sm-12'l>>" +
-              "<'row'<'col-sm-12   col-md-6 pl-4'l>  <'col-sm-12 col-md-6 pr-4'f>>" +
-              "<'row'<'col-sm-12'tr>>" +
-              "<'row'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",
+            buttons:[
+              {
+                extend: "print",
+                text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+                className: "btn btn-info",
+                exportOptions: {
+                    columns: ':not(.exclude-action)', 
+                  },
+              },
+              {
+                extend: "excel",
+                text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+                className: "btn btn-success",
+                exportOptions: {
+                  columns: ':not(.exclude-action)',
+                },
+              },
+            ],
+            // dom:
+            // //   "<'row'<'col-sm-12'l>>" +
+            //   "<'row'<'col-sm-12   col-md-6 pl-4'l>  <'col-sm-12 col-md-6 pr-4'f>>" +
+            //   "<'row'<'col-sm-12'tr>>" +
+            //   "<'row'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",
     
         })
+        table.buttons().container().appendTo("#dataTable_wrapper .dataTables_filter");
+        
     
         $('#dataTable tbody').on('click', 'tr .fa-edit', function () {
           let rowdata =table.row($(this).closest('tr')).data();
@@ -134,6 +159,7 @@ const BidManagementList = (props) => {
                                 <th scope="col">#</th>
                                 <th scope="col">NIT Date</th>
                                 <th scope="col">Customer Name</th>
+                                <th scope="col">State Name</th>
                                 <th scope="col">Quantity of Legacy Waste</th>
                                 <th scope="col">Unit</th>
                                 <th scope="col">Submission Date</th>

@@ -89,6 +89,11 @@ body {
     
 }
 
+.Login .get-flex-center {
+    display: flex;
+    justify-content: center;
+}
+
 .Login .card {
     width: 400px;
     box-shadow: 1px 1px 17px #6868681a;
@@ -142,9 +147,34 @@ body {
     background-color: #23d461;
 }
 
-.Login form .form-group input:focus ~ .label, 
-.Login form .form-group input:valid ~ .label
-{
+.Login form .form-group input:focus ~ .label {
+    transform: translate(15px, -61px);
+    background: #23d461;
+    color: #fff;
+    box-shadow: 0px 0px 13px #ececec;
+    border-radius: 17px;
+    padding: 1px 10px;   
+    font-size: 14px;    
+    width: 79px;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+} 
+
+.Login form .form-group input:-webkit-autofill ~ .label {
+    transform: translate(15px, -61px);
+    background: #23d461;
+    color: #fff;
+    box-shadow: 0px 0px 13px #ececec;
+    border-radius: 17px;
+    padding: 1px 10px;   
+    font-size: 14px;    
+    width: 79px;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+.Login form .form-group input:valid ~ .label {
 
     transform: translate(15px, -61px);
     background: #23d461;
@@ -286,49 +316,55 @@ body {
     border-color: #12c350;
 }
 
-.Login form  button .dfx{
+.Login form button .dfx{
     display: flex;
     justify-content: center;
     align-items: center;
     
 }
-.Login form  button .dfx .fa-gavel{
+.Login form button .dfx .fa-gavel{
     position: absolute;
-    bottom: 56px;
+    bottom: 63px;
     left: 53px;
     font-size: 27px;
     transition: .5s ease-in;
 }
-.Login form  button:hover .dfx .fa-gavel{
-    transform: rotate(45deg);
+.Login form button:hover .dfx .fa-gavel{
+    /* transform: rotate(45deg); */
     transition: .1s ease-out;
 }
-.Login form  button .dfx .fa-gavel.hammer {
+.Login form button .dfx .fa-gavel.hammer {
     position: absolute;
-    bottom: 56px;
+    bottom: 63px;
     left: 53px;
     font-size: 27px;
     animation: hammer .4s infinite;
-    transition: .5s ease-in;
+    /* transition: .5s ease-in; */
 }
 @keyframes hammer {
     0%{
         transform: rotate(0deg);        
     }
-    100%{
+    50%{
         transform: rotate(45deg);
         transition: .1s ease-out!important;
+    }
+    100%{
+        transform: rotate(0deg);        
     }
 }
 
 
 .Login form p.text-danger{
-    padding-bottom: 11px;
+    padding-bottom: 1px;
 }
 .Login form p.text-danger span{
     position: absolute;
     bottom: 14px;
-    left: 100px;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .Login form .form-group .form-control-user {
@@ -453,9 +489,18 @@ body {
 	display: none;
     background: transparent;
 } */
+/*   Login Mobile Responsive    */
 
-
-
+@media screen and (max-width : 991px) {
+    .Login .card {
+        width: 340px;
+        margin-left: 0;
+    }
+    .Login form button .dfx .fa-gavel {
+        position: absolute;
+        bottom: 63px;
+    }    
+}
 
 
 /* ----------------- SIDEBAR */
@@ -596,6 +641,22 @@ body {
     /* box-shadow: 1px 1px 19px #ddd; */
 }
 
+
+
+/* Sidebar Responsive */
+
+@media screen and (max-width : 720px) {
+    .SideNav {
+        overflow: visible;
+        width: 5rem !important;
+    }
+    .SideNav::after {
+        background-image: none;
+        width: 0;
+    }
+}
+
+
 /* ------------------------------ DASHBOARD */
 
 .fixedCard .cardUl{
@@ -604,11 +665,14 @@ body {
     align-items: center;
     overflow-wrap: break-word;
     padding-left: 0 ;
+    flex-wrap: wrap;
+    
 }
 .fixedCard .card{
     margin: 10px 15px;
     width: 190px;
     height: 120px!important;
+   
 }
 .fixedCard .card .card-body{
     display: flex;
@@ -702,10 +766,10 @@ body {
     border-left: 0.25rem solid #7412c4 !important
 }
 .fixedCard .cardUl li{
-    list-style: none;
+    list-style: none;    
 }
 .fixedCard .cardUl li .h4{
-    font-size: 14px!important;
+    font-size: 14px!important;    
     /* letter-spacing: .2px; */
 }
 .fixedCard .cardUl li .h2 {
@@ -744,6 +808,36 @@ body {
 .fixedCard .cardUl li .text-dblue{
     color: #7412c4 !important;
 }
+
+
+
+/* Fixes card responsive */
+
+@media screen and (max-width : 991px) {
+    .fixedCard .cardUl {
+        flex-wrap: wrap;
+    }
+    .fixedCard .card {
+        margin: 8px 11px;  
+        width: 148px;
+        height: 74px!important;
+    }
+    .fixedCard .cardUl li {
+        display: flex;
+        flex: 18%;
+        flex-grow: 0;
+        justify-content: center;
+        align-items: center;    
+    }
+    .fixedCard .cardUl li .h4 {
+        font-size: 10px!important; 
+        letter-spacing: 0.1px;
+    }
+    .fixedCard .card .card-body {
+        padding: 0;
+    }
+}
+
 
 
 .responsive {
@@ -844,6 +938,13 @@ body {
         top: -80px!important;
         right: -32px!important;
     }
+    .DynamicCard .card .box .slider {
+        width: 100%;
+        transform: translate(0px, 0px);
+    }
+    /* #pieChart {
+        height: 750px !important;
+    } */
 }
 
  

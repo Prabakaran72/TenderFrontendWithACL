@@ -47,7 +47,8 @@ function BarChart(props) {
       colors: ["#619c23", "#252525"],
       plotOptions: {
         bar: {
-          // horizontal: true
+          horizontal: false,
+          // columnWidth: '80%'
         },
       },
       legend: {
@@ -64,7 +65,7 @@ function BarChart(props) {
           options: {
             plotOptions: {
               bar: {
-                horizontal: false,
+                horizontal: true,
               },
             },
             legend: {

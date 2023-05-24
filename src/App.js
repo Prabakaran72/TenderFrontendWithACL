@@ -87,7 +87,10 @@ import ExpenseCreation from "./components/expenses/OtherExpenses/CreateExpenseCr
 import CreateExpenseCreation  from "./components/expenses/OtherExpenses/CreateExpenseCreation";
 
 import ReimbursementAdmin from "./components/expenses/Reimbursement/ReimbursementAdmin";
-import  ReimbursementCreate from "./components/expenses/Reimbursement/ReimbursementCreate";
+import ReimbursementCreate from "./components/expenses/Reimbursement/ReimbursementCreate";
+
+import HolidayCreation from "./components/hr/Holiday/HolidayCreation";
+import Holiday from "./components/hr/Holiday/Holiday";
 
 // **********************
 
@@ -405,6 +408,12 @@ function App() {
                 <Route path="edit/:id" element={!!(permission?.['AttendanceEntry']?.can_edit) ? <AttendanceEntry /> : <Unauthorized/> }/>
               </Route>
               <Route path="attendancereport" element={!!(permission?.attendance_report?.can_view) ? <AttendanceReport/> : <Unauthorized/>}/>
+              <Route path="holidays">
+              <Route index element={!!(permission?.['HolidayMaster']?.can_view) ? <Holiday/> : <Unauthorized/>}/>
+                <Route path="create" element={!!(permission?.['HolidayMaster']?.can_add) ? <HolidayCreation/> : <Unauthorized/>}/>
+                <Route path="edit/:id" element={!!(permission?.['HolidayMaster']?.can_edit) ? <HolidayCreation/> : <Unauthorized/>}/>
+              </Route> 
+              
             </Route>
             <Route path="expenses">
             

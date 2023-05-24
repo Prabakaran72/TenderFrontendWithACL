@@ -66,27 +66,7 @@ const ReimbursementList = (props) => {
       setpopup({});
     };
    
-   const  handleApprove=()=>{
-
-    console.log("affagg");
-
-    // swal({
-    //   title: "Are you sure?",
-    //   text: "You won't be able to revert this!",
-    //   icon: "warning",
-    //   buttons: ["Reject", "Approve"],
-    // })
-    // .then((value) => {
-    //   if (value === true) {
-    //     // User clicked "Approve"
-    //   } else {
-    //     // User clicked "Reject"
-    //   }
-    // });
-    
-
-
-   }
+   
    // Incorrect usage
 
 
@@ -95,7 +75,7 @@ const ReimbursementList = (props) => {
 
     useEffect(() => {
      
-     
+      console.log("UlbtList",UlbtList);
         table =  $('#reimdataTable').DataTable({
             data : UlbtList,
             columns: [
@@ -128,7 +108,7 @@ const ReimbursementList = (props) => {
          
 
 if((action!=null)&&(action!='')){
-  console.log('action',action);
+  
   
   if((action=='HOApprove')||(action=='CEOApprove')||(action=='HRApprove'))
 {
@@ -157,6 +137,12 @@ if((action!=null)&&(action!='')){
 
 
 
+console.log('ApproveStatus',ApproveStatus);
+
+if(ApproveStatus){
+
+
+
     let data = {
       ApproveStatus: ApproveStatus,
       rowdata :rowdata.id,
@@ -165,8 +151,9 @@ if((action!=null)&&(action!='')){
 }
 
   let response = await axios.post(`${baseUrl}/api/expensesapp/UpdateApproval`, data)
+  /**********fro empty the approval status */
+  ApproveStatus='';
   
-  console.log("response",response.data.status);
   
   if(response.data.status===200){
     if( ApproveStatus=='approved'){
@@ -193,7 +180,7 @@ if((action!=null)&&(action!='')){
    
     props.getlist();
   }
-
+}
   })
 
 
@@ -227,8 +214,10 @@ if( ApproveStatus=='approved'){
 }
 
 let response = await axios.post(`${baseUrl}/api/expensesapp/UpdateApproval`, data)
+/**********fro empty the approval status */
+ApproveStatus='';
+  
 
-console.log("response",response.data.status);
 if(response.data.status===200){
    Swal.fire({
     imageUrl: "https://content.presentermedia.com/content/animsp/00023000/23935/business_man_emote_thumbs_up_md_nwm_v2.gif",
@@ -437,7 +426,7 @@ if(response.data.status===200){
                                 <th scope="col">#</th>
                                 <th scope="col">Entry Date</th>
                                 <th scope="col">Expense Bill No</th>
-                                <th scope="col"> Staff Name</th>
+                                <th scope="col">Staff Name</th>
                                 <th scope="col">Total Amount</th>
                                 <th scope="col">HO Approval</th>
                                 <th scope="col">CEO Approal</th>

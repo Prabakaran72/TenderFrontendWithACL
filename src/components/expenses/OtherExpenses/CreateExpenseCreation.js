@@ -7,11 +7,13 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import { useImageStoragePath } from "../../hooks/useImageStoragePath";
 import { ImageConfig } from "../../hooks/Config";
-
+import { RiDeleteBin5Fill } from "react-icons/ri";
+import { FiEdit } from "react-icons/fi";
 const initailState = {
   staff: "",
   entryDate: "",
   description: "",
+  invoice: "",
 };
 const CreateExpenseCreation = () => {
 
@@ -32,7 +34,10 @@ const CreateExpenseCreation = () => {
   const [mainDisable, setmainDisable] = useState(false);
   const [img, setImg] = useState([]);
   const { expense: filePath } = useImageStoragePath();
-  const [getlist, setList] = useState('No data available in table');
+  const [getlist, setList] = useState([]);
+  const selectStaffName = localStorage.getItem('userName');
+ 
+  
   useEffect(() => {
 
     // async function fetchData(id) {
@@ -56,50 +61,72 @@ const CreateExpenseCreation = () => {
       }
     });
 
-    if(!id)
-    {
-      
+    if (!id) {
 
-        axios.post(`${baseUrl}/api/expenseinv`).then((res) => {
-          if (res.status === 200) {
-  
-  
-            setinvc(res.data.inv);
-          }
-    })
-  }
-  },[]);
 
-console.log("id",id);
-console.log("optionsForStaff",optionsForStaff);
+      axios.post(`${baseUrl}/api/expenseinv`).then((res) => {
+        if (res.status === 200) {
 
-    /******************get sublist while update*************************************** */
-useEffect(()=>{
-    if (id && optionsForStaff.length>0) {
 
-     
-        axios.get(`${baseUrl}/api/updatedl/` + id).then((res) => {
-          if (res.status === 200) {
-            let Updatedata = res.data.update_del;
-            // setmainDisable(true);
+          setinvc(res.data.inv);
+          setInput((prev) => {
+            return {
+              ...prev,
+              invoice: res.data.inv,
+            };
+          });
+        }
+      })
+    }
+  }, []);
 
-            console.log('Updatedata', Updatedata.executive_id);
-            console.log(typeof Updatedata.executive_id);
 
-            setInput((prev) => {
-              return {
-                ...prev,
+  /******************get sublist while update*************************************** */
+  useEffect(() => {
+    setInput((prev) => {
+      const selectedStaff = optionsForStaff.find((x) => x.label === selectStaffName);
 
-                entryDate: Updatedata?.entry_date,
-                description: Updatedata?.description,
-                staff: optionsForStaff.find((x) => x.value === Updatedata.executive_id),
-              };
-            });
-           console.log('description',input.description);
-            setinvc(Updatedata.expense_no);
-            getSubdata(Updatedata.expense_no);
-          }
-       
+      return {
+        ...prev,
+        entryDate: getCurrentDate(),
+        staff: selectedStaff && selectedStaff ? selectedStaff : null,
+      };
+    });
+
+    const userValues = optionsForStaff
+      .filter((option) => option.label === selectStaffName)
+      .map((option) => option.user);
+
+   
+
+    setBdm(userValues[0]);
+    
+
+    if (id && optionsForStaff.length > 0) {
+
+
+      axios.get(`${baseUrl}/api/updatedl/` + id).then((res) => {
+        if (res.status === 200) {
+          let Updatedata = res.data.update_del;
+          // setmainDisable(true);
+
+
+
+          setInput((prev) => {
+            return {
+              ...prev,
+
+              entryDate: Updatedata?.entry_date,
+              description: Updatedata?.description,
+              staff: optionsForStaff.find((x) => x.value === Updatedata.executive_id),
+              invoice: Updatedata?.expense_no,
+            };
+          });
+
+          setinvc(Updatedata.expense_no);
+          getSubdata(Updatedata.expense_no);
+        }
+
 
       });
 
@@ -113,6 +140,12 @@ useEffect(()=>{
       axios.post(`${baseUrl}/api/expenseinv`).then((res) => {
         if (res.status === 200) {
           setinvc(res.data.inv);
+          setInput((prev) => {
+            return {
+              ...prev,
+              invoice: res.data.inv,
+            };
+          });
         }
       });
     }
@@ -124,7 +157,14 @@ useEffect(()=>{
 
   }, [optionsForStaff]);
 
+  const getCurrentDate = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    let month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    let day = String(currentDate.getDate()).padStart(2, '0');
 
+    return `${year}-${month}-${day}`;
+  };
   const generateOptions = (usertype = []) => {
     let roles = usertype.map((role, index) => ({
       value: role.id,
@@ -137,13 +177,15 @@ useEffect(()=>{
   const formSubmit = () => {
     let data = {
       invc: invc,
-      description :input.description
+      description: input.description,
+      entryDate: input.entryDate,
+      staffName: input.staff.value,
     };
 
-   axios.post(`${baseUrl}/api/finalSubmit`, data).then((res) => {
+    axios.post(`${baseUrl}/api/finalSubmit`, data).then((res) => {
       if (res.data.status === 200) {
 
-        
+
         Swal.fire({
           icon: "success",
           title: "New Expense",
@@ -151,8 +193,8 @@ useEffect(()=>{
           confirmButtonColor: "#5156ed",
         })
 
-          navigate(`/tender/expenses/otherExpense`)
-  
+        navigate(`/tender/expenses/otherExpense`)
+
 
 
       } else if (res.data.status === 400) {
@@ -165,17 +207,17 @@ useEffect(()=>{
       }
 
 
-    // Swal.fire({
-    //   icon: "success",
-    //   title: "Added",
-    //   text: "Added Successfully!",
-    //   confirmButtonColor: "#5156ed",
-    // });
-    // navigate(`/tender/expenses/otherExpense`);
+      // Swal.fire({
+      //   icon: "success",
+      //   title: "Added",
+      //   text: "Added Successfully!",
+      //   confirmButtonColor: "#5156ed",
+      // });
+      // navigate(`/tender/expenses/otherExpense`);
 
-  });
-}
-const formCancel = () => {
+    });
+  }
+  const formCancel = () => {
 
 
     navigate(`/tender/expenses/otherExpense`);
@@ -193,12 +235,12 @@ const formCancel = () => {
   }
 
   const inputHandlerForSelect = (value, action) => {
-    console.log('user',value.user);
+
     setBdm(value.user);
-    if(value.lmtstatus===0){
+    if (value.lmtstatus === 0) {
       setLimit(value.lmt)
     }
-    console.log('limit',limit);
+
     setInput({ ...input, [action.name]: value });
   };
 
@@ -214,7 +256,7 @@ const formCancel = () => {
   };
 
 
-  
+
 
   const handleDel = (id) => {
 
@@ -223,9 +265,13 @@ const formCancel = () => {
       .then((res) => {
         if (res.data.status === 200) {
 
-          getSubdata(invc);
+          getSubdata(input.invoice);
 
-        } else if (res.data.status === 400) {
+        }
+        else if (res.data.status === 300) {
+          navigate(`/tender/expenses/otherExpense`)
+        }
+        else if (res.data.status === 400) {
           Swal.fire({
             icon: "error",
             title: "New SubExpense",
@@ -250,20 +296,24 @@ const formCancel = () => {
   const generatepopArray = async (res) => {
 
     let status = res.data.status;
-  
+
     if (status == 400) {
       setmainDisable(false);
-      setList("No data available in table");
+
+      //  setList(`<tr key={"0"}>
+      //  <td>{"No data available in table"}</td>
+      //  </tr>`);
+      // setList([]);
     }
     else {
-  
+
       let list = [...res.data.sublist];
-  console.log("List", list)
+
       if (list.length !== 0) {
         setmainDisable(true);
         const details = list.map((item, index) => {
           var inc = index + 1;
-  
+
           return (
             <tr key={index}>
               <td>{inc}</td>
@@ -271,49 +321,61 @@ const formCancel = () => {
               <td>{item.amount}</td>
               <td>{item.description_sub}</td>
               <td>
-                <img
-                  src={item.filetype.split('/')[0] ==="image" 
-                  ? filePath+item.hasfilename 
-                  : item.filetype.split('/')[1] === "octet-stream" && item.originalfilename.split(".")[item.originalfilename.split(".").length - 1] === "csv"
-                  ? ImageConfig["csv"]
-                  : item.filetype.split('/')[1] === "octet-stream" && item.originalfilename.split(".")[item.originalfilename.split(".").length - 1] === "rar"
-                  ? ImageConfig["rar"]
-                  : (item.filetype ==="text/plain" && item.originalfilename.split(".")[item.originalfilename.split(".").length - 1] ==="csv") ? ImageConfig["csv"]
-                  :ImageConfig[item.originalfilename.split(".")[item.originalfilename.split(".").length - 1]]
-              }
-                  alt="Uploaded img"
-                  width={50}
-                  height={50}
-                />
+                {item.hasfilename ? (
+                  <img
+                    src={
+                      item.filetype.split('/')[0] === 'image'
+                        ? filePath + item.hasfilename
+                        : item.filetype.split('/')[1] === 'octet-stream' &&
+                          item.originalfilename.split('.').pop() === 'csv'
+                          ? ImageConfig['csv']
+                          : item.filetype.split('/')[1] === 'octet-stream' &&
+                            item.originalfilename.split('.').pop() === 'rar'
+                            ? ImageConfig['rar']
+                            : item.filetype === 'text/plain' &&
+                              item.originalfilename.split('.').pop() === 'csv'
+                              ? ImageConfig['csv']
+                              : ImageConfig[item.originalfilename.split('.').pop()]
+                    }
+                    alt="Uploaded img"
+                    width={50}
+                    height={50}
+                  />
+                ) : (
+                  <span>No image upload</span>
+                )}
+
+
               </td>
               <td>
-                <button
+
+                <FiEdit
                   onClick={() => {
                     handleEdit(item.id);
                   }}
-                >
-                  Edit
-                </button>
-                <button
+                  style={{ color: 'green', cursor: 'pointer' }}
+                />
+                <span style={{ margin: '0 10px' }}></span> {/* Add margin for spacing */}
+                <RiDeleteBin5Fill
                   onClick={() => {
                     handleDel(item.id);
                   }}
-                >
-                  Delete
-                </button>
+                  style={{ color: 'red', cursor: 'pointer' }}
+                />
+
               </td>
             </tr>
           );
         });
-  
+
         setList(details);
-  
+
       }
-      else{
+      else {
         setmainDisable(false);
       }
     }
-  
+
   }
 
   /******************************************************* */
@@ -326,30 +388,31 @@ const formCancel = () => {
               <div className="row justify-content-between">
                 <div className="col-lg-6 row d-flex align-items-center mb-4">
                   <div className="col-lg-3 text-dark font-weight-bold">
-                    <label htmlFor="staff">Staff</label>
+                    <label htmlFor="staff">Staff <span className="text-danger font-weight-bold">*</span></label>
                   </div>
                   <div className="col-lg-9">
                     <Select
                       name="staff"
                       id="staff"
-                      isSearchable="true"
-                      isClearable="true"
+                      isSearchable={true}
+                      isClearable={true}
                       options={optionsForStaff}
                       value={input?.staff}
                       onChange={inputHandlerForSelect}
-                      isDisabled={mainDisable}
-                    ></Select>
+                      isDisabled={true}
+                    />
+
                   </div>
                 </div>
                 <div className="col-lg-6 row d-flex align-items-center mb-4">
                   <div className="col-lg-3 text-dark font-weight-bold">
-                    <label htmlFor="e_date">Entry Date</label>
+                    <label htmlFor="e_date">Entry Date<span className="text-danger font-weight-bold">*</span></label>
                   </div>
                   <div className="col-lg-9">
                     <input
                       type="date"
                       name="entryDate"
-                      value={input.entryDate}
+                      value={input.entryDate || getCurrentDate()}
                       onChange={(e) => inputHandlerForText(e)}
                       className="form-control"
 
@@ -382,6 +445,7 @@ const formCancel = () => {
                   EditId={EditId}
                   setEditId={setEditId}
                   Bdm={Bdm}
+                  getCurrentDate={getCurrentDate}
                 />
               </div>
               <div className="row mt-3 px-2">
@@ -403,7 +467,7 @@ const formCancel = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {getlist}
+                      {getlist.length > 0 ? getlist : <tr><td colSpan="6">No Data Found</td></tr>}
 
                     </tbody>
                   </table>

@@ -3,11 +3,11 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../../storeAuth/auth-context";
 import { usePageTitle } from "../../hooks/usePageTitle";
-import { can } from "../../UserPermission";
+//import { can } from "../../UserPermission";
 import CountryMasterList from "./CountryMasterList";
 
 const CountryMasterView = () => {
-  usePageTitle("Country Master List");
+  usePageTitle("Country Master");
   const {permission} = useContext(AuthContext)
   return (
     <>

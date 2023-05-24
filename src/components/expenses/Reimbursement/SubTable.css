@@ -40,7 +40,7 @@
     color: #eb0e0e;
     font-size: 1.8em;
   }
-  .fade {
+  .remblik {
     opacity: 0;
     animation: fadeInOut 2s ease-in-out infinite;
   }

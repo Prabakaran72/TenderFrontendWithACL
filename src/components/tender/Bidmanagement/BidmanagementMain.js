@@ -147,7 +147,7 @@ const BidmanagementMain = () => {
                       </ul>
                       <div className="tab-content" id="myTabContent">
                         <div
-                          className="tab-pane fade show active card-body px-0"
+                          className="tab-pane show active card-body px-0"
                           id="home"
                           role="tabpanel"
                           aria-labelledby="home-tab"

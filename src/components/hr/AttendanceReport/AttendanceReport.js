@@ -36,7 +36,6 @@ const AttendanceReport = () => {
     const getEmployeeList = async () => {
         const userCreationList = await axios.get(`${baseUrl}/api/usercreation`);
         // console.log(userCreationList)
-
         let options = userCreationList.data.userlist.map((item, index) => ({
             value: item.id,
             label: item.name,
@@ -144,7 +143,7 @@ const AttendanceReport = () => {
                         </div>
                     </div>
                     <div>
-                        <AttendenceReportList month={month} />
+                        <AttendenceReportList month={month} employeeOptions={employeeOptions} selectedMonth = {input.month}/>
                     </div>
                 </div>
             </div>

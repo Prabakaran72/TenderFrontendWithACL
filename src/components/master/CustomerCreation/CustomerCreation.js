@@ -4,12 +4,12 @@ import axios from "axios";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import CustomerCreationList from "./CustomerCreationList";
 import { motion } from "framer-motion";
-import { can } from "../../UserPermission";
+//import { can } from "../../UserPermission";
 import { useContext } from "react";
 import AuthContext from "../../../storeAuth/auth-context";
 
 const CustomerCreation = () => {
-  usePageTitle("Customer Creation");
+  usePageTitle("Customer Master");
   const { server1: baseUrl } = useBaseUrl();
   const navigate = useNavigate();
   const location = useLocation();

@@ -115,7 +115,7 @@ function OtherExpenseMain(props) {
 	}
 	useEffect(() => {
 
-		axios.post(`${baseUrl}/api/expensesapp/staffList`).then((res) => {
+		axios.post(`${baseUrl}/api/expenses/staffList`).then((res) => {
 			if (res.status === 200) {
 	  
 			  // generateOptions(res.data.get_staff);
@@ -184,8 +184,8 @@ console.log('grp',fromdateValue);
 let print =  '<i class="fas fa-solid fa-print print" style={{color: "#70e60f"}} ></i>' ;
 
 
- editbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit" data-action="EDIT"></i> '  : '';
-   deletebtn =  !!(permission?.['CallLogCreation']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete" data-action="DELETE"></i>' : '';
+ editbtn = !!(permission?.['OtherExpenses']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit" data-action="EDIT"></i> '  : '';
+   deletebtn =  !!(permission?.['OtherExpenses']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete" data-action="DELETE"></i>' : '';
        
 			return {
 				...item, 
@@ -293,7 +293,7 @@ let print =  '<i class="fas fa-solid fa-print print" style={{color: "#70e60f"}} 
 										{/* </div> */}
 									</div>
 									<div className="col-sm-1 row d-flex align-items-center mb-4">
-									{!!(permission?.['ReimbursementForm']?.can_add) && <Link
+									{!!(permission?.['OtherExpenses']?.can_add) && <Link
                     to="Create"
                     className="btn btn-primary btn-icon-split rounded-pill"
                   >

@@ -166,6 +166,7 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
     }
 
   useEffect(() => {
+    console.log("input",input)
     const errors = validation;
     if (input.userId === null) {
       errors.userIdErr = true;
@@ -176,6 +177,16 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
       errors.attendanceTypeErr = true;
     } else {
       errors.attendanceTypeErr = false;
+    }
+    if (input.fromDate === null) {
+      errors.fromDate = true;
+    } else {
+      errors.fromDate = false;
+    }
+    if (input.toDate === null) {
+      errors.toDate = true;
+    } else {
+      errors.toDate = false;
     }
     setInputValidation((prev) => { return { ...prev, userIdErr: errors.userIdErr, attendanceTypeErr: errors.attendanceTypeErr } });
 
@@ -288,7 +299,7 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
   const submitHandler = (e) => {
     e.preventDefault();
     setDataSending(true)
-        
+
     const formData = new FormData();
     formData.append('user_id', input.userId?.value); 
     formData.append('attendance_type_id',input.attendanceType?.value);  
@@ -576,7 +587,7 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
                     <input type="date" className="form-control" name='fromDate' value={input.fromDate} onChange={(e) => inputChangeHandler(e)} />
                   </div>
                   <div className="col-6 ml-n5 mt-2">
-                    {(validation.userIdErr === true && isClicked.userId) &&
+                    {(validation.fromDate === true ) &&
                       <span style={{ color: "red" }}>
                         Please Select Employee..!
                       </span>}
@@ -649,7 +660,7 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
                     <input type="date" className="form-control" name='toDate' value={input.toDate} onChange={(e) => inputChangeHandler(e)} />
                   </div>
                   <div className="col-6 ml-n5 mt-2">
-                    {(validation.attendanceTypeErr === true && isClicked.attendanceType) &&
+                    {(validation.toDate === true) &&
                       <span style={{ color: "red" }}>
                         Please Select Attendance Type..!
                       </span>}

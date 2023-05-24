@@ -3,13 +3,13 @@ import { Fragment, useContext } from "react"
 import { Link } from "react-router-dom"
 import AuthContext from "../../../storeAuth/auth-context"
 import { usePageTitle } from "../../hooks/usePageTitle"
-import { can } from "../../UserPermission"
+//import { can } from "../../UserPermission"
 import UserCreationList from "./UserCreationList"
 
 
 
 const UserCreationView = () => {
-    usePageTitle("User Creation List")
+    usePageTitle("User Creation Master")
     const {permission} = useContext(AuthContext)
     return (
     <Fragment>

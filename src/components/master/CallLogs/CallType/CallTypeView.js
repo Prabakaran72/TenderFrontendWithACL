@@ -7,7 +7,7 @@ import { can } from "../../../UserPermission"
 import CallTypeList from "./CallTypeList"
 
 const CallTypeView = () => {
-    usePageTitle("Call Type List")
+    usePageTitle("Call Type Master")
     const {permission} = useContext(AuthContext)
     return (
     <Fragment>

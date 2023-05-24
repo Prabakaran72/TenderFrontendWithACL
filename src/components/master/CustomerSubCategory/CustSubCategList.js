@@ -16,13 +16,13 @@ import "datatables.net-buttons/js/buttons.flash.js";
 import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-buttons/js/buttons.print.js";
 
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+//import pdfMake from "pdfmake/build/pdfmake";
+//import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
 import AuthContext from "../../../storeAuth/auth-context";
-import { can } from "../../UserPermission";
+//import { can } from "../../UserPermission";
 
 let table;
 const CustSubCategList = () => {
@@ -66,17 +66,42 @@ const CustSubCategList = () => {
     table = $("#dataTable").DataTable({
       data: dataSet,
       columns: [
-        {
-          //data: 'sl_no',
-          render: function (data, type, row) {
-            return ++i;
-          },
-        },
+        // {
+        //   //data: 'sl_no',
+        //   render: function (data, type, row) {
+        //     return ++i;
+        //   },
+        // },
+        {data: "sl_no"},
         { data: "customersubcategory" },
         { data: "status" },
-        { data: "action" },
+        { 
+          data: "action",
+          className: "exclude-action",  
+        },
+        // { data: "action" },
+      ],
+      buttons:[
+        {
+          extend: "print",
+          text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+          className: "btn btn-info",
+          exportOptions: {
+              columns: ':not(.exclude-action)', 
+            },
+        },
+        {
+          extend: "excel",
+          text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+          className: "btn btn-success",
+          exportOptions: {
+            columns: ':not(.exclude-action)',
+          },
+        },
       ],
     })
+    table.buttons().container().appendTo("#dataTable_wrapper .dataTables_filter");
+
     setLoading(false)
     //to edit 
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {

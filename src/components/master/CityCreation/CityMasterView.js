@@ -8,7 +8,7 @@ import CityMasterList from "./CityMasterList"
 
 
 const CityMasterView = () => {
-    usePageTitle("City Master List")
+    usePageTitle("City Master")
     const {permission} = useContext(AuthContext)
     return (
     <Fragment>

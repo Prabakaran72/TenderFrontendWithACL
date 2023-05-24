@@ -142,11 +142,10 @@ const AreaChart = () => {
 
   return (
     <div className="col-log-12">
-      <div className="row">
-        <div className="col-md-8 d-flex "></div>
-        <div className="col-md-4 d-flex align-item-right">
-          <div className="col-sm-3 mt-2">State : </div>
-          <div className="col-sm-8">
+      <div className="row">        
+        <div className="col-md-12 col-12 d-flex align-item-right mb-2 col-lg-12">
+          <div className="col-sm-1 mt-2 col-lg-8">State : </div>
+          <div className="col-sm-10 col-9 col-lg-4">
             <Select
               name="stateList"
               id="stateList"
@@ -160,13 +159,12 @@ const AreaChart = () => {
           </div>
         </div>
       </div>
-
       <div>
         <Chart
           options={opt} 
           series={srs} 
           type="area"
-          width="97%"
+          width="100%"
           height={350}
         />
       </div>

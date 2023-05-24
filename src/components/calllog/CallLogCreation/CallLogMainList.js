@@ -9,7 +9,7 @@ import "jquery/dist/jquery.min.js";
 import $ from "jquery";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-bs4";
-import jsZip from "jszip";
+//import jsZip from "jszip";
 import "datatables.net-buttons-bs4";
 import "datatables.net-buttons/js/dataTables.buttons.js";
 import "datatables.net-buttons/js/buttons.colVis.js";
@@ -17,22 +17,23 @@ import "datatables.net-buttons/js/buttons.flash.js";
 import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-buttons/js/buttons.print.js";
 
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+//import pdfMake from "pdfmake/build/pdfmake";
+//import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
 import AuthContext from "../../../storeAuth/auth-context";
 import CallLogCreation from "./CallLogCreation";
-import CallLogHistory from "./CallLogHistory";
+//import CallLogHistory from "./CallLogHistory";
 
 
 let table;
 const CallLogMainList = () => {
+  
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const [btnNxtFlw, setNxtFlw] = useState(null);
-  const [actBtn, setActBtn] = useState([]);
+  //const [actBtn, setActBtn] = useState([]);
   const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
 
@@ -40,96 +41,113 @@ const CallLogMainList = () => {
     let response =  axios.delete(`${baseUrl}/api/callcreation/${id}`)
     return response;
   }
-  
-  console.log( btnNxtFlw);    
+
   const getList = async () => {
-    const usertypelist = await axios.get(`${baseUrl}/api/callcreation/getCallMainList/${localStorage.getItem("token")}`);
-   // const callhislist = await axios.get(`${baseUrl}/api/callhistory/72/`);
-    // console.log("usertypelist",usertypelist);
-    const nxtFlw = usertypelist.data.calllog.map(user => ({      
-      actionBtn: user.action         
-    }));
-    setActBtn(nxtFlw);   
-    // console.log( nxtFlw);    
+    const callloglist = await axios.get(`${baseUrl}/api/callcreation/getCallMainList/${localStorage.getItem("token")}`);
+    console.log('CallCreatoin--',callloglist)
+    // let userPermissions ;
+    // let data = {
+    //   tokenid : localStorage.getItem('token')
+    // }
 
-   
-   // console.log("callhislist",callhislist);
-
+    // let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+    // if(rolesAndPermission.status === 200){
+    //   userPermissions = rolesAndPermission.data;
+    // }
+  
     var dataSet;
     if (
-      usertypelist.status === 200 &&
-      usertypelist.data.status === 200 && 
-      usertypelist.data?.calllog 
-      // callhislist.status === 200 &&
-      // callhislist.data.status === 200 && 
-      // callhislist.data?.showcallhistory
+      callloglist.status === 200 &&
+      callloglist.data.status === 200 &&
+      callloglist.data?.calllog
     ) {
-      let list = [...usertypelist.data.calllog];
-      // let list1 = [callhislist.data.showcallhistory];
-      // let list3 = [...list,...list1];
-      // console.log('LIST1:',list1)      
+      let list = [...callloglist.data.calllog];
       let listarr = list.map((item, index, arr) => {
-        let nxtfollowupbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fas fa-user text-success mr-1 h6" style="cursor:pointer;" title="nxtFollowUp"></i> '  : '';
-        let editbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fa-edit text-info mx-1 h6" style="cursor:pointer; " title="Edit"></i> '  : '';
-        let deletebtn =  !!(permission?.['CallLogCreation']?.can_delete) ? '<i class="fas fa-trash-alt text-danger ml-1 h6" style="cursor:pointer; "  title="Delete"></i>' : '';
-        // setNxtFlw(nxtfollowupbtn);        
+        // CallLogCreation
+        let nxtfollowupbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fas fa-user text-info mx-2 h6" style="cursor:pointer" title="nxtFollowUp"></i> '  : '';
+        let editbtn = !!(permission?.['CallLogCreation']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> '  : '';
+        let deletebtn =  !!(permission?.['CallLogCreation']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+
+        
+        
         return {
+
         ...item,
-        btn : item.next_followup_date == null ? nxtfollowupbtn : 'closed',
         mode: "Direct",
         // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
-        action: (item.next_followup_date ? nxtfollowupbtn : '') + editbtn + deletebtn ,
+        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
         // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
+        action: ( nxtfollowupbtn + editbtn + deletebtn ),
         sl_no: index + 1,
         completed: item.close_date? item.close_date: '--',
-        next_followup :  item.next_followup_date ? item.next_followup_date :  item.close_date ? "<span class='text-success'>Closed</span>" : "<span class='text-warning'>InLive</span>",                              
-      }});                 
+        next_followup :  item.next_followup_date ? item.next_followup_date :  item.close_date ? "<span class='text-success'>Closed</span>" : "<span class='text-warning'>InLive</span>"
+      }});
+
       dataSet = listarr;
 
     } else {
        dataSet = [];
     }
 
-    console.log(dataSet)
+    
     let i = 0;
     table = $("#dataTable").DataTable({
       data: dataSet,
       columns: [
-        {
-          //data: 'sl_no',
-          render: function (data, type, row) {
-            return ++i;
-          },
-        },
+        // {
+        //  // data: 'sl_no',
+        //   render: function (data, type, row) {
+        //     return ++i;
+        //   },
+        // },
+
+        { data: "sl_no" },
         { data: "callid" },
         { data: "customer_name" },
         { data: "username"},
         { data: "mode"},
-      { data: "callname" },        
-      { data: "call_date"},
-      { data: "completed"},
-      { data: "next_followup"},
-      { data: "action" },
-        
+        { data: "callname" },        
+        { data: "call_date"},
+        { data: "completed"},
+        { data: "next_followup"},
+        { 
+          data: "action",
+          className: "exclude-action",  
+        },
+        // { data: "action" },
+      ],
+      buttons:[
+        {
+          extend: "print",
+          text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+          className: "btn btn-info",
+          exportOptions: {
+              columns: ':not(.exclude-action)', 
+            },
+        },
+        {
+          extend: "excel",
+          text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+          className: "btn btn-success",
+          exportOptions: {
+            columns: ':not(.exclude-action)',
+          }, 
+        },
+      
       ],
     })
+    table.buttons().container().appendTo("#dataTable_wrapper .dataTables_filter");
     setLoading(false)
 
-
-
-     //to followup 
-     $("#dataTable tbody").on("click", "tr .fa-user", function () {
-     // let rowdata = axios.get(`${baseUrl}/api/callhistory/72/`);
-      let rowdata = table.row($(this).closest("tr")).data();
-     // nxt(rowdata)
-      navigate(
-        `/tender/calllog/callcreation/callDetails/${rowdata.id}/nxtFlw`
-      );
-      console.log('rowdata',rowdata.next_followup );
-    });
-
-
-
+    //to followup 
+    $("#dataTable tbody").on("click", "tr .fa-user", function () {
+      // let rowdata = axios.get(`${baseUrl}/api/callhistory/72/`);
+       let rowdata = table.row($(this).closest("tr")).data();
+       navigate(
+         `/tender/calllog/callcreation/callDetails/${rowdata.id}/nxtFlw`
+       );
+       console.log('rowdata',rowdata);
+     });
 
     //to edit 
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
@@ -142,7 +160,7 @@ const CallLogMainList = () => {
     // to delete a row
     $("#dataTable tbody").on("click", "tr .fa-trash-alt", async function () {
       let rowdata = table.row($(this).closest("tr")).data();
-      console.log("rowdata -",rowdata);
+      
       Swal.fire({
         text: `Are You sure, to delete ${rowdata.callid}?`,
         icon: "warning",
@@ -182,7 +200,8 @@ const CallLogMainList = () => {
             });
           } else {
             Swal.fire({
-              title: "Cancelled",
+              title: "Delete",
+              text: response.data.message,
               icon: "error",
               timer: 1500,
             });
@@ -229,7 +248,7 @@ const CallLogMainList = () => {
             </tr>
           </thead>
           <tbody></tbody>
-          
+
         </table>
       </div>
     

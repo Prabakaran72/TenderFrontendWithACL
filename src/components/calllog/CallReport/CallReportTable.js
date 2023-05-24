@@ -7,6 +7,7 @@ import {
     useGlobalFilter,
 } from "react-table";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
+import UseExport from "../../hooks/useExport";
 
 
 // const data = [
@@ -18,6 +19,7 @@ import { useBaseUrl } from "../../hooks/useBaseUrl";
 const CallReportTable = ( {change, input, check} ) => {
     const {server1: baseUrl} = useBaseUrl();    
     const [data, setData] = useState([]);      
+    const [header, setHeader] = useState([]);   
 
     const columns = useMemo(
         () => [
@@ -107,6 +109,16 @@ const CallReportTable = ( {change, input, check} ) => {
             console.log('data+++', resp.data.daywisereport);     
         })
     },[change]);
+
+    useEffect(()=> {
+        let HeadersList = [];
+  
+        columns.map((col)=> {        
+            HeadersList.push(col.accessor);
+        })
+        // console.log('HeadersList',HeadersList);
+      setHeader(HeadersList);     
+      },[])
         
    
     // console.log('page',page);
@@ -128,7 +140,12 @@ const CallReportTable = ( {change, input, check} ) => {
                         ))}
                     </select>
                 </div>
-                <div className="d-flex ">                    
+                <div className="d-flex ">  
+                    <UseExport               
+                        data={data}                       
+                        header={header}
+                        title = {'CALL REPOST LIST'}
+                    />                       
                     <input
                         value={globalFilter || ""}
                         onChange={(e) => setGlobalFilter(e.target.value)}

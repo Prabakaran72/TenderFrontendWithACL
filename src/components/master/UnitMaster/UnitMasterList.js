@@ -1,8 +1,7 @@
 import axios from "axios";
-// import { data } from "jquery";
-import { useState, useEffect, Fragment, useContext } from "react";
-import { useBaseUrl } from "../../hooks/useBaseUrl";
-import Swal from "sweetalert2";
+import { Fragment,  useContext,  useEffect, useState } from "react";
+import {  useNavigate } from "react-router-dom";
+// import Swal from "sweetalert2";
 
 //For DataTable
 import "jquery/dist/jquery.min.js";
@@ -10,7 +9,7 @@ import $ from "jquery";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-bs4";
 import jsZip from "jszip";
-import "datatables.net-buttons";
+import "datatables.net-buttons-bs4";
 import "datatables.net-buttons/js/dataTables.buttons.js";
 import "datatables.net-buttons/js/buttons.colVis.js";
 import "datatables.net-buttons/js/buttons.flash.js";
@@ -19,133 +18,145 @@ import "datatables.net-buttons/js/buttons.print.js";
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { useNavigate } from "react-router-dom";
+
+import { useBaseUrl } from "../../hooks/useBaseUrl";
+import Swal from "sweetalert2/src/sweetalert2";
+import { Loader } from "rsuite";
 import AuthContext from "../../../storeAuth/auth-context";
-import { can } from "../../UserPermission";
+//import { can } from "../../UserPermission";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 window.JSZip = jsZip;
 
 
+let table;
 const UnitMasterList = () => {
-  const [loading, setLoading] = useState(true);
-  const [unitList, setUnitList] = useState([]);
   const { server1: baseUrl } = useBaseUrl();
-  const {permission} = useContext(AuthContext)
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const {permission} = useContext(AuthContext)
 
-  useEffect(() => {
-    let isMounted = true;
 
-    axios.get(`${baseUrl}/api/unit`).then((res) => {
-      if (isMounted) {
-        if (res.status === 200) {
-            setUnitList(res.data.unit);
-            setLoading(false);
-         }
-      }
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [loading]);
-
+  const getList = async () => {
+    const unitlist = await axios.get(`${baseUrl}/api/unit`);
   
-  const editHandler = (e, update_id) => {
-    e.preventDefault();
+    // let userPermissions ;
+    // let data = {
+    //   tokenid : localStorage.getItem('token')
+    // }
 
-    Swal.fire({
-      text: "Are You sure, to update this record?",
-      icon: "info",
-      showCancelButton: true,
-      confirmButtonText: "Yes!",
-      cancelButtonText: "No!",
-      confirmButtonColor: "#2fba5f",
-      cancelButtonColor: "#fc5157",
-    }).then((willupdate) => {
-      if (willupdate.isConfirmed) {
-        navigate(`/tender/master/unitmaster/unitcreation/${update_id}`);
-      }
+    // let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+    // if(rolesAndPermission.status === 200){
+    //   userPermissions = rolesAndPermission.data;
+    // }
+  
+    var dataSet;
+    if (
+      unitlist.status === 200 &&
+      unitlist.data.status === 200
+    ) {
+      let list = [...unitlist.data.unit];
+      let listarr = list.map((item, index, arr) => {
+        let editbtn = !!(permission?.["Units"]?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+           
+
+        
+        return {
+
+        ...item,
+        // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
+        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+        // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
+        action:  editbtn + '' + ((item.role_id === 1) ? editbtn : '') ,
+        sl_no: index + 1,
+      }});
+
+      dataSet = listarr;
+
+    } else {
+       dataSet = [];
+    }
+
+    
+    let i = 0;
+    table = $("#dataTable").DataTable({
+      data: dataSet,
+      columns: [
+        // {
+        //  // data: 'sl_no',
+        //   render: function (data, type, row) {
+        //     return ++i;
+        //   },
+        // },
+        { data: "sl_no" },
+      { data: "unit_name" },
+      { data: "unit_status" },
+      {
+        data: "action",
+         className: "exclude-action",
+      },
+        
+      ],
+      buttons:[
+        {
+          extend: "print",
+          text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+          className: "btn btn-info",
+          exportOptions: {
+              columns: ':not(.exclude-action)', 
+            },
+        },
+        {
+          extend: "excel",
+          text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+          className: "btn btn-success",
+          exportOptions: {
+            columns: ':not(.exclude-action)',
+          },
+        },
+      ]
+    })
+    table.buttons().container().appendTo("#dataTable_wrapper .dataTables_filter");
+    setLoading(false)
+    //to edit 
+    $("#dataTable tbody").on("click", "tr .fa-edit", function () {
+      let rowdata = table.row($(this).closest("tr")).data();
+      navigate(`/tender/master/unitmaster/unitcreation/${rowdata.id}`);
     });
+
+    
+    
   };
 
   useEffect(() => {
-    const table = $(`#dataTable`).DataTable({
-      dom:
-        "<'row'<'col-sm-12   col-md-2 mt-2'l> <'col-sm-12  col-md-4'B> <'col-sm-12 col-md-6 mt-2'f>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-
-      buttons: [
-        // {
-        //   extend: "print",
-        //   text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
-        //   className: "btn btn-info",
-        // },
-        // {
-        //   extend: "excel",
-        //   text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
-        //   className: "btn btn-success",
-        // },
-        // {
-        //   extend: "pdf",
-        //   text: '<i class="fa fa-file-pdf-o  mx-1" aria-hidden="true"></i> PDF',
-        //   className: "btn btn-dark",
-        // },
-      ],
-    });
-
-    return () => {
-      table.destroy();
-    };
-  }, [loading]);
-
-  if (loading) {
-    return <h4 className="text-success ">Loading Unit Master List...!!</h4>;
-  } else {
-    var unitList_HTML = unitList.map((unitData, index) => {
-      return (
-        <tr key={unitData.id}>
-          <td className="text-center">{index + 1}</td>
-          <td className="pl-3">{unitData.unit_name}</td>
-          <td className="text-center">{unitData.unit_status}</td>
-          <td className="text-center">
-            <span>
-             {!!(permission?.Units?.can_edit) && <i
-                className="fas fa-edit text-primary h4"
-                onClick={(e) => editHandler(e, unitData.id)}
-              ></i>}
-            </span>
-          </td>
-        </tr>
-      );
-    });
-  }
+    getList();
+  }, []);
 
   return (
     <Fragment>
-      <div className="card-body">
-        <div className="table-responsive">
-          <table
-            className="table table-bordered"
-            id="dataTable"
-            width="100%"
-            cellSpacing={0}
-          >
-            <thead className="text-center bg-primary text-white">
-              <tr>
-                <th className="text-center">SNO</th>
-                <th className="text-center">UNIT NAME</th>
-                <th className="text-center">STATUS</th>
-                <th className="text-center">ACTION</th>
-              </tr>
-            </thead>
-
-            <tbody>{unitList_HTML}</tbody>
-          </table>
-        </div>
+      <div>
+        {loading && <Loader size="lg" backdrop content="Fetching Data..." />}
+      </div>
+      <div className="table-responsive">
+        <table
+          className="table table-bordered text-center"
+          id="dataTable"
+          width="100%"
+          cellSpacing={0}
+        >
+          <thead className="text-center">
+            <tr>
+              <th className="">Sl.No</th>
+              <th className="">Unit Name</th>
+              <th className="">Status</th>
+              <th className="">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </Fragment>
   );
 };
+
 export default UnitMasterList;

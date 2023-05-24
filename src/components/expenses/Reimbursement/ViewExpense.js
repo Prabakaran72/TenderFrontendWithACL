@@ -12,14 +12,13 @@ import { isNotEmpty, isNotNull } from "../CommonFunctions/CommonFunctions";
 
 
 
-import React,{ useEffect, useContext, useState } from "react";
+import React,{ useRef,useEffect, useContext, useState } from "react";
 import { Link, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import useInputValidation from "../../hooks/useInputValidation";
 
 import Select from "react-select";
-
 
 
 const ViewExpense = (props) => {
@@ -36,7 +35,7 @@ const ViewExpense = (props) => {
   const [StafName, setStafName] = useState();
   const [EntryDate,setEntryDate] = useState();
   const [TotalAmount,setTotalAmount] = useState();
- 
+  const popupRef = useRef(null);
   var DATA='';
 useEffect(() => {
   console.log("props.onData",props.onData);
@@ -55,7 +54,7 @@ useEffect(() => {
     if((PopupFor!='0')&&(!isNaN(PopupFor))){
      
       setIsOpen(true);
-     
+      popupRef.current.focus();
 let data = {
   id :PopupFor,
 }

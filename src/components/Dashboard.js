@@ -350,14 +350,7 @@ function Dashboard() {
                   </div>
                 </motion.div>
               </li>
-            </ul>
-          </div>
-      
-        </div>
 
-        <div className="row">
-          <div className="col-xl-12 col-md-12">
-            <ul className="cardUl">
               <li>
                 <motion.div
                   className="card shadow h-100 py-2 border-left-red border-3"
@@ -544,12 +537,12 @@ function Dashboard() {
                 </motion.div>
               </li>
             </ul>
-          </div>
-        </div>
+          </div>    
+        </div>        
       </div>
 
       {checkRole ? <div className="DynamicCard">
-        <div className="card shadow mb-6">
+        <div className="card shadow mb-4">
           <div className="card-body">
             <div className="box col-lg-12">
               <div className="slider">
@@ -578,10 +571,11 @@ function Dashboard() {
 
         <div className="row">
           <div className="col-lg-6 col-md-12">
-            <div className="card shadow mb-5">
+            <div className="card shadow mb-4">
               <div className="card-body">
                 <div className="responsive">
                   <Chart
+                    id="pieChart"
                     type="donut"
                     width="100%"
                     height={400}
@@ -612,6 +606,21 @@ function Dashboard() {
                           },
                         },
                       },
+                      responsive: [
+                        {
+                          breakpoint: 1000,
+                          options: {
+                            plotOptions: {
+                              bar: {
+                                size: "100%"
+                              },
+                            },
+                            legend: {
+                              position: "bottom",
+                            },
+                          },
+                        },
+                      ],
                     }}
                     series={[
                       bidanalysis?.to_be_opened,
@@ -642,6 +651,21 @@ function Dashboard() {
                         "Contract Awarded",
                         "Tender Cancelled",
                         "Tender Retender",
+                      ],
+                      responsive: [
+                        {
+                          breakpoint: 1000,
+                          options: {
+                            plotOptions: {
+                              bar: {
+                                size: "100%"
+                              },
+                            },
+                            legend: {
+                              position: "bottom",
+                            },
+                          },
+                        },
                       ],
                       title: {
                         text: "Bid Analysis - 2",

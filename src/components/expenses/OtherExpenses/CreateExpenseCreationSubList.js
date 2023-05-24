@@ -11,6 +11,7 @@ import { ImageConfig } from "../../hooks/Config";
 import { useImageStoragePath } from "../../hooks/useImageStoragePath";
 import { useAllowedUploadFileSize } from "../../hooks/useAllowedUploadFileSize";
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
+
 const selectState = {
   customerName: "",
   callNo: "",
@@ -24,6 +25,7 @@ const imageGet ={
   originalfilename:'',
   filesize:'',
   pic:'',
+  imageId:''
 }
 const selectFile = {
   name: "",
@@ -46,7 +48,8 @@ const CreateExpenseCreationSubList = ({
   getSubdata,
   EditId,
   setEditId,
-  Bdm
+  Bdm,
+  getCurrentDate
 }) => {
   const navigate = useNavigate();
   const [checkImage,setCheckImage]=useState(false)
@@ -70,15 +73,18 @@ const CreateExpenseCreationSubList = ({
   const[expType , setexpType]=useState();
   const [Lmitamt, setLmitAmt] = useState('');
   const [LimitExeed, setLimitExeed] = useState(false);
-  
+  const [removestatus, setRemove] = useState(0);
   const [accFileStorage, setAccFileStorage] = useState(0);
 const { total: totalStorageSize } = useAllowedUploadFileSize();
 const [fileData, setFileData] = useState([]);
 const [fileSizeLimit, setFileSizeLimit]= useState({error: ''});
 
+
   useEffect(() => {
     
     if (EditId) {
+      setFile(selectFile);
+      setFileCheck(false);
       let data = {
         eidtId: EditId,
       }
@@ -123,6 +129,7 @@ const [fileSizeLimit, setFileSizeLimit]= useState({error: ''});
             ...prev,
             originalfilename: fetcheddata?.originalfilename,
             filesize: fetcheddata?.filesize,
+            imageId:fetcheddata?.id,
             pic:fileMIME === "image"
                   ? filePath+""+fetcheddata.hasfilename
                   : fileMIME === "octet-stream" && fileExt === "csv"
@@ -152,7 +159,7 @@ const [fileSizeLimit, setFileSizeLimit]= useState({error: ''});
 
    
    
-    axios.get(`${baseUrl}/api/customer/list`).then((res) => {
+    axios.post(`${baseUrl}/api/otherExpcustomer/list`).then((res) => {
       if (res.status === 200) {
         setOptionsForCustomers(res.data.customerList);
       }
@@ -181,15 +188,32 @@ const [fileSizeLimit, setFileSizeLimit]= useState({error: ''});
   }, [file]); // this hook will render when file change
 
   useEffect(() => {
+    if (checkBox == true) {
     if (
       inputSub.expenseType !== null &&
-      inputSub.amount !== "" &&
-      inputSub.description !== ""
+      inputSub.amount !== ""&& inputSub?.customerName?.value!='' &&
+      inputSub?.callNo?.value
+    ) {
+
+      setIsFormValid(false);
+    } else {
+      setIsFormValid(true);
+    }
+  }else{
+
+    
+    if (
+      inputSub.expenseType !== null &&
+      inputSub.amount !== ""
+      
     ) {
       setIsFormValid(false);
     } else {
       setIsFormValid(true);
     }
+
+
+  }
 
     setTriggerTable(false);
   }, [inputSub]); // this hook will render when inputSub change
@@ -309,7 +333,7 @@ const [fileSizeLimit, setFileSizeLimit]= useState({error: ''});
     //           };
     //           filelist.push(fileobject);
     //       }
-    // console.log("filelist",filelist);
+    
     //           setTable(filelist);
     //       }
     //     })
@@ -381,10 +405,7 @@ if(lmits.lmitsatatus===0){
 
   useEffect(() => {
    
-    console.log("limit amount",LimitExeed);
-    console.log("Lmitamt",Lmitamt);
-    console.log("inputSub.amount",inputSub.amount);
-    console.log("inputSub.expenseType?.value",inputSub.expenseType?.value);
+   
     if(Lmitamt){
 
       if(inputSub.amount > Lmitamt){
@@ -400,7 +421,16 @@ if(lmits.lmitsatatus===0){
  
   }, [inputSub.amount,Lmitamt])
 
+  
+
   const inputHandlerForFile = (e) => {
+    if(updateId){
+      setImage({ ...file, value: "" });
+    }
+    
+    if(checkImage===true){
+      handleRemoveDoc();
+    }
     const Files = e.target.files[0];
     const FilesValue = e.target.value;
     const fileName = Files.name;
@@ -422,6 +452,7 @@ if(lmits.lmitsatatus===0){
             : ImageConfig[fileType.split("/")[1]],
       });
     }
+    setRemove(0);
     setFileCheck(true);
   };
 
@@ -430,6 +461,9 @@ if(lmits.lmitsatatus===0){
     setFileCheck(false);
     setBtnCheck(false);
     setEditCheck(false);
+    setFileCheck(false);
+    setCheckImage(false);
+    setRemove(1);
   };
   let ck = '';
 
@@ -456,10 +490,10 @@ if(lmits.lmitsatatus===0){
       expense_type_id: inputSub.expenseType?.value ?? "",
       amount: inputSub.amount,
       description_sub: inputSub.description,
-      file: file.name,
+      file: image.originalfilename ? image.originalfilename : file.name,
       need_call_against_expense: ck,
       invc: invc,
-     
+      removestatus:removestatus,
       update_id:updateId,
       tokenid: localStorage.getItem("token"),
     };
@@ -504,7 +538,10 @@ if(lmits.lmitsatatus===0){
 getSubdata(invc);
 setCheck(false);
 setEditCheck(false);
-setEditId('');            
+setEditId('');
+setFile(selectFile); 
+setImage(imageGet);          
+setCheckImage(false); 
       } else if (res.data.status === 400) {
         Swal.fire({
           icon: "error",
@@ -547,21 +584,40 @@ setEditId('');
     { value: 2, label: "def" },
   ];
 
-  
 
-  const downloadDoc = (fileid, filename) => {
-    axios({
-      url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,
-      method: "GET",
-      responseType: "blob", // important
-    }).then((response) => {
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+  const downloadDoc = async (filename) => {
+  
+    if(image?.imageId)
+    {
+      let sendData = {
+        "fileName" : filename,
+        "id" : updateId
+      }
+      await axios({
+        url: `${baseUrl}/api/expense/downloadfile`,
+        method: "POST",
+        responseType: "blob", // important
+        data: sendData,
+      }).then((response) => {
+       
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${filename}`);
+      document.body.appendChild(link);
+      link.click();
+      });
+    }
+    else{
+      const url = window.URL.createObjectURL(new Blob([eTargFiles]));
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", `${filename}`);
       document.body.appendChild(link);
       link.click();
-    });
+    }
+    
   };
 
   return (
@@ -594,7 +650,7 @@ setEditId('');
           {checkBox && (
             <div className="col-sm-6 row d-flex align-items-center mb-4">
               <div className="col-lg-3 text-dark font-weight-bold">
-                <label>Customer Name </label>
+                <label>Customer Name <span className="text-danger font-weight-bold">*</span></label>
               </div>
               <div className="col-lg-9">
                 <Select
@@ -613,7 +669,7 @@ setEditId('');
           {checkBox && (
             <div className="col-sm-6 row  align-items-center mb-4">
               <div className="col-lg-3 text-dark font-weight-bold">
-                <label>Call No </label>
+                <label>Call No <span className="text-danger font-weight-bold">*</span></label>
               </div>
               <div className="col-lg-9">
                 <Select
@@ -630,7 +686,7 @@ setEditId('');
           )}
           <div className="col-sm-6 row d-flex align-items-center mb-4">
             <div className="col-lg-3 text-dark font-weight-bold">
-              <label>Expense Type </label>
+              <label>Expense Type <span className="text-danger font-weight-bold">*</span></label>
             </div>
             <div className="col-lg-9">
               <Select
@@ -646,7 +702,7 @@ setEditId('');
           </div>
           <div className="col-sm-6 row  align-items-center mb-4">
             <div className="col-lg-3 text-dark font-weight-bold">
-              <label>Amount </label>
+              <label>Amount <span className="text-danger font-weight-bold">*</span></label>
             </div>
             <div className="col-lg-9">
               <input
@@ -658,7 +714,7 @@ setEditId('');
               />
             </div>
             {LimitExeed ? (
-  <span class='fade' style={{color: "#eb0e0e"}}>Lmit Amount Exeed For This Staff.Lmit Amount is: {Lmitamt}</span>
+  <span className='fade' style={{color: "#eb0e0e"}}>Lmit Amount Exeed For This Staff.Lmit Amount is: {Lmitamt}</span>
 ) : (
   null
 )}
@@ -674,7 +730,7 @@ setEditId('');
                 col="40"
                 row="40"
                 className="form-control"
-                value={inputSub.description}
+                value={inputSub?.description}
                 onChange={(e) => inputHandlerForText(e)}
               />
             </div>
@@ -698,24 +754,24 @@ setEditId('');
                   className="h-100 w-100 position-absolute top-50 start-50 pointer"
                   // accept={`image/*`}
                   onChange={(e) => inputHandlerForFile(e)}
-                  multiple
+                  
                 />
               </div>
             </div>
-            {btnCheck && (
+            {/* {fileCheck && (
               <div className="d-flex justify-content-end w-100 pr-3">
                 <button className="doc-cancel" onClick={handleRemoveDoc}>
                   Click to Cancel
                 </button>
               </div>
             )}
-            {editCheck && (
+            {checkImage && (
               <div className="d-flex justify-content-end w-100 pr-3">
                 <button className="doc-cancel" onClick={handleRemoveDoc}>
                   Click to Cancel
                 </button>
               </div>
-            )}
+            )} */}
           </div>
           <div className="col-sm-6 row d-flex align-items-center mb-4 ">
             {fileCheck && (
@@ -744,15 +800,17 @@ setEditId('');
                               <h6> Name : </h6> <span>{file.name}</span>
                             </div>
                             <div>
-                              <h6> Size : </h6> <span>{file.size}</span>
+                              <h6> Size : </h6> <span>{file.size}
+                                 <FaDownload
+                                      onClick={() => downloadDoc(file.name)}
+                                      style={{ marginLeft: '10px' }} />  </span>
                             </div>
                           </div>
                           <div className="UploadImg col-lg-6">
                             <img src={file.src} height={50} width={50}/>
+                            <i className="fa fa-times" aria-hidden="true"   style={{ color: 'red',cursor: 'pointer' }} onClick={handleRemoveDoc}></i>
                           </div>
-                          <FaDownload
-                                      // onClick={() => downloadDoc(t.id, t.name)}
-                                    />
+                        
                         </div>
                       </div>
                     </div>
@@ -789,15 +847,17 @@ setEditId('');
                             </div>
                             <div>
                               <h6> Size : </h6>{" "}
-                              <span>{image?.filesize}</span>
+                              <span>{image?.filesize}
+                              <FaDownload
+                                       onClick={() => downloadDoc(image?.originalfilename)}
+                                       style={{ marginLeft: '10px' }}  /></span>
                             </div>
                           </div>
                           <div className="UploadImg">
                             <img src={image?.pic} height={50} width={50}/>
+                            <i className="fa fa-times" aria-hidden="true"  style={{ color: 'red',cursor: 'pointer' }} onClick={handleRemoveDoc}></i>
                           </div>
-                          <FaDownload
-                                      // onClick={() => downloadDoc(t.id, t.name)}
-                                    />
+                          
                         </div>
                       </div>
                     </div>

@@ -1,6 +1,7 @@
 import axios from "axios";
-import { Fragment, useCallback, useContext, useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import { Fragment,  useContext,  useEffect, useState } from "react";
+import {  useNavigate } from "react-router-dom";
+// import Swal from "sweetalert2";
 
 //For DataTable
 import "jquery/dist/jquery.min.js";
@@ -15,105 +16,181 @@ import "datatables.net-buttons/js/buttons.flash.js";
 import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-buttons/js/buttons.print.js";
 
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-import { Link } from "react-router-dom";
+//import pdfMake from "pdfmake/build/pdfmake";
+//import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
+import Swal from "sweetalert2/src/sweetalert2";
+import { Loader } from "rsuite";
 import AuthContext from "../../../storeAuth/auth-context";
-import { can } from "../../UserPermission";
-
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-window.JSZip = jsZip;
-
+// import { can } from "../../../UserPermission";
 
 let table;
-
 const StateMasterList = () => {
-  const [stateList, setStateList] = useState([]);
-  const {server1 : baseUrl} = useBaseUrl()
+  const { server1: baseUrl } = useBaseUrl();
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
-  const loadData = useCallback(async () => {
-    if ( $.fn.DataTable.isDataTable( '#dataTable' ) ) {
-        table.destroy();
+
+  const deleterecord = async (id) => {
+    let response =  axios.delete(`${baseUrl}/api/state/${id}`)
+    return response;
+  }
+
+  const getList = async () => {
+    const statelist = await axios.get(`${baseUrl}/api/state`);
+  
+    // let userPermissions ;
+    // let data = {
+    //   tokenid : localStorage.getItem('token')
+    // }
+
+    // let rolesAndPermission = await axios.post(`${baseUrl}/api/getrolesandpermision`, data)
+    // if(rolesAndPermission.status === 200){
+    //   userPermissions = rolesAndPermission.data;
+    // }
+  
+    var dataSet;
+    if (
+      statelist.status === 200 &&
+      statelist.data.status === 200
+    ) {
+      let list = [...statelist.data.state];
+      let listarr = list.map((item, index, arr) => {
+        let editbtn = !!(permission?.["States"]?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+            let deletebtn =  !!(permission?.["States"]?.can_delete)  ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+
+        
+        return {
+
+        ...item,
+        // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
+        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+        // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
+        action:  editbtn + '' + ((item.role_id === 1) ? '' : deletebtn) ,
+        sl_no: index + 1,
+      }});
+
+      dataSet = listarr;
+
+    } else {
+       dataSet = [];
     }
 
-    const resOfStateList = await axios.get(
-      `${baseUrl}/api/state`
-    );
+    
+    let i = 0;
+    table = $("#dataTable").DataTable({
+      data: dataSet,
+      columns: [
+        // {
+        //  // data: 'sl_no',
+        //   render: function (data, type, row) {
+        //     return ++i;
+        //   },
+        // },
+        { data: "sl_no" },
+        { data: "country_name" },
+        { data: "state_name" },
+        { data: "category" },
+        { data: "state_code" },
+        { data: "state_status" },
+        { 
+          data: "action",
+          className: "exclude-action",  
+        },
+        // { data: "action" },
+      ],
+      buttons:[
+        {
+          extend: "print",
+          text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+          className: "btn btn-info",
+          exportOptions: {
+              columns: ':not(.exclude-action)', 
+            },
+        },
+        {
+          extend: "excel",
+          text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+          className: "btn btn-success",
+          exportOptions: {
+            columns: ':not(.exclude-action)',
+          },
+        },
+      ]
+    })
+    table.buttons().container().appendTo("#dataTable_wrapper .dataTables_filter");
+    setLoading(false)
+    //to edit 
+    $("#dataTable tbody").on("click", "tr .fa-edit", function () {
+      let rowdata = table.row($(this).closest("tr")).data();
+      navigate(
+        `/tender/master/statemaster/statecreation/${rowdata.id}`
+      );
+    });
 
-    if (resOfStateList.status === 200 && resOfStateList.data.status === 200) {
-      setStateList(resOfStateList.data.state)
-    }
-  }, [baseUrl])
-
- 
-  useEffect(() => {  
-      table = $(`#dataTable`).DataTable({
-        dom:"<'row'<'col-sm-12   col-md-2 mt-2'l> <'col-sm-12  col-md-4'B> <'col-sm-12 col-md-6 mt-2'f>>" +
-          "<'row'<'col-sm-12'tr>>" +
-          "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-        buttons: [],
-      });
+    // to delete a row
+    $("#dataTable tbody").on("click", "tr .fa-trash-alt", async function () {
+      let rowdata = table.row($(this).closest("tr")).data();
       
-      // return () => {
-      //     if ($.fn.DataTable.isDataTable( '#dataTable' ) ) {
-      //       table.destroy();
-      //       console.log("unset")
-      //     }
-      // };
-  }, [stateList]);
-
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
-
-  const deleteState =  (id,name) => {
-   
-       Swal.fire({
-        text: `Are You sure, to delete ${name}?`,
+      Swal.fire({
+        text: `Are You sure, to delete ${rowdata.state_name}?`,
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
-        confirmButtonColor: '#2fba5f',
-        cancelButtonColor: '#fc5157'
-    }).then((willDelete) => {
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonColor: "#2fba5f",
+        cancelButtonColor: "#fc5157",
+      }).then( async (willDelete) => {
+        if (willDelete.isConfirmed) {
+         let response = await deleterecord(rowdata.id)
 
-        if(willDelete.isConfirmed){
-            axios.delete(`${baseUrl}/api/state/${id}`)
-            .then((res) => {
-            if (res.data.status === 200) {
-              loadData()
-              Swal.fire({
-                icon: "success",
-                text: `${name} has been removed!`,
-                timer: 1500 ,
-                showConfirmButton: false,               
-              });
-            } else if (res.data.status === 404) {
-              Swal.fire({
-                icon: "error",
-                text: res.data.message,
-                showConfirmButton: true,
-              });
-            }
-          });
-        }
-        else{
+         if (response.data.status === 200) {
+            Swal.fire({ //success msg
+              icon: "success",
+              title: `${rowdata.state_name} `,
+              text: `${rowdata.state_name} has been removed!`,
+              timer: 1500,
+              showConfirmButton: false,
+            });
+
+            //delete in datatable
+              table
+              .row($(this).parents("tr"))
+              .remove()
+              .column(0)
+              .nodes()
+              .each(function (cell, i) {
+                cell.innerHTML = i + 1;
+              })
+              .draw();
+          }else if (response.data.status === 404) {
+            Swal.fire({ // error msg
+              icon: "error",
+              text: response.data.message,
+              showConfirmButton: true,
+            });
+          } else {
             Swal.fire({
-                title: 'Cancelled',
-                icon:'error',
-                timer: 1500
-              });
-        }
+              title: "Delete",
+              text: response.data.message,
+              icon: "error",
+              timer: 1500,
+            });
+          }
+        } 
+      });
+    });
+  };
 
-        });
-    
-  }
+  useEffect(() => {
+    getList();
+  }, []);
 
   return (
     <Fragment>
+      <div>
+        {loading && <Loader size="lg" backdrop content="Fetching Data..." />}
+      </div>
       <div className="table-responsive">
         <table
           className="table table-bordered text-center"
@@ -123,7 +200,7 @@ const StateMasterList = () => {
         >
           <thead className="text-center">
             <tr>
-              <th className="">S.NO</th>
+            <th className="">S.NO</th>
               <th className="">COUNTRY</th>
               <th className="">STATE NAME</th>
               <th className="">CATEGORY</th>
@@ -133,24 +210,6 @@ const StateMasterList = () => {
             </tr>
           </thead>
           <tbody>
-          {stateList.map((item, index) => {
-            return (
-              <tr key={item.id}>
-                <td> {index + 1}</td>
-                <td> {item.country_name} </td>
-                <td> {item.state_name} </td>
-                <td> {item.category} </td>
-                <td> {item.state_code} </td>
-                {item.state_status==='Active' && <td className="text-success font-weight-bold">Active</td>}
-                {item.state_status==='InActive' && <td className="">Inactive</td>}
-                
-                <td>
-                {!!(permission?.States?.can_edit) && <Link to = {`statecreation/${item.id}`}><i className="fas fa-edit text-primary"  ></i></Link>}
-                {!!(permission?.States?.can_delete) && <Link onClick={() => deleteState(item.id, item.state_name)}><i className="fas fa-trash text-danger mx-3"></i></Link>}
-                </td>
-              </tr>
-            );
-          })}
           </tbody>
         </table>
       </div>

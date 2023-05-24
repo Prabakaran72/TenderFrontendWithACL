@@ -3,12 +3,12 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../../storeAuth/auth-context";
 import { usePageTitle } from "../../hooks/usePageTitle";
-import { can } from "../../UserPermission";
+//import { can } from "../../UserPermission";
 import ProejectTypeList from "./ProjectTypeList";
 
 
 const ProjectTypeView = () => {
-    usePageTitle("Project Type Master List");
+    usePageTitle("Project Type Master");
     const {permission} = useContext(AuthContext)
     return (
         <>

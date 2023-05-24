@@ -24,7 +24,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
 import { Loader } from "rsuite";
 import AuthContext from "../../../storeAuth/auth-context";
-import {can} from "../../../components/UserPermission"
+//import {can} from "../../../components/UserPermission"
 let table;
 
 const CustomerCreationList = () => {
@@ -45,15 +45,40 @@ const CustomerCreationList = () => {
         { data: "state_name" },
         { data: "city_name" },
         { data: "customer_group" },
-        { data: "buttons" },
+        // { data: "buttons" },
+        { 
+          data: "buttons",
+          className: "exclude-action",  
+        },
       //  (can('customer-edit', authData.permissions) || can('customer-delete', authData.permissions)) && { data: "buttons" },
       ],
+      buttons:[
+        {
+          extend: "print",
+          text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+          className: "btn btn-info",
+          exportOptions: {
+              columns: ':not(.exclude-action)', 
+            },
+        },
+        {
+          extend: "excel",
+          text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+          className: "btn btn-success",
+          exportOptions: {
+            columns: ':not(.exclude-action)',
+          },
+        },
+      ],
+
       dom:
         //   "<'row'<'col-sm-12'l>>" +
         "<'row mt-3'<'col-sm-12   col-md-6 'l>  <'col-sm-12 col-md-6 'f>>" +
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-12 col-md-5 'i><'col-sm-12 col-md-7 'p>>",
     });
+
+    table.buttons().container().appendTo("#dataTable_wrapper .dataTables_filter");
 
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();

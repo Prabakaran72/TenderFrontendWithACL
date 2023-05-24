@@ -8,7 +8,7 @@ import ZoneList from "./ZoneList";
 
 
 const ZoneView = () => {
-    usePageTitle("Zone Master List");
+    usePageTitle("Zone Master");
     const {permission} = useContext(AuthContext)
     return (
         <>
