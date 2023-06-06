@@ -150,9 +150,7 @@ function Login() {
             <div className="truck"></div>
             <div className="truck1"></div>
             </div>            
-            <motion.div className='login_img' 
-              animate={{y:0}} transition={{type:'tween', duration: 1, stiffness: 220}} 
-              initial={{ y:300}}>
+            <div className='login_img' >
               <div className="container">
                 {/* Outer Row */}
                 <div className="row justify-content-center">
@@ -161,28 +159,24 @@ function Login() {
                     <div className="row">
                       <div className="col-lg-6 d-none d-lg-block py-3  px-0 mt-2">
                         {/* <center> */}
-                          <motion.div 
-                            initial={{y:-800}}
-                            animate={{y:0}} transition={{type:'spring', delay: 3, duration: .1, mass: 1.2, damping: 5}}>
+                          <div>
                             <img
                               className="login_logo"
                               src="/assets/icons/logo-zigma.png"
                               alt="..."                          
                             />
-                            </motion.div>
+                            </div>
                         {/* </center> */}
                       </div> 
                       <div className="col-lg-6 get-flex-center">
-                        <motion.div className="card o-hidden border-0 my-5"
-                         transition={{delay: 2, type:'tween', stiffness: 50}} initial={{opacity: 0}} animate={{opacity: 1}}>
+                        <div className="card o-hidden border-0 my-5">
                           <div className="card-body" 
                            >
                             {/* <div className="p-5"> */}
                               <div className="text-center">
                                 <h1 className="h4 text-gray-900 mb-4">Login</h1>
                               </div>
-                              <motion.form className="user" 
-                                initial={{x:700, opacity: 0}} animate={{x:0, opacity: 1}} transition={{delay: 2, type:'spring', damping: 9}}>
+                              <form className="user">
                                 <div className="form-group" >                                  
                                   <input
                                     type="text"
@@ -275,16 +269,16 @@ function Login() {
                                 <p className=" mt-3 text-danger text-center">
                                   <span>{error}</span>
                                 </p>
-                              </motion.form>
+                              </form>
                             {/* </div> */}
                           </div>  
-                        </motion.div>    
+                        </div>    
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       )}

@@ -23,11 +23,11 @@ useEffect(() => {
 
   return (     
     <Fragment>
-      <div className="container-fluid p-0">
+      <div className="CompetitorTab">
         <div className="row">
           <div className="col-lg-12">
-            <div className="card mb-4">
-              <div className="card-body">
+            <div className="card shadow mb-3">
+              <div className="card-body" style={{padding: "10px 0 0 0"}}>
                 <div>
                   <ul className="nav nav-tabs nav-justified" id="myTab" role="tablist">
                     <li className="nav-item">
@@ -40,8 +40,8 @@ useEffect(() => {
                         aria-controls="profile"
                         aria-selected="true"
                       >
-                        <i className='far fa-user mr-3'></i>
-                        Competitor Profile
+                        <i className='far fa-user '></i>
+                        <span>Competitor Profile</span>
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -54,23 +54,24 @@ useEffect(() => {
                         aria-controls="details"
                         aria-selected="false"
                       >
-                        <i className='far fa-id-card mr-3'></i>
-                        Competitor Details
+                        <i className='far fa-id-card '></i>
+                        <span>Competitor Details</span>
                       </NavLink>
                     </li>
                   </ul>
-                  
-                  <div className="tab-content" id="myTabContent">
-                    <div
-                    
-                      className={activeTab[5]==='profile'? `tab-pane fade show active card-body bg-light`:`tab-pane fade show active card-body bg-white`}
-                      id="home"
-                      role="tabpanel"
-                      aria-labelledby="home-tab"
-                    >
-                      <Outlet context={[ competitorId, setCompetitorId ]}/>
-                    </div>
-                    
+                </div>
+              </div>
+            </div>
+            <div className="card shadow mb-4">
+              <div className="card-body">
+                <div className="tab-content" id="myTabContent">
+                  <div
+                    className={activeTab[5] === 'profile' ? `tab-pane fade show active ` : `tab-pane fade show active bg-white`}
+                    id="home"
+                    role="tabpanel"
+                    aria-labelledby="home-tab"
+                  >
+                    <Outlet context={[competitorId, setCompetitorId]} />
                   </div>
                 </div>
               </div>

@@ -16,6 +16,7 @@ import { useAllowedMIMEDocType } from "../../hooks/useAllowedMIMEDocType";
 import { useAllowedUploadFileSize } from "../../hooks/useAllowedUploadFileSize";
 import { useImageStoragePath } from "../../hooks/useImageStoragePath";
 import CallLogTab from "./CallLogTab";
+import MultiFileUploader from '../../multipleFileUpload/MultiFileUploader';
 
 const selectState = {
   customer: null,
@@ -45,7 +46,7 @@ const selectStateErr = {
   customer: "",
   calltype: "",
   businessForecast: "",
-  forecastStatus: "",
+  // forecastStatus: "",
   date: "",
 };
 
@@ -60,7 +61,7 @@ function capitalizeFirstLetter(string) {
 
 const CallLogCreation = () => {
   usePageTitle("Call Details");
-
+  // const { position, error } = useGeoPosition();
   const { server1: baseUrl } = useBaseUrl();
   const { id, mode } = useParams();
   const navigate = useNavigate();
@@ -94,6 +95,9 @@ const CallLogCreation = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [mainId, setMainId] = useState(null);
   const [fetchedData, setFetchedData] = useState([]);
+  
+  const [fileList, setFileList] = useState([]);
+
   const [isEdited, setEdited] = useState({
     customer: false,
     calltype: false,
@@ -123,6 +127,14 @@ const CallLogCreation = () => {
     pic: file.src,
   };
 
+  
+
+
+
+
+  
+
+
   useEffect(() => {
     if (
       input.customer?.value &&
@@ -131,7 +143,7 @@ const CallLogCreation = () => {
       // input.executiveName?.value &&
       // input.procurement?.value &&
       input.businessForecast?.value &&
-      input.forecastStatus?.value &&
+      // input.forecastStatus?.value &&
       // input.addInfo.value &&
       (input.nxtFollowupDate
         ? input.nxtFollowupDate
@@ -227,6 +239,8 @@ const CallLogCreation = () => {
       }
     });
   };
+
+  
   const InitialRequest = async () => {
     //if mode is Edit
     if (mode === "edit") {
@@ -252,7 +266,9 @@ const CallLogCreation = () => {
       if (id) {
         await axios.get(`${baseUrl}/api/callhistory/${id}`).then((res) => {
           let fetcheddata = res.data.showcallhistory;
-
+          // let customerStored =  optionsForCutomerList?.find(x => x.id === fetcheddata.cust_id)
+          // console.log("customerStored", customerStored);
+          // console.log("optionsForCutomerList", optionsForCutomerList);
           setInput((prev) => {
             return {
               ...prev,
@@ -307,9 +323,12 @@ let datatosend = {"tokenid": token};
           return { ...prev, procurement: false };
         });
       });
+      console.log("id", id);
       if (id) {
         await axios.get(`${baseUrl}/api/callhistory/${id}`).then((res) => {
           let histdata = res.data.showcallhistory;
+          // let customerStored =  optionsForCutomerList?.find(x => x.id === histdata.cust_id)
+          // console.log("customerStored", customerStored);
           setInput((prev) => {
             return {
               ...prev,
@@ -829,7 +848,7 @@ let datatosend = {"tokenid": token};
       // executive_id: input.executiveName.value,
       procurement_type_id: input.procurement?.value,
       bizz_forecast_id: input.businessForecast.value,
-      bizz_forecast_status_id: input.forecastStatus.value,
+      bizz_forecast_status_id: input.forecastStatus?.value,
       additional_info: input.addInfo ? input.addInfo : null,
       next_followup_date: input.nxtFollowupDate ? input.nxtFollowupDate : null,
       close_status_id: input.nxtFollowupDate
@@ -921,24 +940,7 @@ let datatosend = {"tokenid": token};
       });
     }
 console.log("Res",res);
-    // if (res.data.status === 200) {
-    //   Swal.fire({
-    //     icon: "success",
-    //     title: "Call Log",
-    //     text: "Updated Successfully!",
-    //     confirmButtonColor: "#5156ed",
-    //   });
-    //   // navigate('/tender/calllog')
-    //   setDataSending(false);
-    // } else if (res.data.status === 400) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Call Log",
-    //     text: res.data.errors,
-    //     confirmButtonColor: "#5156ed",
-    //   });
-    //   setDataSending(false);
-    // }
+    
   };
 
   return (
@@ -1155,7 +1157,7 @@ console.log("Res",res);
                         className="font-weight-bold"
                       >
                         Status
-                        <span className="text-danger ">*</span>
+                        {/* <span className="text-danger ">*</span> */}
                       </label>
                     </div>
                     <div className="col-lg-8">
@@ -1170,13 +1172,13 @@ console.log("Res",res);
                         onChange={inputHandlerForSelect}
                         isDisabled = {mode === "nxtFlw" ? true : false}
                       ></Select>
-                      {inputValidation.forecastStatus && (
+                      {/* {inputValidation.forecastStatus && (
                         <div className="pt-1">
                           <span className="text-danger font-weight-bold">
                             Please Select Status..!
                           </span>
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>
@@ -1378,6 +1380,11 @@ console.log("Res",res);
                     Cancel
                   </button>
                 </div>
+                      
+               
+                      <MultiFileUploader setFileList={setFileList}/>
+               
+
 
                 <div className="inputgroup col-lg-6 mb-4">
                   <div className="row align-items-center">
@@ -1476,7 +1483,7 @@ console.log("Res",res);
                       {fileListCheck && (
                         <div className="file_Documents">
                           {fileData.map((t, i) => (
-                            <div className="card" key={i}>
+                            <div className="card col-lg-4 " key={i}>
                               <div className="card-body">
                                 <div className="noOfFiles">{fileCount++}</div>
                                 <div className="fileDetails">

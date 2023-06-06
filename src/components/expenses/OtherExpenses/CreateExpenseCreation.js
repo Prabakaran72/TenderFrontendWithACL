@@ -385,47 +385,51 @@ const CreateExpenseCreation = () => {
         <div className="container-fluid p-0">
           <div className="card shadow mb-4">
             <div className="card-body">
-              <div className="row justify-content-between">
-                <div className="col-lg-6 row d-flex align-items-center mb-4">
-                  <div className="col-lg-3 text-dark font-weight-bold">
-                    <label htmlFor="staff">Staff <span className="text-danger font-weight-bold">*</span></label>
-                  </div>
-                  <div className="col-lg-9">
-                    <Select
-                      name="staff"
-                      id="staff"
-                      isSearchable={true}
-                      isClearable={true}
-                      options={optionsForStaff}
-                      value={input?.staff}
-                      onChange={inputHandlerForSelect}
-                      isDisabled={true}
-                    />
+              <div className="row align-items-center">
+                <div className="col-lg-6 mb-4">
+                  <div className="row align-items-center">
+                    <div className="col-lg-4 text-dark font-weight-bold">
+                      <label htmlFor="staff">Staff <span className="text-danger font-weight-bold">*</span></label>
+                    </div>
+                    <div className="col-lg-8">
+                      <Select
+                        name="staff"
+                        id="staff"
+                        isSearchable={true}
+                        isClearable={true}
+                        options={optionsForStaff}
+                        value={input?.staff}
+                        onChange={inputHandlerForSelect}
+                        isDisabled={true}
+                      />
 
+                    </div>
                   </div>
                 </div>
-                <div className="col-lg-6 row d-flex align-items-center mb-4">
-                  <div className="col-lg-3 text-dark font-weight-bold">
-                    <label htmlFor="e_date">Entry Date<span className="text-danger font-weight-bold">*</span></label>
-                  </div>
-                  <div className="col-lg-9">
-                    <input
-                      type="date"
-                      name="entryDate"
-                      value={input.entryDate || getCurrentDate()}
-                      onChange={(e) => inputHandlerForText(e)}
-                      className="form-control"
+                <div className="col-lg-6 mb-4">
+                  <div className="row align-items-center">
+                    <div className="col-lg-4 text-dark font-weight-bold">
+                      <label htmlFor="e_date">Entry Date<span className="text-danger font-weight-bold">*</span></label>
+                    </div>
+                    <div className="col-lg-8">
+                      <input
+                        type="date"
+                        name="entryDate"
+                        value={input.entryDate || getCurrentDate()}
+                        onChange={(e) => inputHandlerForText(e)}
+                        className="form-control"
 
-                      disabled={mainDisable}
-                    />
-                    <input
-                      type="hidden"
-                      name="invoice"
-                      id="invoice"
-                      value={invc}
+                        disabled={mainDisable}
+                      />
+                      <input
+                        type="hidden"
+                        name="invoice"
+                        id="invoice"
+                        value={invc}
 
-                      className="form-control"
-                    />
+                        className="form-control"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -456,7 +460,7 @@ const CreateExpenseCreation = () => {
                     width="100%"
                     cellSpacing={0}
                   >
-                    <thead className="text-center">
+                    <thead className="text-center bg-greeny text-white">
                       <tr>
                         <th className="">Sl.No</th>
                         <th className="">Expense Type </th>
@@ -474,20 +478,22 @@ const CreateExpenseCreation = () => {
                 </div>
               </div>
               <div className="row mt-3">
-                <div className="col-sm-6 row d-flex align-items-center mb-4">
-                  <div className="col-lg-3 text-dark font-weight-bold">
-                    <label htmlFor="descrip">Description</label>
-                  </div>
-                  <div className="col-lg-9">
-                    <textarea
-                      type="textarea"
-                      name="description"
-                      col="40"
-                      row="40"
-                      className="form-control"
-                      value={input?.description}
-                      onChange={inputHandlerForText}
-                    />
+                <div className="col-lg-6 mb-4">
+                  <div className="row align-items-center">
+                    <div className="col-lg-4 text-dark font-weight-bold">
+                      <label htmlFor="descrip">Description</label>
+                    </div>
+                    <div className="col-lg-8">
+                      <textarea
+                        type="textarea"
+                        name="description"
+                        col="40"
+                        row="40"
+                        className="form-control"
+                        value={input?.description}
+                        onChange={inputHandlerForText}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

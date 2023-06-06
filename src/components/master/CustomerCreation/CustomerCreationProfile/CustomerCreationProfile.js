@@ -3,7 +3,7 @@ import $ from 'jquery';
 import Select from "react-select";
 import useInputValidation from "../../../hooks/useInputValidation";
 import { CustSubCatgyOpts } from "../data";
-import { motion } from "framer-motion";
+
 import {
   getCountryData,
   getSatateData,
@@ -29,14 +29,14 @@ import { bankDetailsActions } from "../store/BankDetailsSlice";
 
 
 // const isNotEmpty = (value) => value.trim() !== "";
-const isNotEmpty = (value) => {return true};
-const isEmail = (value) => value.includes("@");
+// const isNotEmpty = (value) => {return true};
+// const isEmail = (value) => value.includes("@");
 const isNotNull = (value) => {
-  if (value === null) {
-    return false;
-  } else if (value === "") {
-    return false;
-  }
+  // if (value === null) {
+  //   return false;
+  // } else if (value === "") {
+  //   return false;
+  // }
   return true;
 };
 
@@ -108,7 +108,7 @@ const CustomerCreationProfile = () => {
 
   const [customercategoryValue, setcustomercategoryValue] = useState("state");
   const [smartcity, setSmartCity] = useState("yes");
-  const [gstReg, setgstReg] = useState("yes");
+  const [gstReg, setgstReg] = useState("no");
 
   const {
     value: customersubcategoryValue,
@@ -369,6 +369,7 @@ const CustomerCreationProfile = () => {
       !(cust_name && cust_name.customercategory)      && setcustomercategoryValue(savedData.customer_category);
       !(cust_name && cust_name.smartcity)             && setSmartCity(savedData.smart_city);
       !(cust_name && cust_name.customersubcategory)   &&  setcustomersubcategoryValue(CustSubCatgyOpts.find((x) => x.value === savedData.customer_sub_category.toString()));
+      //$$$
       !(cust_name && cust_name.pincode)               && setpincodeValue(savedData.pincode===null? "":savedData.pincode.toString());
       !(cust_name && cust_name.phone)                 && setphoneValue(savedData.phone===null ? "": savedData.phone);
       !(cust_name && cust_name.pan)                   && setpanValue(savedData.pan===null? "":savedData.pan);
@@ -395,26 +396,6 @@ const CustomerCreationProfile = () => {
       getCountryListOptions(response.data.profiledata.country);
       getCustomerSubCategoryList();
     }
-
-    // const getProfileFormData = async () => {
-    //   let data = {
-    //     tokenid: localStorage.getItem("token"),
-    //   };
-
-    //   let response = await axios.post(
-    //     `${baseUrl}/api/customercreation/profile`,
-    //     data
-    //   );
-    //   if (response.data.profileFormData) {
-    //     let savedData = response.data.profileFormData;
-    //     savedData !== null && setFormData(savedData);
-    //     savedData !== null && setsavedDataToForm(savedData);
-    //   }else{
-    //     getFormNo();
-    //     setLoading(false)
-    //   }
-    // };
-
 
     if(id){
       getprofileofcust();
@@ -775,8 +756,6 @@ const CustomerCreationProfile = () => {
       return;
     }
 
-    
-
     // setCity(null); 
     cityChangeHandler(null);
     if(isTouched){
@@ -866,15 +845,16 @@ const CustomerCreationProfile = () => {
     stateIsValid &&
     countryIsValid &&
     cityIsValid &&
-    districtIsValid &&
-    addressIsValid &&
-    pincodeIsValid &&
-    // phoneIsValid &&
-    panIsValid &&
-    mobilenoIsValid &&
-    // currentyrdateIsValid &&
-    emailIsValid &&
-    (gstnoIsValid || GstNoDisable)
+    districtIsValid 
+    // &&
+    // addressIsValid &&
+    // pincodeIsValid &&
+    // // phoneIsValid &&
+    // panIsValid &&
+    // mobilenoIsValid &&
+    // // currentyrdateIsValid &&
+    // emailIsValid &&
+    // (gstnoIsValid || GstNoDisable)
      // &&
     // populationyrdataIsValid &&
     //websiteIsValid
@@ -1005,7 +985,7 @@ catch(ex){
   return (
     <Fragment>
     
-      <div className="formContent">
+      <div className="">
       {loading ? (<div className="loading">
         <img id="loading-image" src="/assets/img/282.gif" alt="Loading..." />
       </div> ) :
@@ -1014,10 +994,7 @@ catch(ex){
         <input type = "number" name = "formNo" id = "formNo"  value = {formNo} readOnly={true}/>
         <input type = "number" name = "formId" id = "formId"  value = {formId} readOnly={true}/>*/}
         <div className="row align-items-center"> 
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{  type:'spring', stiffness: 180}} >
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
                 <label htmlFor="customerno" className="pr-3">Customer No <span className="text-danger">&nbsp;*</span> </label>
@@ -1048,11 +1025,8 @@ catch(ex){
 
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{  type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center">
               <div className="col-lg-5 ">
                 <label htmlFor="customercategory">Customer Category<span className="text-danger">&nbsp;*</span> </label>
@@ -1115,11 +1089,8 @@ catch(ex){
                 )} */}
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .1, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center">
               <div className="col-lg-5 ">
                 <label htmlFor="customername">Customer Name<span className="text-danger">&nbsp;*</span> </label>
@@ -1144,11 +1115,8 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .1, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center">
               <div className="col-lg-5 ">
                 <label htmlFor="smartcity">Smart City<span className="text-danger">&nbsp;*</span> </label>
@@ -1188,11 +1156,8 @@ catch(ex){
                 </div>
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .2, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center">
               <div className="col-lg-5 ">
                 <label htmlFor="customersubcategory">
@@ -1220,11 +1185,8 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .2, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center">
               <div className="col-lg-5 ">
                 <label htmlFor="country">Country<span className="text-danger">&nbsp;*</span> </label>
@@ -1250,11 +1212,8 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .3, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center">
               <div className="col-lg-5 ">
                 <label htmlFor="state">State<span className="text-danger">&nbsp;*</span> </label>
@@ -1282,11 +1241,8 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .3, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center">
               <div className="col-lg-5 ">
                 <label htmlFor="distrit">District <span className="text-danger">&nbsp;*</span> </label>
@@ -1312,11 +1268,8 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .4, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center">
               <div className="col-lg-5 ">
                 <label htmlFor="city">City/Town/Village<span className="text-danger">&nbsp;*</span> </label>
@@ -1342,14 +1295,13 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .4, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="pincode">Pincode <span className="text-danger">&nbsp;*</span> </label>
+                <label htmlFor="pincode">Pincode 
+                {/* <span className="text-danger">&nbsp;*</span> */}
+                 </label>
               </div>
               <div className="col-lg-7">
                 <input
@@ -1360,7 +1312,7 @@ catch(ex){
                   name="pincode"
                   value={pincodeValue}
                   onChange={e => {pincodeChangeHandler(e) ; pincodeChangeHandler_store(e)}}
-                  onBlur={pincodeBlurHandler}
+                  // onBlur={pincodeBlurHandler}
                 />
                 {pincodeHasError && (
                   <div className="pt-1">
@@ -1371,14 +1323,13 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .5, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row font-weight-bold">
               <div className="col-lg-5  mt-2">
-                <label htmlFor="address">Address<span className="text-danger">&nbsp;*</span></label>
+                <label htmlFor="address">Address
+                {/* <span className="text-danger">&nbsp;*</span> */}
+                </label>
                 <p className="text-info font-weight-bold mt-n3"><small><b>({addresslen} Characters Remaining) </b></small></p> 
               </div>
               <div className="col-lg-7">
@@ -1389,7 +1340,7 @@ catch(ex){
                   name="address"
                   rows="3"
                   onChange={e => {addressChangeHandler(e) ; addressChangeHandler_store(e)}}
-                  onBlur={addressBlurHandler}
+                  // onBlur={addressBlurHandler}
                   value={addressValue}
                   onKeyUp={(e) => validateInputLength(e.target.value)}
                   maxLength="255"
@@ -1403,11 +1354,8 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .5, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center font-weight-bold  mb-4">
               <div className="col-lg-5 ">
                 <label htmlFor="phone">Phone &nbsp;</label>
@@ -1421,7 +1369,7 @@ catch(ex){
                   name="phone"
                   value={phoneValue}
                   onChange={e => {phoneChangeHandler(e); phoneChangeHandler_store(e)}}
-                  onBlur={phoneBlurHandler}
+                  // onBlur={phoneBlurHandler}
                 />
                 {phoneHasError && (
                   <div className="pt-1">
@@ -1434,7 +1382,7 @@ catch(ex){
             </div>
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="pan">Pan<span className="text-danger">&nbsp;*</span></label>
+                <label htmlFor="pan">Pan{/*<span className="text-danger">&nbsp;*</span>*/}</label>
                 <p className="text-info font-weight-bold mt-n3"><small><b>(Example: FDTPM0000D)</b></small></p> 
               </div>
               <div className="col-lg-7">
@@ -1446,7 +1394,7 @@ catch(ex){
                   name="pan"
                   value={panValue}
                   onChange={e => {panChangeHandler(e); panChangeHandler_store(e)}}
-                  onBlur={panBlurHandler}
+                  // onBlur={panBlurHandler}
                 />
                 {panHasError && (
                   <div className="pt-1">
@@ -1457,14 +1405,13 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4" 
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .6, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="mobile">Mobile No <span className="text-danger">&nbsp;*</span></label>
+                <label htmlFor="mobile">Mobile No 
+                {/* <span className="text-danger">&nbsp;*</span> */}
+                </label>
               </div>
               <div className="col-lg-7">
                 <input
@@ -1475,7 +1422,7 @@ catch(ex){
                   name="mobile"
                   value={mobilenoValue}
                   onChange={e => {mobilenoChangeHandler(e); mobilenoChangeHandler_store(e)}}
-                  onBlur={mobilenoBlurHandler}
+                  // onBlur={mobilenoBlurHandler}
                 />
                 {mobilenoHasError && (
                   <div className="pt-1">
@@ -1486,7 +1433,7 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
+          </div>
           {/* <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-6 ">
@@ -1513,13 +1460,15 @@ catch(ex){
               </div>
             </div>
           </div> */}
-          <motion.div className="inputgroup col-lg-6 mb-4"
+          <div className="inputgroup col-lg-6 mb-4"
             initial={{y:80, opacity: 0}} 
             animate={{y:0, opacity: 1}}    
             transition={{ delay: .6, type:'spring', stiffness: 180}} >
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="email">Email<span className="text-danger">&nbsp;*</span></label>
+                <label htmlFor="email">Email
+                {/* <span className="text-danger">&nbsp;*</span> */}
+                </label>
               </div>
               <div className="col-lg-7">
                 <input
@@ -1530,7 +1479,7 @@ catch(ex){
                   name="email"
                   value={emailValue}
                   onChange={e => {emailChangeHandler(e); emailChangeHandler_store(e)}}
-                  onBlur={emailBlurHandler}
+                  // onBlur={emailBlurHandler}
                 />
                 {emailHasError && (
                   <div className="pt-1">
@@ -1541,11 +1490,8 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4"
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .7, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
                 <label htmlFor="website">Website &nbsp;</label>
@@ -1559,7 +1505,7 @@ catch(ex){
                   name="website"
                   value={websiteValue}
                   onChange={e => {websiteChangeHandler(e); websiteChangeHandler_store(e)}}
-                  onBlur={websiteBlurHandler}
+                  // onBlur={websiteBlurHandler}
                 />
                 {websiteHasError && (
                   <div className="pt-1">
@@ -1570,12 +1516,9 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
+          </div>
           <div className="inputgroup col-lg-6 mb-4"></div>
-          <motion.div className="inputgroup col-lg-6 mb-4"
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .8, type:'spring', stiffness: 180}} >
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center">
               <div className="col-lg-5 ">
                 <label htmlFor="gstregistered">GST Registered&nbsp;</label>
@@ -1606,7 +1549,7 @@ catch(ex){
                       type="radio"
                       name="gstregistered"
                       id="gstregisteredno"
-                      checked={"no" === gstReg}
+                      checked={"no" === gstReg }
                       value="no"
                       onChange={gstregistered}
                     />
@@ -1615,14 +1558,13 @@ catch(ex){
                 </div>
               </div>
             </div>
-          </motion.div>
-          <motion.div className="inputgroup col-lg-6 mb-4"
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .8, type:'spring', stiffness: 180}} >
+          </div>
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="gstno">GST No.<span className="text-danger">&nbsp;*</span></label>
+                <label htmlFor="gstno">GST No.
+                {/* <span className="text-danger">&nbsp;*</span> */}
+                </label>
                 {!GstNoDisable && <p className="text-info font-weight-bold mt-n3"><small><b>(Ex : 22AAAAA0000A1Z5)</b></small></p> }
               </div>
               <div className="col-lg-7">
@@ -1634,7 +1576,7 @@ catch(ex){
                   name="gstno"
                   value={gstnoValue}
                   onChange={e => {gstnoChangeHandler(e); gstnoChangeHandler_store(e)}}
-                  onBlur={gstnoBlurHandler}
+                  // onBlur={gstnoBlurHandler}
                   disabled={GstNoDisable}
                 />
                 {gstnoHasError && !GstNoDisable && (
@@ -1646,37 +1588,11 @@ catch(ex){
                 )}
               </div>
             </div>
-          </motion.div>
-          {/* <div className="inputgroup col-lg-6 mb-4">
-            <div className="row align-items-center font-weight-bold">
-              <div className="col-lg-6 ">
-                <label htmlFor="populationyrdata">Population Year/Data :</label>
-              </div>
-              <div className="col-lg-6">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="populationyrdata"
-                  placeholder="Enter Population Year/Data"
-                  name="populationyrdata"
-                  value={populationyrdataValue}
-                  onChange={populationyrdataChangeHandler}
-                  onBlur={populationyrdataBlurHandler}
-                />
-                {populationyrdataHasError && (
-                  <div className="pt-1">
-                    <span className="text-danger font-weight-normal">
-                      This Field is Required
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div> */}
+          </div>
           
-          <motion.div className="col-lg-12" initial={{opacity:0}} whileInView={{opacity:1}}>
+          <div className="col-lg-12 text-center">
             {!id && <button
-             className={(!formIsValid) ?  "btn btn-outline-primary float-right rounded-pill" :  "btn btn-primary float-right rounded-pill"} 
+             className={(!formIsValid) ?  "btn btn-outline-primary rounded-pill" :  "btn btn-primary rounded-pill"} 
               disabled={!formIsValid || isdatasending}
             >
               {isdatasending && <span className="spinner-border spinner-border-sm mr-2"></span> }
@@ -1685,20 +1601,20 @@ catch(ex){
             </button>}
             {id && 
               <button
-              className={(!formIsValid) ?  "btn btn-outline-primary float-right rounded-pill" :  "btn btn-primary float-right rounded-pill"} 
+              className={(!formIsValid) ?  "btn btn-outline-primary rounded-pill" :  "btn btn-primary rounded-pill"} 
               disabled = {!formIsValid || isdatasending}
             >
               {isdatasending && <span className="spinner-border spinner-border-sm mr-2"></span> }
               {isdatasending && "Updating..."}
               {!isdatasending && "Edit & Continue"}
               </button>}
-            <button className="btn  btn-outline-dark mr-3 float-right rounded-pill"
+            <button className="btn  btn-outline-dark ml-3 rounded-pill"
             onClick = {() => navigate("/tender/master/customercreation/list")}
             disabled ={isdatasending}
             >
               Cancel
             </button>
-          </motion.div>
+          </div>
         </div>
       </form> ) }
       </div>

@@ -64,9 +64,7 @@ function Sidebar() {
       id="accordionSidebar"
     >
       {/* Sidebar - Brand */}
-      <motion.span
-      initial={{opacity: 0}}
-      animate={{opacity: 1}} 
+      <span     
         // to="/"
         className="sidebar-brand d-flex align-items-center justify-content-center brand"
       >
@@ -80,18 +78,17 @@ function Sidebar() {
           />
         </div>
         <div className="sidebar-brand-text mx-3">Zigma</div>
-      </motion.span>
+      </span>
       {/* Divider */}
       <hr className="sidebar-divider my-0" />
       {/* Nav Item - Dashboard */}
-      <motion.li className="nav-item" 
-        animate={{x:0}} initial={{x:-300}} transition={{type: 'tween'  }}>
+      <li className="nav-item">
         <Link className="nav-link" to="/tender">
           {/*<i className="fas fa-fw fa-tachometer-alt" />*/}
           <i className="fa fa-laptop"></i>
           <span className="font-weight-bold ml-1">Dashboard</span>
         </Link>
-      </motion.li>
+      </li>
      
      
       {menus.map((item,index) => {
@@ -102,8 +99,7 @@ function Sidebar() {
         <Fragment key={index}>
         
         <hr className="sidebar-divider my-0" />
-        <motion.li className="nav-item "
-        animate={{x:0}} initial={{x:-300}} transition={{type: 'tween', delay: 0.1 }}>
+        <li className="nav-item ">
           
         <Link
         className="nav-link collapsed"
@@ -142,14 +138,14 @@ function Sidebar() {
         </div>
 
         </div>
-        </motion.li>
+        </li>
       </Fragment> )
        }
       })}
 
-      <motion.div className="text-center d-none d-md-inline">
+      <div className="text-center d-none d-md-inline">
         <button className="rounded-circle border-0" id="sidebarToggle"></button>
-      </motion.div>
+      </div>
     </ul>
   );
 }

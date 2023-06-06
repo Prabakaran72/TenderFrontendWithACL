@@ -14,6 +14,8 @@ import { useAllowedUploadFileSize } from "../../../hooks/useAllowedUploadFileSiz
 import { useImageStoragePath } from "../../../hooks/useImageStoragePath";
 import { FaDownload } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
+import useGeoLocation from "../../../hooks/useGeoLocation";
+import { Link } from 'react-router-dom';
 
 const selectFiles = {
   name: '',
@@ -25,7 +27,7 @@ const selectFiles = {
 
 
 const AttendanceEntry = () => {
-  usePageTitle("Daily Attendance Entry");
+  usePageTitle("Attendance Entry");
   const { server1: baseUrl } = useBaseUrl()
   const navigate = useNavigate();
   const { id } = useParams();
@@ -71,6 +73,7 @@ const AttendanceEntry = () => {
 
   const [savedData, setSavedData] = useState({});
 
+  const location = useGeoLocation();
 
 
   useEffect(() => {
@@ -166,7 +169,6 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
     }
 
   useEffect(() => {
-    console.log("input",input)
     const errors = validation;
     if (input.userId === null) {
       errors.userIdErr = true;
@@ -550,6 +552,7 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
     setInput({ ...input, [e.target.name]: e.target.value })
   }
 
+  
   return (
     <Fragment>
       <div className="AttendanceEntry">
@@ -787,6 +790,12 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
               </div>
             </div>
           </form>
+
+          {location.loaded
+                                    ? JSON.stringify(location)
+                                    : "Location data not available yet."}   
+                          
+                          
         </div>
       </div>
     </Fragment>
@@ -797,78 +806,3 @@ export default AttendanceEntry;
 
 
 
-
-
-{/* <form onSubmit={submitHandler}>
-<div className="row">
-  <div className="col-2">
-    <label>Employee Name</label>
-  </div>
-  <div className="col-10 mb-3">
-    <div className="row">
-      <div className="col-5 mr-5 ">
-        <Select
-          name="userId"
-          id="userId"
-          isSearchable="true"
-          isClearable="true"
-          options={employeeList}
-          value={input.userId}
-          onChange={selectChangeHandler}
-        ></Select>
-      </div>
-
-      <div className="col-6 ml-n5 mt-2">
-        {(validation.userIdErr === true && isClicked.userId) &&
-          <span style={{ color: "red" }}>
-            Please Select Employee..!
-          </span>}
-      </div>
-    </div>
-  </div>
-</div>
-<div className="row">
-  <div className="col-2">
-    <label>Attendance Type</label>
-  </div>
-  <div className="col-10 mb-3">
-    <div className="row">
-      <div className="col-5 mr-5 ">
-        <Select
-          name="attendanceType"
-          id="attendanceType"
-          isSearchable="true"
-          isClearable="true"
-          options={attendance_type_options}
-          value={input.attendanceType}
-          onChange={selectChangeHandler}
-        ></Select>
-      </div>
-      <div className="col-6 ml-n5 mt-2">
-        {(validation.attendanceTypeErr === true && isClicked.attendanceType) &&
-          <span style={{ color: "red" }}>
-            Please Select Attendance Type..!
-          </span>}
-      </div>
-    </div>
-  </div>
-</div>
-<div className="row">
-  <div className="col-2">
-    <label>Server Time</label>
-  </div>
-
-  <div className="col-5 ml-3">
-    <LocalDateTime />
-  </div>
-</div>
-<div className="row text-center">
-  <div className="col-12">
-    {id ? (
-      <button className="btn btn-primary" disabled={dataSending || !formIsValid} > {dataSending ? "Updating..." : "Update"}</button>
-    ) : (
-      <button className="btn btn-primary" disabled={dataSending || !formIsValid}> {dataSending ? "Submitting..." : "Submit"}</button>
-    )}
-  </div>
-</div>
-</form> */}

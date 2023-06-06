@@ -127,92 +127,88 @@ const ProjectstatusMaster = () => {
     };
 
     return (
-        <Fragment>
-        <div className="container-fluid">
-            <div className="card p-4">
-                <form onSubmit={submitHandler}>
-                <div className="row">
-                    <div className="col-2">
+     <Fragment>
+      <div className="">
+        <div className="card shadow mb-4 p-4">
+          <form onSubmit={submitHandler}>
+            <div className="row">
+              <div className="col-lg-6 mb-4">
+                <div className="row align-items-center">
+                  <div className="col-lg-4 text-dark">
                     <label>Project Status</label>
-                    </div>
-                    <div className="col-10 mb-3">
-                    <div className="row">
-                        <div className="col-5 mr-5 ">
-                        <input
-                            className="form-control "
-                            type="text"
-                            id="projectstatus"
-                            name="projectstatus"
-                            onChange={inputHandler}
-                            value={input.projectstatus}
-                        />
-                        </div>
-                        <div className="col-6 ml-n5 mt-2">
-                        <span style={{ color: "red" }}>
-                            {validation.projectstatusErr}
-                        </span>
-                        </div>
-                    </div>
-                    </div>
+                  </div>
+                  <div className="col-lg-8">
+                    <input
+                      className="form-control "
+                      type="text"
+                      id="projectstatus"
+                      name="projectstatus"
+                      onChange={inputHandler}
+                      value={input.projectstatus}
+                    />
+                    <span style={{ color: "red" }}>
+                      {validation.projectstatusErr}
+                    </span>
+                  </div>
                 </div>
-                <div className="row">
-                    <div className="col-2">
+              </div>
+              <div className="col-lg-6 mb-4">
+                <div className="row align-items-center">
+                  <div className="col-lg-4 text-dark">
                     <label>Active Status</label>
-                    </div>
+                  </div>
 
-                    <div className="col-5 ml-3">
-                    <div className="row">
-                        <div className="col-3">
-                        <label
-                            className="for-check-label"
-                            htmlFor="statusActive"
-                        >
-                            <input
-                            className="form-check-input"
-                            type="radio"
-                            id="statusActive"
-                            name="status"
-                            value="Active"
-                            checked={input.status === "Active"}
-                            onChange={inputHandler}
-                            />
-                            Active
-                        </label>
-                        </div>
-                        <div className="col-5">
-                        <label
-                            className="for-check-label"
-                            htmlFor="statusInactive"
-                        >
-                            <input
-                            className="form-check-input"
-                            type="radio"
-                            id="statusInactive"
-                            name="status"
-                            value="InActive"
-                            checked={input.status === "InActive"}
-                            onChange={inputHandler}
-                            />
-                            Inactive
-                        </label>
-                        </div>
+                  <div className="col-lg-8">
+                    <div className='form-check form-check-inline mr-4'>
+                      <label
+                        className="for-check-label"
+                        htmlFor="statusActive"
+                      >
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          id="statusActive"
+                          name="status"
+                          value="Active"
+                          checked={input.status === "Active"}
+                          onChange={inputHandler}
+                        />
+                        Active
+                      </label>
                     </div>
+                    <div className='form-check form-check-inline mr-4'>
+                      <label
+                        className="for-check-label"
+                        htmlFor="statusInactive"
+                      >
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          id="statusInactive"
+                          name="status"
+                          value="InActive"
+                          checked={input.status === "InActive"}
+                          onChange={inputHandler}
+                        />
+                        Inactive
+                      </label>
                     </div>
+                  </div>
                 </div>
-                <div className="row text-center">
-                    <div className="col-12">
-                    {id ? (
-                        <button className="btn btn-primary" disabled ={dataSending} > {dataSending ? "Updating..." : "Update"}</button>
-                    ) : (
-                        <button className="btn btn-primary" disabled = {dataSending}> {dataSending ? "Submitting..." : "Submit"}</button>
-                    )}
-                    </div>
-                </div>
-                </form>
+              </div>
+              <div className="col-lg-12 text-center">
+                {id ? (
+                  <button className="btn btn-primary" disabled={dataSending} > {dataSending ? "Updating..." : "Update"}</button>
+                ) : (
+                  <button className="btn btn-primary" disabled={dataSending}> {dataSending ? "Submitting..." : "Submit"}</button>
+                )}
+              </div>
             </div>
+          </form>
         </div>
-        </Fragment>
-    )
+      </div>
+    </Fragment>
+  )
 }
 
 export default ProjectstatusMaster;

@@ -11,7 +11,7 @@ const BusinessForecastView = () => {
     return (
     <Fragment>
       {/* Page Heading */}
-      <div className="container-fluid p-0">
+      <div className="">
         <motion.div className="card shadow mb-4"
            initial={{scale: 0,opacity:0}} animate={{scale:1,opacity:1}} transition={{type:'tween'}}>
           <div className="card-body">
@@ -20,12 +20,12 @@ const BusinessForecastView = () => {
                 <div className="float-right">
                 <Link  //Have to modify userType-create to CustomerForecast-create
                     to="create"
-                    className="btn btn-primary btn-icon-split rounded-pill"
+                    className="btn btn-primary btn-icon-split "
                   >
                     <span className="icon text-white-50">
                       <i className="fas fa-plus-circle" />
                     </span>
-                    <span className="text">New</span>
+                    <span className="text res-720-btn-none">New</span>
                   </Link>
                 </div>
               </div>

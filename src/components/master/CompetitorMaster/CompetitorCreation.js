@@ -108,7 +108,7 @@ const CompetitorCreation = () => {
       buttons:[
         {
           extend: "print",
-          text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+          text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i><span class="print">Print</span>',
           className: "btn btn-info",
           exportOptions: {
               columns: ':not(.exclude-action)', 
@@ -116,7 +116,7 @@ const CompetitorCreation = () => {
         },
         {
           extend: "excel",
-          text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+          text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> <span class="excel">Excel</span>',
           className: "btn btn-success",
           exportOptions: {
             columns: ':not(.exclude-action)',
@@ -202,7 +202,7 @@ const CompetitorCreation = () => {
           <div className="col-lg-12">
             <div className="card shadow mb-4">
               <div className="card-body">
-                <div className="float-right">
+                <div className="float-right mb-3">
                   {!!(permission?.Competitors?.can_add) ? <Link
                     to={id ? "competitor/profile/${id}" : "competitor/profile"}
                     className="btn btn-primary btn-icon-split"
@@ -210,8 +210,29 @@ const CompetitorCreation = () => {
                     <span className="icon text-white-50">
                       <i className="fas fa-plus-circle" />
                     </span>
-                    <span className="text">New</span>
+                    <span className="text res-720-btn-none">New</span>
                   </Link> : ''}
+                </div>
+                <div className="table-responsive">
+                  <table
+                    className="table table-bordered text-center"
+                    id="dataTable"
+                    width="100%"
+                    cellSpacing={0}
+                  >
+                    <thead className="text-center bg-greeny text-white">
+                      <tr>
+                        <th className="w-5">Sl.No</th>
+                        <th className="w-15">Competitor No</th>
+                        <th className="w-25">Competitor Name</th>
+                        <th className="w-15">Mobile Number</th>
+                        <th className="w-25"> Email Id</th>
+                        <th className="w-15">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -220,28 +241,7 @@ const CompetitorCreation = () => {
       </div>
       <div>
         {loading && <Loader size="lg" backdrop content="Fetching Data..." />}
-      </div>
-      <div className="table-responsive">
-        <table
-          className="table table-bordered text-center"
-          id="dataTable"
-          width="100%"
-          cellSpacing={0}
-        >
-           <thead className="text-center bg-gray text-greeny">
-                      <tr>
-                        <th className="w-5">Sl.No</th>
-                        <th className="w-15">Competitor No</th>
-                        <th className="w-25">Competitor Name</th>            
-                        <th className="w-15">Mobile Number</th>
-                        <th className="w-25"> Email Id</th>
-                        <th className="w-15">Action</th>
-                      </tr>
-            </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
+      </div>      
     </Fragment>
   );
 };

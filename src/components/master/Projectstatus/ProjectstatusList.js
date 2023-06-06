@@ -95,7 +95,7 @@ const ProjectstatusList = () => {
       buttons:[
         {
           extend: "print",
-          text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+          text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> <span class="print">Print</span>',
           className: "btn btn-info",
           exportOptions: {
               columns: ':not(.exclude-action)', 
@@ -103,7 +103,7 @@ const ProjectstatusList = () => {
         },
         {
           extend: "excel",
-          text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+          text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> <span class="excel">Excel</span>',
           className: "btn btn-success",
           exportOptions: {
             columns: ':not(.exclude-action)',
@@ -190,7 +190,7 @@ const ProjectstatusList = () => {
           width="100%"
           cellSpacing={0}
         >
-          <thead className="text-center">
+          <thead className="text-center bg-greeny text-white">
             <tr>
               <th className="">Sl.No</th>
               <th className="">Project Status</th>

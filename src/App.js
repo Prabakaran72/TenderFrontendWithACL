@@ -88,7 +88,7 @@ import CreateExpenseCreation  from "./components/expenses/OtherExpenses/CreateEx
 
 import ReimbursementAdmin from "./components/expenses/Reimbursement/ReimbursementAdmin";
 import ReimbursementCreate from "./components/expenses/Reimbursement/ReimbursementCreate";
-
+import RembursementPrintView from "./components/expenses/Reimbursement/RembursementPrintView"
 import HolidayCreation from "./components/hr/Holiday/HolidayCreation";
 import Holiday from "./components/hr/Holiday/Holiday";
 
@@ -416,7 +416,6 @@ function App() {
               
             </Route>
             <Route path="expenses">
-            
               <Route path="otherExpense" >
                 <Route index element={!!(permission?.['OtherExpenses']?.can_view) ? <OtherExpenseMain /> : <Unauthorized/> } />
                 <Route path="create" element={!!(permission?.['OtherExpenses']?.can_add) ?  <CreateExpenseCreation />  : <Unauthorized/> } />
@@ -431,7 +430,8 @@ function App() {
             </Route>
             </Route> 
           </Route>
-          
+          {/* tender end */}
+        <Route path="remView/:id" element={<RembursementPrintView />} />
           {/* )} */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

@@ -186,7 +186,7 @@ function ReimbursementAdmin(props) {
       let b_3_5 =
         '<i class=" b_3_5" style="cursor:pointer" >' + item.btw_3_5 + "</i> ";
       let print =
-        '<i class="fas fa-solid fa-print print" style={{color: "#70e60f"}} ></i>';
+        '<i class="fas fa-solid fa-print print" style={{color: "#70e60f", cursor: "pointer"}} data-action="printView" ></i>';
       /**********HO approval********** */
       if (item.ho_approval == "pending") {
         ho_app =

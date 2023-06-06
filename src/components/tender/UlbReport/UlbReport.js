@@ -220,109 +220,78 @@ let b_1 =  '<i class=" b_1" style="cursor:pointer" >'+item.bel_1+'</i> ' ;
 
 	return (
 		<>
-			<div className="container-fluid p-0">
+			<div className="UlbReport">
 				<div className="row">
 					<div className="col-lg-12">
-						<div className="card shadow mb-4 pt-2">
-							<div className="card-body">
-								<div className="row d-flex">
-									<div className="col-sm-4 row d-flex align-items-center mb-4">
-										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="From">Category :</label>
-										</div>
-										<div className="col-lg-9">
-											<Select
-												name="cat"
-												id="cat"
-												isSearchable="true"
-												isClearable="true"
-												options={cust_category}
-												onChange={(selectedOptions) => {
-													catChangeHandler(selectedOptions);
-													// getcustno(selectedOptions);
-												}}
-												onBlur={catBlurHandler}
-												value={catValue}
-												isLoading={CategoryOptions.isLoading}
+						<div className="card shadow mb-4 p-4">
+							<div className="row">
+								<div className="col-lg-3">
+									<div className="form-group">
+										<label htmlFor="From">Category :</label>
+										<Select
+											name="cat"
+											id="cat"
+											isSearchable="true"
+											isClearable="true"
+											options={cust_category}
+											onChange={(selectedOptions) => {
+												catChangeHandler(selectedOptions);
+												// getcustno(selectedOptions);
+											}}
+											onBlur={catBlurHandler}
+											value={catValue}
+											isLoading={CategoryOptions.isLoading}
 
-											></Select>
-										</div>
-									</div>
-									<div className="col-sm-4 row d-flex align-items-center mb-4">
-										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="From">State :</label>
-										</div>
-										<div className="col-lg-9">
-											<Select
-												name="state"
-												id="state"
-												isSearchable="true"
-												isClearable="true"
-												options={StateOptions.options}
-												onChange={(selectedOptions) => {
-													stateChangeHandler(selectedOptions);
-													// getcustno(selectedOptions);
-												}}
-												onBlur={stateBlurHandler}
-												value={stateValue}
-												isLoading={StateOptions.isLoading}
-
-											></Select>
-										</div>
-									</div>
-									<div className="col-sm-4 row d-flex align-items-center mb-4">
-										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="Group">Group :</label>
-										</div>
-										<div className="col-lg-9">
-											<Select
-												name="group"
-												id="group"
-												isSearchable="true"
-												isClearable="true"
-												options={Group}
-												onChange={(selectedOptions) => {
-													groupChangeHandler(selectedOptions);
-													// getcustno(selectedOptions);
-												}}
-												onBlur={groupBlurHandler}
-												value={groupValue}
-												isLoading={groupOptions.isLoading}
-
-											></Select>
-										</div>
-									</div>
-
-
-
-
-									<div className="col-sm-3 row d-flex align-items-center mb-4">
-										<div className="col-sm-2">
-											<button className={`btn ${(!filterValid) && 'btn-outline-primary'} ${(filterValid) && 'btn-primary'} rounded-pill px-4`} onClick={goHandler} disabled={!filterValid}> Go </button>
-										</div>
-									</div>
-									<div className="col-lg-7 row">
-
-										{/* <div className="col-sm-2">
-										<button className={`btn ${(!filterValid) && 'btn-outline-primary' } ${(filterValid) && 'btn-primary' } rounded-pill`} onClick={goHandler} disabled={!filterValid}> Go </button>
-										</div> */}
-									</div>
-									<div className="col-lg-5  d-flex align-items-end flex-column">
-
-										{/* <Link to="main/bidcreationmain" className="rounded-pill btn btn-primary btn-icon-split">
-                      <span className="icon text-white-50">
-                        <i className="fas fa-plus-circle" />
-                      </span>
-                      <span className="text">New</span>
-                    </Link> */}
+										></Select>
 									</div>
 								</div>
-								
-								
-								
-	<UlbReportList loading={loading} list={list} getlist={goHandler} />
-	
+								<div className="col-lg-3">
+									<div className="form-group">
+										<label htmlFor="From">State :</label>
+										<Select
+											name="state"
+											id="state"
+											isSearchable="true"
+											isClearable="true"
+											options={StateOptions.options}
+											onChange={(selectedOptions) => {
+												stateChangeHandler(selectedOptions);
+												// getcustno(selectedOptions);
+											}}
+											onBlur={stateBlurHandler}
+											value={stateValue}
+											isLoading={StateOptions.isLoading}
+
+										></Select>
+									</div>
+								</div>
+								<div className="col-lg-3">
+									<div className="form-group">
+										<label htmlFor="Group">Group :</label>
+										<Select
+											name="group"
+											id="group"
+											isSearchable="true"
+											isClearable="true"
+											options={Group}
+											onChange={(selectedOptions) => {
+												groupChangeHandler(selectedOptions);
+												// getcustno(selectedOptions);
+											}}
+											onBlur={groupBlurHandler}
+											value={groupValue}
+											isLoading={groupOptions.isLoading}
+
+										></Select>
+									</div>
+								</div>
+								<div className="col-lg-3 text-center">
+									<button className='btn-tender-block' onClick={goHandler} disabled={!filterValid}> Search </button>
+								</div>
 							</div>
+						</div>
+						<div className="card shadow mb-4 p-4">
+							<UlbReportList loading={loading} list={list} getlist={goHandler} />
 							<div>
 								{/* <BidManagementList loading={loading} list={list} getlist={getlist}/> */}
 

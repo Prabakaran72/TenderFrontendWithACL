@@ -493,8 +493,8 @@ const CommunicationFilesCreation = () => {
         <Fragment>
             <PreLoader loading = {preLoading}>
             <ToastContainer/>
-            <div className="container-fluid">
-                <div className="card p-4">
+            <div className="CommunicationFilesCreation">
+                <div className="card shadow mb-4 p-4">
                     <form>
                         <div className="row align-items-center ">
                             <div className="inputgroup col-lg-6 mb-4">

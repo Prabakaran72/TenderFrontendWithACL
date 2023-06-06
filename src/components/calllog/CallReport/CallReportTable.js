@@ -122,125 +122,127 @@ const CallReportTable = ( {change, input, check} ) => {
         
    
     // console.log('page',page);
-    return (        
-        <div className="table-responsive pb-3">
+    return (    
+        <>
             <div className="d-flex justify-content-between mb-2">
-                <div className="">
-                    <select
-                        className="form-control"
-                        value={pageSize}
-                        onChange={(e) => {
-                            setPageSize(Number(e.target.value));
-                        }}
-                    >
-                        {[10, 20, 30, 40, 50].map((pageSize) => (
-                            <option key={pageSize} value={pageSize}>
-                                Show {pageSize}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="d-flex ">  
-                    <UseExport               
-                        data={data}                       
-                        header={header}
-                        title = {'CALL REPOST LIST'}
-                    />                       
-                    <input
-                        value={globalFilter || ""}
-                        onChange={(e) => setGlobalFilter(e.target.value)}
-                        placeholder="Search..."
-                        className="form-control"
-                    />
-                </div>
-            </div>
-            <table
-                className="table table-bordered text-center"
-                id="dataTable"
-                width="100%"
-                cellSpacing={0}
-                {...getTableProps()}
-            >
-                <thead className="p-3 mb-2 text-center bg-greeny text-white">
-                    {headerGroups.map((headerGroup) => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map((column) => (
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                    {column.render("Header")}
-                                    <span className="text-right">
-                                        {column.defaultCanSort && column.isSorted ? (
-                                            column.isSortedDesc ? (
-                                                <i className="fas fa-sort-amount-asc text-white"></i>
-                                            ) : (
-                                                <i className="fas fa-sort-amount-desc text-white"></i>
-                                            )
-                                        ) : (
-                                            <span></span>
-                                        )}
-                                    </span>
-                                </th>
-                            ))}
-                        </tr>
+            <div className="">
+                <select
+                    className="form-control"
+                    value={pageSize}
+                    onChange={(e) => {
+                        setPageSize(Number(e.target.value));
+                    }}
+                >
+                    {[10, 20, 30, 40, 50].map((pageSize) => (
+                        <option key={pageSize} value={pageSize}>
+                            Show {pageSize}
+                        </option>
                     ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                    {page.map((row) => {
-                        prepareRow(row);
-                        return (
-                            <tr {...row.getRowProps()}>
-                                {row.cells.map((cell) => (
-                                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                </select>
+            </div>
+            <div className="d-flex ">  
+                <UseExport               
+                    data={data}                       
+                    header={header}
+                    title = {'CALL REPOST LIST'}
+                />                       
+                <input
+                    value={globalFilter || ""}
+                    onChange={(e) => setGlobalFilter(e.target.value)}
+                    placeholder="Search..."
+                    className="form-control"
+                />
+            </div>
+            </div>   
+            <div className="table-responsive pb-3">           
+                <table
+                    className="table table-bordered text-center"
+                    id="dataTable"
+                    width="100%"
+                    cellSpacing={0}
+                    {...getTableProps()}
+                >
+                    <thead className="p-3 mb-2 text-center bg-greeny text-white">
+                        {headerGroups.map((headerGroup) => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map((column) => (
+                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                        {column.render("Header")}
+                                        <span className="text-right">
+                                            {column.defaultCanSort && column.isSorted ? (
+                                                column.isSortedDesc ? (
+                                                    <i className="fas fa-sort-amount-asc text-white"></i>
+                                                ) : (
+                                                    <i className="fas fa-sort-amount-desc text-white"></i>
+                                                )
+                                            ) : (
+                                                <span></span>
+                                            )}
+                                        </span>
+                                    </th>
                                 ))}
                             </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+                        ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                        {page.map((row) => {
+                            prepareRow(row);
+                            return (
+                                <tr {...row.getRowProps()}>
+                                    {row.cells.map((cell) => (
+                                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                    ))}
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>                     
+            </div>
             <div className="row align-items-center">
-                <div className="col-auto">
-                    <button
-                        className="btn btn-sm mr-1 bg-greeny text-white font-weight-bold"
-                        onClick={() => previousPage()}
-                        disabled={!canPreviousPage}
-                    >
-                       <i className="fas fa-chevron-circle-left" />
-                    </button>
-                </div>
-                <div className="col-auto">
-                    <button
-                        className="btn btn-sm mr-1 bg-greeny text-white font-weight-bold"
-                        onClick={() => nextPage()}
-                        disabled={!canNextPage}
-                    >
-                        <i className="fas fa-chevron-circle-right" />
-                    </button>
-                </div>
-                <div className="col-auto">
-                    <span>
-                        Page{" "}
-                        <strong>
-                            {pageIndex + 1} of {pageOptions.length}
-                        </strong>{" "}
-                    </span>
-                </div>
-                <div className="col-auto">
-                    <span> {"| "} &nbsp;&nbsp;Go to page: </span>
-                </div>
-                <div className="col-sm-1">
-                    <input
-                        className="form-control"
-                        type="number"
-                        defaultValue={pageIndex + 1}
-                        onChange={(e) => {
-                            const pageNumber = e.target.value
-                                ? Number(e.target.value) - 1
-                                : 0;
-                            gotoPage(pageNumber);
-                        }}
-                    />
-                </div>
-            </div>           
-        </div>
+            <div className="col-auto">
+                <button
+                    className="btn btn-sm mr-1 bg-greeny text-white font-weight-bold"
+                    onClick={() => previousPage()}
+                    disabled={!canPreviousPage}
+                >
+                    <i className="fas fa-chevron-circle-left" />
+                </button>
+            </div>
+            <div className="col-auto">
+                <button
+                    className="btn btn-sm mr-1 bg-greeny text-white font-weight-bold"
+                    onClick={() => nextPage()}
+                    disabled={!canNextPage}
+                >
+                    <i className="fas fa-chevron-circle-right" />
+                </button>
+            </div>
+            <div className="col-auto">
+                <span>
+                    Page{" "}
+                    <strong>
+                        {pageIndex + 1} of {pageOptions.length}
+                    </strong>{" "}
+                </span>
+            </div>
+            <div className="col-auto">
+                <span> {"| "} &nbsp;&nbsp;Go to page: </span>
+            </div>
+            <div className="col-sm-1">
+                <input
+                    className="form-control"
+                    type="number"
+                    defaultValue={pageIndex + 1}
+                    onChange={(e) => {
+                        const pageNumber = e.target.value
+                            ? Number(e.target.value) - 1
+                            : 0;
+                        gotoPage(pageNumber);
+                    }}
+                />
+            </div>
+            </div> 
+        </> 
 
     );
 };

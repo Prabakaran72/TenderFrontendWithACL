@@ -4,7 +4,7 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useBaseUrl } from "../../../hooks/useBaseUrl";
 import { useDispatch, useSelector } from "react-redux";
 import { ULBDetailsActions } from "../store/ULBDetailsSlice";
-import { motion  } from 'framer-motion';
+
 
 const initialState = {
   area: "",
@@ -388,82 +388,11 @@ const CustomerCreationUlbDetails = () => {
   };
 
 
-  const variant1 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .1, type:'spring', stiffness: 180 }}
-  };
-  const variant2 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .2, type:'spring', stiffness: 180 }}
-  };
-  const variant3 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .3, type:'spring', stiffness: 180 }}
-  };
-  const variant4 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .4, type:'spring', stiffness: 180 }}
-  };
-  const variant5 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .5, type:'spring', stiffness: 180 }}
-  };
-  const variant6 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .6, type:'spring', stiffness: 180 }}
-  };
-  const variant7 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .7, type:'spring', stiffness: 180 }}
-  };
-  const variant8 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .8, type:'spring', stiffness: 180 }}
-  };
-  const variant9 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .9, type:'spring', stiffness: 180 }}
-  };
-  const variant10 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 1, type:'spring', stiffness: 180 }}
-  };
-  const variant11 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 1.1, type:'spring', stiffness: 180 }}
-  };
-  const variant12 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 1.2, type:'spring', stiffness: 180 }}
-  };
-  const variant13 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 1.3, type:'spring', stiffness: 180 }}
-  };
-  const variant14 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 1.4, type:'spring', stiffness: 180 }}
-  };
-  const variant15 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 1.5, type:'spring', stiffness: 180 }}
-  };
-  const variant16 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 1.6, type:'spring', stiffness: 180 }}
-  };
-  const variant17 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 1.7, type:'spring', stiffness: 180 }}
-  };
-  const variant18 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 1.8, type:'spring', stiffness: 180 }}
-  };
-  const variant19 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 1.9, type:'spring', stiffness: 180 }}
-  };
-  const variant20 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 2, type:'spring', stiffness: 180 }}
-  };
-  const variant21 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 2.1, type:'spring', stiffness: 180 }}
-  };
-  const variant22 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: 2.2, type:'spring', stiffness: 180 }}
-  };  
 
-// const trans = {
-//   show: {x: 200},
-//   hidden:{x:0,timing:{type: 'spring',stiffness: 180, delay: .1}},
-  
-// }
  
   return (
     <Fragment>
-      <div className="formContent">
+      <div className="">
         {id && loading && (
           <div className="loading">
             <img
@@ -486,7 +415,7 @@ const CustomerCreationUlbDetails = () => {
         )}
         <form onSubmit={submitHandler}>
           <div className="row align-items-center">
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant1} >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="area">Area in Sq.km </label>
@@ -503,8 +432,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant1} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4"  >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="population2011">Population as per 2011</label>
@@ -521,8 +450,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant2} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4"   >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="presentpopulation">Present Population</label>
@@ -540,8 +469,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant2} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4"   >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="wards">No. of Wards</label>
@@ -558,8 +487,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant3} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4"   >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="households">No. House holds</label>
@@ -575,8 +504,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant3} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4"  >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="commercial">
@@ -594,8 +523,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant4} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4"  >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="ABbusstand">No. of A&B grade bus stand</label>
@@ -611,8 +540,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant4} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4"  >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="CDbusstand">No. of C&D grade bus stand</label>
@@ -628,8 +557,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant5} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4"  >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="market_morethan_oneacre">
@@ -647,8 +576,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant5} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="market_lessthan_oneacre">
@@ -666,8 +595,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant6} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lengthofroad">
@@ -685,8 +614,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant6} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lengthofrouteroad">
@@ -704,8 +633,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant7} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lengthofotherroad">
@@ -723,8 +652,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant7} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4"  >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lengthoflanes">
@@ -742,8 +671,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant8} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lengthofpucca">
@@ -761,8 +690,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant8} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lengthofcutcha">
@@ -780,8 +709,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant9} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="parks">No. of parks available</label>
@@ -797,8 +726,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant9} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="parksforpublicuse">
@@ -816,8 +745,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant10} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="tricycle">
@@ -835,8 +764,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant10} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="bov">No. of bov in working condition</label>
@@ -852,8 +781,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant11} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="bovrepair">No. of bov in repair</label>
@@ -869,8 +798,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant11} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lcv">
@@ -888,8 +817,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant12} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lcvrepair">
@@ -907,8 +836,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant12} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="compactor">
@@ -926,8 +855,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant13} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="hookloaderwithcapacity">
@@ -945,8 +874,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant13} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="compactorbin">
@@ -964,8 +893,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant14} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="hookloader">
@@ -983,8 +912,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant14} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="tractortipper">
@@ -1002,8 +931,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant15} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lorries">
@@ -1021,8 +950,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant15} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="jcb">No. of JCB available</label>
@@ -1038,8 +967,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant16} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="bobcat">No. of bobCat available</label>
@@ -1055,8 +984,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant16} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="sanitaryworkers_sanctioned">
@@ -1074,8 +1003,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant17} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="sanitaryworkers_inservice">
@@ -1093,8 +1022,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant17} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="sanitarysupervisor_sanctioned">
@@ -1112,8 +1041,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant18} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="sanitarysupervisor_inservice">
@@ -1131,8 +1060,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant18} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="permanentdrivers">
@@ -1150,8 +1079,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant19} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="regulardrivers">
@@ -1169,8 +1098,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant19} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="publicgathering">
@@ -1188,8 +1117,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant20} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="secondarystorage">
@@ -1207,8 +1136,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant20} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="transferstation">
@@ -1226,8 +1155,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant21} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="households_animatorsurvey">
@@ -1245,8 +1174,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant21} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="assessments_residential">
@@ -1264,8 +1193,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"  initial='start' animate='end'  variants={variant22} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="assessments_commercial">
@@ -1283,8 +1212,8 @@ const CustomerCreationUlbDetails = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="col-lg-12 mt-3 d-flex justify-content-end" initial={{opacity:0}} whileInView={{opacity:1}}>
+            </div>
+            <div className="col-lg-12 mt-3 d-flex justify-content-end">
               <button
                 className={
                   !formvalid
@@ -1308,7 +1237,7 @@ const CustomerCreationUlbDetails = () => {
               >
                 Cancel
               </button>
-            </motion.div>
+            </div>
           </div>
         </form>
       </div>

@@ -13,6 +13,7 @@ const initialState = {
 };
 
 const initialStateErr = {
+  calltypeErr: "",
   bizzforecastErr: "",
   activeStatusErr: "",
 };
@@ -29,6 +30,7 @@ const BusinessForecast = () => {
   const [inputValidation, setInputValidation] = useState(initialStateErr);
   const [savedData, setSavedData] = useState({});
   const [calltypeList, setCallTypeList] = useState([]);
+  const [formIsValid, setFormIsValid] = useState(false);
 
   useEffect(() => {
     axios.get(`${baseUrl}/api/calltype/list`).then((resp) => {
@@ -39,11 +41,8 @@ const BusinessForecast = () => {
   useEffect(() => {
     if (id) {
       axios.get(`${baseUrl}/api/bizzforecast/${id}`).then((resp) => {
-        console.log("resp",resp)
         if (resp.data.status === 200) {
-          console.log("Checkpoint");
           setSavedData(resp.data?.bizzforecast[0]);
-          console.log("Checkpoint");
           setInput((prev) => {
             return {
               ...prev,
@@ -85,10 +84,16 @@ const BusinessForecast = () => {
       setInput((prev) => {
         return { ...prev, calltype: selectedOption };
       });
+      setInputValidation((prev) => {
+        return {...prev ,calltypeErr: false};
+       })
     } else {
       setInput((prev) => {
         return { ...prev, calltype: null };
       });
+      setInputValidation((prev) => {
+        return {...prev ,calltypeErr: true};
+       })
     }
   };
 
@@ -174,11 +179,21 @@ const BusinessForecast = () => {
       });
   };
 
-  let formIsValid = false;
+  
+  useEffect(()=>{
+   
+    if(input.calltype!==null && input.bizzforecast !== "")
+    {
+    
+     
+      setFormIsValid(true);
+    }
+    else{ 
+       
 
-  if (input.bizzforecast !== "") {
-    formIsValid = true;
-  }
+      setFormIsValid(false);
+    }
+  },[inputValidation])
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -196,12 +211,24 @@ const BusinessForecast = () => {
       activeStatus: input.activeStatus,
       tokenId: localStorage.getItem("token"),
     };
-
+  
+    if(data.call_type_id && data.name)
+    {
     if (!id) {
       postData(data);
     } else {
       putData(data, id);
     }
+  }
+  else{
+    setDataSending(false)
+    Swal.fire({
+      icon: "error",
+      title: "Bussiness Forecast",
+      text:"Fill the Form First!!",
+      confirmButtonColor: "#5156ed",
+    });
+  }
   };
 
   const cancelHandler = () => {
@@ -234,6 +261,14 @@ const BusinessForecast = () => {
                       value={input.calltype}
                       // isLoading={calltypeList.isLoading}
                     ></Select>
+                    {inputValidation.calltypeErr && (
+                      <div className="pt-1">
+                        <span className="text-danger font-weight-bold">
+                          Enter Call Type 
+                        </span>
+                      </div>
+                    )}
+
                   </div>
                 </div>
               </div>

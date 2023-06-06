@@ -20,7 +20,7 @@ function Topbar() {
         <i className="fa fa-bars" />
       </button>
       {/* Topbar Search */}
-      <div><h4 className="h4  text-gray-800" id="pageTitle"></h4></div>
+      <div><h4 className="h4  text-gray-800 pageTitle" id="pageTitle"></h4></div>
      
       {/* Topbar Navbar */}
       <ul className="navbar-nav ml-auto">
@@ -61,7 +61,7 @@ function Topbar() {
           </div>
         </li>
         {/* Nav Item - Alerts */}
-        <li className="nav-item dropdown no-arrow mx-1">
+       {/*  <li className="nav-item dropdown no-arrow mx-1">
           <Link
             className="nav-link dropdown-toggle"
             to="#"
@@ -71,12 +71,12 @@ function Topbar() {
             aria-haspopup="true"
             aria-expanded="false"
           >
-            {/* <i className="fas fa-bell fa-fw" /> */}
-            {/* Counter - Alerts */}
+            <i className="fas fa-bell fa-fw" /> 
+             Counter - Alerts 
             <span className="badge badge-danger badge-counter"></span>
-            {/* <span className="badge badge-danger badge-counter">3+</span> */}
+             <span className="badge badge-danger badge-counter">3+</span> 
           </Link>
-        </li>
+        </li> */}
 
         <div className="topbar-divider d-none d-sm-block" />
         {/* Nav Item - User Information */}

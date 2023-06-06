@@ -75,23 +75,25 @@ const DocListCP = forwardRef((props, ref) => {
 
     return (
         <Fragment>
-            <div className="d-sm-flex align-items-center justify-content-between mt-2 mb-2">
-                <h1 className="h4 mb-0 text-primary">Documents To be Uploaded</h1>
-            </div>
-            <PreLoader loading={loading}>
-                {props.filesToUpload.length > 0  && <div className={`overflow-auto col-lg-12 ${styles.doclist}`}>
-                    {props.filesToUpload.map((item, index) => {
-                        return(
-                            <DocCardCP key = {index} item = {item} index={index} onDelete={props.deleteFromUpload} onEdit={props.onEdit}/>
-                        )
-                    })}
-                </div>}
-                {props.filesToUpload.length <= 0 && 
-                <div className={'mt-3'}>
-                    <h5>No documents found. </h5>
+            <div className="DocListCP">
+                <div className="d-sm-flex align-items-center justify-content-between mt-2 mb-2">
+                    <h1 className="h4 mb-0 text-primary">Documents To be Uploaded</h1>
                 </div>
-                }
-            </PreLoader>
+                <PreLoader loading={loading}>
+                    {props.filesToUpload.length > 0  && <div className={`overflow-auto col-lg-12 ${styles.doclist}`}>
+                        {props.filesToUpload.map((item, index) => {
+                            return(
+                                <DocCardCP key = {index} item = {item} index={index} onDelete={props.deleteFromUpload} onEdit={props.onEdit}/>
+                            )
+                        })}
+                    </div>}
+                    {props.filesToUpload.length <= 0 && 
+                    <div className={'mt-3'}>
+                        <h5>No documents found. </h5>
+                    </div>
+                    }
+                </PreLoader>
+            </div>
         </Fragment>
     )
 })

@@ -888,7 +888,7 @@ console.log("compId" , competitorFormInput?.compNo)
       <PreLoader loading={fetchLoading}>
         <form onSubmit={submitHandler}>
           <div className="row align-items-center">
-            <div className="inputgroup col-lg-5 mb-4">
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="no">
@@ -910,9 +910,8 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
 
-            <div className="inputgroup col-lg-5 mb-4">
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark">
                   <label
@@ -944,9 +943,9 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
 
-            <div className="inputgroup col-lg-5 mb-4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="regType" className="font-weight-bold">
@@ -975,9 +974,9 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
 
-            <div className="inputgroup col-lg-5 mb-4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="registerationYear">
@@ -1006,8 +1005,8 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="country" className="font-weight-bold">
@@ -1035,9 +1034,9 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
 
-            <div className="inputgroup col-lg-5 mb-4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="state">
@@ -1065,9 +1064,9 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
 
-            <div className="inputgroup col-lg-5 mb-4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="district" className="font-weight-bold">
@@ -1095,9 +1094,9 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
 
-            <div className="inputgroup col-lg-5 mb-4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="city">
@@ -1125,8 +1124,8 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4 ">
+
+            <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="address">
@@ -1156,8 +1155,8 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1"></div>
-            <div className="inputgroup col-lg-5 mt-n4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="pincode" className="">
@@ -1183,7 +1182,12 @@ console.log("compId" , competitorFormInput?.compNo)
                     </div>
                   )}
                 </div>
-                <div className="col-lg-4 text-dark font-weight-bold mt-3 mb-n3">
+              </div>
+            </div>
+
+            <div className="inputgroup col-lg-6 mb-4">
+              <div className="row align-items-center">
+                <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="panNo">
                     PAN<span className="text-danger">&nbsp;*</span>
                   </label>
@@ -1209,8 +1213,8 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="mobile">
@@ -1238,8 +1242,8 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="email">
@@ -1268,8 +1272,8 @@ console.log("compId" , competitorFormInput?.compNo)
               </div>
             </div>
 
-            <div className="inputgroup col-lg-1 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="gst">
@@ -1297,9 +1301,9 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-1 mb-4"></div>
 
-            <div className="inputgroup col-lg-5 mb-4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="directors">
@@ -1328,9 +1332,9 @@ console.log("compId" , competitorFormInput?.compNo)
               </div>
             </div>
 
-            <div className="inputgroup col-lg-1 mb-4"></div>
 
-            <div className="inputgroup col-lg-5 mb-4">
+
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="companyType" className="font-weight-bold">
@@ -1358,9 +1362,8 @@ console.log("compId" , competitorFormInput?.compNo)
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-4 mb-4"></div>
 
-            <div className="inputgroup col-lg-5 mb-4">
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="manpower">
@@ -1390,13 +1393,11 @@ console.log("compId" , competitorFormInput?.compNo)
               </div>
             </div>
 
-            <div className="inputgroup col-lg-6 mb-4"></div>
-            <div className="inputgroup col-lg-6 mb-4"></div>
-            <div className="inputgroup col-lg-5 mb-4 ml-n3">
+            <div className="inputgroup col-lg-12">
               <div className="row align-items-center">
-                <div className="col-lg-10 text-right ">
+                <div className="col-lg-12 text-center ">
                   <button
-                    className="btn btn-primary"
+                    className="btn btn-primary mr-2"
                     disabled={!formIsValid}
                     onClick={!id ? submitHandler : updateHandler}
                   >
@@ -1408,8 +1409,6 @@ console.log("compId" , competitorFormInput?.compNo)
                       ? "Updating...."
                       : "Update"}
                   </button>
-                </div>
-                <div className="col-lg-1 text-left">
                   <button className="btn btn-secondary" onClick={cancelHandler}>
                     Cancel
                   </button>

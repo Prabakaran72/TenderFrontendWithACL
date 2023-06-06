@@ -112,16 +112,16 @@ const UnitMaster = () => {
 }
 
   return (
-    <div className="container-fluid">
-      <div className="card p-4">
+    <div className="">
+      <div className="card shadow mb-4 p-4">
         <form onSubmit={submitUnit} id="unit_FORM">
           <div className="row">
-            <div className="col-2">
-              <label>Unit Name</label>
-            </div>
-            <div className="col-10 mb-3">
-              <div className="row">
-                <div className="col-5 mr-5 ">
+            <div className="col-lg-6 mb-4">
+              <div className="row align-items-center">
+                <div className="col-lg-4 text-dark">
+                  <label>Unit Name</label>
+                </div>
+                <div className="col-lg-8">
                   <input
                     className="form-control "
                     type="text"
@@ -130,59 +130,57 @@ const UnitMaster = () => {
                     onChange={inputHandler}
                     value={unitInput.unitName}
                   />
-                </div>
-                <div className="col-6 ml-n5 mt-2">
                   <span style={{ color: "red" }}>{unitValidation.unitName}</span>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-2">
-              <label>Active Status</label>
-            </div>
-
-            <div className="col-5 ml-3">
-              <div className="row ">
-                <div className="col-3">
-                  <label className="form-check-label" htmlFor="unitStatusActive">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      id="unitStatusActive"
-                      name="unitStatus"
-                      value="Active"
-                      checked={unitInput.unitStatus === "Active"}
-                      onChange={inputHandler}
-                    />
-                    Active
-                  </label>
+            <div className="col-lg-6 mb-4">
+              <div className="row align-items-center">
+                <div className="col-lg-4 text-dark">
+                  <label>Active Status</label>
                 </div>
-                <div className="col-3">
-                  <label
-                    className="form-check-label"
-                    htmlFor="unitStatusInActive"
-                  >
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      id="unitStatusInActive"
-                      name="unitStatus"
-                      value="InActive"
-                      checked={unitInput.unitStatus === "InActive"}
-                      onChange={inputHandler}
-                    />
-                    Inactive
-                  </label>
+
+                <div className="col-lg-8">
+                  <div className='form-check form-check-inline mr-4'>
+                    <label className="form-check-label" htmlFor="unitStatusActive">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        id="unitStatusActive"
+                        name="unitStatus"
+                        value="Active"
+                        checked={unitInput.unitStatus === "Active"}
+                        onChange={inputHandler}
+                      />
+                      Active
+                    </label>
+                  </div>
+                  <div className='form-check form-check-inline mr-4'>
+                    <label
+                      className="form-check-label"
+                      htmlFor="unitStatusInActive"
+                    >
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        id="unitStatusInActive"
+                        name="unitStatus"
+                        value="InActive"
+                        checked={unitInput.unitStatus === "InActive"}
+                        onChange={inputHandler}
+                      />
+                      Inactive
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row text-center">
-            <div className="col-12">
-              <button type="submit" className="btn btn-primary" disabled={dataSending}>
-                {!id ? (!dataSending ? "Submit" : "Submitting...") : (!dataSending ? "Update" : "Updating...") }
-              </button>
+            <div className="col-lg-12 text-center">
+              <div className="col-12">
+                <button type="submit" className="btn btn-primary" disabled={dataSending}>
+                  {!id ? (!dataSending ? "Submit" : "Submitting...") : (!dataSending ? "Update" : "Updating...")}
+                </button>
+              </div>
             </div>
           </div>
         </form>

@@ -3,12 +3,12 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../../storeAuth/auth-context";
 import { usePageTitle } from "../../hooks/usePageTitle";
-import { can } from "../../UserPermission";
+//import { can } from "../../UserPermission";
 import TenderTypeMasterList from "./TenderTypeMasterList";
 
 
 const TenderTypeMasterView = () => {
-  usePageTitle("Tender Type Creation");
+  usePageTitle("Tender Type Master");
   const {permission} = useContext(AuthContext)
   return (
     <>

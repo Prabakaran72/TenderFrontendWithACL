@@ -624,7 +624,7 @@ setCheckImage(false);
     <div className="CreateExpenseCreationSubList">
       <form onSubmit={handleSubmit}>
         <div className="row d-flex justify-content-between">
-          <div className="col-sm-12 row d-flex align-items-center mb-4">
+          <div className="col-sm-12 mb-4">
             <div className="col-lg-5">
             {Bdm === 2 ? (
     <input
@@ -648,70 +648,78 @@ setCheckImage(false);
             </div>
           </div>
           {checkBox && (
-            <div className="col-sm-6 row d-flex align-items-center mb-4">
-              <div className="col-lg-3 text-dark font-weight-bold">
-                <label>Customer Name <span className="text-danger font-weight-bold">*</span></label>
-              </div>
-              <div className="col-lg-9">
-                <Select
-                  name="customerName"
-                  id="cusName"
-                  isSearchable="true"
-                  isClearable="true"
-                  options={optionsForCustomers}
-                  value={ inputSub?.customerName}
-                  onChange={inputHandlerForSelect}
-                // onChange={(inputSub.customerName) => {inputHandlerForSelect(inputSub.customerName,"")}}
-                ></Select>
+            <div className="col-lg-6 mb-4">
+              <div className="row align-items-center">
+                <div className="col-lg-4 text-dark font-weight-bold">
+                  <label>Customer Name <span className="text-danger font-weight-bold">*</span></label>
+                </div>
+                <div className="col-lg-8">
+                  <Select
+                    name="customerName"
+                    id="cusName"
+                    isSearchable="true"
+                    isClearable="true"
+                    options={optionsForCustomers}
+                    value={ inputSub?.customerName}
+                    onChange={inputHandlerForSelect}
+                  // onChange={(inputSub.customerName) => {inputHandlerForSelect(inputSub.customerName,"")}}
+                  ></Select>
+                </div>
               </div>
             </div>
           )}
           {checkBox && (
-            <div className="col-sm-6 row  align-items-center mb-4">
-              <div className="col-lg-3 text-dark font-weight-bold">
-                <label>Call No <span className="text-danger font-weight-bold">*</span></label>
+            <div className="col-lg-6 mb-4">
+              <div className="row align-items-center">
+                <div className="col-lg-4 text-dark font-weight-bold">
+                  <label>Call No <span className="text-danger font-weight-bold">*</span></label>
+                </div>
+                <div className="col-lg-8">
+                  <Select
+                    name="callNo"
+                    id="callNo"
+                    isSearchable="true"
+                    isClearable="true"
+                    options={CallIdOptions}
+                    value={inputSub?.callNo}
+                    onChange={inputHandlerForSelect}
+                  ></Select>
+                </div>
               </div>
-              <div className="col-lg-9">
+            </div>
+          )}
+          <div className="col-lg-6 mb-4">
+            <div className="row align-items-center">
+              <div className="col-lg-4 text-dark font-weight-bold">
+                <label>Expense Type <span className="text-danger font-weight-bold">*</span></label>
+              </div>
+              <div className="col-lg-8">
                 <Select
-                  name="callNo"
-                  id="callNo"
+                  name="expenseType"
+                  id="expenseType"
                   isSearchable="true"
                   isClearable="true"
-                  options={CallIdOptions}
-                  value={inputSub?.callNo}
+                  options={optionsForExpense}
+                  value={inputSub?.expenseType}
                   onChange={inputHandlerForSelect}
                 ></Select>
               </div>
             </div>
-          )}
-          <div className="col-sm-6 row d-flex align-items-center mb-4">
-            <div className="col-lg-3 text-dark font-weight-bold">
-              <label>Expense Type <span className="text-danger font-weight-bold">*</span></label>
-            </div>
-            <div className="col-lg-9">
-              <Select
-                name="expenseType"
-                id="expenseType"
-                isSearchable="true"
-                isClearable="true"
-                options={optionsForExpense}
-                value={inputSub?.expenseType}
-                onChange={inputHandlerForSelect}
-              ></Select>
-            </div>
           </div>
-          <div className="col-sm-6 row  align-items-center mb-4">
-            <div className="col-lg-3 text-dark font-weight-bold">
-              <label>Amount <span className="text-danger font-weight-bold">*</span></label>
-            </div>
-            <div className="col-lg-9">
-              <input
-                type="text"
-                name="amount"
-                value={inputSub.amount}
-                onChange={(e) => inputHandlerForAmount(e)}
-                className="form-control"
-              />
+          <div className="col-lg-6 mb-4">
+            <div className="row align-items-center">
+              <div className="col-lg-4 text-dark font-weight-bold">
+                <label>Amount <span className="text-danger font-weight-bold">*</span></label>
+              </div>
+              <div className="col-lg-8">
+                <input
+                  type="text"
+                  name="amount"
+                  value={inputSub.amount}
+                  onChange={(e) => inputHandlerForAmount(e)}
+                  className="form-control"
+                />
+              </div>
             </div>
             {LimitExeed ? (
   <span className='fade' style={{color: "#eb0e0e"}}>Lmit Amount Exeed For This Staff.Lmit Amount is: {Lmitamt}</span>
@@ -719,43 +727,47 @@ setCheckImage(false);
   null
 )}
           </div>
-          <div className="col-sm-6 row d-flex align-items-center mb-4">
-            <div className="col-lg-3 text-dark font-weight-bold">
-              <label>Description</label>
-            </div>
-            <div className="col-lg-9">
-              <textarea
-                type="textarea"
-                name="description"
-                col="40"
-                row="40"
-                className="form-control"
-                value={inputSub?.description}
-                onChange={(e) => inputHandlerForText(e)}
-              />
+          <div className="col-lg-6 mb-4">
+            <div className="row align-items-center">
+              <div className="col-lg-4 text-dark font-weight-bold">
+                <label>Description</label>
+              </div>
+              <div className="col-lg-8">
+                <textarea
+                  type="textarea"
+                  name="description"
+                  col="40"
+                  row="40"
+                  className="form-control"
+                  value={inputSub?.description}
+                  onChange={(e) => inputHandlerForText(e)}
+                />
+              </div>
             </div>
           </div>
-          <div className="col-sm-6 row d-flex align-items-center mb-4">
-            <div className="col-lg-3 text-dark font-weight-bold">
-              <label>Document Upload</label>
-            </div>
-            <div className="col-lg-9">
-              <div
-                className={`border-primary d-flex flex-column align-items-center justify-content-center   bg-gray-200 ${styles.height_of_dropbox} ${styles.boderradius__dropbox} ${styles.dashed} ${styles.drop_file_input} `}
-              >
-                <p className="display-4 mb-0">
-                  <i className="fas fa-cloud-upload-alt text-primary "></i>
-                </p>
-                <p>Drag & Drop an document or Click</p>
-                <input
-                  type="file"
-                  value={file.value}
-                  name="file"
-                  className="h-100 w-100 position-absolute top-50 start-50 pointer"
-                  // accept={`image/*`}
-                  onChange={(e) => inputHandlerForFile(e)}
-                  
-                />
+          <div className="col-lg-6 mb-4">
+            <div className="row align-items-center">
+              <div className="col-lg-4 text-dark font-weight-bold">
+                <label>Document Upload</label>
+              </div>
+              <div className="col-lg-8">
+                <div
+                  className={`border-primary d-flex flex-column align-items-center justify-content-center   bg-gray-200 ${styles.height_of_dropbox} ${styles.boderradius__dropbox} ${styles.dashed} ${styles.drop_file_input} `}
+                >
+                  <p className="display-4 mb-0">
+                    <i className="fas fa-cloud-upload-alt text-primary "></i>
+                  </p>
+                  <p>Drag & Drop an document or Click</p>
+                  <input
+                    type="file"
+                    value={file.value}
+                    name="file"
+                    className="h-100 w-100 position-absolute top-50 start-50 pointer"
+                    // accept={`image/*`}
+                    onChange={(e) => inputHandlerForFile(e)}
+                    
+                  />
+                </div>
               </div>
             </div>
             {/* {fileCheck && (
@@ -773,100 +785,104 @@ setCheckImage(false);
               </div>
             )} */}
           </div>
-          <div className="col-sm-6 row d-flex align-items-center mb-4 ">
+          <div className="col-lg-6">
             {fileCheck && (
               <>
-                <div className="col-lg-3 text-dark font-weight-bold">
-                  <label className="font-weight-bold">Preview</label>
-                </div>
-                <motion.div
-                  className="col-lg-9"
-                  initial={{ scale: 0.5, opacity: 0.4 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.1,
-                    delay: 0.1,
-                  }}
-                >
-                  <>
-                    <div className="upload_Documents">
-                      <div className="card  my-4">
-                        <div className="card-body">
-                          {/* <div className="noOfCountsForUpload">{''}</div> */}
-                          <div className="UploadingDetails col-lg-6">
-                            <div>
-                              <h6> Name : </h6> <span>{file.name}</span>
+                <div className="row align-items-center">
+                  <div className="col-lg-4 text-dark font-weight-bold">
+                    <label className="font-weight-bold">Preview</label>
+                  </div>
+                  <motion.div
+                    className="col-lg-8"
+                    initial={{ scale: 0.5, opacity: 0.4 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{
+                      type: "tween",
+                      stiffness: 10,
+                      duration: 0.1,
+                      delay: 0.1,
+                    }}
+                  >
+                    <>
+                      <div className="upload_Documents">
+                        <div className="card  my-4">
+                          <div className="card-body">
+                            {/* <div className="noOfCountsForUpload">{''}</div> */}
+                            <div className="UploadingDetails ">
+                              <div>
+                                <h6> Name : </h6> <span>{file.name}</span>
+                              </div>
+                              <div>
+                                <h6> Size : </h6> <span>{file.size}
+                                  <FaDownload
+                                        onClick={() => downloadDoc(file.name)}
+                                        style={{ marginLeft: '10px' }} />  </span>
+                              </div>
                             </div>
-                            <div>
-                              <h6> Size : </h6> <span>{file.size}
-                                 <FaDownload
-                                      onClick={() => downloadDoc(file.name)}
-                                      style={{ marginLeft: '10px' }} />  </span>
+                            <div className="UploadImg ">
+                              <img src={file.src} height={50} width={50}/>
+                              <i className="fa fa-times" aria-hidden="true"   style={{ color: 'red',cursor: 'pointer' }} onClick={handleRemoveDoc}></i>
                             </div>
+                          
                           </div>
-                          <div className="UploadImg col-lg-6">
-                            <img src={file.src} height={50} width={50}/>
-                            <i className="fa fa-times" aria-hidden="true"   style={{ color: 'red',cursor: 'pointer' }} onClick={handleRemoveDoc}></i>
-                          </div>
-                        
                         </div>
                       </div>
-                    </div>
-                  </>
-                </motion.div>
+                    </>
+                  </motion.div>
+                </div>
               </>
             )}
 
             {checkImage && (
               <>
-                <div className="col-lg-3 text-dark font-weight-bold">
-                  <label className="font-weight-bold">Preview</label>
-                </div>
-                <motion.div
-                  className="col-lg-9"
-                  initial={{ scale: 0.5, opacity: 0.4 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.1,
-                    delay: 0.1,
-                  }}
-                >
-                  <>
-                    <div className="upload_Documents">
-                      <div className="card  my-4">
-                        <div className="card-body">
-                          {/* <div className="noOfCountsForUpload">{''}</div> */}
-                          <div className="UploadingDetails">
-                            <div>
-                              <h6> Name : </h6>{" "}
-                              <span>{image?.originalfilename}</span>
+                <div className="row align-items-center">
+                  <div className="col-lg-4 text-dark font-weight-bold">
+                    <label className="font-weight-bold">Preview</label>
+                  </div>
+                  <motion.div
+                    className="col-lg-8"
+                    initial={{ scale: 0.5, opacity: 0.4 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{
+                      type: "tween",
+                      stiffness: 10,
+                      duration: 0.1,
+                      delay: 0.1,
+                    }}
+                  >
+                    <>
+                      <div className="upload_Documents">
+                        <div className="card  my-4">
+                          <div className="card-body">
+                            {/* <div className="noOfCountsForUpload">{''}</div> */}
+                            <div className="UploadingDetails">
+                              <div>
+                                <h6> Name : </h6>{" "}
+                                <span>{image?.originalfilename}</span>
+                              </div>
+                              <div>
+                                <h6> Size : </h6>{" "}
+                                <span>{image?.filesize}
+                                <FaDownload
+                                        onClick={() => downloadDoc(image?.originalfilename)}
+                                        style={{ marginLeft: '10px' }}  /></span>
+                              </div>
                             </div>
-                            <div>
-                              <h6> Size : </h6>{" "}
-                              <span>{image?.filesize}
-                              <FaDownload
-                                       onClick={() => downloadDoc(image?.originalfilename)}
-                                       style={{ marginLeft: '10px' }}  /></span>
+                            <div className="UploadImg">
+                              <img src={image?.pic} height={50} width={50}/>
+                              <i className="fa fa-times" aria-hidden="true"  style={{ color: 'red',cursor: 'pointer' }} onClick={handleRemoveDoc}></i>
                             </div>
+                            
                           </div>
-                          <div className="UploadImg">
-                            <img src={image?.pic} height={50} width={50}/>
-                            <i className="fa fa-times" aria-hidden="true"  style={{ color: 'red',cursor: 'pointer' }} onClick={handleRemoveDoc}></i>
-                          </div>
-                          
                         </div>
                       </div>
-                    </div>
-                  </>
-                </motion.div>
+                    </>
+                  </motion.div>
+                </div>
               </>
             )}
           </div>
-          <div className="col-sm-12 row d-flex align-items-center justify-content-center mb-4">
+          <div className="col-lg-12 text-center mb-4">
             <button
               className="btn btn-success subList"
               type="submit"

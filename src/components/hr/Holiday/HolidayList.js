@@ -90,15 +90,15 @@ const HolidayList = () => {
                 date: hod.date,
                 remarks : hod.remarks,
                 action : (
-                    <div>
-                      <button onClick={() => getRow(hod)} className="mr-2"><i className="fas fa-edit icon-edit" /></button>
-                      <button onClick={() => deleteRow(hod)}><i className="fas fa-trash-alt icon-trash" /></button>
+                    <div className="d-flex">
+                      <button onClick={() => getRow(hod)} className="mr-2 btn-rmv-border"><i className="fas fa-edit icon-edit" /></button>
+                      <button onClick={() => deleteRow(hod)} className="btn-rmv-border"><i className="fas fa-trash-alt icon-trash" /></button>
                     </div>
                   )   
                 };                               
             })              
             setData(holidaysList);                     
-            console.log('data+++', holidaysList);     
+              
         })
     },[]);
 
@@ -134,7 +134,7 @@ const HolidayList = () => {
     },[getRowData]);
 
     const getRow = (hod) => {
-        navigate(`/tender/hr/holiday/edit/${hod.id}`);
+        navigate(`/tender/hr/holidays/edit/${hod.id}`);
         console.log('hod', hod);
     }     
 
@@ -150,7 +150,7 @@ const HolidayList = () => {
               text: "Deleted Successfully!",
               confirmButtonColor: "#5156ed",
             });            
-            navigate('/tender/hr/holiday')
+            navigate('/tender/hr/holidays')
           } else if (resp.data.status === 400) {
             Swal.fire({
               icon: "error",
@@ -164,31 +164,34 @@ const HolidayList = () => {
         
     
        
-    return (        
-        <div className="table-responsive pb-3">
-            <div className="d-flex justify-content-between mb-2">
-                <div className="">
-                    <select
-                        className="form-control"
-                        value={pageSize}
-                        onChange={(e) => {
-                            setPageSize(Number(e.target.value));
-                        }}
-                    >
-                        {[10, 20, 30, 40, 50].map((pageSize) => (
-                            <option key={pageSize} value={pageSize}>
-                                Show {pageSize}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                
-                <div className="d-flex ">  
-                    <UseExport               
-                        data={data} 
-                        header={header} 
-                        title = {'HOLIDAY LIST'}    
-                    />                  
+    return (  
+        <>
+            <div className="react-table-headers">
+                <div className="list-and-btns">
+                    <div>
+                        <select
+                            className="form-control"
+                            value={pageSize}
+                            onChange={(e) => {
+                                setPageSize(Number(e.target.value));
+                            }}
+                        >
+                            {[10, 20, 30, 40, 50].map((pageSize) => (
+                                <option key={pageSize} value={pageSize}>
+                                    Show {pageSize}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <UseExport               
+                            data={data} 
+                            header={header} 
+                            title = {'HOLIDAY LIST'}    
+                        />   
+                    </div>
+                </div>                
+                <div className="search">                                     
                     <input
                         value={globalFilter || ""}
                         onChange={(e) => setGlobalFilter(e.target.value)}
@@ -197,79 +200,79 @@ const HolidayList = () => {
                     />
                 </div>
             </div>
-            <table
-                className="table table-bordered text-center"
-                id="dataTable"
-                width="100%"
-                cellSpacing={0}
-                {...getTableProps()}
-            >
-                <thead className="p-3 mb-2 text-center bg-greeny text-white">
-                    {headerGroups.map((headerGroup) => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map((column) => (
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                    {column.render("Header")}
-                                    <span className="text-right">
-                                        {column.defaultCanSort && column.isSorted ? (
-                                            column.isSortedDesc ? (
-                                                <i className="fas fa-sort-amount-asc text-white"></i>
+            <div className="table-responsive">            
+                <table
+                    className="table table-bordered text-center"
+                    id="dataTable"
+                    width="100%"
+                    cellSpacing={0}
+                    {...getTableProps()}
+                >
+                    <thead className="p-3 mb-2 text-center bg-greeny text-white">
+                        {headerGroups.map((headerGroup) => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map((column) => (
+                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                        {column.render("Header")}
+                                        <span className="text-right">
+                                            {column.defaultCanSort && column.isSorted ? (
+                                                column.isSortedDesc ? (
+                                                    <i className="fas fa-sort-amount-asc text-white"></i>
+                                                ) : (
+                                                    <i className="fas fa-sort-amount-desc text-white"></i>
+                                                )
                                             ) : (
-                                                <i className="fas fa-sort-amount-desc text-white"></i>
-                                            )
-                                        ) : (
-                                            <span></span>
-                                        )}
-                                    </span>
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                    {page.map((row) => {
-                        prepareRow(row);
-                        return (
-                            <tr {...row.getRowProps()}>
-                                {row.cells.map((cell) => (
-                                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                                <span></span>
+                                            )}
+                                        </span>
+                                    </th>
                                 ))}
                             </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-            <div className="row align-items-center">
-                <div className="col-auto">
-                    <button
-                        className="btn btn-sm mr-1 bg-greeny text-white font-weight-bold"
-                        onClick={() => previousPage()}
-                        disabled={!canPreviousPage}
-                    >
-                       <i className="fas fa-chevron-circle-left" />
-                    </button>
+                        ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                        {page.map((row) => {
+                            prepareRow(row);
+                            return (
+                                <tr {...row.getRowProps()}>
+                                    {row.cells.map((cell) => (
+                                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                    ))}
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>                           
+            </div>
+            <div className="react-table-footers">
+                <div className="pagination">
+                    <div className="btns">
+                        <button
+                            className="btn btn-sm mr-3 bg-greeny text-white font-weight-bold"
+                            onClick={() => previousPage()}
+                            disabled={!canPreviousPage}
+                        >
+                        <i className="fas fa-chevron-circle-left" />
+                        </button>
+                        <button
+                            className="btn btn-sm mr-1 bg-greeny text-white font-weight-bold"
+                            onClick={() => nextPage()}
+                            disabled={!canNextPage}
+                        >
+                            <i className="fas fa-chevron-circle-right" />
+                        </button>
+                    </div>                
+                    <div className="noOfPage">
+                        <span>
+                            Page{" "}
+                            <strong>
+                                {pageIndex + 1} of {pageOptions.length}
+                            </strong>{" "}
+                        </span>                    
+                    </div>
                 </div>
-                <div className="col-auto">
-                    <button
-                        className="btn btn-sm mr-1 bg-greeny text-white font-weight-bold"
-                        onClick={() => nextPage()}
-                        disabled={!canNextPage}
-                    >
-                        <i className="fas fa-chevron-circle-right" />
-                    </button>
-                </div>
-                <div className="col-auto">
-                    <span>
-                        Page{" "}
-                        <strong>
-                            {pageIndex + 1} of {pageOptions.length}
-                        </strong>{" "}
-                    </span>
-                </div>
-                <div className="col-auto">
+                <div className="find-page">                    
                     <span> {"| "} &nbsp;&nbsp;Go to page: </span>
-                </div>
-                <div className="col-sm-1">
                     <input
                         className="form-control"
                         type="number"
@@ -281,9 +284,9 @@ const HolidayList = () => {
                             gotoPage(pageNumber);
                         }}
                     />
-                </div>
-            </div>           
-        </div>
+                </div>                
+            </div>
+        </>      
 
     );
 };

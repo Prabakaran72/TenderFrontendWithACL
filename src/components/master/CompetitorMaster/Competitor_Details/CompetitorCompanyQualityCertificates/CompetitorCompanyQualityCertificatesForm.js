@@ -547,15 +547,15 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
 
   return (
     <PreLoader loading={FetchLoading}>
-    <div className="card-body ">
+    <div className="">
       <form>
         <div className="row align-items-center">
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-3 text-dark font-weight-bold pt-1">
+              <div className="col-lg-5 text-dark font-weight-bold pt-1">
                 <label htmlFor="cerName"> Certificate Name</label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 <input
                   type="text"
                   className="form-control"
@@ -579,10 +579,10 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
 
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-3 text-dark font-weight-bold pt-1">
+              <div className="col-lg-5 text-dark font-weight-bold pt-1">
                 <label htmlFor="remark">Remarks</label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 <input
                   type="text"
                   className="form-control"
@@ -606,10 +606,10 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
 
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-3 text-dark font-weight-bold pt-1">
+              <div className="col-lg-5 text-dark font-weight-bold pt-1">
                 <label htmlFor="cerName"> File Upload</label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 <div
                   className="dashed border-primary height_of_dropbox boderradius__dropbox d-flex flex-column align-items-center justify-content-center  drop-file-input bg-gray-200"
                   ref={wrapperRef}
@@ -637,10 +637,10 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
 
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
-              <div className="col-lg-3 text-dark font-weight-bold pt-1">
+              <div className="col-lg-5 text-dark font-weight-bold pt-1">
                 <label htmlFor="remark">Preview</label>
               </div>
-              <div className="col-lg-8">
+              <div className="col-lg-7">
                 {file && (
                   <Docsupload
                     file={file}
@@ -652,28 +652,28 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
               </div>
             </div>
           </div>
-
-          <div className="inputgroup col-lg-5 mb-4"></div>
-          <div className="inputgroup col-lg-2 mb-4 align-items-center">
+          
+          <div className="inputgroup col-lg-12 mb-4 align-items-center">
             <div className="row">
-              <button
-                className="btn btn-primary"
-                disabled={!formIsValid || isBtnClicked === true}
-                onClick={
-                  !competitorQCInput.qcId ? submitHandler : updateHandler
-                }
-              >
-                {!competitorQCInput.qcId
-                  ? loading === true
-                    ?  <span className="spinner-border spinner-border-sm mr-2"></span>+ progress + '% Uploaded'
-                    : "Add"
-                  : loading === true
-                  ? progress + '% Updating'
-                  : "Update"}
-              </button>
+              <div className="col-lg-12 text-center">
+                <button
+                  className="btn btn-primary"
+                  disabled={!formIsValid || isBtnClicked === true}
+                  onClick={
+                    !competitorQCInput.qcId ? submitHandler : updateHandler
+                  }
+                >
+                  {!competitorQCInput.qcId
+                    ? loading === true
+                      ?  <span className="spinner-border spinner-border-sm mr-2"></span>+ progress + '% Uploaded'
+                      : "Add"
+                    : loading === true
+                    ? progress + '% Updating'
+                    : "Update"}
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="inputgroup col-lg-5 mb-4"></div>
+          </div>          
         </div>
       </form>
       <CompetitorCompanyQualityCertificatesList

@@ -276,8 +276,8 @@ const ExpenseType = () => {
 
     return (
         <Fragment>
-            <div className="container-fluid">
-                <div className="card p-4">
+            <div className="">
+                <div className="card shadow mb-4 p-4">
                     <form>
                         <div className="row align-items-center">
                             <div className="inputgroup col-lg-6 mb-4">
@@ -401,9 +401,9 @@ const ExpenseType = () => {
                         })}
 
                     </form>
-                    <div className="inputgroup col-lg-12 mb-4 ml-3 mt-5">
+                    <div className="inputgroup col-lg-12 mt-5">
                     <div className="row align-items-center">
-                        <div className="col-lg-12 text-right ">
+                        <div className="col-lg-12 text-center">
                             <button
                                 className="btn btn-primary"
                                 disabled={!formIsValid}

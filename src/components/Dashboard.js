@@ -161,21 +161,8 @@ function Dashboard() {
           <div className="col-xl-12 col-md-12">
             <ul className="cardUl">
               <li>
-                <motion.div
-                  className="card shadow h-100 py-2 border-left-primary border-3"
-                  initial={{
-                    x: 1300,
-                    opacity: 0,
-                  }}
-                  animate={{
-                    x: 0,
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.5,
-                  }}
+                <div
+                  className="card shadow h-100 py-2 border-left-primary border-3"                 
                 >
                   <div className="card-body ">
                     <div className="row no-gutters align-items-center ">
@@ -197,26 +184,12 @@ function Dashboard() {
                           </div> */}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </li>
 
               <li>
-                <motion.div
+                <div
                   className="card border-left-success shadow h-100 py-2  border-3"
-                  initial={{
-                    x: 1300,
-                    opacity: 0,
-                  }}
-                  animate={{
-                    x: 0,
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.5,
-                    delay: 0.2,
-                  }}
                 >
                   <div className="card-body">
                     <div className="row no-gutters align-items-center">
@@ -237,26 +210,12 @@ function Dashboard() {
                           </div> */}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </li>
 
               <li>
-                <motion.div
-                  className="card border-left-info shadow h-100 py-2  border-3"
-                  initial={{
-                    x: 1300,
-                    opacity: 0,
-                  }}
-                  animate={{
-                    x: 0,
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.5,
-                    delay: 0.3,
-                  }}
+                <div
+                  className="card border-left-info shadow h-100 py-2  border-3"                  
                 >
                   <div className="card-body">
                     <div className="row no-gutters align-items-center">
@@ -274,26 +233,12 @@ function Dashboard() {
                           </div> */}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </li>
 
               <li>
-                <motion.div
-                  className="card border-left-pink shadow h-100 py-2  border-3"
-                  initial={{
-                    x: 1300,
-                    opacity: 0,
-                  }}
-                  animate={{
-                    x: 0,
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.5,
-                    delay: 0.4,
-                  }}
+                <div
+                  className="card border-left-pink shadow h-100 py-2  border-3"                  
                 >
                   <div className="card-body">
                     <div className="row no-gutters align-items-center">
@@ -311,26 +256,12 @@ function Dashboard() {
                           </div> */}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </li>
 
               <li>
-                <motion.div
-                  className="card border-left-orange shadow h-100 py-2  border-3"
-                  initial={{
-                    x: 1300,
-                    opacity: 0,
-                  }}
-                  animate={{
-                    x: 0,
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.5,
-                    delay: 0.5,
-                  }}
+                <div
+                  className="card border-left-orange shadow h-100 py-2  border-3"                  
                 >
                   <div className="card-body">
                     <div className="row no-gutters align-items-center">
@@ -348,26 +279,12 @@ function Dashboard() {
                           </div> */}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </li>
 
               <li>
-                <motion.div
-                  className="card shadow h-100 py-2 border-left-red border-3"
-                  initial={{
-                    x: 1300,
-                    opacity: 0,
-                  }}
-                  animate={{
-                    x: 0,
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.5,
-                    delay: 0.6,
-                  }}
+                <div
+                  className="card shadow h-100 py-2 border-left-red border-3"                 
                 >
                   <div className="card-body ">
                     <div className="row no-gutters align-items-center ">
@@ -386,26 +303,12 @@ function Dashboard() {
                           </div> */}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </li>
 
               <li>
-                <motion.div
-                  className="card border-left-dblue shadow h-100 py-2  border-3"
-                  initial={{
-                    x: 1300,
-                    opacity: 0,
-                  }}
-                  animate={{
-                    x: 0,
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.5,
-                    delay: 0.7,
-                  }}
+                <div
+                  className="card border-left-dblue shadow h-100 py-2  border-3"                  
                 >
                   <div className="card-body">
                     <div className="row no-gutters align-items-center">
@@ -423,26 +326,13 @@ function Dashboard() {
                           </div> */}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </li>
 
               <li>
-                <motion.div
+                <div
                   className="card border-left-brown shadow h-100 py-2  border-3"
-                  initial={{
-                    x: 1300,
-                    opacity: 0,
-                  }}
-                  animate={{
-                    x: 0,
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.5,
-                    delay: 0.8,
-                  }}
+                  
                 >
                   <div className="card-body">
                     <div className="row no-gutters align-items-center">
@@ -460,26 +350,13 @@ function Dashboard() {
                           </div> */}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </li>
 
               <li>
-                <motion.div
+                <div
                   className="card border-left-yellow shadow h-100 py-2  border-3"
-                  initial={{
-                    x: 1300,
-                    opacity: 0,
-                  }}
-                  animate={{
-                    x: 0,
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.5,
-                    delay: 0.9,
-                  }}
+                  
                 >
                   <div className="card-body">
                     <div className="row no-gutters align-items-center">
@@ -497,26 +374,12 @@ function Dashboard() {
                           </div> */}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </li>
 
               <li>
-                <motion.div
-                  className="card border-left-ash shadow h-100 py-2  border-3"
-                  initial={{
-                    x: 1300,
-                    opacity: 0,
-                  }}
-                  animate={{
-                    x: 0,
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "tween",
-                    stiffness: 10,
-                    duration: 0.5,
-                    delay: 1,
-                  }}
+                <div
+                  className="card border-left-ash shadow h-100 py-2  border-3"                 
                 >
                   <div className="card-body">
                     <div className="row no-gutters align-items-center">
@@ -534,7 +397,7 @@ function Dashboard() {
                           </div> */}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </li>
             </ul>
           </div>    

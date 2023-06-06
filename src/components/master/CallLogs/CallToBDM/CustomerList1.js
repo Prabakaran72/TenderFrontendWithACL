@@ -280,8 +280,7 @@ const CustomerList1 = (props) => {
   
   return (
     <>
-      <div className="table-responsive pb-3">
-        <div className="d-flex justify-content-between mb-2">
+    <div className="d-flex justify-content-between mb-2">
           <div className="">
             <select
               className="form-control"
@@ -317,7 +316,7 @@ const CustomerList1 = (props) => {
             />
           </div>
         </div>
-
+      <div className="table-responsive pb-3">        
         <table
           className="table table-bordered text-center"
           id="dataTable"
@@ -360,6 +359,7 @@ const CustomerList1 = (props) => {
             })}
           </tbody>
         </table>
+      </div>
         <div className="row align-items-center">
           <div className="col-auto">
             <button
@@ -406,9 +406,9 @@ const CustomerList1 = (props) => {
         </div>
 
 
-        <div className="inputgroup col-lg-12 mb-4 ml-3 mt-3">
+        <div className="inputgroup col-lg-12 mt-3">
           <div className="row align-items-center">
-            <div className="col-lg-12 text-right ">
+            <div className="col-lg-12 text-center">
               <button
                 className="btn btn-primary"
                 disabled={!isEdited}
@@ -421,12 +421,11 @@ const CustomerList1 = (props) => {
               <button className="btn btn-secondary mx-3" onClick={props.cancelHandler} disabled={isSubmitted}>
                 Cancel
               </button>
-            </div>
-            s
+            </div>            
           </div>
         </div>
 
-      </div>
+      
       {/* <AssignedCustomerModal showModal = {showModel} updateRef={updateRef} data={data}/> */}
     </>
 

@@ -3,11 +3,11 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../../storeAuth/auth-context";
 import { usePageTitle } from "../../hooks/usePageTitle";
-import { can } from "../../UserPermission";
+//import { can } from "../../UserPermission";
 import DistrictMasterList from "./DistrictMasterList";
 
 const DistrictMasterView = () => {
-  usePageTitle("District Master Creation");
+  usePageTitle("District Master");
   const {permission} = useContext(AuthContext)
 
   return (

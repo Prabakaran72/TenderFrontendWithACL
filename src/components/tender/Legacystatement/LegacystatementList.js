@@ -54,7 +54,7 @@ const LegacystatementList = (props) => {
             buttons:[
               {
                 extend: "print",
-                text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+                text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> <span class="print">Print</span>',
                 className: "btn btn-info",
                 exportOptions: {
                     columns: ':not(.exclude-action)', 
@@ -62,7 +62,7 @@ const LegacystatementList = (props) => {
               },
               {
                 extend: "excel",
-                text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+                text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> <span class="excel">Excel</span>',
                 className: "btn btn-success",
                 exportOptions: {
                   columns: ':not(.exclude-action)',
@@ -107,19 +107,17 @@ const LegacystatementList = (props) => {
 
 return (
     <Fragment>
-        <div className="d-sm-flex align-items-center  mb-4">
-            <h1 className="h4 mb-0 text-primary mx-3 pl-1">Legacy Statement List : </h1>
-        </div>
+        
         <PreLoader loading = {props.loading}>
         <ToastContainer/>
-        <div className="table-responsive pb-3">
+        <div className="table-responsive">
                     <table
-                        className="table text-center"
+                        className="table table-bordered text-center"
                         id="dataTable"
                         width="100%"
                         cellSpacing={0}
                     >
-                        <thead className="text-center bg-gray-200 text-primary">
+                        <thead className="text-center bg-greeny text-white">
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">NIT Date</th>

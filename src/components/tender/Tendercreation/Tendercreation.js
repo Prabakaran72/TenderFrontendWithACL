@@ -237,17 +237,17 @@ const Tendercreation = () => {
     // setLoading(false);
   };
 
-    return (
-    <div className="card-body ">
-    <form>
-      <div className="row align-items-center">
-      <div className="inputgroup col-lg-5 mb-4">
+  return (
+    <div className="card shadow mb-4 p-4">
+      <form>
+        <div className="row align-items-center">
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center">
               <div className="col-lg-4 text-dark">
-              <label htmlFor="organisation" className="font-weight-bold"> Organisation<span className="text-danger">&nbsp;*</span> </label>
-            </div>
-            <div className="col-lg-8">
-            <Select
+                <label htmlFor="organisation" className="font-weight-bold"> Organisation<span className="text-danger">&nbsp;*</span> </label>
+              </div>
+              <div className="col-lg-8">
+                <Select
                   name="organisation"
                   id="organisation"
                   isSearchable="true"
@@ -256,49 +256,48 @@ const Tendercreation = () => {
                   value={input.organisation}
                   onChange={inputHandlerForSelect}
                 ></Select>
-              
-              {inputValidation.organisation && (
-                <div className="pt-1">
-                  <span className="text-danger font-weight-bold">
-                    Select Valid Type..!
-                  </span>
-                </div>
-              )}
+
+                {inputValidation.organisation && (
+                  <div className="pt-1">
+                    <span className="text-danger font-weight-bold">
+                      Select Valid Type..!
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="inputgroup col-lg-1 mb-4"></div>
 
-        <div className="inputgroup col-lg-5 mb-4">
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center">
               <div className="col-lg-4 text-dark">
-              <label htmlFor="customerName" className="font-weight-bold">
-              Customer Name<span className="text-danger">&nbsp;*</span>
-              </label>
-            </div>
-            <div className="col-lg-8">
-              <Select
-                name="customerName"
-                id="customerName"
-                isSearchable="true"
-                isClearable="true"
-                options={ulbOptions.options}
-                value={input.customerName}
-                onChange={inputHandlerForSelect}
-              ></Select>
-              {inputValidation.customerName && (
-                <div className="pt-1">
-                  <span className="text-danger font-weight-bold">
-                    Enter Valid Input..!
-                  </span>
-                </div>
-              )}
+                <label htmlFor="customerName" className="font-weight-bold">
+                  Customer Name<span className="text-danger">&nbsp;*</span>
+                </label>
+              </div>
+              <div className="col-lg-8">
+                <Select
+                  name="customerName"
+                  id="customerName"
+                  isSearchable="true"
+                  isClearable="true"
+                  options={ulbOptions.options}
+                  value={input.customerName}
+                  onChange={inputHandlerForSelect}
+                ></Select>
+                {inputValidation.customerName && (
+                  <div className="pt-1">
+                    <span className="text-danger font-weight-bold">
+                      Enter Valid Input..!
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        
 
-        <div className="inputgroup col-lg-5 mb-4">
+
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center">
               <div className="col-lg-4 text-dark">
                 <label htmlFor="tenderType" className="font-weight-bold">
@@ -314,7 +313,7 @@ const Tendercreation = () => {
                   options={tenderTypeList}
                   value={input.tenderType}
                   onChange={inputHandlerForSelect}
-                  
+
                 ></Select>
                 {inputValidation.tenderType && (
                   <div className="pt-1">
@@ -326,9 +325,8 @@ const Tendercreation = () => {
               </div>
             </div>
           </div>
-          <div className="inputgroup col-lg-1 mb-4"></div>
 
-          <div className="inputgroup col-lg-5 mb-4">
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center">
               <div className="col-lg-4 text-dark font-weight-bold">
                 <label htmlFor="nitDate">
@@ -353,29 +351,28 @@ const Tendercreation = () => {
                 )}
               </div>
             </div>
-          </div> 
-          <div className="inputgroup col-lg-6 mb-4"></div>
-          <div className="inputgroup col-lg-6 mb-4"></div>
-          <div className="inputgroup col-lg-12 mb-4 ml-3">
+          </div>
+
+          <div className="inputgroup col-lg-12 ">
             <div className="row align-items-center">
-              <div className="col-lg-10 text-right ">
+              <div className="col-lg-12 text-center ">
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-primary mr-3"
                   disabled={!formIsValid}
                   onClick={submitHandler}
-                  >
-                    {dataSending === true ? "Submitting...." : "Save & Countinue"}
-               
+                >
+                  {dataSending === true ? "Submitting...." : "Save & Countinue"}
+
                 </button>
-              </div>
-              <div className="col-lg-1 text-left">
                 <button className="btn btn-secondary" onClick={cancelHandler}>
                   Cancel
                 </button>
               </div>
             </div>
-          </div>       
-          </div></form></div>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 };
 

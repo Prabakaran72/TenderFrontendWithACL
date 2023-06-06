@@ -500,16 +500,13 @@ const CustomerCreationSWMProjectStatus = () => {
 // console.log("formIsValid", formIsValid);
     return(
         <Fragment>
-        <div className="formContent">
+        <div className="">
         {!id && <div className="loading">
           <img id="loading-image" src="/assets/img/lock.png" alt="Loading..." width ="150" height="150"/>
         </div>}
         <form onSubmit={submitHandler}>
           <div className="row align-items-center">
-            <motion.div className="inputgroup col-lg-6 mb-4"  
-              initial={{y:80, opacity: 0}} 
-              animate={{y:0, opacity: 1}}    
-              transition={{ delay: .1, type:'spring', stiffness: 180}} >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center ">
                 <div className="col-lg-5 text-dark font-weight-bold">
                   <label htmlFor="projecttype">
@@ -537,12 +534,9 @@ const CustomerCreationSWMProjectStatus = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div className="inputgroup col-lg-6 mb-4"  
-              initial={{y:80, opacity: 0}} 
-              animate={{y:0, opacity: 1}}    
-              transition={{ delay: .1, type:'spring', stiffness: 180}} >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center ">
                 <div className="col-lg-5 text-dark font-weight-bold">
                   <label htmlFor="status">
@@ -569,12 +563,9 @@ const CustomerCreationSWMProjectStatus = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div className="inputgroup col-lg-6 mb-4"  
-              initial={{y:80, opacity: 0}} 
-              animate={{y:0, opacity: 1}}    
-              transition={{ delay: .2, type:'spring', stiffness: 180}} >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center ">
                 <div className="col-lg-5 text-dark font-weight-bold">
                   <label htmlFor="vendorType">
@@ -601,12 +592,9 @@ const CustomerCreationSWMProjectStatus = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div className="inputgroup col-lg-6 mb-4"  
-              initial={{y:80, opacity: 0}} 
-              animate={{y:0, opacity: 1}}    
-              transition={{ delay: .2, type:'spring', stiffness: 180}} >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="vendor">
@@ -633,12 +621,9 @@ const CustomerCreationSWMProjectStatus = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div className="inputgroup col-lg-6 mb-4"  
-              initial={{y:80, opacity: 0}} 
-              animate={{y:0, opacity: 1}}    
-              transition={{ delay: .3, type:'spring', stiffness: 180}} >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center ">
                 <div className="col-lg-5 text-dark font-weight-bold" >
                   <label htmlFor="projectstatus">
@@ -666,12 +651,9 @@ const CustomerCreationSWMProjectStatus = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div className="inputgroup col-lg-6 mb-4"  
-              initial={{y:80, opacity: 0}} 
-              animate={{y:0, opacity: 1}}    
-              transition={{ delay: .3, type:'spring', stiffness: 180}} >
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="projectvalue">
@@ -698,12 +680,9 @@ const CustomerCreationSWMProjectStatus = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div className="inputgroup col-lg-6 mb-4"  
-              initial={{y:80, opacity: 0}} 
-              animate={{y:0, opacity: 1}}    
-              transition={{ delay: .4, type:'spring', stiffness: 180}} >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="duration">
@@ -711,7 +690,7 @@ const CustomerCreationSWMProjectStatus = () => {
                   </label>
                 </div>
                 <div className="col-lg-7 ">
-                  <div className="col-lg-12 d-flex justify-content-between p-0">
+                  <div className="col-lg-12 col-6 d-flex justify-content-between p-0">
                   <input
                     type="date"
                     className="form-control col-md-5"
@@ -743,9 +722,9 @@ const CustomerCreationSWMProjectStatus = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
             
-            <div className="col-lg-12 d-flex justify-content-center">
+            <div className="col-lg-12 d-flex justify-content-center mb-4">
               {!isEditbtn && 
               <button
               className={(!formIsValid) ?  "btn btn-outline-primary rounded-pill px-4" :  "btn btn-primary rounded-pill px-4"} 
@@ -780,7 +759,7 @@ const CustomerCreationSWMProjectStatus = () => {
           {/* <CustomerCreationContactSubtable contactData = {contactlist} onEdit={onEdit} onDelete={onDelete}/> */}
           < SWMProjectStatusSubTable projectList = {projectList} onEdit={onEdit} onDelete={onDelete}/>
         {/* </div> */}
-        <div className = "col-lg-12 mt-3 d-flex justify-content-end">
+        <div className = "col-lg-12 mt-3 d-flex justify-content-center">
           <button
               className="btn btn-outline-primary mr-3 rounded-pill"
               onClick = {() => navigate("/tender/master/customercreation/list/main/ulbdetails/"+id)}

@@ -288,17 +288,14 @@ const CustomerCreationContactPerson = () => {
 
   return (
     <Fragment>
-      <div className="formContent">
+      <div className="">
         {!id && <div className="loading">
           <img id="loading-image" src="/assets/img/lock.png" alt="Loading..." width ="150" height="150"/>
          
         </div>}
         <form onSubmit={submitHandler}>
           <div className="row align-items-center">
-            <motion.div className="inputgroup col-lg-6 mb-4"
-              initial={{y:80, opacity: 0}} 
-              animate={{y:0, opacity: 1}}    
-              transition={{ delay: .1, type:'spring', stiffness: 180}} >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="contactpersonname">
@@ -325,11 +322,8 @@ const CustomerCreationContactPerson = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"
-              initial={{y:80, opacity: 0}} 
-              animate={{y:0, opacity: 1}}    
-              transition={{ delay: .1, type:'spring', stiffness: 180}} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="Designation">Designation :</label>
@@ -354,11 +348,8 @@ const CustomerCreationContactPerson = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"
-              initial={{y:80, opacity: 0}} 
-              animate={{y:0, opacity: 1}}    
-              transition={{ delay: .2, type:'spring', stiffness: 180}} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="email">Email :</label>
@@ -383,11 +374,8 @@ const CustomerCreationContactPerson = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4"
-              initial={{y:80, opacity: 0}} 
-              animate={{y:0, opacity: 1}}    
-              transition={{ delay: .2, type:'spring', stiffness: 180}} >
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="mobile">Mobile no :</label>
@@ -414,8 +402,8 @@ const CustomerCreationContactPerson = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
-            <div className="col-lg-12 d-flex justify-content-center">
+            </div>
+            <div className="col-lg-12 d-flex justify-content-center mb-4">
               {!isEditbtn && 
               <button
                 className={(!formIsValid) ?  "btn btn-outline-primary rounded-pill px-4" :  "btn btn-primary rounded-pill px-4"} 
@@ -450,7 +438,7 @@ const CustomerCreationContactPerson = () => {
         {/* <div className="col-lg-12 d-flex justify-content-center mt-4"> */}
           <CustomerCreationContactSubtable contactData = {contactlist} onEdit={onEdit} onDelete={onDelete}/>
         {/* </div> */}
-        <div className = "col-lg-12 mt-3 d-flex justify-content-end">
+        <div className = "col-lg-12 mt-3 d-flex justify-content-center">
           <button
               className="btn btn-outline-primary mr-3 rounded-pill"
               onClick = {() => navigate("/tender/master/customercreation/list/main/swmprojectstatus/"+id)}

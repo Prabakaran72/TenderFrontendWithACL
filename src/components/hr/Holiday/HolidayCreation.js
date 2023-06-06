@@ -99,6 +99,7 @@ const HolidayCreation = () => {
 
 
     const postData = (formData) => {
+        console.log("Post Data")
         axios.post(`${baseUrl}/api/holidays`, formData).then((resp) => {  
             console.log('resp', resp)          
           if (resp.status === 200) {
@@ -231,7 +232,7 @@ const HolidayCreation = () => {
     console.log('input', input);
     return (
         <Fragment>            
-            <div className="card shadow p-4">
+            <div className="card shadow mb-4 p-4">
                 <form>
                     <div className="row align-items-center">
                         <div className="inputgroup col-lg-6 mb-4">

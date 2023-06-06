@@ -12,7 +12,7 @@ const currentDate = new Date();
 const currentMonth = currentDate.getFullYear() + '-' + ('0' + (currentDate.getMonth() + 1)).slice(-2)
 
 const initialState = {
-    employee: { value : 'ALl', label: 'All'},
+    employee: { value : 'All', label: 'All'},
     role: { value : 'All', label: 'All'},
     month: currentMonth
 }
@@ -27,6 +27,7 @@ const AttendanceReport = () => {
     const [roleOptions, setRoleOptions] = useState([]);
     const [month, setMonth] =useState(currentMonth)
     const [input, setInput] = useState(initialState)
+    const [isClicked, setIsClicked] = useState(false);
 
     useEffect(() => {
         getEmployeeList()
@@ -41,6 +42,7 @@ const AttendanceReport = () => {
             label: item.name,
         }))
 
+        options.unshift({ value: 'All', label: 'All' });
         setEmployeeOptions(options)
     }
 
@@ -53,6 +55,7 @@ const AttendanceReport = () => {
             label: item.name,
         }))
 
+        options.unshift({ value: 'All', label: 'All' });
         setRoleOptions(options)
     }
 
@@ -74,25 +77,28 @@ const AttendanceReport = () => {
 
     const goHandler = ()  => {
 
-        let data = {
-            ...input,
-            tokenid     : localStorage.getItem("token")
-        }
+        // console.log('input',input)
+        // let data = {
+        //     ...input,
+        //     tokenid     : localStorage.getItem("token")
+        // }
 
-        setMonth(input.month)
+        // setMonth(input.month)
+        
+        setIsClicked(true)
+        
 
     }
 
+    // console.log('input',input)
     return (
-        <div className="container-fluid p-0">
+        <div className="AttendanceReport">
             <div className="card shadow mb-4 pt-2">
                 <div className="card-body">
-                    <div className="row d-flex">
-                        <div className="col-sm-4 row d-flex align-items-center mb-4">
-                            <div className="col-lg-3 text-dark font-weight-bold">
-                                <label htmlFor="employee">Employee :</label>
-                            </div>
-                            <div className="col-lg-9">
+                    <div className="row">
+                        <div className="col-lg-3">
+                            <div className="form-group">
+                                <label htmlFor="employee">Employee :</label>                            
                                 <Select
                                     name="employee"
                                     id="employee"
@@ -104,11 +110,9 @@ const AttendanceReport = () => {
                                 ></Select>
                             </div>
                         </div>
-                        <div className="col-sm-4 row  align-items-center mb-4">
-                            <div className="col-lg-3 text-dark font-weight-bold">
-                                <label htmlFor="role">Role :</label>
-                            </div>
-                            <div className="col-lg-9">
+                        <div className="col-lg-3">
+                            <div className="form-group">
+                                <label htmlFor="role">Role :</label>                            
                                 <Select
                                     name="role"
                                     id="role"
@@ -120,11 +124,9 @@ const AttendanceReport = () => {
                                 ></Select>
                             </div>
                         </div>
-                        <div className="col-sm-3 row d-flex align-items-center mb-4">
-                            <div className="col-lg-3 text-dark font-weight-bold">
-                                <label htmlFor="month">Month :</label>
-                            </div>
-                            <div className="col-lg-9">
+                        <div className="col-lg-3">
+                            <div className="form-group">
+                                <label htmlFor="month">Month :</label>                            
                                 <input
                                     name="month"
                                     id="month"
@@ -136,15 +138,15 @@ const AttendanceReport = () => {
                                 />
                             </div>
                         </div>
-                        <div className="col-sm-1 row d-flex align-items-center mb-4">
-                            <div className="col-sm-2">
-                                <button className={`btn btn-outline-primary rounded-pill px-4`} onClick={goHandler} > Go </button>
-                            </div>
+                        <div className="col-lg-3">                            
+                            <button className='btn-tender-block' onClick={goHandler} >Search</button>                            
                         </div>
-                    </div>
-                    <div>
-                        <AttendenceReportList month={month} employeeOptions={employeeOptions} selectedMonth = {input.month}/>
-                    </div>
+                    </div>                    
+                </div>
+            </div>
+            <div className="card shadow mb-4 p-4">
+                <div>
+                    <AttendenceReportList input={input} isClicked={isClicked} setIsClicked={setIsClicked}/>                    
                 </div>
             </div>
         </div>

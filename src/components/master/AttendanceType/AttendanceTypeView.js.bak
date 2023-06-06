@@ -6,7 +6,7 @@ import { usePageTitle } from "../../hooks/usePageTitle"
 import AttendanceTypeList from "./AttendanceTypeList"
 
 const AttendanceTypeView = () => {
-    usePageTitle("Attendance Type List")
+    usePageTitle("Attendance Type Master")
     const {permission} = useContext(AuthContext)
     return (
     <Fragment>

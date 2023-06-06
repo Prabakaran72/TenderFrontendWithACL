@@ -223,120 +223,96 @@ let print =  '<i class="fas fa-solid fa-print print" style={{color: "#70e60f"}} 
 
 	return (
 		<>
-			<div className="container-fluid p-0">
+			<div className="OtherExpenseMain">
 				<div className="row">
 					<div className="col-lg-12">
 						<div className="card shadow mb-4 pt-2">
 							<div className="card-body">
 								<div className="row d-flex">
-									<div className="col-sm-3 row d-flex align-items-center mb-4">
-										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="From">From :</label>
-										</div>
-										<div className="col-lg-7">
-										<input
-                          type="date"
-                          className="form-control"
-                          id="fromdate"
-                          placeholder="From Date"
-                          name="fromdate"
-                          value={fromdateValue}
-                          onChange={fromdateChangeHandler}
-                          max={todateValue}
-                        />
+									<div className="col-lg-3">
+										<div className="form-group">
+											<label htmlFor="From">From :</label>										
+											<input
+												type="date"
+												className="form-control"
+												id="fromdate"
+												placeholder="From Date"
+												name="fromdate"
+												value={fromdateValue}
+												onChange={fromdateChangeHandler}
+												max={todateValue}
+											/>
 										</div>
 									</div>
-									<div className="col-sm-3 row d-flex align-items-center mb-4">
-										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="From">To :</label>
-										</div>
-										<div className="col-lg-9">
-										<input
-                          type="date"
-                          className="form-control"
-                          id="todate"
-                          placeholder="To Date"
-                          name="todate"
-                          value={todateValue}
-                          onChange={todateChangeHandler}
-                          min={fromdateValue}
-                        />
+									<div className="col-lg-3">
+										<div className="form-group">
+											<label htmlFor="From">To :</label>										
+											<input
+												type="date"
+												className="form-control"
+												id="todate"
+												placeholder="To Date"
+												name="todate"
+												value={todateValue}
+												onChange={todateChangeHandler}
+												min={fromdateValue}
+											/>
 										</div>
 									</div>
-									<div className="col-sm-5 row d-flex align-items-center mb-4">
-										<div className="col-lg-4 text-dark font-weight-bold">
-											<label htmlFor="Group">Executive Name :</label>
-										</div>
-										<div className="col-lg-6">
+									<div className="col-lg-3">
+										<div className="form-group">
+											<label htmlFor="Group">Executive Name :</label>										
 											<Select
-                      name="staff"
-                      id="staff"
-                      isSearchable="true"
-                      isClearable="true"
-                      options={optionsForStaff}
-                      value={executiveValue}
-                      onChange={(selectedOptions) => {
-						executiveChangeHandler(selectedOptions);
-						// getcustno(selectedOptions);
-					}}
-                      
-                    ></Select>
+												name="staff"
+												id="staff"
+												isSearchable="true"
+												isClearable="true"
+												options={optionsForStaff}
+												value={executiveValue}
+												onChange={(selectedOptions) => {
+													executiveChangeHandler(selectedOptions);
+													// getcustno(selectedOptions);
+												}}
+
+											></Select>
 										</div>
 									</div>
-
-
-
-
-									<div className="col-sm-1 row d-flex align-items-center mb-4">
-										{/* <div className="col-sm-2"> */}
-											<button className={`btn ${(!filterValid) && 'btn-outline-primary'} ${(filterValid) && 'btn-primary'} rounded-pill px-4`} onClick={goHandler} disabled={!filterValid}> Go </button>
-										{/* </div> */}
-									</div>
-									<div className="col-sm-1 row d-flex align-items-center mb-4">
-									{!!(permission?.['OtherExpenses']?.can_add) && <Link
-                    to="Create"
-                    className="btn btn-primary btn-icon-split rounded-pill"
-                  >
-                    <span className="icon text-white-50">
-                      <i className="fas fa-plus-circle" />
-                    </span>
-                    <span className="text">New</span>
-                  </Link>}
-									</div>
-									<div className="col-lg-7 row">
-								{/* <div className="col-sm-2">
-										<button className={`btn ${(!filterValid) && 'btn-outline-primary' } ${(filterValid) && 'btn-primary' } rounded-pill`} onClick={goHandler} disabled={!filterValid}> Go </button>
-										</div> */}
-									</div>
-									<div className="col-lg-5  d-flex align-items-end flex-column">
-
-										{/* <Link to="main/bidcreationmain" className="rounded-pill btn btn-primary btn-icon-split">
-                      <span className="icon text-white-50">
-                        <i className="fas fa-plus-circle" />
-                      </span>
-                      <span className="text">New</span>
-                    </Link> */}
-									</div>
-									<div >
-									
-									</div>
-									
-							
-								</div>
-								
-								
-								
-	<OtherExpenseMainList loading={loading} list={list} getlist={goHandler} />
-	
-							</div>
-							<div>
-								{/* <BidManagementList loading={loading} list={list} getlist={getlist}/> */}
-
+									<div className="col-lg-3">										
+										<button className='btn-tender-block' onClick={goHandler} disabled={!filterValid}> Search </button>										
+									</div>																		
+									{/* <div className="col-lg-5  d-flex align-items-end flex-column">
+										<Link to="main/bidcreationmain" className="rounded-pill btn btn-primary btn-icon-split">
+										<span className="icon text-white-50">
+											<i className="fas fa-plus-circle" />
+										</span>
+										<span className="text">New</span>
+										</Link>
+									</div>*/}
+								</div>								
 							</div>
 						</div>
+						<div className="card shadow mb-4 p-4">
+							<div className="row mb-3">
+								<div className="col-lg-12 text-right">
+									{!!(permission?.['OtherExpenses']?.can_add) && <Link
+										to="Create"
+										className="btn btn-primary btn-icon-split"
+									>
+										<span className="icon text-white-50">
+											<i className="fas fa-plus-circle" />
+										</span>
+										<span className="text res-720-btn-none">New</span>
+									</Link>}
+								</div>
+							</div>
+							<OtherExpenseMainList loading={loading} list={list} getlist={goHandler} />
+						</div>
+					</div>
+					<div>
+						{/* <BidManagementList loading={loading} list={list} getlist={getlist}/> */}
 					</div>
 				</div>
-			</div>
+			</div>		
 		</>
 	);
 }

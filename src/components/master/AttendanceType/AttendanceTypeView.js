@@ -20,12 +20,12 @@ const AttendanceTypeView = () => {
                 <div className="float-right">
                 <Link  //Have to modify userType-create to AttendanceType-create
                     to="create"
-                    className="btn btn-primary btn-icon-split rounded-pill"
+                    className="btn btn-primary btn-icon-split "
                   >
                     <span className="icon text-white-50">
                       <i className="fas fa-plus-circle" />
                     </span>
-                    <span className="text">New</span>
+                    <span className="text res-720-btn-none">New</span>
                   </Link>
                 </div>
               </div>

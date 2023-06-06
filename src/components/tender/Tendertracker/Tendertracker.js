@@ -142,78 +142,57 @@ function Tendertracker(props) {
 
   return (
     <>
-      <div className="container-fluid p-0">
+      <div className="Tendertracker">
         <div className="row">
           <div className="col-lg-12">
-            <div className="card shadow mb-4">
-              <div className="card-body">
-                <div className="row d-flex justify-content-between">
-                  <div className="col-lg-12 row">
-                    <div className="col-lg-4 row d-flex align-items-center">
-                      <div className="col-lg-4 text-dark font-weight-bold">
-                        <label htmlFor="From">Quantity :</label>
-					
-                      </div>
-                      <div className="col-sm-8">
-					  <Select
-                    name="qty"
-                    id="qty"
-                    isSearchable="true"
-                    isClearable="true"
-                    options={Quantity}
-					onChange={(selectedOptions) => {
-						qtyChangeHandler(selectedOptions);
-						// getcustno(selectedOptions);
-					  }}
-					  value={qtyValue}
-                  
-                    
-                   
-                    
-                  ></Select>
-                      </div>
-                    </div>
-                    <div className="col-lg-1 row d-flex align-items-center"></div>
-                    <div className="col-lg-4 row d-flex align-items-center">
-                    <div className="col-lg-3 text-dark font-weight-bold">
-                        <label htmlFor="From">State :</label>
-                      </div>
-                      <div className="col-lg-8">
-					  <Select
-                    name="state"
-                    id="state"
-                    isSearchable="true"
-                    isClearable="true"
-                    options={StateOptions.options}
-                    onChange={(selectedOptions) => {
-						stateChangeHandler(selectedOptions);
-						// getcustno(selectedOptions);
-					  }}
-					  value={stateValue}
-                  
-                    
-                    isLoading={StateOptions.isLoading}
-                    
-                  ></Select>
-                      </div>
-                    </div>
-                    <div className="col-sm-2">
-                      <button className={`btn ${(!filterValid) && 'btn-outline-primary' } ${(filterValid) && 'btn-primary' } rounded-pill`} onClick={goHandler} disabled={!filterValid}> Go </button>
-                    </div>
-                  </div>
-                  <div className="col-lg-5  d-flex align-items-end flex-column">
-                    {/* <Link to="main/bidcreationmain" className="rounded-pill btn btn-primary btn-icon-split">
-                      <span className="icon text-white-50">
-                        <i className="fas fa-plus-circle" />
-                      </span>
-                      <span className="text">New</span>
-                    </Link> */}
+            <div className="card shadow mb-4 p-4">
+              <div className="row">
+                <div className="col-lg-5">
+                  <div className="form-group">
+                    <label htmlFor="From">Quantity :</label>
+                    <Select
+                      name="qty"
+                      id="qty"
+                      isSearchable="true"
+                      isClearable="true"
+                      options={Quantity}
+                      onChange={(selectedOptions) => {
+                        qtyChangeHandler(selectedOptions);
+                        // getcustno(selectedOptions);
+                      }}
+                      value={qtyValue}
+                    ></Select>
                   </div>
                 </div>
+                <div className="col-lg-5">
+                  <div className="form-group">
+                    <label htmlFor="From">State :</label>
+                    <Select
+                      name="state"
+                      id="state"
+                      isSearchable="true"
+                      isClearable="true"
+                      options={StateOptions.options}
+                      onChange={(selectedOptions) => {
+                        stateChangeHandler(selectedOptions);
+                        // getcustno(selectedOptions);
+                      }}
+                      value={stateValue}
 
+
+                      isLoading={StateOptions.isLoading}
+
+                    ></Select>
+                  </div>
+                </div>
+                <div className="col-lg-2 text-center">                  
+                  <button className='btn-tender-block' onClick={goHandler} disabled={!filterValid}> Search </button>
+                </div>
               </div>
+            </div>
+            <div className="card shadow mb-4 p-4">
               <div>
-                <TendertrackerList loading={loading} list={list} getlist={getlist}/>
+                <TendertrackerList loading={loading} list={list} getlist={getlist} />
               </div>
             </div>
           </div>

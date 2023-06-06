@@ -54,8 +54,8 @@ const CustomerCreationMain = () => {
                           aria-controls="profile"
                           aria-selected="true"
                         >
-                          <i className='far fa-user mr-3'></i>
-                          Profile
+                          <i className='far fa-user'></i>
+                          <span>Profile</span>
                         </NavLink>
                       </li>
                       <li className="nav-item">
@@ -70,8 +70,8 @@ const CustomerCreationMain = () => {
                           aria-selected="false"
                         >
                           
-                          <i className='far fa-id-card mr-3'></i>
-                          Contact Person
+                          <i className='far fa-id-card'></i>
+                          <span>Contact Person</span>
                         </NavLink>
                       </li>
                       <li className="nav-item">
@@ -85,8 +85,8 @@ const CustomerCreationMain = () => {
                           aria-controls="SWMProjectStatus"
                           aria-selected="false"
                         >
-                          <i className="fas fa-map-marker-alt mr-3" aria-hidden="true"></i>
-                          SWM Project Status
+                          <i className="fas fa-map-marker-alt" aria-hidden="true"></i>
+                          <span>SWM Project Status</span>
                         </NavLink>
                       </li>
                       <li className="nav-item">
@@ -100,8 +100,8 @@ const CustomerCreationMain = () => {
                           aria-controls="ulbdetails"
                           aria-selected="false"
                         >	
-                        <i className='far fa-check-circle mr-3'></i>
-                          ULB Details
+                        <i className='far fa-check-circle'></i>
+                        <span>ULB Details</span>
                         </NavLink>
                       </li>
                       <li className="nav-item">
@@ -115,8 +115,8 @@ const CustomerCreationMain = () => {
                           aria-controls="Bankdetails"
                           aria-selected="false"
                         >	
-                        <i className='fas fa-landmark mr-3'></i>
-                          Bank Details
+                        <i className='fas fa-landmark'></i>
+                        <span>Bank Details</span>
                         </NavLink>
                       </li>
                       
@@ -126,7 +126,7 @@ const CustomerCreationMain = () => {
               </div>
               <div className="card shadow mb-4">
                 <div className="card-body">
-                  <div>
+                  <div className="formContent">
                     <div className="tab-content" id="myTabContent">
                       <div
                         className="tab-pane fade show active card-body tabContent"

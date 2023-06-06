@@ -6,15 +6,15 @@ import "jquery/dist/jquery.min.js";
 import $ from "jquery";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-bs4";
-import jsZip from "jszip";
+//import jsZip from "jszip";
 import "datatables.net-buttons-bs4";
 import "datatables.net-buttons/js/dataTables.buttons.js";
 import "datatables.net-buttons/js/buttons.colVis.js";
 import "datatables.net-buttons/js/buttons.flash.js";
 import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-buttons/js/buttons.print.js";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+//import pdfMake from "pdfmake/build/pdfmake";
+//import pdfFonts from "pdfmake/build/vfs_fonts";
 
 import axios from "axios";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
@@ -53,17 +53,40 @@ const CommunicationFilesList = (props) => {
                 { data: 'tovalue' },
                 { data: 'medium' },
                 { data: 'med_refrence_no'},
-                { data: 'Files' },
+                { data: 'Files'},
+                { data: "action"},
                 // { data: 'current_stage' },
-                { data: 'action' },
+               // { data: 'action' },
             ],
-            dom:
-            //   "<'row'<'col-sm-12'l>>" +
-              "<'row'<'col-sm-12   col-md-6 pl-4'l>  <'col-sm-12 col-md-6 pr-4'f>>" +
-              "<'row'<'col-sm-12'tr>>" +
-              "<'row'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",
+
+            buttons:[
+              {
+                extend: "print",
+                text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+                className: "btn btn-info",
+                exportOptions: {
+                    // columns: ':not(.exclude-action)', 
+                    columns: [0, 1, 2, 3, 4, 5], //Except Files 6 and action 7 columns
+                  },
+              },
+              {
+                extend: "excel",
+                text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+                className: "btn btn-success",
+                exportOptions: {
+                  columns: ':not(.exclude-action)',
+                  columns: [0, 1, 2, 3, 4, 5], //Except Files 6 and action 7 columns
+                },
+              },
+            ],
+            // dom:
+            // //   "<'row'<'col-sm-12'l>>" +
+            //   "<'row'<'col-sm-12   col-md-6 pl-4'l>  <'col-sm-12 col-md-6 pr-4'f>>" +
+            //   "<'row'<'col-sm-12'tr>>" +
+            //   "<'row'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",
     
         })
+        table.buttons().container().appendTo("#dataTable_wrapper .dataTables_filter");
     
         $('#dataTable tbody').on('click', 'tr .fa-edit', function () {
           let rowdata =table.row($(this).closest('tr')).data();

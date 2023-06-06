@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import PreLoader from "../../UI/PreLoader";
 
-import wating from "./image/wait_f.gif"
+
 //For DataTable
 import "jquery/dist/jquery.min.js";
 import $ from "jquery";
@@ -24,7 +24,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import Swal from "sweetalert2";
 import { usePageTitle } from "../../hooks/usePageTitle";
-import family from "./image/wait_f.gif";
+
 
 
 let table; 
@@ -36,7 +36,7 @@ const ReimbursementList = (props) => {
     const [UlbtList, setUlbList] = useState([]);
     
     const { server1: baseUrl } = useBaseUrl();
-    const navigate = useNavigate()
+   
     const location = useLocation();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -184,7 +184,7 @@ if(ApproveStatus){
   })
 
 
-}else{
+}else if((action=='HOApprove_reject')||(action=='CEOApprove_reject')||(action=='HRApprove_reject')){
 
 
   Swal.fire({
@@ -241,6 +241,18 @@ if(response.data.status===200){
 
 
 
+
+
+
+}else if((action=='printView')){
+
+  const width = 800;
+  const height = 600;
+  const left = (window.innerWidth - width) / 2;
+  const top = (window.innerHeight - height) / 2;
+
+  const url = 'remView/';
+window.open(url+rowdata.id, '', `width=${width}, height=${height}, left=${left}, top=${top}`);
 
 
 

@@ -299,9 +299,8 @@ const UserPermission = () => {
     }
 
     return (
-        <Fragment>
-            <div className="container-fluid">
-                <div className="card p-4">
+        <Fragment>        
+                <div className="card shadow mb-4 p-4">
                     <form>
                         <div className="row align-items-center">
                             <div className="inputgroup col-lg-6 mb-4">
@@ -330,7 +329,7 @@ const UserPermission = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="inputgroup col-lg-6 mb-4">
+                            <div className="col-lg-6 mb-4">
                                 <div className="row align-items-center">
                                     <div className="col-lg-4 text-dark">
                                         <label htmlFor="menu" className="font-weight-bold">Menu(s)<span className="text-danger">&nbsp;*</span> </label>
@@ -358,9 +357,9 @@ const UserPermission = () => {
                             </div>
                         </div>
                     </form>
-                </div>
+                
 
-                {subMenuList.length > 0 && <div className="card p-4 mt-3">
+                {subMenuList.length > 0 && <div className="table-responsive-sm mt-3">
                     <table className="table table-hover  table-bordered text-center">
                         <thead>
                             <tr className="table-secondary text-dark">
@@ -464,11 +463,11 @@ const UserPermission = () => {
                     </table>
                 </div>}
 
-                <div className="inputgroup col-lg-12 mb-4 ml-3 mt-3">
+                <div className="col-lg-12 mt-3">
                     <div className="row align-items-center">
-                        <div className="col-lg-12 text-right ">
+                        <div className="col-lg-12 text-center ">
                             <button
-                                className="btn btn-primary"
+                                className="btn btn-primary mr-2"
                                 disabled={!formIsValid}
                                 onClick={submitHandler}
                             >
@@ -476,15 +475,14 @@ const UserPermission = () => {
                                 {dataSending === true ? ((id) ? 'Updating...' :"Submitting....") : ((id) ? 'Update' :"Save" )}
 
                             </button>
-                            <button className="btn btn-secondary mx-3" onClick={cancelHandler} disabled = {dataSending}>
+                            <button className="btn btn-secondary" onClick={cancelHandler} disabled = {dataSending}>
                                 Cancel
                             </button>
                         </div>
                         
                     </div>
-                </div>
-
-            </div>
+                </div>    
+            </div>        
         </Fragment>
     )
 }

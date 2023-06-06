@@ -53,6 +53,7 @@ const DocListSaved = (props) => {
 
     return (
         <Fragment>
+          <div className="DocListSaved">
             <div className="d-sm-flex align-items-center justify-content-between mt-2 mb-2">
                 <h1 className="h4 mb-0 text-primary">Saved documents</h1>
             </div>
@@ -70,6 +71,7 @@ const DocListSaved = (props) => {
                 </div>
                 }
             </PreLoader>
+          </div>
         </Fragment>
     )
 }

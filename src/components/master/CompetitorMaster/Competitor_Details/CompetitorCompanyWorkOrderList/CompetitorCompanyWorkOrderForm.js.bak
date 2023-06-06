@@ -480,14 +480,14 @@ const CompetitorCompanyWorkOrderForm = (props) => {
   };
 
   const onEdit = (data) => {
-    console.log("Data", data);
+    console.log("data", data);
     setFetchLoading(true);
     setFile("");
     setFile1("");
     getStateList();
     getUnitList();
-    setEditDataState(data.state);
-    setEditDataUnit(data.unit);
+    data.state > 0 ? setEditDataState(data.state) : setEditDataState("");
+    data.unit > 0 ? setEditDataUnit(data.unit): setEditDataUnit("");
     getImageUrl(data.id);
     setFormIsValid(true);
     setCompetitorWOInput({
@@ -496,12 +496,12 @@ const CompetitorCompanyWorkOrderForm = (props) => {
       custName: data.custName,
       projectName: data.projectName,
       tnederId: data.tnederId,
-      woDate: data.woDate,
+      woDate: data.woDate ? data.woDate : "",
       quantity: data.quantity,
       projectValue: data.projectValue,
       perTonRate: data.perTonRate,
       qualityCompleted: data.qualityCompleted,
-      date: data.date,
+      date: data.date? data.date: "",
       woFile: data.woFile,
       completionFile: data.completionFile,
     });
@@ -810,7 +810,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
             confirmButtonColor: "#5156ed",
           }).then(function () {
             setLoading(false);
-            setIsBtnClicked(false);
+            setIsBtnClicked(false);    
           });
         } else {
           Swal.fire({
@@ -1000,9 +1000,9 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                   <label htmlFor="woDate">
                     {" "}
                     WO Date
-                    <span className="text-danger h6 font-weight-bold">
+                    {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
-                    </span>
+                    </span> */}
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1031,9 +1031,9 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                 <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="qantity">
                     Quantity
-                    <span className="text-danger h6 font-weight-bold">
+                    {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
-                    </span>
+                    </span> */}
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1063,9 +1063,9 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                 <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="unit">
                     Unit
-                    <span className="text-danger h6 font-weight-bold">
+                     {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
-                    </span>
+                    </span> */}
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1095,9 +1095,9 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                 <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="projectValue">
                     Project Value
-                    <span className="text-danger h6 font-weight-bold">
+                     {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
-                    </span>
+                    </span> */}
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1127,9 +1127,9 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                 <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="perTonRate">
                     Per Ton Rate
-                    <span className="text-danger h6 font-weight-bold">
+                     {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
-                    </span>
+                    </span> */}
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1159,9 +1159,9 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                 <div className="col-lg-3 text-dark font-weight-bold pt-1">
                   <label htmlFor="qualityCompleted">
                     Quantity Completed
-                    <span className="text-danger h6 font-weight-bold">
+                     {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
-                    </span>
+                    </span> */}
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1192,9 +1192,9 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                   <label htmlFor="date">
                     {" "}
                     Date
-                    <span className="text-danger h6 font-weight-bold">
+                     {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
-                    </span>
+                    </span> */}
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1252,9 +1252,9 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                   <label htmlFor="woUpload">
                     {" "}
                     WO Upload
-                    <span className="text-danger h6 font-weight-bold">
+                     {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
-                    </span>
+                    </span> */}
                     {/* <p className="text-info mt-2 mb-n2">Max File size 1 MB</p>
                   <p className="text-info ">Allowed File Type JPG/JPEG/PNG/PDF</p> */}
                   </label>
@@ -1333,15 +1333,19 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                                 title="Click for Preview"
                               />
                             ) : (
-                              <img
-                                className="rounded-circle pointer"
-                                id="previewImg"
-                                src={ImageConfig[previewFileType.woFile]}
-                                alt="No Image"
-                                width="75px"
-                                height="75px"
-                                title="Click for Preview"
-                              />
+                              <a href={previewObjURL} download={previewObjURL}>
+                                <img
+                                  className="rounded-circle pointer"
+                                  id="previewImg"
+                                  src={ImageConfig[previewFileType.woFile]}
+                                  alt="No Image"
+                                  width="75px"
+                                  height="75px"
+                                  title="Click for Dwonload"
+
+                                />
+                              </a>
+
                             )}
 
                             {previewObjURL !== null && (
@@ -1458,17 +1462,20 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                                 title="Click for Preview"
                               />
                             ) : (
-                              <img
-                                className="rounded-circle pointer"
-                                id="previewImg1"
-                                src={
-                                  ImageConfig[previewFileType.woCompletionFile]
-                                }
-                                alt="No Image"
-                                width="75px"
-                                height="75px"
-                                title="Click for Preview"
-                              />
+                              <a href={previewObjURL1} download={previewObjURL1}>
+                                <img
+                                  className="rounded-circle pointer"
+                                  id="previewImg1"
+                                  src={
+                                    ImageConfig[previewFileType.woCompletionFile]
+                                  }
+                                  alt="No Image"
+                                  width="75px"
+                                  height="75px"
+                                  title="Click for Download"
+                                />
+                              </a>
+
                             )}
                             
                             {previewObjURL1 && (

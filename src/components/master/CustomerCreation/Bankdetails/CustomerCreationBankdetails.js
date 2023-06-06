@@ -9,7 +9,6 @@ import CustomerCreationBankDetailsubtable from "./CusromerCreationBankDetailsubt
 import Swal from "sweetalert2";
 import { bankDetailsActions } from "../store/BankDetailsSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { motion } from "framer-motion";
 
 //$$$ const isNotEmpty = (value) => value.trim() !== "";
 const isNotEmpty = (value) => true;
@@ -325,17 +324,12 @@ const CustomerCreationBankDetails = () => {
     });
   };
 
-  const variant1 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .1, type:'spring', stiffness: 180 }}
-  };
-  const variant2 = {
-    start: { opacity: 0, y: 80 }, end: { opacity: 1, y: 0, transition:{ delay: .2, type:'spring', stiffness: 180 }}
-  };
+ 
 
 
   return (
     <Fragment>
-      <div className="formContent">
+      <div className="">
         {!id && (
           <div className="loading">
             <img
@@ -349,7 +343,7 @@ const CustomerCreationBankDetails = () => {
         )}
         <form onSubmit={submitHandler}>
           <div className="row align-items-center">
-            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant1}>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="ifsccode">IFSC Code :</label>
@@ -378,8 +372,8 @@ const CustomerCreationBankDetails = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant1}>
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="bankname">Bank Name:</label>
@@ -407,8 +401,8 @@ const CustomerCreationBankDetails = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
-            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant2}>
+            </div>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="bankaddress">Bank address :</label>
@@ -444,9 +438,9 @@ const CustomerCreationBankDetails = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div className="inputgroup col-lg-6 mb-4" initial='start' animate='end' variants={variant2}>
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold mb-4">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="beneficiaryaccountname">
@@ -503,9 +497,9 @@ const CustomerCreationBankDetails = () => {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div className="col-lg-12 d-flex justify-content-center" initial={{opacity:0}} animate={{opacity:1}}>
+            <div className="col-lg-12 d-flex justify-content-center mb-4" >
               {!isEditbtn && (
                 <button
                   className={
@@ -546,7 +540,7 @@ const CustomerCreationBankDetails = () => {
               >
                 Clear
               </button>
-            </motion.div>
+            </div>
           </div>
         </form>
 
@@ -557,7 +551,7 @@ const CustomerCreationBankDetails = () => {
           onDelete={onDelete}
         />
         {/* </div> */}
-        <div className="col-lg-12 mt-3 d-flex justify-content-end">
+        <div className="col-lg-12 mt-3 d-flex justify-content-center">
           {/* <button
               className="btn btn-outline-primary mr-3 rounded-pill"
               onClick = {() => navigate("/tender/master/customercreation/list/main/swmprojectstatus/"+id)}

@@ -32,6 +32,8 @@ const ZoneMaster = () => {
       });
       const [dataSending, setDataSending] = useState(false);
       const [formIsValid ,setFormIsValid] = useState(false);
+      const [isEdited , setIsEdited] = useState(false);
+      const [datafetching , setDataFetching] = useState(false);
       useEffect(()=>{
         axios.get(`${baseUrl}/api/state/list/105`).then((resp)=> {
           setOptions(resp.data.stateList);
@@ -40,6 +42,7 @@ const ZoneMaster = () => {
       
       useEffect(() => {
         if(id){
+          setDataFetching(true);
           axios.get(`${baseUrl}/api/zonemaster/${id}`).then((resp)=> {
             setInput({
                 zonename: resp.data.zonename.zone_name,
@@ -98,6 +101,17 @@ const ZoneMaster = () => {
       }
 
 
+      useEffect(()=>{
+          
+          if(statelist.length > 0 || validation.statelistErr ==="")
+          {
+            setInputValidation({...validation,statelistErr: false})
+          }
+          else{
+            setInputValidation({...validation,statelistErr: true})
+          }
+      },[statelist])
+
       const inputHandler = (e) => {
         e.persist();
         setInput({ ...input , [e.target.name]: e.target.value });
@@ -105,6 +119,11 @@ const ZoneMaster = () => {
           setInputValidation({ ...validation, [e.target.name]: true });
         } else {
           setInputValidation({ ...validation, [e.target.name]: false });
+        }
+        if(datafetching === true && id)
+        {
+          setIsEdited(true);
+          setDataFetching(false);
         }
       };
 
@@ -114,6 +133,7 @@ const ZoneMaster = () => {
         if(validation.statelistErr=== false && validation.zonenameErr == false && input.zonename && statelist.length > 0)
         {
           setFormIsValid(true);
+          
         }
         else{
           setFormIsValid(false);
@@ -153,7 +173,8 @@ const ZoneMaster = () => {
 
     console.log("Datasending", dataSending)
     console.log("formIsvalid", formIsValid)
-
+    console.log("isEdited", isEdited)
+    console.log("datafetching", datafetching)
     return (
         <Fragment>
         <div className="container-fluid">
@@ -178,7 +199,7 @@ const ZoneMaster = () => {
                     {validation.zonename && (
                       <div className="pt-1">
                         <span className="text-danger font-weight-bold">
-                          Enter Zone NAME
+                          Enter Zone Name
                         </span>
                       </div>
                     )}
@@ -206,7 +227,7 @@ const ZoneMaster = () => {
                                             isMulti='true'
                                             options={options}
                                             value={statelist}
-                                            onChange={(value, action) => { setStateList(value) }}
+                                            onChange={(value, action) => { setStateList(value); setIsEdited(true)}}
                                             closeMenuOnSelect={false}
                                         ></Select>
                       {validation.statelistErr && (
@@ -263,7 +284,7 @@ const ZoneMaster = () => {
                             checked={input.status === "inactive"}
                             onChange={inputHandler}
                             />
-                            Inactive
+                            Inactive {(id ? !(formIsValid && isEdited) : !formIsValid )}
                         </label>
                         </div>
                     </div>
@@ -272,9 +293,9 @@ const ZoneMaster = () => {
                 <div className="row text-center">
                     <div className="col-12">
                     {id ? (
-                        <button className="btn btn-primary" disabled ={dataSending || !formIsValid} > {dataSending ? "Updating..." : "Update"}</button>
+                        <button className="btn btn-primary" disabled ={dataSending || (id ? !(formIsValid && isEdited) : !formIsValid )} > {dataSending ? "Updating..." : "Update"}</button>
                     ) : (
-                        <button className="btn btn-primary" disabled = {dataSending || !formIsValid}> {dataSending ? "Submitting..." : "Submit"}</button>
+                        <button className="btn btn-primary" disabled = {dataSending || (id ? !(formIsValid && isEdited) : !formIsValid )}> {dataSending ? "Submitting..." : "Submit"}</button>
                     )}
                     </div>
                 </div>

@@ -191,218 +191,181 @@ function Legacystatement() {
 	return (
 		<>
 			{/* Page Heading */}
-			<div className="container-fluid p-0">
+			<div className="Legacystatement">
 				<div className="row">
 					<div className="col-lg-12">
-						<div className="card shadow mb-4 pt-2">
-							<div className="card-body">
-								<div className="row d-flex">
-									<div className="col-sm-4 row d-flex align-items-center mb-4">
-										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="From">From :</label>
-										</div>
-										<div className="col-lg-9">
-											<input
-												type="date"
-												className="form-control"
-												id="fromdate"
-												placeholder="From Date"
-												name="fromdate"
-												value={fromdateValue}
-												onChange={fromdateChangeHandler}
-												max={todateValue}
-											/>
-										</div>
-									</div>
-									<div className="col-sm-4 row d-flex align-items-center mb-4">
-										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="From">To :</label>
-										</div>
-										<div className="col-lg-9">
-											<input
-												type="date"
-												className="form-control"
-												id="todate"
-												placeholder="To Date"
-												name="todate"
-												value={todateValue}
-												onChange={todateChangeHandler}
-												min={fromdateValue}
-											/>
-										</div>
-									</div>
-									<div className="col-sm-4 row d-flex align-items-center mb-4">
-										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="Status">Status :</label>
-										</div>
-										<div className="col-lg-9">
-											<Select
-												name="status"
-												id="status"
-												isSearchable="true"
-												isClearable="true"
-												options={statusOptions}
-												onChange={(selectedOptions) => {
-													statusChangeHandler(selectedOptions);
-													// getcustno(selectedOptions);
-												}}
-												onBlur={statusBlurHandler}
-												value={statusValue}
-											></Select>
-										</div>
-									</div>
-									<div className="col-sm-4 row d-flex align-items-center mb-4">
-										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="state">State :</label>
-										</div>
-										<div className="col-lg-9">
-											<Select
-												name="state"
-												id="state"
-												isSearchable="true"
-												isClearable="true"
-												options={StateOptions.options}
-												onChange={(selectedOptions) => {
-												  stateChangeHandler(selectedOptions);
-												  // getcustno(selectedOptions);
-												}}
-												onBlur={stateBlurHandler}
-												value={stateValue}
-												isLoading={StateOptions.isLoading}
-
-											></Select>
-										</div>
-									</div>
-									<div className="col-sm-4 row d-flex align-items-center mb-4">
-										<div className="col-lg-3 text-dark font-weight-bold">
-											<label htmlFor="typeofproject">Type of project :</label>
-										</div>
-										<div className="col-lg-9">
-											<Select
-												name="typeofproject"
-												id="typeofproject"
-												isSearchable="true"
-												isClearable="true"
-												options={typeofprojectOptions.options}
-												onChange={(selectedOptions) => {
-													typeofprojectChangeHandler(selectedOptions);
-													// getcustno(selectedOptions);
-												}}
-												onBlur={typeofprojectBlurHandler}
-												value={typeofprojectValue}
-												isLoading={typeofprojectOptions.isLoading}
-
-											></Select>
-										</div>
-									</div>
-									<div className="col-sm-4 row d-flex align-items-center mb-4">
-										<div className="col-lg-4 text-dark font-weight-bold">
-											<label htmlFor="typeofcustomer">Type of customer :</label>
-										</div>
-										<div className="col-lg-8">
-											<div className="form-check form-check-inline mr-5">
-												<label className="form-check-label" htmlFor="typeofcustomer_public">
-													<input
-														className="form-check-input"
-														type="radio"
-														name="typeofcustomer"
-														id="typeofcustomer_public"
-														checked={"Public" === typeofcustomerValue}
-														value="Public"
-														onChange={(e) => {
-															typeofcustomerhandler(e);
-															// getcustno(stateValue)
-														}}
-													/>
-													Public
-												</label>
-											</div>
-											<div className="form-check form-check-inline">
-												<label className="form-check-label" htmlFor="typeofcustomer_private">
-													<input
-														className="form-check-input"
-														type="radio"
-														name="typeofcustomer"
-														id="typeofcustomer_private"
-														checked={"Private" === typeofcustomerValue}
-														value="Private"
-														onChange={(e) => {
-															typeofcustomerhandler(e);
-															//  getcustno(stateValue)
-														}}
-													/>
-													Private
-												</label>
-											</div>
-										</div>
-									</div>
-									<div className="col-sm-4 row d-flex align-items-center mb-4">
-										<div className="col-lg-4 text-dark font-weight-bold">
-											<label htmlFor="tenderparticipation">Tender Participation :</label>
-										</div>
-										<div className="col-lg-8">
-											<div className="form-check form-check-inline mr-5">
-												<label className="form-check-label" htmlFor="tenderparticipation_public">
-													<input
-														className="form-check-input"
-														type="radio"
-														name="tenderparticipation"
-														id="tenderparticipation_public"
-														checked={"Yes" === tenderparticipationValue}
-														value="Yes"
-														onChange={(e) => {
-															tenderparticipationhandler(e);
-															// getcustno(stateValue)
-														}}
-													/>
-													Yes
-												</label>
-											</div>
-											<div className="form-check form-check-inline">
-												<label className="form-check-label" htmlFor="tenderparticipation_private">
-													<input
-														className="form-check-input"
-														type="radio"
-														name="tenderparticipation"
-														id="tenderparticipation_private"
-														checked={"No" === tenderparticipationValue}
-														value="No"
-														onChange={(e) => {
-															tenderparticipationhandler(e);
-															//  getcustno(stateValue)
-														}}
-													/>
-													No
-												</label>
-											</div>
-										</div>
-									</div>
-									<div className="col-sm-3 row d-flex align-items-center mb-4">
-									<div className="col-sm-2">
-										<button className={`btn ${(!filterValid) && 'btn-outline-primary' } ${(filterValid) && 'btn-primary' } rounded-pill px-4`} onClick={goHandler} disabled={!filterValid}> Go </button>
-										</div>
-									</div>
-									<div className="col-lg-7 row">
-
-										{/* <div className="col-sm-2">
-										<button className={`btn ${(!filterValid) && 'btn-outline-primary' } ${(filterValid) && 'btn-primary' } rounded-pill`} onClick={goHandler} disabled={!filterValid}> Go </button>
-										</div> */}
-									</div>
-									<div className="col-lg-5  d-flex align-items-end flex-column">
-
-										{/* <Link to="main/bidcreationmain" className="rounded-pill btn btn-primary btn-icon-split">
-                      <span className="icon text-white-50">
-                        <i className="fas fa-plus-circle" />
-                      </span>
-                      <span className="text">New</span>
-                    </Link> */}
+						<div className="card shadow mb-4 p-4">
+							<div className="row">
+								<div className="col-lg-3">
+									<div className="form-group">
+										<label htmlFor="From">From :</label>
+										<input
+											type="date"
+											className="form-control"
+											id="fromdate"
+											placeholder="From Date"
+											name="fromdate"
+											value={fromdateValue}
+											onChange={fromdateChangeHandler}
+											max={todateValue}
+										/>
 									</div>
 								</div>
+								<div className="col-lg-3">
+									<div className="form-group">
+										<label htmlFor="From">To :</label>
+										<input
+											type="date"
+											className="form-control"
+											id="todate"
+											placeholder="To Date"
+											name="todate"
+											value={todateValue}
+											onChange={todateChangeHandler}
+											min={fromdateValue}
+										/>
+									</div>
+								</div>
+								<div className="col-lg-3">
+									<div className="form-group">
+										<label htmlFor="Status">Status :</label>
+										<Select
+											name="status"
+											id="status"
+											isSearchable="true"
+											isClearable="true"
+											options={statusOptions}
+											onChange={(selectedOptions) => {
+												statusChangeHandler(selectedOptions);
+												// getcustno(selectedOptions);
+											}}
+											onBlur={statusBlurHandler}
+											value={statusValue}
+										></Select>
+									</div>
+								</div>
+								<div className="col-lg-3">
+									<div className="form-group">
+										<label htmlFor="state">State :</label>
+										<Select
+											name="state"
+											id="state"
+											isSearchable="true"
+											isClearable="true"
+											options={StateOptions.options}
+											onChange={(selectedOptions) => {
+												stateChangeHandler(selectedOptions);
+												// getcustno(selectedOptions);
+											}}
+											onBlur={stateBlurHandler}
+											value={stateValue}
+											isLoading={StateOptions.isLoading}
+										></Select>
+									</div>
+								</div>
+								<div className="col-lg-3">
+									<div className="form-group">
+										<label htmlFor="typeofproject">Type of project :</label>
+										<Select
+											name="typeofproject"
+											id="typeofproject"
+											isSearchable="true"
+											isClearable="true"
+											options={typeofprojectOptions.options}
+											onChange={(selectedOptions) => {
+												typeofprojectChangeHandler(selectedOptions);
+												// getcustno(selectedOptions);
+											}}
+											onBlur={typeofprojectBlurHandler}
+											value={typeofprojectValue}
+											isLoading={typeofprojectOptions.isLoading}
 
+										></Select>
+									</div>
+								</div>
+								<div className="col-lg-3">
+									<div className="form-group">
+										<label htmlFor="typeofcustomer">Type of customer :</label>
+										<div className="ml-4 mt-2">
+											<label className="form-check-label mr-5" htmlFor="typeofcustomer_public">
+												<input
+													className="form-check-input"
+													type="radio"
+													name="typeofcustomer"
+													id="typeofcustomer_public"
+													checked={"Public" === typeofcustomerValue}
+													value="Public"
+													onChange={(e) => {
+														typeofcustomerhandler(e);
+														// getcustno(stateValue)
+													}}
+												/>
+												Public
+											</label>
+											<label className="form-check-label" htmlFor="typeofcustomer_private">
+												<input
+													className="form-check-input"
+													type="radio"
+													name="typeofcustomer"
+													id="typeofcustomer_private"
+													checked={"Private" === typeofcustomerValue}
+													value="Private"
+													onChange={(e) => {
+														typeofcustomerhandler(e);
+														//  getcustno(stateValue)
+													}}
+												/>
+												Private
+											</label>
+										</div> 	
+									</div>
+								</div>
+								<div className="col-lg-3">
+									<div className="form-group">
+										<label htmlFor="tenderparticipation">Tender Participation :</label>
+										<div className="ml-4 mt-2">
+											<label className="form-check-label mr-5" htmlFor="tenderparticipation_public">
+												<input
+													className="form-check-input"
+													type="radio"
+													name="tenderparticipation"
+													id="tenderparticipation_public"
+													checked={"Yes" === tenderparticipationValue}
+													value="Yes"
+													onChange={(e) => {
+														tenderparticipationhandler(e);
+														// getcustno(stateValue)
+													}}
+												/>
+												Yes
+											</label>
+											<label className="form-check-label" htmlFor="tenderparticipation_private">
+												<input
+													className="form-check-input"
+													type="radio"
+													name="tenderparticipation"
+													id="tenderparticipation_private"
+													checked={"No" === tenderparticipationValue}
+													value="No"
+													onChange={(e) => {
+														tenderparticipationhandler(e);
+														//  getcustno(stateValue)
+													}}
+												/>
+												No
+											</label>
+										</div>
+									</div>
+								</div>
+								<div className="col-lg-3 text-center">
+									<button className='btn-tender-block' onClick={goHandler} disabled={!filterValid}> Search </button>
+								</div>
 							</div>
+						</div>
+						<div className="card shadow mb-4 p-4">
 							<div>
 								{/* <BidManagementList loading={loading} list={list} getlist={getlist}/> */}
-								<LegacystatementList  loading={loading} list={list}  getlist={getlist}/>
+								<LegacystatementList loading={loading} list={list} getlist={getlist} />
 							</div>
 						</div>
 					</div>
@@ -413,3 +376,13 @@ function Legacystatement() {
 }
 
 export default Legacystatement;
+
+
+
+
+
+
+
+
+
+

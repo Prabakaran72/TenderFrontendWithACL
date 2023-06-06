@@ -106,92 +106,90 @@ const TenderTypeMaster = () => {
   };
 
   return (
-    <div className="container-fluid">
-      <div className="card p-4">
+    <div className="">
+      <div className="card shadow mb-4 p-4">
         <form onSubmit={submitTenderType} id="tender_FORM">
-          <div className="row">
-            <div className="col-2">
-              <label>Tender Type Name</label>
-            </div>
-            <div className="col-10 mb-3">
-              <div className="row">
-                <div className="col-5 mr-5 ">
-                  <input
-                    className="form-control "
-                    type="text"
-                    id="tenderType"
-                    name="tenderType"
-                    onChange={inputHandler}
-                    value={tenderTypeInput.tenderType}
-                  />
-                </div>
-                <div className="col-6 ml-n5 mt-2">
-                  <span style={{ color: "red" }}>
-                    {tenderTypeValidation.tenderType}
-                  </span>
-                </div>
+          <div className="row align-items-center">
+          <div className="col-lg-6 mb-4">
+            <div className="row align-items-center">
+              <div className="col-lg-4 text-dark">
+                <label>Tender Type Name</label>
+              </div>
+              <div className="col-lg-8">               
+                    <input
+                      className="form-control "
+                      type="text"
+                      id="tenderType"
+                      name="tenderType"
+                      onChange={inputHandler}
+                      value={tenderTypeInput.tenderType}
+                    />                 
+                    <span style={{ color: "red" }}>
+                      {tenderTypeValidation.tenderType}
+                    </span>                 
+              </div>
               </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-2">
-              <label>Active Status</label>
-            </div>
+            <div className="col-lg-6 mb-4">
+              <div className="row align-items-center">
+                <div className="col-lg-4 text-dark">
+                  <label>Active Status</label>
+                </div>
 
-            <div className="col-5 ml-3">
-              <div className="row ">
-                <div className="col-3">
-                  <label
-                    className="form-check-label"
-                    htmlFor="tenderTypeStatusActive"
-                  >
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      id="tenderTypeStatusActive"
-                      name="tenderTypeStatus"
-                      value="Active"
-                      checked={tenderTypeInput.tenderTypeStatus === "Active"}
-                      onChange={inputHandler}
-                    />
-                    Active
-                  </label>
-                </div>
-                <div className="col-3">
-                  <label
-                    className="form-check-label"
-                    htmlFor="tenderTypeStatusInActive"
-                  >
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      id="tenderTypeStatusInActive"
-                      name="tenderTypeStatus"
-                      value="InActive"
-                      checked={tenderTypeInput.tenderTypeStatus === "InActive"}
-                      onChange={inputHandler}
-                    />
-                    Inactive
-                  </label>
+                <div className="col-lg-8">
+                  <div className='form-check form-check-inline mr-5'>
+                    <label
+                      className="form-check-label"
+                      htmlFor="tenderTypeStatusActive"
+                    >
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        id="tenderTypeStatusActive"
+                        name="tenderTypeStatus"
+                        value="Active"
+                        checked={tenderTypeInput.tenderTypeStatus === "Active"}
+                        onChange={inputHandler}
+                      />
+                      Active
+                    </label>
+                  </div>
+                  <div className='form-check form-check-inline '>
+                    <label
+                      className="form-check-label"
+                      htmlFor="tenderTypeStatusInActive"
+                    >
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        id="tenderTypeStatusInActive"
+                        name="tenderTypeStatus"
+                        value="InActive"
+                        checked={tenderTypeInput.tenderTypeStatus === "InActive"}
+                        onChange={inputHandler}
+                      />
+                      Inactive
+                    </label>
+                  </div>               
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row text-center">
-            <div className="col-12">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={dataSending}
-              >
-                {!id
-                  ? !dataSending
-                    ? "Submit"
-                    : "Submitting..."
-                  : !dataSending
-                  ? "Update"
-                  : "Updating..."}
-              </button>
+            <div className="col-lg-12 text-center">
+              <div className="col-12">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={dataSending}
+                >
+                  {!id
+                    ? !dataSending
+                      ? "Submit"
+                      : "Submitting..."
+                    : !dataSending
+                    ? "Update"
+                    : "Updating..."}
+                </button>
+              </div>
             </div>
           </div>
         </form>

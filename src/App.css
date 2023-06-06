@@ -7,10 +7,13 @@ body {
 :root {
     --popup: #00000078;
     --primary: #6eb821;
-    --thead: #69b73deb;
+    /* --primary: #60ab11;     */
+    --thead : #6eb821;
+    /* --thead : #73b52e; */
     --text-color: #5a5c69;    
     --white: #ffffff;
-    --btn-bg: #528b17;
+    /* --btn-bg: #528b17; */
+    --btn-bg: #60ab11;
 }
 
 .btn-tender {
@@ -39,6 +42,50 @@ body {
     box-shadow: 3px 3px 10px #302c2c54;
 }
 
+.btn-rmv-border {
+    border: none;
+    background: none;
+}
+
+.icon-edit {
+    color: #03a714;
+}
+.icon-delete, .icon-trash {
+    color: #e74a3b ;
+}
+
+@media screen and (max-width : 768px) {
+    .btn-icon-split {
+        font-size: 12px;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
+    .res-720-btn-none {
+        display: none !important;
+    }
+    span.print {
+        display: none;
+    }
+    span.excel {
+        display: none;
+    }
+    .dt-buttons .buttons-print {
+        padding: 6px;
+    }
+    .dt-buttons .buttons-excel {
+        padding: 6px;
+    }    
+}
+@media screen and (max-width : 480px) {
+    form label {
+        font-size: 14px;
+    }  
+    .card label {
+        font-size: 14px;
+    }        
+}
+
+
 #wrapper {
     display: flex;
     overflow: hidden;
@@ -51,6 +98,28 @@ body {
     overflow-x: hidden;
     z-index: -1;
     position: relative;
+}
+
+.scroll-to-top {
+    z-index: 999;
+}
+@media screen and (max-width : 480px) {
+    .scroll-to-top {
+        width: 2rem;
+        height: 2rem;
+    }
+    .scroll-to-top i {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        transform: translate(-50%, -50%);
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        bottom: 50%;
+        left: 50%;
+    }
 }
 
 .Login .login_Bg {   
@@ -72,7 +141,7 @@ body {
     height: 180px;
     margin-top: 20px;
     transition: 2s ease-in-out;
-    animation: wave;
+    /* animation: wave; */
     animation-iteration-count: infinite;
     animation-duration: 2.5s;
 }
@@ -391,103 +460,10 @@ body {
     border-color: #12c350;
     box-shadow: 1px 1px 13px #ebebeb;
 }
-/* .box {
-    position: absolute;
-    bottom: 0;
-    width: 100%;    
-    height: 103px;    
-} */
-/* .box::before {
-    content: '';
-    background: #f0f0f0;
-    height: 100px;
-    width: 100px;
-    z-index: 9999;
-    position: absolute;
-}
-.box::after {
-    content: '';
-    background: #f0f0f0;
-    height: 100px;
-    width: 100px;
-    z-index: 9999;
-    position: absolute;
-    right: 0;
-} */
-/* 
-.truck {
-    background: url(../public/assets/img/truck.png);
-    height: 100px;
-    width: 150px;
-    background-position: bottom;
-    background-repeat: no-repeat;
-    background-size: contain;
-    position: absolute;
-    bottom: 2px;
-    animation: run 5s infinite linear;    
-    transition: 2s linear;
-    overflow-x: hidden;
-}
 
 
-@keyframes run {
-    0% {
-       
-        transform: translateX(-100px);
-        
-    }
-    100% {
-       
-        transform: translateX(1250px);
-        
-    }
-}
-
-.truck1 {
-    background: url(../public/assets/img/recycle-truck.png);
-    height: 120px;
-    width: 200px;
-    background-position: bottom;
-    background-repeat: no-repeat;
-    background-size: contain;
-    position: absolute;
-    bottom: -10px;
-    animation: run1 5s infinite linear;  
-    animation-delay: 3s;  
-    transition: 2s linear;
-    overflow-x: hidden;
-}
-
-
-@keyframes run1 {
-    0% {
-       
-        transform: translateX(-100px);
-        
-    }
-    100% {
-       
-        transform: translateX(1250px);
-        
-    }
-}
-
-
- ::-webkit-scrollbar 
-{
-	display: none;
-    background: transparent;
-}
- ::-webkit-scrollbar-thumb 
-{
-	display: none;
-    background: transparent;
-}
-
-::-webkit-scrollbar-track 
-{
-	display: none;
-    background: transparent;
+/* .abso {
+    position: relative;
 } */
 /*   Login Mobile Responsive    */
 
@@ -503,9 +479,29 @@ body {
 }
 
 
+
+
+
+
+
+/* ----------------- TOPBAR */
+
+.topbar .pageTitle {
+    font-size: 20px;
+    margin:  0;
+}
+
+/* TOPBAR RESPONSIVE */ 
+
+@media screen and (max-width : 768px) {
+    .topbar .pageTitle {
+        font-size: 15px;        
+    }
+}
+
 /* ----------------- SIDEBAR */
 .SideNav {
-    background: #6eb821;
+    background: var(--primary);
     width: 270px!important;    
     box-shadow: 0px 0px 13px #7171718c;
     backdrop-filter: drop-shadow(1px 1px 14px #7171718c);
@@ -513,7 +509,7 @@ body {
     overflow: hidden;
     /* animation: move 3s infinite ease-in-out;     */
 }
-.SideNav::after {
+/* .SideNav::after {
     content: '';
     position: absolute;
     background-image: url(../public/assets/img/dottedBg3.png);
@@ -525,7 +521,7 @@ body {
     transition: 2s ease-in-out;
     transform: scale(2.9);
     z-index: -11;
-}
+} */
 
 @keyframes movy {
     0% {
@@ -645,7 +641,7 @@ body {
 
 /* Sidebar Responsive */
 
-@media screen and (max-width : 720px) {
+@media screen and (max-width : 768px) {
     .SideNav {
         overflow: visible;
         width: 5rem !important;
@@ -653,6 +649,9 @@ body {
     .SideNav::after {
         background-image: none;
         width: 0;
+    }
+    .sidebar .nav-item .collapse {
+        left: 112% !important;
     }
 }
 
@@ -941,10 +940,7 @@ body {
     .DynamicCard .card .box .slider {
         width: 100%;
         transform: translate(0px, 0px);
-    }
-    /* #pieChart {
-        height: 750px !important;
-    } */
+    }   
 }
 
  
@@ -993,6 +989,9 @@ body {
     background-color : var(--thead);
 }
 
+table {
+    white-space: nowrap;
+}
 .table tbody tr:nth-child(even) {
     background: #fafafabe;
 }
@@ -1006,6 +1005,9 @@ body {
 .table tbody td {
     padding: 0.65rem !important;
     vertical-align: middle !important;
+}
+.table thead th { 
+    vertical-align: middle;
 }
 /* .table tbody tr:hover {
     transform: scale(1.015);
@@ -1045,7 +1047,149 @@ footer a {
     color: #6eb821 !important;
 }
 
+.react-table-headers {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.react-table-headers .list-and-btns {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
 
+
+.react-table-footers {
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    width: 100%;    
+}
+.react-table-footers .pagination {
+    display: flex;
+    align-items: center;
+}
+.react-table-footers .pagination .btns {
+    margin-right: 16px;
+}
+.react-table-footers .find-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 16px;
+}
+.react-table-footers .find-page span{
+    margin-right: 16px;
+}
+.react-table-footers .find-page input{
+    width: 100px;
+}
+
+@media screen and (max-width : 560px) {
+    .react-table-footers {
+        flex-direction: column;
+        margin-top: 10px;
+    }
+    .react-table-footers .pagination { 
+        width: 100%;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+    .react-table-footers .pagination .btns button {
+        padding: 1px 6px;
+    }
+    .react-table-footers .find-page {
+        width: 100%;
+    }
+    .react-table-footers .find-page input{
+        width: 80px;
+        height: 30px;
+    }
+}
+@media screen and (max-width : 480px) {
+    .react-table-headers {
+        flex-direction: column;
+        margin-top: 10px;
+    }
+    .react-table-headers .search {
+        margin-top: 4px;
+    }
+    .react-table-headers .list-and-btns select {
+        padding: 3px;
+        font-size: 13px;
+    }
+    .react-table-headers .search input {
+        padding: 5px 9px;
+        font-size: 14px;
+    }
+}
+
+
+/*----------------User Type Master-------------*/
+.exclude-action { display: flex; justify-content: center; align-items: center;}
+table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {
+    display: table-cell;
+}
+
+
+@media screen and (max-width : 480px) {    
+    table>thead>tr>th:not(.sorting_disabled) {        
+        padding: 5px 8px;
+        /* width: 100% !important; */
+        font-weight: 600;
+        height: 27px;
+        display: table-cell;
+        vertical-align: middle;
+    } 
+    
+     table>thead>tr>td.exclude-action {        
+        padding: 5px 8px;
+        /* width: 100% !important; */
+        font-weight: 600;
+        height: 27px;
+        display: table-cell;
+    } 
+
+    .t-card::after {
+        display: none;
+    }
+    .t-card::before {
+        display: none;
+    }
+}
+
+
+
+
+/* For User Permission Creation */
+@media screen and (max-width : 768px) {
+    .btn-circle {
+        height: 2.5rem !important;
+        width: 2.5rem !important;
+        padding: 0 !important;
+    }
+    .btn-circle .fa-close {
+        font-size: 15px;
+    }
+    .btn-circle .fa-check {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width : 480px) {
+    .btn-circle {
+        height: 1.5rem !important;
+        width: 1.5rem !important;
+        padding: 0 !important;
+    }
+    .btn-circle .fa-close {
+        font-size: 10px;
+    }
+    .btn-circle .fa-check {
+        font-size: 10px;
+    }
+}
 
 /*----------------Customer Creation List-------------*/
 
@@ -1072,6 +1216,9 @@ footer a {
     border-color: #fff #fff #6eb821!important;
     border-bottom: 0.2rem solid #6eb821;
 }
+.CustomerCreationMain ul.nav-tabs li a i {
+    margin-right: 8px;
+}
 .CustomerCreationMain .nav-tabs .nav-link:hover {
     color: #6eb821;
     border-color: #fff #fff #fff;
@@ -1088,6 +1235,19 @@ footer a {
 .CustomerCreationMain .tabContent textarea{
     font-size: 14px;    
 }
+
+/* Mobile Responsive */
+@media screen and (max-width : 768px) {
+    .CustomerCreationMain ul.nav-tabs li a span {
+        display: none;
+    }
+    .CustomerCreationMain ul.nav-tabs li a i {
+        margin-right: 0px;
+    }
+}
+
+
+
 
 .Competitor .tabContent label{
     font-size: 14px;
@@ -1114,6 +1274,242 @@ footer a {
     font-size: 13px;
     font-weight: 600!important;
 }
+
+.CompetitorTab ul.nav-tabs li a i {
+    margin-right: 8px;
+}
+
+
+/* Mobile Responsive */
+@media screen and (max-width : 768px) {
+    .CompetitorTab ul.nav-tabs li a span {
+        display: none;
+    }
+    .CompetitorTab ul.nav-tabs li a i {
+        margin-right: 0px;
+    }
+    .CompetitorTab .formContent .card h6 {
+        font-size: 12.5px;
+        color: #7e7272 !important;
+    }
+    /* .CompetitorTab .formContent .card table tbody td:last-child {
+       display: flex;
+       border-bottom: none;
+    } */
+}
+
+
+
+/* BidManagement */
+.Bidmanagement .card .btn-tender-block {
+    margin-top: 30px;
+}
+
+@media screen and (max-width : 991px) {
+    .Bidmanagement .card .btn-tender-block {
+        margin-top: 0;
+    }
+}
+
+
+/* Tender Tracker */
+.Tendertracker .card .btn-tender-block {
+    margin-top: 30px;
+}
+
+@media screen and (max-width : 991px) {
+    .Tendertracker .card .btn-tender-block {
+        margin-top: 0;
+    }
+}
+
+
+
+
+/* Legacystatement */
+.Legacystatement .card .btn-tender-block {
+    margin-top: 30px;
+}
+
+@media screen and (max-width : 991px) {
+    .Legacystatement .card .btn-tender-block {
+        margin-top: 0;
+    }
+}
+
+
+
+
+/* UlbReport */
+.UlbReport .card .btn-tender-block {
+    margin-top: 30px;
+}
+
+@media screen and (max-width : 991px) {
+    .UlbReport .card .btn-tender-block {
+        margin-top: 0;
+    }
+}
+
+
+
+
+
+/* CommunicationFilesCreation */
+@media screen and (max-width : 480px) {
+
+/* DocListCP */
+    .CommunicationFilesCreation .DocListCP .card img {
+        width: 50px !important;
+        height: 50px !important;
+        border-radius: 7px;
+    }
+    
+    .CommunicationFilesCreation .DocListCP .card .img-block {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+    }
+    
+    .CommunicationFilesCreation .DocListCP .card .text-truncate span {
+        display: none;
+    }
+
+    .CommunicationFilesCreation .DocListCP h1 {
+        font-size: 16px !important;
+    }
+
+    .CommunicationFilesCreation .DocListCP .card .card-body {
+        display: flex;
+        justify-content: center;
+    }
+
+     .CommunicationFilesCreation .DocListCP .card .card-body p{
+        font-size: 12px !important;
+    }
+
+    .CommunicationFilesCreation .DocListCP .card .card-body .btn-circle{
+        margin: 5px !important;
+    }
+
+
+/* DocListSaved */
+    .CommunicationFilesCreation .DocListSaved .card img {
+        width: 50px !important;
+        height: 50px !important;
+        border-radius: 7px;
+    }
+    
+    .CommunicationFilesCreation .DocListSaved .card .img-block {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+    }
+    
+    .CommunicationFilesCreation .DocListSaved .card .text-truncate span {
+        display: none;
+    }
+
+    .CommunicationFilesCreation .DocListSaved h1 {
+        font-size: 16px !important;
+    }
+
+    .CommunicationFilesCreation .DocListSaved .card .card-body {
+        display: flex;
+        justify-content: center;
+    }
+
+     .CommunicationFilesCreation .DocListSaved .card .card-body p{
+        font-size: 12px !important;
+    }
+
+    .CommunicationFilesCreation .DocListSaved .card .card-body .btn-circle{
+        margin: 5px !important;
+    }
+}
+
+@media screen and (max-width : 768px) {
+    
+    /* DocListCP */
+        .CommunicationFilesCreation .DocListCP .card img {
+            width: 60px;
+            height: 60px;
+            border-radius: 7px;
+        }
+        
+        .CommunicationFilesCreation .DocListCP .card .img-block {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+        
+        .CommunicationFilesCreation .DocListCP .card .text-truncate span {
+            display: none;
+        }
+    
+        .CommunicationFilesCreation .DocListCP h1 {
+            font-size: 18px;
+        }
+    
+        .CommunicationFilesCreation .DocListCP .card .card-body {
+            display: flex;
+            justify-content: center;
+        }
+    
+         .CommunicationFilesCreation .DocListCP .card .card-body p{
+            font-size: 14px;
+        }
+    
+        .CommunicationFilesCreation .DocListCP .card .card-body .btn-circle{
+            margin: 5px !important;
+        }
+    
+    
+    /* DocListSaved */
+        .CommunicationFilesCreation .DocListSaved .card img {
+            width: 60px;
+            height: 60px;
+            border-radius: 7px;
+        }
+        
+        .CommunicationFilesCreation .DocListSaved .card .img-block {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+        
+        .CommunicationFilesCreation .DocListSaved .card .text-truncate span {
+            display: none;
+        }
+    
+        .CommunicationFilesCreation .DocListSaved h1 {
+            font-size: 18px;
+        }
+    
+        .CommunicationFilesCreation .DocListSaved .card .card-body {
+            display: flex;
+            justify-content: center;
+        }
+    
+         .CommunicationFilesCreation .DocListSaved .card .card-body p{
+            font-size: 14px;
+        }
+    
+        .CommunicationFilesCreation .DocListSaved .card .card-body .btn-circle{
+            margin: 5px !important;
+        }
+}
+
+
+
 
 
 
@@ -1199,6 +1595,33 @@ footer a {
     color: #d00000;
 }
 
+
+/* MOBILE RESPONSIVE FOR CALL LOG DASHBOARD */
+@media screen and (max-width : 991px) {
+    .CallLogsDashboard .cards .card {
+        margin-bottom: 10px;
+    }
+}
+@media screen and (max-width : 480px) {
+    .CallLogsDashboard .cards .card .card-body {
+        padding: 12px 16px;
+    }
+    .CallLogsDashboard .cards .card .card-body .title h4{
+        margin-bottom: 0;
+    }
+}
+
+
+
+/* CallLogTab */
+@media screen and (max-width : 480px) {
+    .CallLogTab .card ul.nav-tabs span {
+        display: none;
+    } 
+    .CallLogTab .card .card-body.new {
+        padding: 0;
+    }   
+}
 
 
 /* Image Upload For CallLogCreation */
@@ -1409,6 +1832,405 @@ footer a {
    .CallLogsCreation .file_Documents .fileDetails .text div p{    
     text-transform: capitalize;
    }
+
+
+@media screen and (max-width: 480px) {
+    
+    .CallLogsCreation .upload_Documents .card .card-body {
+        display: flex;
+        flex-direction: column-reverse !important;
+        align-items: center;
+    }
+    .CallLogsCreation .upload_Documents .UploadImg img {
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0px 0px 14px #38383459;
+        margin-bottom: 11px;
+    }
+    .CallLogsCreation .upload_Documents .card {
+        border-radius: 15px;
+    }
+    .CallLogsCreation .file_Documents .card .noOfFiles {
+        display: none !important;
+    }
+    .CallLogsCreation .file_Documents .fileDetails {
+        padding: 0 !important;
+    }
+    .CallLogsCreation .file_Documents .fileDetails .text {
+        margin: 0 10px 0 13px;
+    }
+    .CallLogsCreation .file_Documents .fileDetails .pic {
+        margin: 0;
+    }
+    .CallLogsCreation .file_Documents .fileDetails .pic img {
+        height: 35px !important;
+        width: 35px !important;
+        border-radius: 5px;
+    }
+    .CallLogsCreation .file_Documents .fileDetails .text div h6 {
+        display: none;
+    }
+    .CallLogsCreation .file_Documents .fileDetails .text div p {
+        width: 100px !important;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 12.5px !important;
+        margin: 0;
+    }
+    .CallLogsCreation .file_Documents .fileAction .download {
+        height: 25px;
+        width: 25px;
+    }
+    .CallLogsCreation .file_Documents .fileAction .download svg {
+        font-size: 11px;
+    }
+    .CallLogsCreation .file_Documents .fileAction .delete {
+        padding: 6px;
+    }
+    
+
+}
+@media screen and (max-width: 768px) {
+    
+.CallLogsCreation .upload_Documents .card .card-body {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+}
+.CallLogsCreation .upload_Documents .UploadImg img {
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0px 0px 14px #38383459;
+        margin-bottom: 11px;
+}
+.CallLogsCreation .upload_Documents .card {
+        border-radius: 15px;
+}
+.CallLogsCreation .file_Documents .card .noOfFiles {
+        display: none;
+    }
+    .CallLogsCreation .file_Documents .fileDetails {
+        padding: 0 15px;
+    }
+    .CallLogsCreation .file_Documents .fileDetails .text {
+        margin: 0 10px 0 13px;
+    }
+    .CallLogsCreation .file_Documents .fileDetails .pic {
+        margin: 0;
+    }
+    .CallLogsCreation .file_Documents .fileDetails .pic img {
+        height: 40px;
+        width: 40px;
+        border-radius: 5px;
+    }
+    .CallLogsCreation .file_Documents .fileDetails .text div h6 {
+        display: none;
+    }
+    .CallLogsCreation .file_Documents .fileDetails .text div p {
+        width: 200px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 14.5px;
+        margin: 0;
+    }
+    .CallLogsCreation .file_Documents .fileAction .download {
+        height: 25px;
+        width: 25px;
+    }
+    .CallLogsCreation .file_Documents .fileAction .download svg {
+        font-size: 11px;
+    }
+    .CallLogsCreation .file_Documents .fileAction .delete {
+        padding: 6px;
+    }
+
+
+}
+
+
+
+/* CallLogHistory */
+@media screen and (max-width : 768px) {
+    .CallLogHistory .card-body {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .CallLogHistory .card-body div:nth-child(1) {
+        text-align: left !important;
+        margin-bottom: 10px;
+    }
+    .CallLogHistory .card-body div:nth-child(2) {
+        text-align: left !important;
+        margin-bottom: 10px;
+    }
+    .CallLogHistory .card-body div:nth-child(3) {
+        text-align: left !important;        
+    }
+    .CallLogHistory .card-body h5 {
+        font-size: 14px !important;
+    }
+}
+
+@media screen and (max-width : 480px) {
+    .CallLogHistory .card-body h5 {
+        font-size: 13px !important;
+    }
+}
+
+
+
+/* AttendanceEntry */
+@media screen and (max-width: 480px) {
+    
+    .AttendanceEntry .upload_Documents .card .card-body {
+        display: flex;
+        flex-direction: column-reverse !important;
+        align-items: center;
+    }
+    .AttendanceEntry .upload_Documents .UploadImg img {
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0px 0px 14px #38383459;
+        margin-bottom: 11px;
+    }
+    .AttendanceEntry .upload_Documents .card {
+        border-radius: 15px;
+    }
+    .AttendanceEntry .file_Documents .card .noOfFiles {
+        display: none !important;
+    }
+    .AttendanceEntry .file_Documents .fileDetails {
+        padding: 0 !important;
+    }
+    .AttendanceEntry .file_Documents .fileDetails .text {
+        margin: 0 10px 0 13px;
+    }
+    .AttendanceEntry .file_Documents .fileDetails .pic {
+        margin: 0;
+    }
+    .AttendanceEntry .file_Documents .fileDetails .pic img {
+        height: 35px !important;
+        width: 35px !important;
+        border-radius: 5px;
+    }
+    .AttendanceEntry .file_Documents .fileDetails .text div h6 {
+        display: none;
+    }
+    .AttendanceEntry .file_Documents .fileDetails .text div p {
+        width: 100px !important;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 12.5px !important;
+        margin: 0;
+    }
+    .AttendanceEntry .file_Documents .fileAction .download {
+        height: 25px;
+        width: 25px;
+    }
+    .AttendanceEntry .file_Documents .fileAction .download svg {
+        font-size: 11px;
+    }
+    .AttendanceEntry .file_Documents .fileAction .delete {
+        padding: 6px;
+    }
+    
+
+}
+@media screen and (max-width: 768px) {
+    
+    .AttendanceEntry .upload_Documents .card .card-body {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+    }
+    .AttendanceEntry .upload_Documents .UploadImg img {
+            height: 100%;
+            width: 100%;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0px 0px 14px #38383459;
+            margin-bottom: 11px;
+    }
+    .AttendanceEntry .upload_Documents .card {
+            border-radius: 15px;
+    }
+    .AttendanceEntry .file_Documents .card .noOfFiles {
+        display: none;
+    }
+    .AttendanceEntry .file_Documents .fileDetails {
+        padding: 0 15px;
+    }
+    .AttendanceEntry .file_Documents .fileDetails .text {
+        margin: 0 10px 0 13px;
+    }
+    .AttendanceEntry .file_Documents .fileDetails .pic {
+        margin: 0;
+    }
+    .AttendanceEntry .file_Documents .fileDetails .pic img {
+        height: 40px;
+        width: 40px;
+        border-radius: 5px;
+    }
+    .AttendanceEntry .file_Documents .fileDetails .text div h6 {
+        display: none;
+    }
+    .AttendanceEntry .file_Documents .fileDetails .text div p {
+        width: 200px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 14.5px;
+        margin: 0;
+    }
+    .AttendanceEntry .file_Documents .fileAction .download {
+        height: 25px;
+        width: 25px;
+    }
+    .AttendanceEntry .file_Documents .fileAction .download svg {
+        font-size: 11px;
+    }
+    .AttendanceEntry .file_Documents .fileAction .delete {
+        padding: 6px;
+    }
+
+
+}
+
+
+
+/* AttendanceReport */
+.AttendanceReport .card .btn-tender-block {
+    margin-top: 30px;
+}
+
+@media screen and (max-width : 991px) {
+    .AttendanceReport .card .btn-tender-block {
+        margin-top: 0;
+    }
+}
+
+
+
+/* OtherExpenseMain */
+.OtherExpenseMain .card .btn-tender-block {
+    margin-top: 30px;
+}
+.otherExpenseMainForm .table tbody td:last-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@media screen and (max-width: 991px) {
+    .OtherExpenseMain .card .btn-tender-block {
+        margin-top: 0px;
+    }
+}
+
+.CreateExpenseCreationSubList .upload_Documents .card .UploadImg i{
+    position: absolute;
+    top: 6px;
+    right: 22px;
+}
+.CreateExpenseCreationSubList .upload_Documents .card .UploadImg {
+    justify-content: end;
+}
+
+@media screen and (max-width: 768px) {    
+    .CreateExpenseCreationSubList .upload_Documents .card .card-body {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+    }
+    .CreateExpenseCreationSubList .upload_Documents .UploadImg img {
+            height: 100%;
+            width: 100%;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0px 0px 14px #38383459;
+            margin-bottom: 11px;
+    }
+    .CreateExpenseCreationSubList .upload_Documents .card {
+            border-radius: 15px;
+    }
+    .CreateExpenseCreationSubList .upload_Documents .card .UploadImg i{
+        position: absolute;
+        top: 3px;
+        right: 5px;
+    }
+}
+@media screen and (max-width: 480px) {
+    
+    .CreateExpenseCreationSubList .upload_Documents .card .card-body {
+        display: flex;
+        flex-direction: column-reverse !important;
+        align-items: center;
+    }
+    .CreateExpenseCreationSubList .upload_Documents .UploadImg img {
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0px 0px 14px #38383459;
+        margin-bottom: 11px;
+    }
+    .CreateExpenseCreationSubList .upload_Documents .card {
+        border-radius: 15px;
+    }
+    .CreateExpenseCreationSubList .upload_Documents .card .UploadImg i{
+        position: absolute;
+        top: 3px;
+        right: 5px;
+    }
+}
+
+
+
+/* ReimbursementAdmin */
+.ReimbursementAdmin .card .btn-tender-block {
+    margin-top: 30px;
+}
+
+.ViewExpense .exp-details {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.ViewExpense .exp-details strong {
+    font-size: 17px;
+    color: #6b5c5c;
+    margin-right: 10px;
+}
+
+@media screen and (max-width : 991px) {
+    .ReimbursementAdmin .card .btn-tender-block {
+        margin-top: 0;
+    }
+}
+@media screen and (max-width : 768px) {
+    .ViewExpense .exp-details {
+        display: block;        
+        line-height: 2;
+    }
+    .ViewExpense .exp-details strong {
+        font-size: 15px;        
+    }
+    .popup__content {
+        position: absolute !important;
+    }
+}
+
+
 
 
    .save_cancel {
@@ -1735,6 +2557,7 @@ footer a {
     background: var(--btn-bg);
     color: var(--white);    
     text-decoration: none;
+    border: none;
 } 
 
 .back span { 
@@ -2094,4 +2917,12 @@ footer a {
     left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
+}
+
+
+@media screen and (max-width: 768px) {
+    .modal.fade .modal-dialog {
+        transform: translate(0, 0px) !important;
+    }
+    
 }

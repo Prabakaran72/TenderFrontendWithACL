@@ -171,8 +171,8 @@ function Login() {
                             />
                             </motion.div>
                         {/* </center> */}
-                      </div>
-                      <div className="col-lg-6">
+                      </div> 
+                      <div className="col-lg-6 get-flex-center">
                         <motion.div className="card o-hidden border-0 my-5"
                          transition={{delay: 2, type:'tween', stiffness: 50}} initial={{opacity: 0}} animate={{opacity: 1}}>
                           <div className="card-body" 
@@ -256,7 +256,7 @@ function Login() {
                                 >
                                   <div className='dfx'>
                                                                       
-                                    <div>                                                                                                    
+                                    <div className="abso">                                                                                                    
                                       {isDatasending ? (<i className="fas fa-gavel hammer"></i>) : (<i className="fas fa-gavel"></i>)}
                                     </div>
 
@@ -272,7 +272,7 @@ function Login() {
                                   </div>
                                   
                                 </button>
-                                <p className="pl-3 mt-3 text-danger text-center">
+                                <p className=" mt-3 text-danger text-center">
                                   <span>{error}</span>
                                 </p>
                               </motion.form>

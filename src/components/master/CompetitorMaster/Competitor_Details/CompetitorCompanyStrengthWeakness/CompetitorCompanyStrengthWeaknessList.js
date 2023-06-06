@@ -58,12 +58,12 @@ const CompetitorCompanyStrengthWeaknessList = (props) => {
         </div>
       <div className="table-responsive">
         <table
-          className="table   text-center"
+          className="table table-bordered text-center"
           id="prosConsTable"
           width="100%"
           cellSpacing={0}
         >
-          <thead className="text-center bg-primary text-white">
+          <thead className="text-center bg-greeny text-white">
             <tr>
               <th scope="col">#</th>
               <th scope="col">Strength</th>

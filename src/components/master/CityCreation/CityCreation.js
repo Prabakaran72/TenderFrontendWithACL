@@ -292,163 +292,146 @@ const CityCreation = () => {
   };
 
   return (
-    <div className="container-fluid">
-      <div className="card p-4">
+    <div className="">
+      <div className="card shadow mb-4 p-4">
         <form onSubmit={submitHandler}>
           <div className="row">
-            <div className="col-2">
-              <label>Country Name</label>
-            </div>
-            <div className="col-10 mb-3">
-              <div className="row">
-                <div className="col-5 mr-5 ">
-                  <Select
-                    name="country"
-                    id="country"
-                    isSearchable="true"
-                    isClearable="true"
-                    options={countryList.options}
-                    onChange={inputHandlerForSelect}
-                    // onBlur={countrylistBlurHandler}
-                    value={input.country}
-                    isLoading={countryList.isLoading}
-                  ></Select>
+            <div className="col-lg-6 mb-4">
+              <div className="row align-items-center">
+                <div className="col-lg-4 text-dark">
+                  <label>Country Name</label>
                 </div>
-                <div className="col-6 ml-n5 mt-2">
-                  <span style={{ color: "red" }}>
-                    {inputValidation.countryErr}
-                  </span>
+                <div className="col-lg-8">                  
+                      <Select
+                        name="country"
+                        id="country"
+                        isSearchable="true"
+                        isClearable="true"
+                        options={countryList.options}
+                        onChange={inputHandlerForSelect}
+                        // onBlur={countrylistBlurHandler}
+                        value={input.country}
+                        isLoading={countryList.isLoading}
+                      ></Select>                    
+                      <span style={{ color: "red" }}>
+                        {inputValidation.countryErr}
+                      </span>                    
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-2">
-              <label>State Name</label>
-            </div>
-            <div className="col-10 mb-3">
-              <div className="row">
-                <div className="col-5 mr-5 ">
-                  <Select
-                    name="state"
-                    id="state"
-                    isSearchable="true"
-                    isClearable="true"
-                    options={stateList.options}
-                    onChange={inputHandlerForSelect}
-                    
-                    isLoading={stateList.isLoading}
-                    value={input.state}
-                  ></Select>
+            <div className="col-lg-6 mb-4">
+              <div className="row align-items-center">
+                <div className="col-lg-4 text-dark">
+                  <label>State Name</label>
                 </div>
-                <div className="col-6 ml-n5 mt-2">
-                  <span style={{ color: "red" }}>
-                    {inputValidation.stateErr}
-                  </span>
+                <div className="col-lg-8">                  
+                      <Select
+                        name="state"
+                        id="state"
+                        isSearchable="true"
+                        isClearable="true"
+                        options={stateList.options}
+                        onChange={inputHandlerForSelect}
+                        
+                        isLoading={stateList.isLoading}
+                        value={input.state}
+                      ></Select>                    
+                      <span style={{ color: "red" }}>
+                        {inputValidation.stateErr}
+                      </span>                   
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-2">
-              <label>District Name</label>
-            </div>
-            <div className="col-10 mb-3">
-              <div className="row">
-                <div className="col-5 mr-5 ">
-                  <Select
-                    name="district"
-                    id="district"
-                    isSearchable="true"
-                    isClearable="true"
-                    options={districtList.options}
-                    onChange={inputHandlerForSelect}
-                    // onBlur={countrylistBlurHandler}
-                    value={input.district}
-                    isLoading={districtList.isLoading}
-                  ></Select>
+            <div className="col-lg-6 mb-4">
+              <div className="row align-items-center">
+                <div className="col-lg-4 text-dark">
+                  <label>District Name</label>
                 </div>
-                <div className="col-6 ml-n5 mt-2">
-                  <span style={{ color: "red" }}>
-                    {inputValidation.districtErr}
-                  </span>
+                <div className="col-lg-8">                 
+                      <Select
+                        name="district"
+                        id="district"
+                        isSearchable="true"
+                        isClearable="true"
+                        options={districtList.options}
+                        onChange={inputHandlerForSelect}
+                        // onBlur={countrylistBlurHandler}
+                        value={input.district}
+                        isLoading={districtList.isLoading}
+                      ></Select>                    
+                      <span style={{ color: "red" }}>
+                        {inputValidation.districtErr}
+                      </span>                    
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-2">
-              <label>City Name</label>
-            </div>
-            <div className="col-10 mb-3">
-              <div className="row">
-                <div className="col-5 mr-5 ">
-                  <input
-                    className="form-control "
-                    type="text"
-                    id="city"
-                    name="city"
-                    onChange={inputHandler}
-                    value={input.city}
-                  />
+            <div className="col-lg-6 mb-4">
+              <div className="row align-items-center">
+                <div className="col-lg-4 text-dark">
+                  <label>City Name</label>
                 </div>
-                <div className="col-6 ml-n5 mt-2">
-                  <span style={{ color: "red" }}>
-                    {inputValidation.cityErr}
-                  </span>
+                <div className="col-lg-8">                  
+                      <input
+                        className="form-control "
+                        type="text"
+                        id="city"
+                        name="city"
+                        onChange={inputHandler}
+                        value={input.city}
+                      />                   
+                      <span style={{ color: "red" }}>
+                        {inputValidation.cityErr}
+                      </span>                   
                 </div>
-              </div>
+              </div>              
             </div>
-          </div>
-          <div className="row">
-            <div className="col-2">
-              <label>Active Status</label>
-            </div>
-
-            <div className="col-5 ml-3">
-              <div className="row">
-                <div className="col-3">
-                  <label className="for-check-label" htmlFor="statusActive">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      id="statusActive"
-                      name="status"
-                      value="Active"
-                      checked={input.status === "Active"}
-                      onChange={inputHandler}
-                    />
-                    Active
-                  </label>
+            <div className="col-lg-6 mb-4">
+              <div className="row align-items-center">
+                <div className="col-lg-4 text-dark">
+                  <label>Active Status</label>
                 </div>
-                <div className="col-5">
-                  <label className="for-check-label" htmlFor="statusInactive">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      id="statusInactive"
-                      name="status"
-                      value="InActive"
-                      checked={input.status === "InActive"}
-                      onChange={inputHandler}
-                    />
-                    Inactive
-                  </label>
+                <div className="col-lg-8">                  
+                    <div className='form-check form-check-inline mr-4'>
+                      <label className="for-check-label" htmlFor="statusActive">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          id="statusActive"
+                          name="status"
+                          value="Active"
+                          checked={input.status === "Active"}
+                          onChange={inputHandler}
+                        />
+                        Active
+                      </label>
+                    </div>
+                    <div className='form-check form-check-inline '>
+                      <label className="for-check-label" htmlFor="statusInactive">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          id="statusInactive"
+                          name="status"
+                          value="InActive"
+                          checked={input.status === "InActive"}
+                          onChange={inputHandler}
+                        />
+                        Inactive
+                      </label>
+                    </div>                  
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row text-center">
-            <div className="col-12">
-              {id ? (
-                <button className="btn btn-primary" disabled={dataSending}>
-                  {dataSending ? "Editing..." : "Edit"}
-                </button>
-              ) : (
-                <button className="btn btn-primary" disabled={dataSending}>
-                  {dataSending ? "Submitting..." : "Submit"}
-                </button>
-              )}
+            <div className="col-lg-12 text-center">              
+                {id ? (
+                  <button className="btn btn-primary" disabled={dataSending}>
+                    {dataSending ? "Editing..." : "Edit"}
+                  </button>
+                ) : (
+                  <button className="btn btn-primary" disabled={dataSending}>
+                    {dataSending ? "Submitting..." : "Submit"}
+                  </button>
+                )}              
             </div>
           </div>
         </form>

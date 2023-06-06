@@ -274,7 +274,7 @@ const CompetitorCompanyStrengthWeaknessForm = (props) => {
   };
 
   return (
-    <div className="card-body ">
+    <div className="">
       <form>
         <div className="row align-items-center">
           <div className="inputgroup col-lg-6 mb-4 ">
@@ -287,7 +287,7 @@ const CompetitorCompanyStrengthWeaknessForm = (props) => {
                     <p className="text-info">( upto : 99,999,999,999.99 )</p> */}
                 </label>
               </div>
-              <div className="col-lg-6">
+              <div className="col-lg-8">
                 <input
                   type="text"
                   className="form-control"
@@ -313,7 +313,7 @@ const CompetitorCompanyStrengthWeaknessForm = (props) => {
               <div className="col-lg-4 text-dark font-weight-bold pt-1">
                 <label htmlFor="weakness">Weakness</label>
               </div>
-              <div className="col-lg-6">
+              <div className="col-lg-8">
                 <input
                   type="text"
                   className="form-control"
@@ -333,12 +333,11 @@ const CompetitorCompanyStrengthWeaknessForm = (props) => {
                 )} */}
               </div>
             </div>
-          </div>
-          <div className="inputgroup col-lg-1 mb-4"></div>
-
-          <div className="inputgroup col-lg-5 mb-4"></div>
-          <div className="inputgroup col-lg-2 mb-4 align-items-center">
+          </div>          
+          
+          <div className="inputgroup col-lg-12 mb-4 align-items-center">
             <div className="row">
+              <div className="col-lg-12 text-center">
               <button
                 className="btn btn-primary"
                 disabled={!formIsValid || isBtnClicked === true}
@@ -357,8 +356,8 @@ const CompetitorCompanyStrengthWeaknessForm = (props) => {
                   : "Update"}
               </button>
             </div>
-          </div>
-          <div className="inputgroup col-lg-5 mb-4"></div>
+            </div>
+          </div>          
         </div>
       </form>
       <CompetitorCompanyStrengthWeaknessList

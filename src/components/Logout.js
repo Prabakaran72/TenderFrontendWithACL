@@ -21,7 +21,7 @@ function Logout() {
     axios.post(`${baseUrl}/api/logout`, data).then((res) => {
       if (res.data.status === 200) {
         authCtx.logout()
-        navigate(0)
+        navigate('/')
       }else{
         alert("Unable to logout. Try again!")
       }

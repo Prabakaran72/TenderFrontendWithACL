@@ -48,8 +48,8 @@ const UserTypeList = () => {
     ) {
       let list = [...usertypelist.data.userType];
       let listarr = list.map((item, index, arr) => {
-        let editbtn = !!(permission?.["User Type"]?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
-        let deletebtn = !!(permission?.["User Type"]?.can_delete) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        let editbtn = !!(permission?.["User Type"]?.can_edit) ? '<i class="fas fa-edit text-info mx-2 my-1 h6" style="cursor:pointer" title="Edit"></i> ' : '';
+        let deletebtn = !!(permission?.["User Type"]?.can_delete) ?  '<i class="fas fa-trash-alt text-danger h6  mx-2 my-1" style="cursor:pointer"  title="Delete"></i>' : '';
         return {
         ...item,
         status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
@@ -87,7 +87,7 @@ const UserTypeList = () => {
       buttons:[
         {
           extend: "print",
-          text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+          text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> <span class="print">Print</span>',
           className: "btn btn-info",
           exportOptions: {
               columns: ':not(.exclude-action)', 
@@ -95,7 +95,7 @@ const UserTypeList = () => {
         },
         {
           extend: "excel",
-          text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+          text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> <span class="excel">Excel</span>',
           className: "btn btn-success",
           exportOptions: {
             columns: ':not(.exclude-action)',
@@ -182,7 +182,7 @@ const UserTypeList = () => {
           width="100%"
           cellSpacing={0}
         >
-          <thead className="text-center">
+          <thead className="text-center bg-greeny text-white">
             <tr>
               <th className="">Sl.No</th>
               <th className="">User Type (role)</th>

@@ -346,10 +346,10 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
   };
 
   return (
-    <div className="card-body ">
+    <div className="">
       <form>
         <div className="row align-items-center">
-          <div className="inputgroup col-lg-5 mb-4">
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center">
               <div className="col-lg-4 text-dark">
                 <label htmlFor="accountYear" className="font-weight-bold pt-1">
@@ -377,8 +377,7 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
                 )}
               </div>
             </div>
-          </div>
-          <div className="inputgroup col-lg-1 mb-4"></div>
+          </div>          
 
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
@@ -409,33 +408,32 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
                 )}
               </div>
             </div>
-          </div>
-          <div className="inputgroup col-lg-1 mb-4"></div>
-
-          <div className="inputgroup col-lg-5 mb-4"></div>
-          <div className="inputgroup col-lg-2 mb-4 align-items-center">
+          </div>          
+          
+          <div className="inputgroup col-lg-12 mb-4 align-items-center">
             <div className="row">
-              <button
-                className="btn btn-primary"
-                disabled={!formIsValid || isBtnClicked === true}
-                onClick={
-                  !competitorNetWorthInput.accYearId
-                    ? submitHandler
-                    : updateHandler
-                }
-              >
-                {!competitorNetWorthInput.accYearId
-                  ? loading === true
-                    ? "Adding...."
-                    : "Add"
-                  : loading === true
-                  ? "Updating...."
-                  : "Update"}
-              </button>
-              {formIsValid && btn_clicked === true}
-            </div>
-          </div>
-          <div className="inputgroup col-lg-5 mb-4"></div>
+              <div className="col-lg-12 text-center">
+                <button
+                  className="btn btn-primary"
+                  disabled={!formIsValid || isBtnClicked === true}
+                  onClick={
+                    !competitorNetWorthInput.accYearId
+                      ? submitHandler
+                      : updateHandler
+                  }
+                >
+                  {!competitorNetWorthInput.accYearId
+                    ? loading === true
+                      ? "Adding...."
+                      : "Add"
+                    : loading === true
+                    ? "Updating...."
+                    : "Update"}
+                </button>
+                {formIsValid && btn_clicked === true}
+              </div>
+            </div>  
+          </div>          
         </div>
       </form>
       <CompetitorDetailsCompanyNetWorthList

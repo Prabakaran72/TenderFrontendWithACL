@@ -19,20 +19,16 @@ const DistrictMasterView = () => {
              initial={{scale: 0,opacity:0}} animate={{scale:1,opacity:1}} transition={{type:'tween'}}>
             <div className="row">
               <div className="col-lg-12">
-                <div className="row">
-                <div className="col-6 text-left ml-3"> <h6 className="m-0 font-weight-bold text-primary">DISTRICT MASTER LIST</h6></div>
-                <div className="col-5 text-right ml-5">
-          
+                <div className="float-right">                                          
                  {!!(permission?.Districts?.can_add) && <Link
                     to="districtcreation"
-                    className="btn btn-primary btn-icon-split rounded-pill"
+                    className="btn btn-primary btn-icon-split"
                   >
                     <span className="icon text-white-50">
                       <i className="fas fa-plus-circle" />
                     </span>
-                    <span className="text">New</span>
-                  </Link>}
-                </div>
+                    <span className="text res-720-btn-none">New</span>
+                  </Link>}                
                 </div>
               </div>
             </div>

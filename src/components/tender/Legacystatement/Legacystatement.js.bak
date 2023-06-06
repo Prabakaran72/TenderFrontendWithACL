@@ -14,12 +14,16 @@ const initialOptions = {
 
 
 const statusOptions = [
-	{ value: 'Retender', label: 'Retender' },
+	
 	{ value: 'To be Opened', label: 'To be Opened' },
-	{ value: 'Tender Cancel', label: 'Tender Cancel' },
+    { value: 'Technical Evaluation in Progress', label: 'In Technical Evaluation' },
+    { value: 'Financial Bid Opening in Progress', label: 'In Financial Evaluation' },
 	{ value: 'LoA yet to be awarded', label: 'LoA yet to be awarded' },
-	{ value: 'Financial Bid Opening in Progress', label: 'Financial Bid Opening in Progress' },
-	{ value: 'Technical Evaluation in Progress', label: 'Technical Evaluation in Progress' },
+    { value: 'Awarded', label: 'Awarded' },
+	{ value: 'Tender Cancelled', label: 'Tender Cancelled' },
+    { value: 'Retendered', label: 'Retendered' },
+	
+	
   ]
 
 function Legacystatement() {

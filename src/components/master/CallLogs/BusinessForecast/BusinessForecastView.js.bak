@@ -6,7 +6,7 @@ import { usePageTitle } from "../../../hooks/usePageTitle"
 import BusinessForecastList from "./BusinessForecastList"
 
 const BusinessForecastView = () => {
-    usePageTitle("Business Forecast List")
+    usePageTitle("Business Forecast Master")
     const {permission} = useContext(AuthContext)
     return (
     <Fragment>

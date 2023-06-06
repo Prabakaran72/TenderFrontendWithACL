@@ -11,11 +11,7 @@ import { useEffect } from 'react';
 //   setHeader(HeadersList);     
 // },[])
 
-
 const UseExport = ({ data, header, title }) => {
-
-  console.log('data',data);
-  console.log('header',header);
 
   function capitalizeArr(array) {
     const sno = 'S.No';
@@ -51,7 +47,6 @@ const UseExport = ({ data, header, title }) => {
       title,
       Header.map((head)=> {return head == 'Action' ? '' : head}),
       ...data.map((row, index) => {  
-        console.log('rowdata',row);
         //this if condition for Call assign, if  Cusotmer is checked the assign_status=1 or 0. So we have to display either Assigned or not by using value. it will return other field data without changes, 
         // this returns current row if the header not has assign_status accesor
         if (row.assign_status == '1') {

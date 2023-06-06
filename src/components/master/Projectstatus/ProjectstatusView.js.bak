@@ -8,7 +8,7 @@ import ProjectstatusList from "./ProjectstatusList";
 
 
 const ProjectstatusView = () => {
-    usePageTitle("Project Status Master List");
+    usePageTitle("Project Status Master");
     const {permission} = useContext(AuthContext)
     return (
         <>

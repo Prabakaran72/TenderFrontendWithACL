@@ -170,11 +170,11 @@ const UserType = () => {
 
     return (
         <Fragment>
-            <div className="container-fluid">
-                <div className="card p-4">
+            
+                <div className="card shadow mb-4 p-4">
                     <form>
                         <div className="row align-items-center">
-                            <div className="inputgroup col-lg-6 mb-4">
+                            <div className="col-lg-6 mb-4">
                                 <div className="row align-items-center">
                                     <div className="col-lg-4 text-dark">
                                         <label htmlFor="usertype" className="font-weight-bold">User Type<span className="text-danger">&nbsp;*</span> </label>
@@ -201,10 +201,10 @@ const UserType = () => {
                             </div>
                             <div className="inputgroup col-lg-6 mb-4">
                                 <div className="row align-items-center">
-                                    <div className="col-lg-5 text-dark ">
+                                    <div className="col-lg-4 text-dark ">
                                         <label htmlFor="activeStatus " className="font-weight-bold" >Active Status&nbsp;</label>
                                     </div>
-                                    <div className="col-lg-7">
+                                    <div className="col-lg-8">
                                         <div className="form-check form-check-inline">
                                             <label
                                                 className="form-check-label"
@@ -239,11 +239,11 @@ const UserType = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="inputgroup col-lg-12 mb-4 ml-3">
+                            <div className="inputgroup col-lg-12  mt-2 mb-1">
                                 <div className="row align-items-center">
-                                    <div className="col-lg-10 text-right ">
+                                    <div className="col-lg-12 text-center ">
                                         <button
-                                            className="btn btn-primary"
+                                            className="btn btn-primary mr-2"
                                             disabled={!formIsValid}
                                             onClick={submitHandler}
                                         >
@@ -251,8 +251,6 @@ const UserType = () => {
                                             {dataSending === true ? ((id) ? 'Updating...' :"Submitting....") : ((id) ? 'Update' :"Save" )}
 
                                         </button>
-                                    </div>
-                                    <div className="col-lg-1 text-left">
                                         <button className="btn btn-secondary" onClick={cancelHandler} disabled = {dataSending}>
                                             Cancel
                                         </button>
@@ -262,7 +260,6 @@ const UserType = () => {
                         </div>
                     </form>
                 </div>
-            </div>
         </Fragment>
     )
 }

@@ -150,8 +150,8 @@ const CallToBDM = () => {
 console.log("data", data)
   return (
     <Fragment>
-      <div className="container-fluid">
-        <div className="card p-4">
+      <div className="CallToBDM">
+        <div className="card shadow mb-4 p-4">
           <form>
             <div className="row align-items-center">
               <div className="inputgroup col-lg-6 mb-4">
@@ -243,23 +243,22 @@ console.log("data", data)
                 </div>
               </div>
 
-              <div className="inputgroup col-lg-12 mb-4 ml-3 ">
+              <div className="inputgroup col-lg-12 mb-4 ">
                 <div className="row align-items-center">
-                  <div className="col-lg-11 text-right ">
+                  <div className="col-lg-12 text-center ">
                     <button
                       className="btn btn-primary"
                       onClick={submitHandler}
                     >
                       {" "}
-                      Go
+                      Search
                     </button>
                   </div>
                 </div>
               </div>
-            </div>-
+            </div>
           </form>
-
-          <div className="card p-4">
+          
             <CustomerList1
               id={id}
               setIsEdited={setIsEdited}
@@ -268,8 +267,7 @@ console.log("data", data)
               submitHandler={submitHandler}
               dataSending={dataSending}
               userName = {userName}
-            />
-          </div>
+            />          
         </div>
       </div>
     </Fragment>

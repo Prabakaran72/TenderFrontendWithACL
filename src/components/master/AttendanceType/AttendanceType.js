@@ -173,16 +173,16 @@ const AttendanceType = () => {
 
     return (
         <Fragment>
-            <div className="container-fluid">
-                <div className="card p-4">
+            <div className="">
+                <div className="card shadow mb-4 p-4">
                     <form>
                         <div className="row align-items-center">
-                            <div className="inputgroup col-lg-12 mb-4">
+                            <div className="inputgroup col-lg-6 mb-4">
                                 <div className="row align-items-center">
-                                    <div className="col-lg-2 text-dark">
+                                    <div className="col-lg-4 text-dark">
                                         <label htmlFor="attendancetype" className="font-weight-bold">Attendance Type<span className="text-danger">&nbsp;*</span> </label>
                                     </div>
-                                    <div className="col-lg-4">
+                                    <div className="col-lg-8">
                                         <input
                                             type="text"
                                             className="form-control"
@@ -202,12 +202,12 @@ const AttendanceType = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="inputgroup col-lg-12 mb-4">
+                            <div className="inputgroup col-lg-6 mb-4">
                                 <div className="row align-items-center">
-                                    <div className="col-lg-2 text-dark ">
+                                    <div className="col-lg-4 text-dark ">
                                         <label htmlFor="activeStatus " className="font-weight-bold" >Active Status&nbsp;</label>
                                     </div>
-                                    <div className="col-lg-4">
+                                    <div className="col-lg-8">
                                         <div className="form-check form-check-inline">
                                             <label
                                                 className="form-check-label"
