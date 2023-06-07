@@ -165,10 +165,10 @@ const CompetitorProfile = () => {
                   ? lastCompNo < 9
                     ? "000" + (Number(lastCompNo) + 1).toString()
                     : lastCompNo < 99
-                    ? "00" + (Number(lastCompNo) + 1).toString()
-                    : lastCompNo < 999
-                    ? "0" + (Number(lastCompNo) + 1).toString()
-                    : (Number(lastCompNo) + 1).toString()
+                      ? "00" + (Number(lastCompNo) + 1).toString()
+                      : lastCompNo < 999
+                        ? "0" + (Number(lastCompNo) + 1).toString()
+                        : (Number(lastCompNo) + 1).toString()
                   : "0001";
               } else {
                 newCompNo = "0001";
@@ -182,7 +182,7 @@ const CompetitorProfile = () => {
             });
           });
       });
-    }
+  }
 
   //set Country on Edit
   useEffect(() => {
@@ -773,7 +773,7 @@ const CompetitorProfile = () => {
           setLoading(false);
         });
       }
-      else{
+      else {
         Swal.fire({
           icon: "error",
           title: "Competitor",
@@ -785,8 +785,8 @@ const CompetitorProfile = () => {
       }
     });
   };
-console.log("id" , id)
-console.log("compId" , competitorFormInput?.compNo)
+  console.log("id", id)
+  console.log("compId", competitorFormInput?.compNo)
 
   const updateHandler = (e) => {
     e.preventDefault();
@@ -864,7 +864,7 @@ console.log("compId" , competitorFormInput?.compNo)
             confirmButtonColor: "#5156ed",
           });
         }
-        else{
+        else {
           Swal.fire({
             icon: "error",
             title: "Competitor Update",
@@ -931,7 +931,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     name="compName"
                     value={competitorFormInput.compName}
                     onChange={textInputHandler}
-                    ////onBlur={onBlurSelectHandler}
+                  ////onBlur={onBlurSelectHandler}
                   />
                   {hasError.compName && (
                     <div className="pt-1">
@@ -962,7 +962,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     options={registrationTypeList}
                     value={competitorFormInput.registrationType}
                     onChange={selectInputHandler}
-                    ////onBlur={onBlurSelectHandler}
+                  ////onBlur={onBlurSelectHandler}
                   ></Select>
                   {hasError.registrationType && (
                     <div className="pt-1">
@@ -993,7 +993,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     name="registerationYear"
                     value={competitorFormInput.registerationYear}
                     onChange={textInputHandler}
-                    ////onBlur={onBlurSelectHandler}
+                  ////onBlur={onBlurSelectHandler}
                   />
                   {hasError.registerationYear && (
                     <div className="pt-1">
@@ -1022,7 +1022,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     options={countryList}
                     value={competitorFormInput.country}
                     onChange={selectInputHandler}
-                    //onBlur={onBlurSelectHandler}
+                  //onBlur={onBlurSelectHandler}
                   ></Select>
                   {hasError.country && (
                     <div className="pt-1">
@@ -1172,7 +1172,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     name="pincode"
                     value={competitorFormInput.pincode}
                     onChange={textInputHandler}
-                    //onBlur={onBlurSelectHandler}
+                  //onBlur={onBlurSelectHandler}
                   />
                   {hasError.pincode && (
                     <div className="pt-1">
@@ -1201,7 +1201,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     name="panNo"
                     value={competitorFormInput.panNo}
                     onChange={textInputHandler}
-                    //onBlur={onBlurSelectHandler}
+                  //onBlur={onBlurSelectHandler}
                   />
                   {hasError.panNo && (
                     <div className="pt-1">
@@ -1230,7 +1230,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     name="mobile"
                     value={competitorFormInput.mobile}
                     onChange={textInputHandler}
-                    //onBlur={onBlurSelectHandler}
+                  //onBlur={onBlurSelectHandler}
                   />
                   {hasError.mobile && (
                     <div className="pt-1">
@@ -1259,7 +1259,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     name="email"
                     value={competitorFormInput.email}
                     onChange={textInputHandler}
-                    //onBlur={onBlurSelectHandler}
+                  //onBlur={onBlurSelectHandler}
                   />
                   {hasError.email && (
                     <div className="pt-1">
@@ -1289,7 +1289,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     name="gstNo"
                     value={competitorFormInput.gstNo}
                     onChange={textInputHandler}
-                    //onBlur={onBlurSelectHandler}
+                  //onBlur={onBlurSelectHandler}
                   />
                   {hasError.gstNo && (
                     <div className="pt-1">
@@ -1319,7 +1319,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     name="directors"
                     value={competitorFormInput.directors}
                     onChange={textInputHandler}
-                    //onBlur={onBlurSelectHandler}
+                  //onBlur={onBlurSelectHandler}
                   />
                   {hasError.directors && (
                     <div className="pt-1">
@@ -1380,7 +1380,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     name="manpower"
                     value={competitorFormInput.manpower}
                     onChange={textInputHandler}
-                    //onBlur={onBlurSelectHandler}
+                  //onBlur={onBlurSelectHandler}
                   />
                   {hasError.manpower && (
                     <div className="pt-1">
@@ -1406,8 +1406,8 @@ console.log("compId" , competitorFormInput?.compNo)
                         ? "Submitting...."
                         : "Save & Countinue"
                       : loading === true
-                      ? "Updating...."
-                      : "Update"}
+                        ? "Updating...."
+                        : "Update"}
                   </button>
                   <button className="btn btn-secondary" onClick={cancelHandler}>
                     Cancel

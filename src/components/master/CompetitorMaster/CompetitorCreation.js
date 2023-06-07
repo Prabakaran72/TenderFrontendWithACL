@@ -2,8 +2,8 @@ import axios from "axios";
 import { usePageTitle } from "../../hooks/usePageTitle";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { Link } from "react-router-dom";
-import { Fragment,  useContext,  useEffect, useState } from "react";
-import {  useNavigate,useParams } from "react-router-dom";
+import { Fragment, useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 // import Swal from "sweetalert2";
 
 //For DataTable
@@ -34,18 +34,18 @@ const CompetitorCreation = () => {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const {permission} = useContext(AuthContext)
+  const { permission } = useContext(AuthContext)
   const { id } = useParams();
 
 
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/competitorprofile/${id}`)
+    let response = axios.delete(`${baseUrl}/api/competitorprofile/${id}`)
     return response;
   }
 
   const getList = async () => {
     const competitorlist = await axios.get(`${baseUrl}/api/competitorprofile`);
-  
+
     // let userPermissions ;
     // let data = {
     //   tokenid : localStorage.getItem('token')
@@ -55,7 +55,7 @@ const CompetitorCreation = () => {
     // if(rolesAndPermission.status === 200){
     //   userPermissions = rolesAndPermission.data;
     // }
-  
+
     var dataSet;
     if (
       competitorlist.status === 200 &&
@@ -64,26 +64,27 @@ const CompetitorCreation = () => {
       let list = [...competitorlist.data.competitor];
       let listarr = list.map((item, index, arr) => {
         let editbtn = !!(permission?.["Competitors"]?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
-            let deletebtn =  !!(permission?.["Competitors"]?.can_delete)  ?  '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
+        let deletebtn = !!(permission?.["Competitors"]?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>' : '';
 
-        
+
         return {
 
-        ...item,
-        // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
-        // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
-        // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
-        action:  editbtn + '' + ((item.role_id === 1) ? '' : deletebtn) ,
-        sl_no: index + 1,
-      }});
+          ...item,
+          // status : (item.activeStatus ===  "active") ? `<span class="text-success font-weight-bold"> Active </span>` : `<span class="text-warning font-weight-bold"> Inactive </span>`,
+          // action: `<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+          // action: (item.name === "Admin" || item.name === "admin") ? '' :( editbtn + deletebtn),
+          action: editbtn + '' + ((item.role_id === 1) ? '' : deletebtn),
+          sl_no: index + 1,
+        }
+      });
 
       dataSet = listarr;
 
     } else {
-       dataSet = [];
+      dataSet = [];
     }
 
-    
+
     let i = 0;
     table = $("#dataTable").DataTable({
       data: dataSet,
@@ -99,20 +100,20 @@ const CompetitorCreation = () => {
         { data: "compName" },
         { data: "mobile" },
         { data: "email" },
-        { 
+        {
           data: "action",
-          className: "exclude-action",  
+          className: "exclude-action",
         },
         // { data: "action" },
       ],
-      buttons:[
+      buttons: [
         {
           extend: "print",
           text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i><span class="print">Print</span>',
           className: "btn btn-info",
           exportOptions: {
-              columns: ':not(.exclude-action)', 
-            },
+            columns: ':not(.exclude-action)',
+          },
         },
         {
           extend: "excel",
@@ -122,7 +123,7 @@ const CompetitorCreation = () => {
             columns: ':not(.exclude-action)',
           },
         },
-        
+
       ]
     })
     table.buttons().container().appendTo("#dataTable_wrapper .dataTables_filter");
@@ -130,17 +131,17 @@ const CompetitorCreation = () => {
     //to edit 
     $("#dataTable tbody").on("click", "tr .fa-edit", function () {
       let rowdata = table.row($(this).closest("tr")).data();
-      console.log('ROW DATA--',rowdata)
+      console.log('ROW DATA--', rowdata)
       navigate(
         `competitor/profile/${rowdata.id}`
       );
     });
-    
+
 
     // to delete a row
     $("#dataTable tbody").on("click", "tr .fa-trash-alt", async function () {
       let rowdata = table.row($(this).closest("tr")).data();
-      
+
       Swal.fire({
         text: `Are You sure, to delete ${rowdata.compName}?`,
         icon: "warning",
@@ -149,11 +150,11 @@ const CompetitorCreation = () => {
         cancelButtonText: "No, cancel!",
         confirmButtonColor: "#2fba5f",
         cancelButtonColor: "#fc5157",
-      }).then( async (willDelete) => {
+      }).then(async (willDelete) => {
         if (willDelete.isConfirmed) {
-         let response = await deleterecord(rowdata.id)
+          let response = await deleterecord(rowdata.id)
 
-         if (response.data.status === 200) {
+          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
               title: `${rowdata.compName} `,
@@ -163,7 +164,7 @@ const CompetitorCreation = () => {
             });
 
             //delete in datatable
-              table
+            table
               .row($(this).parents("tr"))
               .remove()
               .column(0)
@@ -172,7 +173,7 @@ const CompetitorCreation = () => {
                 cell.innerHTML = i + 1;
               })
               .draw();
-          }else if (response.data.status === 404) {
+          } else if (response.data.status === 404) {
             Swal.fire({ // error msg
               icon: "error",
               text: response.data.message,
@@ -186,7 +187,7 @@ const CompetitorCreation = () => {
               timer: 1500,
             });
           }
-        } 
+        }
       });
     });
   };
@@ -197,7 +198,7 @@ const CompetitorCreation = () => {
 
   return (
     <Fragment>
-       <div className="container-fluid p-0">
+      <div className="container-fluid p-0">
         <div className="row">
           <div className="col-lg-12">
             <div className="card shadow mb-4">

@@ -3,7 +3,7 @@ import $ from 'jquery';
 import Select from "react-select";
 import useInputValidation from "../../../hooks/useInputValidation";
 import { CustSubCatgyOpts } from "../data";
-
+import { motion } from "framer-motion";
 import {
   getCountryData,
   getSatateData,
@@ -29,14 +29,14 @@ import { bankDetailsActions } from "../store/BankDetailsSlice";
 
 
 // const isNotEmpty = (value) => value.trim() !== "";
-// const isNotEmpty = (value) => {return true};
-// const isEmail = (value) => value.includes("@");
+const isNotEmpty = (value) => {return true};
+const isEmail = (value) => value.includes("@");
 const isNotNull = (value) => {
-  // if (value === null) {
-  //   return false;
-  // } else if (value === "") {
-  //   return false;
-  // }
+  if (value === null) {
+    return false;
+  } else if (value === "") {
+    return false;
+  }
   return true;
 };
 
@@ -108,7 +108,7 @@ const CustomerCreationProfile = () => {
 
   const [customercategoryValue, setcustomercategoryValue] = useState("state");
   const [smartcity, setSmartCity] = useState("yes");
-  const [gstReg, setgstReg] = useState("no");
+  const [gstReg, setgstReg] = useState("yes");
 
   const {
     value: customersubcategoryValue,
@@ -369,7 +369,6 @@ const CustomerCreationProfile = () => {
       !(cust_name && cust_name.customercategory)      && setcustomercategoryValue(savedData.customer_category);
       !(cust_name && cust_name.smartcity)             && setSmartCity(savedData.smart_city);
       !(cust_name && cust_name.customersubcategory)   &&  setcustomersubcategoryValue(CustSubCatgyOpts.find((x) => x.value === savedData.customer_sub_category.toString()));
-      //$$$
       !(cust_name && cust_name.pincode)               && setpincodeValue(savedData.pincode===null? "":savedData.pincode.toString());
       !(cust_name && cust_name.phone)                 && setphoneValue(savedData.phone===null ? "": savedData.phone);
       !(cust_name && cust_name.pan)                   && setpanValue(savedData.pan===null? "":savedData.pan);
@@ -396,6 +395,26 @@ const CustomerCreationProfile = () => {
       getCountryListOptions(response.data.profiledata.country);
       getCustomerSubCategoryList();
     }
+
+    // const getProfileFormData = async () => {
+    //   let data = {
+    //     tokenid: localStorage.getItem("token"),
+    //   };
+
+    //   let response = await axios.post(
+    //     `${baseUrl}/api/customercreation/profile`,
+    //     data
+    //   );
+    //   if (response.data.profileFormData) {
+    //     let savedData = response.data.profileFormData;
+    //     savedData !== null && setFormData(savedData);
+    //     savedData !== null && setsavedDataToForm(savedData);
+    //   }else{
+    //     getFormNo();
+    //     setLoading(false)
+    //   }
+    // };
+
 
     if(id){
       getprofileofcust();
@@ -756,6 +775,8 @@ const CustomerCreationProfile = () => {
       return;
     }
 
+    
+
     // setCity(null); 
     cityChangeHandler(null);
     if(isTouched){
@@ -845,16 +866,15 @@ const CustomerCreationProfile = () => {
     stateIsValid &&
     countryIsValid &&
     cityIsValid &&
-    districtIsValid 
-    // &&
-    // addressIsValid &&
-    // pincodeIsValid &&
-    // // phoneIsValid &&
-    // panIsValid &&
-    // mobilenoIsValid &&
-    // // currentyrdateIsValid &&
-    // emailIsValid &&
-    // (gstnoIsValid || GstNoDisable)
+    districtIsValid &&
+    addressIsValid &&
+    pincodeIsValid &&
+    // phoneIsValid &&
+    panIsValid &&
+    mobilenoIsValid &&
+    // currentyrdateIsValid &&
+    emailIsValid &&
+    (gstnoIsValid || GstNoDisable)
      // &&
     // populationyrdataIsValid &&
     //websiteIsValid
@@ -1299,9 +1319,7 @@ catch(ex){
           <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="pincode">Pincode 
-                {/* <span className="text-danger">&nbsp;*</span> */}
-                 </label>
+                <label htmlFor="pincode">Pincode <span className="text-danger">&nbsp;*</span> </label>
               </div>
               <div className="col-lg-7">
                 <input
@@ -1312,7 +1330,7 @@ catch(ex){
                   name="pincode"
                   value={pincodeValue}
                   onChange={e => {pincodeChangeHandler(e) ; pincodeChangeHandler_store(e)}}
-                  // onBlur={pincodeBlurHandler}
+                  onBlur={pincodeBlurHandler}
                 />
                 {pincodeHasError && (
                   <div className="pt-1">
@@ -1327,9 +1345,7 @@ catch(ex){
           <div className="inputgroup col-lg-6 mb-4" >
             <div className="row font-weight-bold">
               <div className="col-lg-5  mt-2">
-                <label htmlFor="address">Address
-                {/* <span className="text-danger">&nbsp;*</span> */}
-                </label>
+                <label htmlFor="address">Address<span className="text-danger">&nbsp;*</span></label>
                 <p className="text-info font-weight-bold mt-n3"><small><b>({addresslen} Characters Remaining) </b></small></p> 
               </div>
               <div className="col-lg-7">
@@ -1340,7 +1356,7 @@ catch(ex){
                   name="address"
                   rows="3"
                   onChange={e => {addressChangeHandler(e) ; addressChangeHandler_store(e)}}
-                  // onBlur={addressBlurHandler}
+                  onBlur={addressBlurHandler}
                   value={addressValue}
                   onKeyUp={(e) => validateInputLength(e.target.value)}
                   maxLength="255"
@@ -1369,7 +1385,7 @@ catch(ex){
                   name="phone"
                   value={phoneValue}
                   onChange={e => {phoneChangeHandler(e); phoneChangeHandler_store(e)}}
-                  // onBlur={phoneBlurHandler}
+                  onBlur={phoneBlurHandler}
                 />
                 {phoneHasError && (
                   <div className="pt-1">
@@ -1382,7 +1398,7 @@ catch(ex){
             </div>
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="pan">Pan{/*<span className="text-danger">&nbsp;*</span>*/}</label>
+                <label htmlFor="pan">Pan<span className="text-danger">&nbsp;*</span></label>
                 <p className="text-info font-weight-bold mt-n3"><small><b>(Example: FDTPM0000D)</b></small></p> 
               </div>
               <div className="col-lg-7">
@@ -1394,7 +1410,7 @@ catch(ex){
                   name="pan"
                   value={panValue}
                   onChange={e => {panChangeHandler(e); panChangeHandler_store(e)}}
-                  // onBlur={panBlurHandler}
+                  onBlur={panBlurHandler}
                 />
                 {panHasError && (
                   <div className="pt-1">
@@ -1409,9 +1425,7 @@ catch(ex){
           <div className="inputgroup col-lg-6 mb-4" >
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="mobile">Mobile No 
-                {/* <span className="text-danger">&nbsp;*</span> */}
-                </label>
+                <label htmlFor="mobile">Mobile No <span className="text-danger">&nbsp;*</span></label>
               </div>
               <div className="col-lg-7">
                 <input
@@ -1422,7 +1436,7 @@ catch(ex){
                   name="mobile"
                   value={mobilenoValue}
                   onChange={e => {mobilenoChangeHandler(e); mobilenoChangeHandler_store(e)}}
-                  // onBlur={mobilenoBlurHandler}
+                  onBlur={mobilenoBlurHandler}
                 />
                 {mobilenoHasError && (
                   <div className="pt-1">
@@ -1433,42 +1447,11 @@ catch(ex){
                 )}
               </div>
             </div>
-          </div>
-          {/* <div className="inputgroup col-lg-6 mb-4">
-            <div className="row align-items-center font-weight-bold">
-              <div className="col-lg-6 ">
-                <label htmlFor="currentyrdate">Current Year/Date &nbsp;</label>
-              </div>
-              <div className="col-lg-6">
-                <input
-                  type="date"
-                  className="form-control"
-                  id="currentyrdate"
-                  placeholder="Enter Date"
-                  name="currentyrdate"
-                  value={currentyrdateValue}
-                  onChange={currentyrdateChangeHandler}
-                  onBlur={currentyrdateBlurHandler}
-                />
-                {currentyrdateHasError && (
-                  <div className="pt-1">
-                    <span className="text-danger font-weight-normal">
-                      This Field is required
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div> */}
-          <div className="inputgroup col-lg-6 mb-4"
-            initial={{y:80, opacity: 0}} 
-            animate={{y:0, opacity: 1}}    
-            transition={{ delay: .6, type:'spring', stiffness: 180}} >
+          </div>          
+          <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="email">Email
-                {/* <span className="text-danger">&nbsp;*</span> */}
-                </label>
+                <label htmlFor="email">Email<span className="text-danger">&nbsp;*</span></label>
               </div>
               <div className="col-lg-7">
                 <input
@@ -1479,7 +1462,7 @@ catch(ex){
                   name="email"
                   value={emailValue}
                   onChange={e => {emailChangeHandler(e); emailChangeHandler_store(e)}}
-                  // onBlur={emailBlurHandler}
+                  onBlur={emailBlurHandler}
                 />
                 {emailHasError && (
                   <div className="pt-1">
@@ -1505,7 +1488,7 @@ catch(ex){
                   name="website"
                   value={websiteValue}
                   onChange={e => {websiteChangeHandler(e); websiteChangeHandler_store(e)}}
-                  // onBlur={websiteBlurHandler}
+                  onBlur={websiteBlurHandler}
                 />
                 {websiteHasError && (
                   <div className="pt-1">
@@ -1549,7 +1532,7 @@ catch(ex){
                       type="radio"
                       name="gstregistered"
                       id="gstregisteredno"
-                      checked={"no" === gstReg }
+                      checked={"no" === gstReg}
                       value="no"
                       onChange={gstregistered}
                     />
@@ -1562,9 +1545,7 @@ catch(ex){
           <div className="inputgroup col-lg-6 mb-4">
             <div className="row align-items-center font-weight-bold">
               <div className="col-lg-5 ">
-                <label htmlFor="gstno">GST No.
-                {/* <span className="text-danger">&nbsp;*</span> */}
-                </label>
+                <label htmlFor="gstno">GST No.<span className="text-danger">&nbsp;*</span></label>
                 {!GstNoDisable && <p className="text-info font-weight-bold mt-n3"><small><b>(Ex : 22AAAAA0000A1Z5)</b></small></p> }
               </div>
               <div className="col-lg-7">
@@ -1576,7 +1557,7 @@ catch(ex){
                   name="gstno"
                   value={gstnoValue}
                   onChange={e => {gstnoChangeHandler(e); gstnoChangeHandler_store(e)}}
-                  // onBlur={gstnoBlurHandler}
+                  onBlur={gstnoBlurHandler}
                   disabled={GstNoDisable}
                 />
                 {gstnoHasError && !GstNoDisable && (
@@ -1588,9 +1569,9 @@ catch(ex){
                 )}
               </div>
             </div>
-          </div>
+          </div>          
           
-          <div className="col-lg-12 text-center">
+          <div className="col-lg-12 text-center" initial={{opacity:0}} whileInView={{opacity:1}}>
             {!id && <button
              className={(!formIsValid) ?  "btn btn-outline-primary rounded-pill" :  "btn btn-primary rounded-pill"} 
               disabled={!formIsValid || isdatasending}

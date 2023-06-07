@@ -185,16 +185,16 @@ const CompetitorCompanyWorkOrderForm = (props) => {
         setFile("");
         setPreviewObjURL("");
       });
-    // if (woFile && woFile.size > maxImageSize) {
-    //   Swal.fire({
-    //     title: "File Size",
-    //     text: "File size is too Large",
-    //     icon: "error",
-    //     confirmButtonColor: "#2fba5f",
-    //   }).then(() => {
-    //     setFile("");
-    //     setPreviewObjURL("");
-    //   });
+      // if (woFile && woFile.size > maxImageSize) {
+      //   Swal.fire({
+      //     title: "File Size",
+      //     text: "File size is too Large",
+      //     icon: "error",
+      //     confirmButtonColor: "#2fba5f",
+      //   }).then(() => {
+      //     setFile("");
+      //     setPreviewObjURL("");
+      //   });
     } else if (woFile && !doctype.includes(woFile.type)) {
       if (woFile?.name?.split(".")[len - 1] !== "rar") {
         Swal.fire({
@@ -226,7 +226,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
   useEffect(() => {
     let len = completionFile?.name?.split(".").length;
     if (completionFile && fileSize > maxImageSize) {
-      setFileSize(prev=>prev-completionFile.size);
+      setFileSize(prev => prev - completionFile.size);
       Swal.fire({
         title: "File Size",
         text: "File Size is too large",
@@ -236,16 +236,16 @@ const CompetitorCompanyWorkOrderForm = (props) => {
         setFile1("");
         setPreviewObjURL1("");
       });
-    // if (completionFile && completionFile.size > maxImageSize) {
-    //   Swal.fire({
-    //     title: "File Size",
-    //     text: "File Size is too large",
-    //     icon: "error",
-    //     confirmButtonColor: "#2fba5f",
-    //   }).then(() => {
-    //     setFile1("");
-    //     setPreviewObjURL1("");
-    //   });
+      // if (completionFile && completionFile.size > maxImageSize) {
+      //   Swal.fire({
+      //     title: "File Size",
+      //     text: "File Size is too large",
+      //     icon: "error",
+      //     confirmButtonColor: "#2fba5f",
+      //   }).then(() => {
+      //     setFile1("");
+      //     setPreviewObjURL1("");
+      //   });
     } else if (completionFile && !doctype.includes(completionFile.type)) {
       if (completionFile?.name?.split(".")[len - 1] !== "rar") {
         // else if (completionFile && !doctype.includes(completionFile.type)) {
@@ -310,81 +310,79 @@ const CompetitorCompanyWorkOrderForm = (props) => {
           ...item,
           woFile:
             item.woFile !== "" &&
-            (item.woFile.split(".")[1] === "jpg" ||
-              item.woFile.split(".")[1] === "png" ||
-              item.woFile.split(".")[1] === "jpeg" ||
-              item.woFile.split(".")[1] === "webp")
+              (item.woFile.split(".")[1] === "jpg" ||
+                item.woFile.split(".")[1] === "png" ||
+                item.woFile.split(".")[1] === "jpeg" ||
+                item.woFile.split(".")[1] === "webp")
               ? `<img src="${woFilePath}` +
-                item.woFile +
-                `" class="rounded-circle pointer" width="40" height="40" style="cursor:pointer" />`
-              : `<img src="${
-                  item.woFile.split(".")[1] === "rar" ||
-                  item.woFile.split(".")[1] === "vnd.rar" ||
-                  item.woFile.split(".")[1] === "x-rar-compressed" ||
-                  item.woFile.split(".")[1] === "x-rar"
-                    ? ImageConfig["x-rar"]
-                    : item.woFile.split(".")[1] === "pdf"
-                    ? ImageConfig["pdf"]
-                    : item.woFile.split(".")[1] === "doc" ||
-                      item.woFile.split(".")[1] === "docx" ||
-                      item.woFile.split(".")[1] === "msword" ||
-                      item.woFile.split(".")[1] ===
-                        "vnd.openxmlformats-officedocument.wordprocessingml.document"
+              item.woFile +
+              `" class="rounded-circle pointer" width="40" height="40" style="cursor:pointer" />`
+              : `<img src="${item.woFile.split(".")[1] === "rar" ||
+                item.woFile.split(".")[1] === "vnd.rar" ||
+                item.woFile.split(".")[1] === "x-rar-compressed" ||
+                item.woFile.split(".")[1] === "x-rar"
+                ? ImageConfig["x-rar"]
+                : item.woFile.split(".")[1] === "pdf"
+                  ? ImageConfig["pdf"]
+                  : item.woFile.split(".")[1] === "doc" ||
+                    item.woFile.split(".")[1] === "docx" ||
+                    item.woFile.split(".")[1] === "msword" ||
+                    item.woFile.split(".")[1] ===
+                    "vnd.openxmlformats-officedocument.wordprocessingml.document"
                     ? ImageConfig["doc"]
                     : item.woFile.split(".")[1] === "zip" ||
                       item.woFile.split(".")[1] === "multipart/x-zip" ||
                       item.woFile.split(".")[1] === "x-zip" ||
                       item.woFile.split(".")[1] === "x-zip-compressed"
-                    ? ImageConfig["zip"]
-                    : item.woFile.split(".")[1] === "xls" ||
-                      item.woFile.split(".")[1] === "xlsx" ||
-                      item.woFile.split(".")[1] === "vnd.ms-excel" ||
-                      item.woFile.split(".")[1] ===
+                      ? ImageConfig["zip"]
+                      : item.woFile.split(".")[1] === "xls" ||
+                        item.woFile.split(".")[1] === "xlsx" ||
+                        item.woFile.split(".")[1] === "vnd.ms-excel" ||
+                        item.woFile.split(".")[1] ===
                         "vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    ? ImageConfig["vnd.ms-excel"]
-                    : item.woFile.split(".")[1] === "csv"
-                    ? ImageConfig["csv"]
-                    : ImageConfig["default"]
-                }" class="rounded-circle pointer" width="50" height="40" alt="" style="cursor:pointer"></img>`,
+                        ? ImageConfig["vnd.ms-excel"]
+                        : item.woFile.split(".")[1] === "csv"
+                          ? ImageConfig["csv"]
+                          : ImageConfig["default"]
+              }" class="rounded-circle pointer" width="50" height="40" alt="" style="cursor:pointer"></img>`,
 
           completionFile:
             item.completionFile !== "" &&
-            (item.completionFile.split(".")[1] === "jpg" ||
-              item.completionFile.split(".")[1] === "png" ||
-              item.completionFile.split(".")[1] === "jpeg" ||
-              item.completionFile.split(".")[1] === "webp")
+              (item.completionFile.split(".")[1] === "jpg" ||
+                item.completionFile.split(".")[1] === "png" ||
+                item.completionFile.split(".")[1] === "jpeg" ||
+                item.completionFile.split(".")[1] === "webp")
               ? `<img src="${woCompletionFilePath}` +
-                item.completionFile +
-                `" class="rounded-circle pointer" width="40" height="40" style="cursor:pointer" />`
-              : `<img src="${
-                  item.completionFile.split(".")[1] === "rar" ||
-                  item.completionFile.split(".")[1] === "vnd.rar" ||
-                  item.completionFile.split(".")[1] === "x-rar-compressed" ||
-                  item.completionFile.split(".")[1] === "x-rar"
-                    ? ImageConfig["x-rar"]
-                    : item.completionFile.split(".")[1] === "pdf"
-                    ? ImageConfig["pdf"]
-                    : item.completionFile.split(".")[1] === "doc" ||
-                      item.completionFile.split(".")[1] === "docx" ||
-                      item.completionFile.split(".")[1] === "msword" ||
-                      item.completionFile.split(".")[1] ===
-                        "vnd.openxmlformats-officedocument.wordprocessingml.document"
+              item.completionFile +
+              `" class="rounded-circle pointer" width="40" height="40" style="cursor:pointer" />`
+              : `<img src="${item.completionFile.split(".")[1] === "rar" ||
+                item.completionFile.split(".")[1] === "vnd.rar" ||
+                item.completionFile.split(".")[1] === "x-rar-compressed" ||
+                item.completionFile.split(".")[1] === "x-rar"
+                ? ImageConfig["x-rar"]
+                : item.completionFile.split(".")[1] === "pdf"
+                  ? ImageConfig["pdf"]
+                  : item.completionFile.split(".")[1] === "doc" ||
+                    item.completionFile.split(".")[1] === "docx" ||
+                    item.completionFile.split(".")[1] === "msword" ||
+                    item.completionFile.split(".")[1] ===
+                    "vnd.openxmlformats-officedocument.wordprocessingml.document"
                     ? ImageConfig["doc"]
                     : item.completionFile.split(".")[1] === "zip" ||
                       item.completionFile.split(".")[1] === "multipart/x-zip" ||
                       item.completionFile.split(".")[1] === "x-zip" ||
                       item.completionFile.split(".")[1] === "x-zip-compressed"
-                    ? ImageConfig["zip"]
-                    : item.completionFile.split(".")[1] === "xls" ||
-                      item.completionFile.split(".")[1] === "xlsx" ||
-                      item.completionFile.split(".")[1] === "vnd.ms-excel" ||
-                      item.completionFile.split(".")[1] ===
+                      ? ImageConfig["zip"]
+                      : item.completionFile.split(".")[1] === "xls" ||
+                        item.completionFile.split(".")[1] === "xlsx" ||
+                        item.completionFile.split(".")[1] === "vnd.ms-excel" ||
+                        item.completionFile.split(".")[1] ===
                         "vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    ? ImageConfig["vnd.ms-excel"]
-                    : item.completionFile.split(".")[1] === "csv"
-                    ? ImageConfig["csv"]
-                    : ImageConfig["default"]
-                }" class="rounded-circle pointer" width="50" height="40" alt="" style="cursor:pointer"></img>`,
+                        ? ImageConfig["vnd.ms-excel"]
+                        : item.completionFile.split(".")[1] === "csv"
+                          ? ImageConfig["csv"]
+                          : ImageConfig["default"]
+              }" class="rounded-circle pointer" width="50" height="40" alt="" style="cursor:pointer"></img>`,
           buttons: `<i class="fa fa-edit text-primary mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fa fa-trash text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
           sl_no: index + 1,
         }));
@@ -416,7 +414,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
             },
           }).then((response) => {
             if (response.status === 200) {
-              setFileSize(prev=>prev+response.data.size);
+              setFileSize(prev => prev + response.data.size);
               setFile(response.data);
               setPreviewObjURL(URL.createObjectURL(response.data));
               setPreviewFileType((prev) => {
@@ -451,7 +449,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
             },
           }).then((response) => {
             if (response.status === 200) {
-              setFileSize(prev=>prev+response.data.size);
+              setFileSize(prev => prev + response.data.size);
               setFile1(response.data);
               setPreviewObjURL1(URL.createObjectURL(response.data));
               setPreviewFileType((prev) => {
@@ -487,7 +485,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
     getStateList();
     getUnitList();
     data.state > 0 ? setEditDataState(data.state) : setEditDataState("");
-    data.unit > 0 ? setEditDataUnit(data.unit): setEditDataUnit("");
+    data.unit > 0 ? setEditDataUnit(data.unit) : setEditDataUnit("");
     getImageUrl(data.id);
     setFormIsValid(true);
     setCompetitorWOInput({
@@ -501,7 +499,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
       projectValue: data.projectValue,
       perTonRate: data.perTonRate,
       qualityCompleted: data.qualityCompleted,
-      date: data.date? data.date: "",
+      date: data.date ? data.date : "",
       woFile: data.woFile,
       completionFile: data.completionFile,
     });
@@ -810,7 +808,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
             confirmButtonColor: "#5156ed",
           }).then(function () {
             setLoading(false);
-            setIsBtnClicked(false);    
+            setIsBtnClicked(false);
           });
         } else {
           Swal.fire({
@@ -830,12 +828,12 @@ const CompetitorCompanyWorkOrderForm = (props) => {
     // console.log("remove handler", e.target, " ----");
     //e.target.name receives only undefiend so used 'e.target.id'
     if (e.target.id === "woUpload") {
-      setFileSize(prev=>prev-woFile.size);
+      setFileSize(prev => prev - woFile.size);
       setFile("");
       setPreviewObjURL("");
       setPreviewForEdit("");
     } else if (e.target.id === "completionCertificate") {
-      setFileSize(prev=>prev-completionFile.size);
+      setFileSize(prev => prev - completionFile.size);
       setFile1("");
       setPreviewObjURL1("");
       setPreviewForEdit1("");
@@ -1063,7 +1061,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                 <div className="col-lg-4 text-dark font-weight-bold pt-1">
                   <label htmlFor="unit">
                     Unit
-                     {/* <span className="text-danger h6 font-weight-bold">
+                    {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
                     </span> */}
                   </label>
@@ -1095,7 +1093,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                 <div className="col-lg-4 text-dark font-weight-bold pt-1">
                   <label htmlFor="projectValue">
                     Project Value
-                     {/* <span className="text-danger h6 font-weight-bold">
+                    {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
                     </span> */}
                   </label>
@@ -1127,7 +1125,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                 <div className="col-lg-4 text-dark font-weight-bold pt-1">
                   <label htmlFor="perTonRate">
                     Per Ton Rate
-                     {/* <span className="text-danger h6 font-weight-bold">
+                    {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
                     </span> */}
                   </label>
@@ -1159,7 +1157,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                 <div className="col-lg-4 text-dark font-weight-bold pt-1">
                   <label htmlFor="qualityCompleted">
                     Quantity Completed
-                     {/* <span className="text-danger h6 font-weight-bold">
+                    {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
                     </span> */}
                   </label>
@@ -1192,7 +1190,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                   <label htmlFor="date">
                     {" "}
                     Date
-                     {/* <span className="text-danger h6 font-weight-bold">
+                    {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
                     </span> */}
                   </label>
@@ -1221,28 +1219,6 @@ const CompetitorCompanyWorkOrderForm = (props) => {
 
             <div className="inputgroup col-lg-6 mb-4 ">
               <div className="row align-items-center">
-                {/*<div className="col-lg-3 text-dark font-weight-bold pt-1">
-                <label htmlFor="projectName">WO Upload</label>
-              </div>
-               <div className="col-lg-8">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="projectName"
-                  placeholder="Enter Project Name"
-                  name="projectName"
-                  value={competitorWOInput.projectName}
-                  onChange={textInputHandler}
-                />
-
-                {/* {hasError.projectName && (
-                  <div className="pt-1">
-                    <span className="text-danger font-weight-bold">
-                      Enter Valid Amount..!
-                    </span>
-                  </div>
-                )} 
-              </div> */}
               </div>
             </div>
 
@@ -1252,7 +1228,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                   <label htmlFor="woUpload">
                     {" "}
                     WO Upload
-                     {/* <span className="text-danger h6 font-weight-bold">
+                    {/* <span className="text-danger h6 font-weight-bold">
                       &nbsp;*
                     </span> */}
                     {/* <p className="text-info mt-2 mb-n2">Max File size 1 MB</p>
@@ -1317,9 +1293,9 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                           </div>
                           <div className="col-md-3 d-flex align-items-center justify-content-center">
                             {previewObjURL &&
-                            ["jpg", "jpeg", "png", "webp"].includes(
-                              previewFileType.woFile
-                            ) ? (
+                              ["jpg", "jpeg", "png", "webp"].includes(
+                                previewFileType.woFile
+                              ) ? (
                               <img
                                 className="rounded-circle pointer"
                                 id="previewImg"
@@ -1446,9 +1422,9 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                           </div>
                           <div className="col-md-3 d-flex align-items-center justify-content-center">
                             {previewObjURL1 &&
-                            ["jpg", "jpeg", "png", "webp"].includes(
-                              previewFileType.woCompletionFile
-                            ) ? (
+                              ["jpg", "jpeg", "png", "webp"].includes(
+                                previewFileType.woCompletionFile
+                              ) ? (
                               <img
                                 className="rounded-circle pointer"
                                 id="previewImg1"
@@ -1477,7 +1453,7 @@ const CompetitorCompanyWorkOrderForm = (props) => {
                               </a>
 
                             )}
-                            
+
                             {previewObjURL1 && (
                               <button
                                 type="button"

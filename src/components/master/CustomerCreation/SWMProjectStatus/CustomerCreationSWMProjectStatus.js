@@ -506,7 +506,7 @@ const CustomerCreationSWMProjectStatus = () => {
         </div>}
         <form onSubmit={submitHandler}>
           <div className="row align-items-center">
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center ">
                 <div className="col-lg-5 text-dark font-weight-bold">
                   <label htmlFor="projecttype">
@@ -536,7 +536,7 @@ const CustomerCreationSWMProjectStatus = () => {
               </div>
             </div>
 
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center ">
                 <div className="col-lg-5 text-dark font-weight-bold">
                   <label htmlFor="status">
@@ -565,7 +565,7 @@ const CustomerCreationSWMProjectStatus = () => {
               </div>
             </div>
 
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center ">
                 <div className="col-lg-5 text-dark font-weight-bold">
                   <label htmlFor="vendorType">
@@ -594,7 +594,7 @@ const CustomerCreationSWMProjectStatus = () => {
               </div>
             </div>
 
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="vendor">
@@ -623,7 +623,7 @@ const CustomerCreationSWMProjectStatus = () => {
               </div>
             </div>
 
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center ">
                 <div className="col-lg-5 text-dark font-weight-bold" >
                   <label htmlFor="projectstatus">
@@ -682,7 +682,7 @@ const CustomerCreationSWMProjectStatus = () => {
               </div>
             </div>
 
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-5 text-dark">
                   <label htmlFor="duration">

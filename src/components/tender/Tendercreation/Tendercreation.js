@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 // import { useNavigate, useParams } from "react-router-dom";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { usePageTitle } from "../../hooks/usePageTitle";
 import Select from "react-select";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
@@ -15,8 +15,8 @@ const initialState = {
 };
 
 const organisationList = [
-  {value :"Public Sector Unit", label :"Public Sector Unit"},
-  {value :"Private/Public Sector Company", label :"Private/Public Sector Company"},
+  { value: "Public Sector Unit", label: "Public Sector Unit" },
+  { value: "Private/Public Sector Company", label: "Private/Public Sector Company" },
 ];
 
 
@@ -47,14 +47,14 @@ const Tendercreation = () => {
   // const [customerNameList, setCustomerNameList] = useState();
   const [tenderTypeList, setTenderTypeList] = useState({
     value: "",
-    label:""
+    label: ""
   });
   const [formIsValid, setFormIsValid] = useState(false);
   // const [loading, setLoading] = useState(false);
   let tokenId = localStorage.getItem("token");
   // const [savedData, setSavedData] = useState({});
 
- 
+
 
   useEffect(() => {
     // getOrganisationList();
@@ -82,7 +82,7 @@ const Tendercreation = () => {
   const getulbData = async (savedulb) => {
     let response = await axios.get(`${baseUrl}/api/ulb-list/${savedulb}`);
     return { options: response.data.ulbList, isLoading: false };
-  };      
+  };
 
   const getulbListOptions = async (savedulb = null) => {
     setulbOptions((c) => {
@@ -97,13 +97,12 @@ const Tendercreation = () => {
       ...input,
       [e.target.name]: e.target.value,
     });
-    if(e.target.value === "")
-    {
-        setInputValidation({...inputValidation, [e.target.name]:true});
+    if (e.target.value === "") {
+      setInputValidation({ ...inputValidation, [e.target.name]: true });
     }
-    else{
+    else {
       setFormIsValid(false);
-      setInputValidation({...inputValidation, [e.target.name]:false});
+      setInputValidation({ ...inputValidation, [e.target.name]: false });
     }
   };
 
@@ -115,30 +114,28 @@ const Tendercreation = () => {
       ...input,
       [action.name]: value,
     });
-    if(value === "" | value === null)
-    {
-        setInputValidation({...inputValidation, [action.name]:true});
+    if (value === "" | value === null) {
+      setInputValidation({ ...inputValidation, [action.name]: true });
     }
-    else{
+    else {
       setFormIsValid(false);
-      setInputValidation({...inputValidation, [action.name]:false});
+      setInputValidation({ ...inputValidation, [action.name]: false });
     }
   };
- 
-  useEffect(()=>{
-    
-    if(
-  (input.customerName ? (input.customerName.value!=="" && input.customerName.value!==undefined && input.customerName.value!==null): false) &&
-      input.nitDate!=="" &&
-      (input.organisation ? (input.organisation.value!=="" && input.organisation.value!==undefined && input.organisation.value!==null): false) && 
-      (input.tenderType ? (input.tenderType.value!=="" && input.tenderType.value!==undefined && input.tenderType.value!==null): false))
-    {
+
+  useEffect(() => {
+
+    if (
+      (input.customerName ? (input.customerName.value !== "" && input.customerName.value !== undefined && input.customerName.value !== null) : false) &&
+      input.nitDate !== "" &&
+      (input.organisation ? (input.organisation.value !== "" && input.organisation.value !== undefined && input.organisation.value !== null) : false) &&
+      (input.tenderType ? (input.tenderType.value !== "" && input.tenderType.value !== undefined && input.tenderType.value !== null) : false)) {
       setFormIsValid(true);
     }
-    else{
+    else {
       setFormIsValid(false);
     }
-  },[input]);
+  }, [input]);
 
   const postData = (data) => {
     axios.post(`${baseUrl}/api/tendercreation`, data).then((resp) => {
@@ -146,11 +143,11 @@ const Tendercreation = () => {
         Swal.fire({
           icon: "success",
           title: "Tender",
-          text:  resp.data.message,
+          text: resp.data.message,
           confirmButtonColor: "#5156ed",
         });
-        
-      navigate(`/tender/bidmanagement/list`);
+
+        navigate(`/tender/bidmanagement/list`);
       } else if (resp.data.status === 400) {
         Swal.fire({
           icon: "error",
@@ -158,7 +155,7 @@ const Tendercreation = () => {
           text: resp.data.errors,
           confirmButtonColor: "#5156ed",
         });
-       
+
       }
       else {
         Swal.fire({
@@ -166,7 +163,7 @@ const Tendercreation = () => {
           title: "Tender",
           text: "Provided Credentials are Incorrect",
           confirmButtonColor: "#5156ed",
-        }).then (()=>{
+        }).then(() => {
           localStorage.clear();
           navigate("/");
         });
@@ -175,7 +172,7 @@ const Tendercreation = () => {
       setFormIsValid(false);
     });
   };
-  
+
   // const putData = (data, id) => {
   //   axios.put(`${baseUrl}/api/city/${id}`, data).then((res) => {
   //     if (res.data.status === 200) {
@@ -200,17 +197,16 @@ const Tendercreation = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    setDataSending(true); 
-    if(input.customerName.value!=="" && input.nitDate!=="" && input.organisation.value!=="" && (input.tenderType.value!=="" | input.tenderType.value!==undefined))
-    {
+    setDataSending(true);
+    if (input.customerName.value !== "" && input.nitDate !== "" && input.organisation.value !== "" && (input.tenderType.value !== "" | input.tenderType.value !== undefined)) {
       setDataSending(false);
-    
+
       const data = {
         organisation: input.organisation.value,
         customername: input.customerName.value,
         nitdate: input.nitDate,
         tendertype: input.tenderType.value,
-        tokenId:tokenId
+        tokenId: tokenId
       };
       postData(data)
       // if (!id) {
@@ -226,7 +222,7 @@ const Tendercreation = () => {
   //   setLoading(true);
   //   //Have to write, when need Update option 
   // }
-    
+
 
 
   const cancelHandler = () => {

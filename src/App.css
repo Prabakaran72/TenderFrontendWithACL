@@ -49,9 +49,11 @@ body {
 
 .icon-edit {
     color: #03a714;
+    cursor: pointer;
 }
 .icon-delete, .icon-trash {
     color: #e74a3b ;
+    cursor: pointer;
 }
 
 @media screen and (max-width : 768px) {

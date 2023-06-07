@@ -7,15 +7,15 @@ import "jquery/dist/jquery.min.js";
 import $ from "jquery";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-bs4";
-import jsZip from "jszip";
+//import jsZip from "jszip";
 import "datatables.net-buttons-bs4";
 import "datatables.net-buttons/js/dataTables.buttons.js";
 import "datatables.net-buttons/js/buttons.colVis.js";
 import "datatables.net-buttons/js/buttons.flash.js";
 import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-buttons/js/buttons.print.js";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+//import pdfMake from "pdfmake/build/pdfmake";
+//import pdfFonts from "pdfmake/build/vfs_fonts";
 
 
 import axios from "axios";
@@ -75,7 +75,7 @@ const ReimbursementList = (props) => {
 
     useEffect(() => {
      
-      console.log("UlbtList",UlbtList);
+     
         table =  $('#reimdataTable').DataTable({
             data : UlbtList,
             columns: [
@@ -91,6 +91,24 @@ const ReimbursementList = (props) => {
                 // { data: 'current_stage' },
                 // { data: 'action' },
             ],
+            buttons:[
+              {
+                extend: "print",
+                text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
+                className: "btn btn-info",
+                exportOptions: {
+                    columns: ':not(.exclude-action)', 
+                  },
+              },
+              {
+                extend: "excel",
+                text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
+                className: "btn btn-success",
+                exportOptions: {
+                  columns: ':not(.exclude-action)',
+                },
+              },
+            ],
             // dom:
             // //   "<'row'<'col-sm-12'l>>" +
             //   "<'row'<'col-sm-12   col-md-6 pl-4'l>  <'col-sm-12 col-md-6 pr-4'f>>" +
@@ -98,6 +116,8 @@ const ReimbursementList = (props) => {
             //   "<'row'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",
     
         })
+        table.buttons().container().appendTo("#reimdataTable_wrapper .dataTables_filter");
+
         let ApproveStatus = '';
 
         $('#reimdataTable tbody').on('click', 'td', function(event) {
@@ -426,7 +446,7 @@ if(response.data.status===200){
                                 <th scope="col">#</th>
                                 <th scope="col">Entry Date</th>
                                 <th scope="col">Expense Bill No</th>
-                                <th scope="col">Staff Name</th>
+                                <th scope="col"> Staff Name</th>
                                 <th scope="col">Total Amount</th>
                                 <th scope="col">HO Approval</th>
                                 <th scope="col">CEO Approal</th>

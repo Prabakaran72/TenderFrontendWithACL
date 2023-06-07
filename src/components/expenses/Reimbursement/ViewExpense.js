@@ -12,13 +12,14 @@ import { isNotEmpty, isNotNull } from "../CommonFunctions/CommonFunctions";
 
 
 
-import React,{ useRef,useEffect, useContext, useState } from "react";
+import React,{ useEffect, useContext, useState } from "react";
 import { Link, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import useInputValidation from "../../hooks/useInputValidation";
 
 import Select from "react-select";
+
 
 
 const ViewExpense = (props) => {
@@ -35,7 +36,7 @@ const ViewExpense = (props) => {
   const [StafName, setStafName] = useState();
   const [EntryDate,setEntryDate] = useState();
   const [TotalAmount,setTotalAmount] = useState();
-  const popupRef = useRef(null);
+ 
   var DATA='';
 useEffect(() => {
   console.log("props.onData",props.onData);
@@ -54,7 +55,7 @@ useEffect(() => {
     if((PopupFor!='0')&&(!isNaN(PopupFor))){
      
       setIsOpen(true);
-      popupRef.current.focus();
+     
 let data = {
   id :PopupFor,
 }
@@ -150,19 +151,35 @@ if(list3.length!='0'){
     setother(null);
   };
 
+  console.log('StafName',StafName);
+  
   return (
-    <div>
+    <div className='ViewExpense'>
      
       {isOpen && (
         <Popup title={<span style={{color: 'blue'}}>Expense Details</span>} onClose={handleClosePopup} id='fcus'>
+          <div className='exp-details'>
+              <div>
+                <strong>Staff Name:</strong>
+                <span>{StafName}</span>
+              </div>
+              <div>
+                <strong>Entry Date:</strong>
+                <span>{EntryDate}</span>
+              </div>
+              <div>
+                <strong>Total Amount:</strong>
+                <span>{TotalAmount}</span>
+              </div>
+          </div>
           <p>
             
-          <span style={{color: 'black', marginRight: '5px'}}><strong>Staff Name:</strong></span>
+  {/* <span style={{color: 'black', marginRight: '5px'}}><strong>Staff Name:</strong></span>
   <span style={{color: 'black', marginRight: '250px'}}>{StafName}</span>
   <span style={{color: 'black', marginRight: '5px'}}><strong>Entry Date:</strong></span>
   <span style={{color: 'black', marginRight: '100px'}}>{EntryDate}</span>
   <span style={{color: 'black', marginRight: '5px'}}><strong>Total Amount:</strong></span>
-  <span style={{color: 'black'}}>{TotalAmount}</span>
+  <span style={{color: 'black'}}>{TotalAmount}</span> */}
             
 
             
@@ -175,7 +192,7 @@ if(list3.length!='0'){
 
 </p>
 
-             
+      <div className='table-responsive'>     
         <table className='poptb'>
           <thead>
             <tr>
@@ -191,6 +208,7 @@ if(list3.length!='0'){
 {getcall}
           </tbody>
         </table>
+      </div>
        </div>
        <div>
 
@@ -200,7 +218,7 @@ if(list3.length!='0'){
 
 </p>
 
-             
+           <div className='table-responsive'>
         <table className='poptb'>
           <thead>
             <tr>
@@ -216,6 +234,7 @@ if(list3.length!='0'){
 {getother}
           </tbody>
         </table>
+        </div> 
        </div>
        
         </Popup>

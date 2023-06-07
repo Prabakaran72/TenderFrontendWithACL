@@ -8,125 +8,125 @@ import { useBaseUrl } from "../../hooks/useBaseUrl";
 
 
 const CustSubCategMaster = () => {
-    usePageTitle("Customer Sub Category Creation");
+  usePageTitle("Customer Sub Category Creation");
 
-    const {server1:baseUrl} = useBaseUrl()
-  
-    const navigate = useNavigate();
-    const { id } = useParams();
+  const { server1: baseUrl } = useBaseUrl()
 
-    const initialState = {
-        customersubcategory: "",
-        status: "Active",
-      };
-    
-      const [input, setInput] = useState(initialState);
-    
-      const [validation, setInputValidation] = useState({
-        customersubcategoryErr : "",
-      });
-      const [dataSending, setDataSending] = useState(false);
-    
-      useEffect(() => {
-        if(id){
-          axios.get(`${baseUrl}/api/customersubcategory/${id}`).then((resp)=> {
-            setInput({
-                customersubcategory: resp.data.customersubcategory.customersubcategory,
-                status: resp.data.customersubcategory.status,
-            })
-          })
-        }
-      },[id, baseUrl])
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-      const postData = (data) => {
-        axios.post(`${baseUrl}/api/customersubcategory`, data).then((res) => {
-              if (res.data.status === 200) {
-                Swal.fire({
-                  icon: "success",
-                  title: "New Customer Sub Category",
-                  text: "Created Successfully!",
-                  confirmButtonColor: "#5156ed",
-                });
-                setInput(initialState)
-                navigate('/tender/master/customersubcategory')
-              } else if (res.data.status === 400) {
-                Swal.fire({
-                  icon: "error",
-                  title: "Customer Sub Category",
-                  text: res.data.errors,
-                  confirmButtonColor: "#5156ed",
-                });
-                setDataSending(false)
-              }
-            });
-      }
-      
-      const putData = (data, id) => {
-        axios.put(`${baseUrl}/api/customersubcategory/${id}`, data).then((res) => {
-          if (res.data.status === 200) {
-            Swal.fire({
-              icon: "success",
-              title: "Customer Sub Category",
-              text: "Updated Successfully!",
-              confirmButtonColor: "#5156ed",
-            });
-            setInput(initialState)
-            navigate('/tender/master/customersubcategory')
-          } else if (res.data.status === 400) {
-            Swal.fire({
-              icon: "error",
-              title: "Customer Sub Category",
-              text: res.data.errors,
-              confirmButtonColor: "#5156ed",
-            });
-            setDataSending(false)
-          }
+  const initialState = {
+    customersubcategory: "",
+    status: "Active",
+  };
+
+  const [input, setInput] = useState(initialState);
+
+  const [validation, setInputValidation] = useState({
+    customersubcategoryErr: "",
+  });
+  const [dataSending, setDataSending] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      axios.get(`${baseUrl}/api/customersubcategory/${id}`).then((resp) => {
+        setInput({
+          customersubcategory: resp.data.customersubcategory.customersubcategory,
+          status: resp.data.customersubcategory.status,
+        })
+      })
+    }
+  }, [id, baseUrl])
+
+  const postData = (data) => {
+    axios.post(`${baseUrl}/api/customersubcategory`, data).then((res) => {
+      if (res.data.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "New Customer Sub Category",
+          text: "Created Successfully!",
+          confirmButtonColor: "#5156ed",
         });
+        setInput(initialState)
+        navigate('/tender/master/customersubcategory')
+      } else if (res.data.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Customer Sub Category",
+          text: res.data.errors,
+          confirmButtonColor: "#5156ed",
+        });
+        setDataSending(false)
       }
+    });
+  }
+
+  const putData = (data, id) => {
+    axios.put(`${baseUrl}/api/customersubcategory/${id}`, data).then((res) => {
+      if (res.data.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Customer Sub Category",
+          text: "Updated Successfully!",
+          confirmButtonColor: "#5156ed",
+        });
+        setInput(initialState)
+        navigate('/tender/master/customersubcategory')
+      } else if (res.data.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Customer Sub Category",
+          text: res.data.errors,
+          confirmButtonColor: "#5156ed",
+        });
+        setDataSending(false)
+      }
+    });
+  }
 
 
-      const inputHandler = (e) => {
-        e.persist();
-        setInput({ ...input , [e.target.name]: e.target.value });
+  const inputHandler = (e) => {
+    e.persist();
+    setInput({ ...input, [e.target.name]: e.target.value });
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setDataSending(true)
+    var errors = { ...validation };
+
+    if (input.customersubcategory.trim() === "") {
+      errors.customersubcategoryErr = "Please Enter Customer Sub Category";
+
+    } else {
+      errors.customersubcategoryErr = "";
+    }
+
+    const { customersubcategoryErr } = errors;
+
+    setInputValidation(errors);
+
+    if (customersubcategoryErr !== "") {
+      setDataSending(false)
+      return;
+    }
+
+    if (customersubcategoryErr === "") {
+      const data = {
+        customersubcategory: input.customersubcategory,
+        status: input.status,
       };
 
-    const submitHandler = (e) => {
-        e.preventDefault();
-        setDataSending(true)
-        var errors = { ...validation };
-    
-        if (input.customersubcategory.trim() === "") {
-          errors.customersubcategoryErr = "Please Enter Customer Sub Category";
-        
-        } else {
-          errors.customersubcategoryErr = "";
-        }
-    
-        const { customersubcategoryErr } = errors;
-    
-        setInputValidation(errors);
-    
-        if (customersubcategoryErr !== "") {
-          setDataSending(false)
-          return;
-        }
-    
-        if (customersubcategoryErr === "") {
-          const data = {
-            customersubcategory: input.customersubcategory,
-            status: input.status,
-          };
-        
-    
-          if(!id){
-            postData(data);
-          }else{
-            putData(data, id);
-          }
-        }
-    };
 
-    return (
+      if (!id) {
+        postData(data);
+      } else {
+        putData(data, id);
+      }
+    }
+  };
+
+  return (
     <Fragment>
       <div className="">
         <div className="card shadow mb-4 p-4">

@@ -12,7 +12,7 @@ const currentDate = new Date();
 const currentMonth = currentDate.getFullYear() + '-' + ('0' + (currentDate.getMonth() + 1)).slice(-2)
 
 const initialState = {
-    employee: { value : 'All', label: 'All'},
+    employee: { value : 'ALl', label: 'All'},
     role: { value : 'All', label: 'All'},
     month: currentMonth
 }
@@ -27,7 +27,6 @@ const AttendanceReport = () => {
     const [roleOptions, setRoleOptions] = useState([]);
     const [month, setMonth] =useState(currentMonth)
     const [input, setInput] = useState(initialState)
-    const [isClicked, setIsClicked] = useState(false);
 
     useEffect(() => {
         getEmployeeList()
@@ -42,7 +41,6 @@ const AttendanceReport = () => {
             label: item.name,
         }))
 
-        options.unshift({ value: 'All', label: 'All' });
         setEmployeeOptions(options)
     }
 
@@ -55,7 +53,6 @@ const AttendanceReport = () => {
             label: item.name,
         }))
 
-        options.unshift({ value: 'All', label: 'All' });
         setRoleOptions(options)
     }
 
@@ -77,20 +74,15 @@ const AttendanceReport = () => {
 
     const goHandler = ()  => {
 
-        // console.log('input',input)
-        // let data = {
-        //     ...input,
-        //     tokenid     : localStorage.getItem("token")
-        // }
+        let data = {
+            ...input,
+            tokenid     : localStorage.getItem("token")
+        }
 
-        // setMonth(input.month)
-        
-        setIsClicked(true)
-        
+        setMonth(input.month)
 
     }
 
-    // console.log('input',input)
     return (
         <div className="AttendanceReport">
             <div className="card shadow mb-4 pt-2">
@@ -146,7 +138,7 @@ const AttendanceReport = () => {
             </div>
             <div className="card shadow mb-4 p-4">
                 <div>
-                    <AttendenceReportList input={input} isClicked={isClicked} setIsClicked={setIsClicked}/>                    
+                    <AttendenceReportList month={month} employeeOptions={employeeOptions} selectedMonth = {input.month}/>
                 </div>
             </div>
         </div>

@@ -152,7 +152,7 @@ const StateMaster = () => {
 
   return (
     <div className="">
-      <div className="card shadow mb-4 p-4">
+      <div className="card shadow p-4">
         <form onSubmit={submitHandler}>
           <div className="row">
             <div className="col-lg-6 mb-4">
@@ -173,7 +173,7 @@ const StateMaster = () => {
                   ></Select>                    
                   <span style={{ color: "red" }}>
                     {stateValidation.countryName}
-                  </span>
+                  </span>                                      
                 </div>
               </div>
             </div>
@@ -193,7 +193,7 @@ const StateMaster = () => {
                   />                    
                   <span style={{ color: "red" }}>
                     {stateValidation.stateName}
-                  </span>
+                  </span>                                      
                 </div>
               </div>
             </div>
@@ -213,7 +213,7 @@ const StateMaster = () => {
                   />                    
                   <span style={{ color: "red" }}>
                     {stateValidation.statecode}
-                  </span>
+                  </span>                    
                 </div>
               </div>
             </div>

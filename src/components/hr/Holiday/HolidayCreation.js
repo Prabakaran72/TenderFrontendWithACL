@@ -99,7 +99,6 @@ const HolidayCreation = () => {
 
 
     const postData = (formData) => {
-        console.log("Post Data")
         axios.post(`${baseUrl}/api/holidays`, formData).then((resp) => {  
             console.log('resp', resp)          
           if (resp.status === 200) {

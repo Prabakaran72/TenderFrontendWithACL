@@ -48,7 +48,7 @@ const CustomerCreation = () => {
               initial={{scale: 0,opacity:0}} animate={{scale:1,opacity:1}} transition={{type:'tween'}}>
               <div className="card-body">
                 <div className="float-right ">
-                 {!!(permission?.Customers?.can_add) ? <Link to ="main/profile" state={{ data: data }}  className=" btn btn-primary btn-icon-split">
+                 {!!(permission?.Customers?.can_add) ? <Link to ="main/profile" state={{ data: data }}  className=" btn btn-primary btn-icon-split ">
                     <span className="icon text-white-50">
                       <i className="fas fa-plus-circle" />
                     </span>

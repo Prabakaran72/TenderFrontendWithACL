@@ -8,7 +8,7 @@ import useInputValidation from "../../hooks/useInputValidation";
 import { isNotEmpty, isNotNull } from "../CommonFunctions/CommonFunctions";
 import Select from "react-select";
 import OtherExpenseMainList from "./OtherExpenseMainList";
- 
+
 
 
 function OtherExpenseMain(props) {
@@ -47,7 +47,7 @@ function OtherExpenseMain(props) {
 
 	let filterValid = false;
 
-	
+
 	const cust_category = [
 
 		{ value: "state", label: "State" },
@@ -104,61 +104,61 @@ function OtherExpenseMain(props) {
 		reset: resetgroup,
 	} = useInputValidation(isNotNull);
 
-	if(fromdateIsValid || todateIsValid || executiveIsValid){
-		console.log('todateIsValid',todateIsValid);
-		if(todateIsValid===true && fromdateIsValid===true){
+	if (fromdateIsValid || todateIsValid || executiveIsValid) {
+		console.log('todateIsValid', todateIsValid);
+		if (todateIsValid === true && fromdateIsValid === true) {
 			filterValid = true;
-		}else if(executiveIsValid===true){
+		} else if (executiveIsValid === true) {
 			filterValid = true;
 		}
-	  
+
 	}
 	useEffect(() => {
 
 		axios.post(`${baseUrl}/api/expenses/staffList`).then((res) => {
 			if (res.status === 200) {
-	  
-			  // generateOptions(res.data.get_staff);
-			  let op = res.data.get_staff
-			  let roles = op.map((role, index) => ({
-				value: role.id,
-				label: role.userName,
-			  }))
-	  
-			  setOptionsForStaff(roles)
+
+				// generateOptions(res.data.get_staff);
+				let op = res.data.get_staff
+				let roles = op.map((role, index) => ({
+					value: role.id,
+					label: role.userName,
+				}))
+
+				setOptionsForStaff(roles)
 			}
-		  });
+		});
 		getStateListOptions();
 
 	}, [])
 
 
 	const goHandler = async () => {
-console.log('grp',fromdateValue);
+		console.log('grp', fromdateValue);
 		// setLoading(true)
-		if(fromdateValue==null){
-			var value1='';
+		if (fromdateValue == null) {
+			var value1 = '';
 		}
-		else{
-			var value1=fromdateValue;
+		else {
+			var value1 = fromdateValue;
 		}
 
-		if(todateValue==null){
-			var value2='';
+		if (todateValue == null) {
+			var value2 = '';
 		}
-		else{
-			var value2=todateValue;
+		else {
+			var value2 = todateValue;
 		}
-		
 
-		if(executiveValue?.value==null){
-			var value3='';
+
+		if (executiveValue?.value == null) {
+			var value3 = '';
 		}
-		else{
-			var value3=executiveValue.value;
+		else {
+			var value3 = executiveValue.value;
 		}
-		
-		
+
+
 		let data = {
 			fromdate: fromdateValue,
 			todate: todateValue,
@@ -177,29 +177,29 @@ console.log('grp',fromdateValue);
 		let list = [...response.data.exp_app];
 
 		let listarr = list.map((item, index, arr) => {
-		
-      let editbtn='';
-      let deletebtn='';
-			
-let print =  '<i class="fas fa-solid fa-print print" style={{color: "#70e60f"}} ></i>' ;
+
+			let editbtn = '';
+			let deletebtn = '';
+
+			let print = '<i class="fas fa-solid fa-print print" style={{color: "#70e60f"}} ></i>';
 
 
- editbtn = !!(permission?.['OtherExpenses']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit" data-action="EDIT"></i> '  : '';
-   deletebtn =  !!(permission?.['OtherExpenses']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete" data-action="DELETE"></i>' : '';
-       
+			editbtn = !!(permission?.['OtherExpenses']?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit" data-action="EDIT"></i> ' : '';
+			deletebtn = !!(permission?.['OtherExpenses']?.can_delete) ? '<i class="fas fa-trash-alt text-danger h6  mx-2" style="cursor:pointer"  title="Delete" data-action="DELETE"></i>' : '';
+
 			return {
-				...item, 
+				...item,
 				entry_date: item.entry_date,
-				exp_no:item.expense_no ,
+				exp_no: item.expense_no,
 				staff_name: item.userName,
-				total_amount:item.expense_amount,
-			
+				total_amount: item.expense_amount,
 
-				action: editbtn+deletebtn,
-			
+
+				action: editbtn + deletebtn,
+
 				view: print,
-	
-				sl_no : index+1
+
+				sl_no: index + 1
 			}
 		})
 		// <i class="fa fa-print text-info mr-2 h6" style="cursor:pointer; font-size: 1.25rem" title="Print"></i>  -- To add @ line 72 

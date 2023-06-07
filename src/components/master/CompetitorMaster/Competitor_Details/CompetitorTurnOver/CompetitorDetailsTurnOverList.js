@@ -18,45 +18,45 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 
 var table;
 const CompetitorDetailsTurnOverList = (props) => {
-  
- var dataSet = []
 
- useEffect(() => {
-   table =  $('#turnOverTable').DataTable({
-        data: dataSet,
-        columns: [
-            { data: 'sl_no' },
-            // {data: 'accYearId'},
-            { data: 'accountYear' },
-            { data: 'accValue' },
-            { data: 'buttons' },
-        ],
+  var dataSet = []
+
+  useEffect(() => {
+    table = $('#turnOverTable').DataTable({
+      data: dataSet,
+      columns: [
+        { data: 'sl_no' },
+        // {data: 'accYearId'},
+        { data: 'accountYear' },
+        { data: 'accValue' },
+        { data: 'buttons' },
+      ],
     })
 
-      $('#turnOverTable tbody').on('click', 'tr .fa-edit', function () {
-        let rowdata =table.row($(this).closest('tr')).data();
-        props.onEdit(rowdata)
-        
-      });
+    $('#turnOverTable tbody').on('click', 'tr .fa-edit', function () {
+      let rowdata = table.row($(this).closest('tr')).data();
+      props.onEdit(rowdata)
 
-      $('#turnOverTable tbody').on('click', 'tr .fa-trash', function () {
-        let rowdata =table.row($(this).closest('tr')).data();
-        props.onDelete(rowdata)
-      });
+    });
 
- }, [])
+    $('#turnOverTable tbody').on('click', 'tr .fa-trash', function () {
+      let rowdata = table.row($(this).closest('tr')).data();
+      props.onDelete(rowdata)
+    });
 
- useEffect(() => {
-    if(props.turnOverList){
-        table.clear().rows.add(props.turnOverList).draw();
+  }, [])
+
+  useEffect(() => {
+    if (props.turnOverList) {
+      table.clear().rows.add(props.turnOverList).draw();
     }
- }, [props.turnOverList])
- 
+  }, [props.turnOverList])
+
 
   return (
     <Fragment>
       <div className="col-lg-12">
-        </div>
+      </div>
       <div className="table-responsive">
         <table
           className="table table-bordered text-center"
@@ -73,7 +73,7 @@ const CompetitorDetailsTurnOverList = (props) => {
             </tr>
           </thead>
           <tbody className="bg-white">
-                
+
           </tbody>
         </table>
       </div>

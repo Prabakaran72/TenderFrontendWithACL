@@ -8,126 +8,126 @@ import { useBaseUrl } from "../../hooks/useBaseUrl";
 
 
 const ProjectstatusMaster = () => {
-    usePageTitle("Project Status Creation");
+  usePageTitle("Project Status Creation");
 
-    const {server1:baseUrl} = useBaseUrl()
-  
-    const navigate = useNavigate();
-    const { id } = useParams();
+  const { server1: baseUrl } = useBaseUrl()
 
-    const initialState = {
-        projectstatus: "",
-        status: "Active",
-      };
-    
-      const [input, setInput] = useState(initialState);
-    
-      const [validation, setInputValidation] = useState({
-        projectstatusErr : "",
-      });
-      const [dataSending, setDataSending] = useState(false);
-    
-      useEffect(() => {
-        if(id){
-          axios.get(`${baseUrl}/api/projectstatus/${id}`).then((resp)=> {
-            setInput({
-                projectstatus: resp.data.projectstatus.projectstatus,
-                status: resp.data.projectstatus.status,
-            })
-          })
-        }
-      },[id, baseUrl])
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-      const postData = (data) => {
-        axios.post(`${baseUrl}/api/projectstatus`, data).then((res) => {
-              if (res.data.status === 200) {
-                Swal.fire({
-                  icon: "success",
-                  title: "New Project Status",
-                  text: "Created Successfully!",
-                  confirmButtonColor: "#5156ed",
-                });
-                setInput(initialState)
-                navigate('/tender/master/projectstatus')
-              } else if (res.data.status === 400) {
-                Swal.fire({
-                  icon: "error",
-                  title: "New Project Status",
-                  text: res.data.errors,
-                  confirmButtonColor: "#5156ed",
-                });
-                setDataSending(false)
-              }
-            });
-      }
-      
-      const putData = (data, id) => {
-        axios.put(`${baseUrl}/api/projectstatus/${id}`, data).then((res) => {
-          if (res.data.status === 200) {
-            Swal.fire({
-              icon: "success",
-              title: "Project Status",
-              text: "Updated Successfully!",
-              confirmButtonColor: "#5156ed",
-            });
-            setInput(initialState)
-            navigate('/tender/master/projectstatus')
-          } else if (res.data.status === 400) {
-            Swal.fire({
-              icon: "error",
-              title: "Project Status",
-              text: res.data.errors,
-              confirmButtonColor: "#5156ed",
-            });
-            setDataSending(false)
-          }
+  const initialState = {
+    projectstatus: "",
+    status: "Active",
+  };
+
+  const [input, setInput] = useState(initialState);
+
+  const [validation, setInputValidation] = useState({
+    projectstatusErr: "",
+  });
+  const [dataSending, setDataSending] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      axios.get(`${baseUrl}/api/projectstatus/${id}`).then((resp) => {
+        setInput({
+          projectstatus: resp.data.projectstatus.projectstatus,
+          status: resp.data.projectstatus.status,
+        })
+      })
+    }
+  }, [id, baseUrl])
+
+  const postData = (data) => {
+    axios.post(`${baseUrl}/api/projectstatus`, data).then((res) => {
+      if (res.data.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "New Project Status",
+          text: "Created Successfully!",
+          confirmButtonColor: "#5156ed",
         });
+        setInput(initialState)
+        navigate('/tender/master/projectstatus')
+      } else if (res.data.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "New Project Status",
+          text: res.data.errors,
+          confirmButtonColor: "#5156ed",
+        });
+        setDataSending(false)
       }
+    });
+  }
+
+  const putData = (data, id) => {
+    axios.put(`${baseUrl}/api/projectstatus/${id}`, data).then((res) => {
+      if (res.data.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Project Status",
+          text: "Updated Successfully!",
+          confirmButtonColor: "#5156ed",
+        });
+        setInput(initialState)
+        navigate('/tender/master/projectstatus')
+      } else if (res.data.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Project Status",
+          text: res.data.errors,
+          confirmButtonColor: "#5156ed",
+        });
+        setDataSending(false)
+      }
+    });
+  }
 
 
-      const inputHandler = (e) => {
-        e.persist();
-        setInput({ ...input , [e.target.name]: e.target.value });
+  const inputHandler = (e) => {
+    e.persist();
+    setInput({ ...input, [e.target.name]: e.target.value });
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setDataSending(true)
+    var errors = { ...validation };
+
+    if (input.projectstatus.trim() === "") {
+      errors.projectstatusErr = "This Field is required";
+
+    } else {
+      errors.projectstatusErr = "";
+    }
+
+    const { projectstatusErr } = errors;
+
+    setInputValidation(errors);
+
+    if (projectstatusErr !== "") {
+      setDataSending(false)
+      return;
+    }
+
+    if (projectstatusErr === "") {
+      const data = {
+        projectstatus: input.projectstatus,
+        status: input.status,
       };
 
-    const submitHandler = (e) => {
-        e.preventDefault();
-        setDataSending(true)
-        var errors = { ...validation };
-    
-        if (input.projectstatus.trim() === "") {
-          errors.projectstatusErr = "This Field is required";
-        
-        } else {
-          errors.projectstatusErr = "";
-        }
-    
-        const { projectstatusErr } = errors;
-    
-        setInputValidation(errors);
-    
-        if (projectstatusErr !== "") {
-          setDataSending(false)
-          return;
-        }
-    
-        if (projectstatusErr === "") {
-          const data = {
-            projectstatus: input.projectstatus,
-            status: input.status,
-          };
-        
-    
-          if(!id){
-            postData(data);
-          }else{
-            putData(data, id);
-          }
-        }
-    };
 
-    return (
-     <Fragment>
+      if (!id) {
+        postData(data);
+      } else {
+        putData(data, id);
+      }
+    }
+  };
+
+  return (
+    <Fragment>
       <div className="">
         <div className="card shadow mb-4 p-4">
           <form onSubmit={submitHandler}>

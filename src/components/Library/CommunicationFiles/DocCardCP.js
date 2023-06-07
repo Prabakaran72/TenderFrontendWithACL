@@ -62,10 +62,7 @@ const DocCardCP = (props) => {
                             <div className="img-block">
                             {props.item.type.split('/')[0] !== "image" && <img src={ImageConfig[props.item?.file_original_name?.split('.').pop()] || ImageConfig[props.item.type.split('/')[1]] || ImageConfig['default']} alt="" width="75px" height="75px" />}
 
-                            {props.item.type.split('/')[0] === "image" && <img src={URL.createObjectURL(props.item)} alt="" width="75px" height="75px" />}
-
-                         
-
+                            {props.item.type.split('/')[0] === "image" && <img src={URL.createObjectURL(props.item)} alt="" width="75px" height="75px" />}                         
                             {/* <img src={ImageConfig[props.item.file_type.split('/')[1]] || ImageConfig['default']} alt="" width="75px" height="75px" /> */}
                             </div>
                         </div>

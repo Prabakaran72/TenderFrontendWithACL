@@ -8,7 +8,7 @@ import useInputValidation from "../../hooks/useInputValidation";
 import { isNotEmpty, isNotNull } from "../CommonFunctions/CommonFunctions";
 import Select from "react-select";
 import UlbReportList from "./UlbReportList";
- import UlbViewCity from "./UlbViewCity";
+import UlbViewCity from "./UlbViewCity";
 
 
 
@@ -47,7 +47,7 @@ function UlbReport(props) {
 
 	let filterValid = true;
 
-	
+
 	const cust_category = [
 
 		{ value: "state", label: "State" },
@@ -116,29 +116,29 @@ function UlbReport(props) {
 
 
 	const goHandler = async () => {
-console.log('grp',groupValue?.value);
+		console.log('grp', groupValue?.value);
 		setLoading(true)
-		if(catValue?.value==null){
-			var value1='';
+		if (catValue?.value == null) {
+			var value1 = '';
 		}
-		else{
-			var value1=catValue.value;
+		else {
+			var value1 = catValue.value;
 		}
 
-		if(stateValue?.value==null){
-			var value2='';
+		if (stateValue?.value == null) {
+			var value2 = '';
 		}
-		else{
-			var value2=stateValue.value;
+		else {
+			var value2 = stateValue.value;
 		}
-		
-		if(groupValue?.value==null){
-			var value3='';
+
+		if (groupValue?.value == null) {
+			var value3 = '';
 		}
-		else{
-			var value3=groupValue.value;
+		else {
+			var value3 = groupValue.value;
 		}
-		
+
 		let data = {
 			category: value1,
 			State: value2,
@@ -158,23 +158,23 @@ console.log('grp',groupValue?.value);
 
 		let listarr = list.map((item, index, arr) => {
 
-			 let ViewCustomer = item.customers;
-// let ViewCustomer =  <UlbViewCity />;
-// let editbtn ='<i calss="customer" style="cursor:pointer">'+item.customers+'</i> ';
-let cust =  '<i class=" customer" style="cursor:pointer" >'+item.customers+'</i> ' ;
+			let ViewCustomer = item.customers;
+			// let ViewCustomer =  <UlbViewCity />;
+			// let editbtn ='<i calss="customer" style="cursor:pointer">'+item.customers+'</i> ';
+			let cust = '<i class=" customer" style="cursor:pointer" >' + item.customers + '</i> ';
 
-let m20 =  '<i class=" m20" style="cursor:pointer" >'+item.more_20+'</i> ' ;
-let b10_20 =  '<i class=" b10_20" style="cursor:pointer" >'+item.btw_10_20+'</i> ' ;
-let b_5_10 =  '<i class=" b_5_10" style="cursor:pointer" >'+item.btw_5_10+'</i> ' ;
-let b_3_5 =  '<i class=" b_3_5" style="cursor:pointer" >'+item.btw_3_5+'</i> ' ;
-let b_1_3 =  '<i class=" b_1_3" style="cursor:pointer" >'+item.btw_1_3+'</i> ' ;
-let b_1 =  '<i class=" b_1" style="cursor:pointer" >'+item.bel_1+'</i> ' ;
+			let m20 = '<i class=" m20" style="cursor:pointer" >' + item.more_20 + '</i> ';
+			let b10_20 = '<i class=" b10_20" style="cursor:pointer" >' + item.btw_10_20 + '</i> ';
+			let b_5_10 = '<i class=" b_5_10" style="cursor:pointer" >' + item.btw_5_10 + '</i> ';
+			let b_3_5 = '<i class=" b_3_5" style="cursor:pointer" >' + item.btw_3_5 + '</i> ';
+			let b_1_3 = '<i class=" b_1_3" style="cursor:pointer" >' + item.btw_1_3 + '</i> ';
+			let b_1 = '<i class=" b_1" style="cursor:pointer" >' + item.bel_1 + '</i> ';
 
-      
+
 			return {
-				...item, 
+				...item,
 				ulblist: item.customersubcategory,
-				customers:cust ,
+				customers: cust,
 				more_20: m20,
 				btw_10_20: b10_20,
 				btw_5_10: b_5_10,
@@ -182,9 +182,9 @@ let b_1 =  '<i class=" b_1" style="cursor:pointer" >'+item.bel_1+'</i> ' ;
 				btw_3_5: b_3_5,
 				btw_1_3: b_1_3,
 				bel_1: b_1,
-				filter_cat:catValue?.value,
-				filter_state:stateValue?.value,
-				filter_group:groupValue?.value,
+				filter_cat: catValue?.value,
+				filter_state: stateValue?.value,
+				filter_group: groupValue?.value,
 				popup: [],
 
 
@@ -305,3 +305,17 @@ let b_1 =  '<i class=" b_1" style="cursor:pointer" >'+item.bel_1+'</i> ' ;
 }
 
 export default UlbReport;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

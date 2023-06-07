@@ -1,13 +1,14 @@
 import axios from "axios";
 import React, { useState, useMemo, useEffect, useRef } from "react";
-import {
-    useTable,
-    useSortBy,
-    usePagination,
-    useGlobalFilter,
-} from "react-table";
+// import {
+//     useTable,
+//     useSortBy,
+//     usePagination,
+//     useGlobalFilter,
+// } from "react-table";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import UseExport from "../../hooks/useExport";
+import DataTable from '../../hooks/DataTable';
 
 
 // const data = [
@@ -72,26 +73,27 @@ const CallReportTable = ( {change, input, check} ) => {
         ],
         []
     );
+    
 
-    const tableInstance = useTable( { columns, data, }, useGlobalFilter, useSortBy, usePagination );
+    // const tableInstance = useTable( { columns, data, }, useGlobalFilter, useSortBy, usePagination );
 
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        prepareRow,
-        page,
-        state: { pageIndex, pageSize, globalFilter },
-        setGlobalFilter,
-        previousPage,
-        nextPage,
-        canPreviousPage,
-        canNextPage,
-        pageOptions,
-        gotoPage,
-        pageCount,
-        setPageSize,
-    } = tableInstance;
+    // const {
+    //     getTableProps,
+    //     getTableBodyProps,
+    //     headerGroups,
+    //     prepareRow,
+    //     page,
+    //     state: { pageIndex, pageSize, globalFilter },
+    //     setGlobalFilter,
+    //     previousPage,
+    //     nextPage,
+    //     canPreviousPage,
+    //     canNextPage,
+    //     pageOptions,
+    //     gotoPage,
+    //     pageCount,
+    //     setPageSize,
+    // } = tableInstance;
 
     useEffect(()=> {        
         axios.post(`${baseUrl}/api/getdaywisereport/list`,change).then((resp)=> { 
@@ -124,7 +126,7 @@ const CallReportTable = ( {change, input, check} ) => {
     // console.log('page',page);
     return (    
         <>
-            <div className="d-flex justify-content-between mb-2">
+            {/* <div className="d-flex justify-content-between mb-2">
             <div className="">
                 <select
                     className="form-control"
@@ -153,8 +155,8 @@ const CallReportTable = ( {change, input, check} ) => {
                     className="form-control"
                 />
             </div>
-            </div>   
-            <div className="table-responsive pb-3">           
+            </div>    */}
+            {/* <div className="table-responsive pb-3">           
                 <table
                     className="table table-bordered text-center"
                     id="dataTable"
@@ -197,8 +199,14 @@ const CallReportTable = ( {change, input, check} ) => {
                         })}
                     </tbody>
                 </table>                     
-            </div>
-            <div className="row align-items-center">
+            </div> */}
+            <DataTable 
+                data={data}
+                columns={columns}
+                header={header}
+                title={'CALL REPOST LIST'}
+            />
+            {/* <div className="row align-items-center">
             <div className="col-auto">
                 <button
                     className="btn btn-sm mr-1 bg-greeny text-white font-weight-bold"
@@ -241,7 +249,7 @@ const CallReportTable = ( {change, input, check} ) => {
                     }}
                 />
             </div>
-            </div> 
+            </div>  */}
         </> 
 
     );

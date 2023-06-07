@@ -303,7 +303,7 @@ const UserPermission = () => {
                 <div className="card shadow mb-4 p-4">
                     <form>
                         <div className="row align-items-center">
-                            <div className="inputgroup col-lg-6 mb-4">
+                            <div className="col-lg-6 mb-4">
                                 <div className="row align-items-center">
                                     <div className="col-lg-4 text-dark">
                                         <label htmlFor="usertype" className="font-weight-bold">User Type (Role)<span className="text-danger">&nbsp;*</span> </label>

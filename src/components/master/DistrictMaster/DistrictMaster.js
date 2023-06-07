@@ -53,9 +53,9 @@ const DistrictMaster = () => {
   }, []);
 
   useEffect(() => {
-    
+
     if (id && districtInput.countryId) {
-      
+
       axios
         .get(`${baseUrl}/api/state/list/${districtInput.countryId.value}`)
         .then((resp) => {
@@ -69,18 +69,18 @@ const DistrictMaster = () => {
     }
   }, [districtInput.countryId]);
 
-  useEffect(()=>{
-   
-    if(id && districtInput.countryId && stateList.length>0 && existingData)
-    {
-      setDistrictInput({...districtInput,
-        stateId:stateList.find((x)=> x.value=== existingData.state_id),
-        districtName:existingData.district_name,
-        districtStatus:existingData.district_status,
+  useEffect(() => {
+
+    if (id && districtInput.countryId && stateList.length > 0 && existingData) {
+      setDistrictInput({
+        ...districtInput,
+        stateId: stateList.find((x) => x.value === existingData.state_id),
+        districtName: existingData.district_name,
+        districtStatus: existingData.district_status,
       })
       setExistingData(null);
     }
-  },[districtInput.countryId,stateList]);
+  }, [districtInput.countryId, stateList]);
 
 
   useEffect(() => {

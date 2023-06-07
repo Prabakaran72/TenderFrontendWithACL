@@ -14,17 +14,17 @@ const initialOptions = {
 
 
 const statusOptions = [
-	
+
 	{ value: 'To be Opened', label: 'To be Opened' },
-    { value: 'Technical Evaluation in Progress', label: 'In Technical Evaluation' },
-    { value: 'Financial Bid Opening in Progress', label: 'In Financial Evaluation' },
+	{ value: 'Technical Evaluation in Progress', label: 'In Technical Evaluation' },
+	{ value: 'Financial Bid Opening in Progress', label: 'In Financial Evaluation' },
 	{ value: 'LoA yet to be awarded', label: 'LoA yet to be awarded' },
-    { value: 'Awarded', label: 'Awarded' },
+	{ value: 'Awarded', label: 'Awarded' },
 	{ value: 'Tender Cancelled', label: 'Tender Cancelled' },
-    { value: 'Retendered', label: 'Retendered' },
-	
-	
-  ]
+	{ value: 'Retendered', label: 'Retendered' },
+
+
+]
 
 function Legacystatement() {
 
@@ -96,13 +96,13 @@ function Legacystatement() {
 
 	const goHandler = () => {
 		let data = {
-			fromdate			: fromdateValue,
-			todate				: todateValue,
-			status				: (statusValue) ? statusValue.value : null,
-			state				: (stateValue)  ? stateValue.value : null,
-			typeofproject		: (typeofprojectValue) ? typeofprojectValue.value : null,
-			typeofcustomer		: typeofcustomerValue,
-			tenderparticipation	: tenderparticipationValue,
+			fromdate: fromdateValue,
+			todate: todateValue,
+			status: (statusValue) ? statusValue.value : null,
+			state: (stateValue) ? stateValue.value : null,
+			typeofproject: (typeofprojectValue) ? typeofprojectValue.value : null,
+			typeofcustomer: typeofcustomerValue,
+			tenderparticipation: tenderparticipationValue,
 		}
 
 		getlist(data)
@@ -114,73 +114,73 @@ function Legacystatement() {
 	const tenderparticipationhandler = (e) => {
 		settenderparticipationValue(e.target.value);
 	};
-	
-	const generateListArray = async (response) =>{
-		let list = [...response.data.legacylist];
-		let listarr = list.map((item, index, arr)=> ({
-		  ...item,
-		  NITdate:FormattedDate(item.nitdate),
-		  quality: (item.quality) ? item.quality.toLocaleString('en-IN') : '',
-		  projectvalue: (item.estprojectvalue) ? item.estprojectvalue.toLocaleString('en-IN') : '',
-		  status:`<span class="font-weight-bold" style="color:orange;">${item.tenderStatus}</span>`,
-		//   action:`
-		//   <i class="fa fa-print text-info mr-2 h6" style="cursor:pointer; font-size: 1.25rem" title="Print"></i>`,
-		//   <i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> 
-		//   <i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>
-		
-		  sl_no : index+1
-		}))
-	
-		return listarr;
-	  }
 
-	  const FormattedDate = (date) => {
+	const generateListArray = async (response) => {
+		let list = [...response.data.legacylist];
+		let listarr = list.map((item, index, arr) => ({
+			...item,
+			NITdate: FormattedDate(item.nitdate),
+			quality: (item.quality) ? item.quality.toLocaleString('en-IN') : '',
+			projectvalue: (item.estprojectvalue) ? item.estprojectvalue.toLocaleString('en-IN') : '',
+			status: `<span class="font-weight-bold" style="color:orange;">${item.tenderStatus}</span>`,
+			//   action:`
+			//   <i class="fa fa-print text-info mr-2 h6" style="cursor:pointer; font-size: 1.25rem" title="Print"></i>`,
+			//   <i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> 
+			//   <i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>
+
+			sl_no: index + 1
+		}))
+
+		return listarr;
+	}
+
+	const FormattedDate = (date) => {
 		const targetdate = new Date(date);
 		const yyyy = targetdate.getFullYear();
 		let mm = targetdate.getMonth() + 1; // Months start at 0!
 		let dd = targetdate.getDate();
-	
+
 		if (dd < 10) dd = '0' + dd;
 		if (mm < 10) mm = '0' + mm;
-	
+
 		const formattedDate = dd + '-' + mm + '-' + yyyy;
 		return formattedDate
-	  }
+	}
 
 	const getlist = async (data = null) => {
 		setLoading(true)
 
-		let response =  await axios.post(`${baseUrl}/api/legacystatement`, data);
+		let response = await axios.post(`${baseUrl}/api/legacystatement`, data);
 		// console.log(response.data.legacylist)
 		// console.log(response.data.sql)
 		let listarr = await generateListArray(response)
-		
+
 		setListarr(listarr)
 		setLoading(false)
 	}
 
-	
+
 	const getStateData = async (savedState) => {
 		let response = await axios.get(`${baseUrl}/api/state-list/${savedState}`);
 		return { options: response.data.stateList, isLoading: false };
-	  };
-	
-	const getStateListOptions = async (savedState = null) => {
-	setStateOptions((c) => {
-		return { ...c, isLoading: true };
-	});
-	let StateList = await getStateData(savedState);
-	setStateOptions(StateList);
 	};
-	
+
+	const getStateListOptions = async (savedState = null) => {
+		setStateOptions((c) => {
+			return { ...c, isLoading: true };
+		});
+		let StateList = await getStateData(savedState);
+		setStateOptions(StateList);
+	};
+
 	const getTypeofProjectList = () => {
 		settypeofprojectOptions((c) => {
 			return { ...c, isLoading: true };
 		});
 		axios.get(`${baseUrl}/api/projecttype/list`).then((resp) => {
-			settypeofprojectOptions({options : resp.data.projectTypeList, isLoading: false});
+			settypeofprojectOptions({ options: resp.data.projectTypeList, isLoading: false });
 		});
-	  };
+	};
 
 	useEffect(() => {
 		getlist();

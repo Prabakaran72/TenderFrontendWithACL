@@ -1,27 +1,27 @@
 import { usePageTitle } from "../../hooks/usePageTitle";
-import { Fragment, useState,useEffect } from "react";
-import {useParams,  Outlet, NavLink, useLocation} from "react-router-dom";
+import { Fragment, useState, useEffect } from "react";
+import { useParams, Outlet, NavLink, useLocation } from "react-router-dom";
 import "./CompetitorMaster.css";
 
 const CompetitorTab = () => {
   usePageTitle("Competitor Creation");
   const { id } = useParams();
-const [competitorId,setCompetitorId]=useState(0);
+  const [competitorId, setCompetitorId] = useState(0);
 
- //assigning location variable
- const location = useLocation();
+  //assigning location variable
+  const location = useLocation();
 
- //destructuring pathname from location
- const { pathname } = location;
+  //destructuring pathname from location
+  const { pathname } = location;
 
- //Javascript split method to get the name of the path in array
- const activeTab = pathname.split("/");
- 
-useEffect(() => {
-  {id && setCompetitorId(id)}
-}, []);
+  //Javascript split method to get the name of the path in array
+  const activeTab = pathname.split("/");
 
-  return (     
+  useEffect(() => {
+    { id && setCompetitorId(id) }
+  }, []);
+
+  return (
     <Fragment>
       <div className="CompetitorTab">
         <div className="row">
@@ -46,10 +46,10 @@ useEffect(() => {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link" 
+                        className="nav-link"
                         id="details-tab"
                         data-toggle="tab"
-                        to={!competitorId ? "details": `details/${competitorId}`}
+                        to={!competitorId ? "details" : `details/${competitorId}`}
                         role="tab"
                         aria-controls="details"
                         aria-selected="false"

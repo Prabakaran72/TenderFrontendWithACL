@@ -1,5 +1,5 @@
 import { usePageTitle } from "../../../../hooks/usePageTitle";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useBaseUrl } from "../../../../hooks/useBaseUrl";
@@ -21,12 +21,12 @@ const CompetitorDetailsLineOfBusinessForm = (props) => {
   const [competitorBizLineInput, setCompetitorBizLineInput] =
     useState(initialValue);
 
-  
+
   const [formIsValid, setFormIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [bizLineList, setBizLineList] = useState([]);
-  const [isBtnClicked,setIsBtnClicked]=useState(false);
-  
+  const [isBtnClicked, setIsBtnClicked] = useState(false);
+
   let tokenId = localStorage.getItem("token");
   const { server1: baseUrl } = useBaseUrl();
   // const navigate = useNavigate();
@@ -56,18 +56,18 @@ const CompetitorDetailsLineOfBusinessForm = (props) => {
   //       }
   //     });
   // };
-  
+
   //check Form is Valid or not
-useEffect(() => {
-  if (
-      competitorBizLineInput.bizLineValue !== "" 
-  ) {
-    setFormIsValid(true);
-  }
-  else{
-    setFormIsValid(false);
-  }
-}, [competitorBizLineInput]);
+  useEffect(() => {
+    if (
+      competitorBizLineInput.bizLineValue !== ""
+    ) {
+      setFormIsValid(true);
+    }
+    else {
+      setFormIsValid(false);
+    }
+  }, [competitorBizLineInput]);
 
   const getBizLineList = () => {
     axios
@@ -76,7 +76,7 @@ useEffect(() => {
         let list = [...resp.data.buz_line];
         let listarr = list.map((item, index) => ({
           ...item,
-          buttons:`<i class="fa fa-edit text-primary mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fa fa-trash text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
+          buttons: `<i class="fa fa-edit text-primary mx-2 h6" style="cursor:pointer" title="Edit"></i> <i class="fa fa-trash text-danger h6  mx-2" style="cursor:pointer"  title="Delete"></i>`,
           sl_no: index + 1,
         }));
         setBizLineList(listarr);
@@ -86,17 +86,17 @@ useEffect(() => {
 
 
 
-  const onEdit = (data) => {    
-      setFormIsValid(true);     
-        setCompetitorBizLineInput({
-          bizLineId: data.id,
-          compNo: data.compNo,
-          bizLineValue: data.bizLineValue,
-          remark: data.remark,
-        });
+  const onEdit = (data) => {
+    setFormIsValid(true);
+    setCompetitorBizLineInput({
+      bizLineId: data.id,
+      compNo: data.compNo,
+      bizLineValue: data.bizLineValue,
+      remark: data.remark,
+    });
   };
-  
-  const onDelete = (data) => {    
+
+  const onDelete = (data) => {
     Swal.fire({
       text: `Are You sure, to delete ?`,
       icon: "warning",
@@ -114,7 +114,7 @@ useEffect(() => {
               Swal.fire({
                 //success msg
                 icon: "success",
-                title: "Line of Business "+data.bizLineValue,
+                title: "Line of Business " + data.bizLineValue,
                 text: `removed!`,
                 timer: 2000,
                 showConfirmButton: false,
@@ -133,7 +133,7 @@ useEffect(() => {
                 text: "Something went wrong!",
                 timer: 2000,
               });
-            } 
+            }
           });
       } else {
         Swal.fire({
@@ -144,12 +144,12 @@ useEffect(() => {
       }
     });
   };
- 
 
-  const textInputHandler = (e) =>{
-    setCompetitorBizLineInput({...competitorBizLineInput, [e.target.name] : e.target.value});
+
+  const textInputHandler = (e) => {
+    setCompetitorBizLineInput({ ...competitorBizLineInput, [e.target.name]: e.target.value });
   }
-  
+
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -168,45 +168,44 @@ useEffect(() => {
       datatosend.compId !== null &&
       datatosend.compNo !== null &&
       datatosend.bizLineValue !== null
-    )
-    {
-    axios.post(`${baseUrl}/api/competitorlineofbusiness`, datatosend).then((resp) => {
-      if (resp.data.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Competitor Line of Business",
-          text: resp.data.message,
-          timer: 2000,
-        }).then(function () {
-          setLoading(false);
-          setIsBtnClicked(false);
-          setCompetitorBizLineInput({...competitorBizLineInput, remark: "", bizLineValue: ""});
-          getBizLineList();
-        });
-      } else if (resp.data.status === 404) {
-        Swal.fire({
-          icon: "error",
-          title: "Competitor Networth",
-          text: resp.data.message,
-          confirmButtonColor: "#5156ed",
-        }).then(function () {
-          setLoading(false);
-          setIsBtnClicked(false);
-        });
-      }
-    });
-  }
-  else{
-    Swal.fire({
-      icon: "error",
-      title: "Competitor Line of Business",
-      text: "You are tring to submit empty values",
-      confirmButtonColor: "#5156ed",
-    }).then(function () {
-      setLoading(false);
-      setIsBtnClicked(false);
-    });
-  }
+    ) {
+      axios.post(`${baseUrl}/api/competitorlineofbusiness`, datatosend).then((resp) => {
+        if (resp.data.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Competitor Line of Business",
+            text: resp.data.message,
+            timer: 2000,
+          }).then(function () {
+            setLoading(false);
+            setIsBtnClicked(false);
+            setCompetitorBizLineInput({ ...competitorBizLineInput, remark: "", bizLineValue: "" });
+            getBizLineList();
+          });
+        } else if (resp.data.status === 404) {
+          Swal.fire({
+            icon: "error",
+            title: "Competitor Networth",
+            text: resp.data.message,
+            confirmButtonColor: "#5156ed",
+          }).then(function () {
+            setLoading(false);
+            setIsBtnClicked(false);
+          });
+        }
+      });
+    }
+    else {
+      Swal.fire({
+        icon: "error",
+        title: "Competitor Line of Business",
+        text: "You are tring to submit empty values",
+        confirmButtonColor: "#5156ed",
+      }).then(function () {
+        setLoading(false);
+        setIsBtnClicked(false);
+      });
+    }
   };
   const updateHandler = (e) => {
     e.preventDefault();
@@ -225,49 +224,48 @@ useEffect(() => {
       datatosend.compNo !== null &&
       datatosend.bizLineValue !== null &&
       competitorBizLineInput.bizLineId
-    )
-    {
-    axios.put(`${baseUrl}/api/competitorlineofbusiness/${competitorBizLineInput.bizLineId}`, datatosend).then((resp) => {
-      if (resp.data.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Competitor Line of Business",
-          text: resp.data.message,
-          timer: 2000,
-        }).then(function () {
-          setCompetitorBizLineInput({...competitorBizLineInput,bizLineId:null, remark: "", bizLineValue: ""});
-          getBizLineList();
-          setIsBtnClicked(false);
-          setLoading(false);
-        });
-      } else if (resp.data.status === 404) {
-        Swal.fire({
-          icon: "error",
-          title: "Competitor Networth",
-          text: resp.data.errors,
-          confirmButtonColor: "#5156ed",
-        }).then(function () {
-          setLoading(false);
-          setIsBtnClicked(false);
-        });
-      }
-      else{
-        Swal.fire({
-          icon: "error",
-          title: "Competitor Networth",
-          text: "Something went wrong!",
-          confirmButtonColor: "#5156ed",
-        }).then(function () {
-          setLoading(false);
-          setIsBtnClicked(false);
-        });
-      }
-     
-    });
-  }
+    ) {
+      axios.put(`${baseUrl}/api/competitorlineofbusiness/${competitorBizLineInput.bizLineId}`, datatosend).then((resp) => {
+        if (resp.data.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Competitor Line of Business",
+            text: resp.data.message,
+            timer: 2000,
+          }).then(function () {
+            setCompetitorBizLineInput({ ...competitorBizLineInput, bizLineId: null, remark: "", bizLineValue: "" });
+            getBizLineList();
+            setIsBtnClicked(false);
+            setLoading(false);
+          });
+        } else if (resp.data.status === 404) {
+          Swal.fire({
+            icon: "error",
+            title: "Competitor Networth",
+            text: resp.data.errors,
+            confirmButtonColor: "#5156ed",
+          }).then(function () {
+            setLoading(false);
+            setIsBtnClicked(false);
+          });
+        }
+        else {
+          Swal.fire({
+            icon: "error",
+            title: "Competitor Networth",
+            text: "Something went wrong!",
+            confirmButtonColor: "#5156ed",
+          }).then(function () {
+            setLoading(false);
+            setIsBtnClicked(false);
+          });
+        }
+
+      });
+    }
   };
 
-  
+
 
   return (
     <div className="">
@@ -278,7 +276,7 @@ useEffect(() => {
               <div className="col-lg-5 text-dark font-weight-bold pt-1">
                 <label htmlFor="bizLineValue"> Line of Business
 
-                    {/* Value in Rupees ( &#8377; )<span className="text-danger">&nbsp;*</span>
+                  {/* Value in Rupees ( &#8377; )<span className="text-danger">&nbsp;*</span>
                     <p className="text-info">( upto : 99,999,999,999.99 )</p> */}
                 </label>
               </div>
@@ -290,9 +288,9 @@ useEffect(() => {
                   placeholder="Enter Business Name"
                   name="bizLineValue"
                   value={competitorBizLineInput.bizLineValue}
-                  onChange={textInputHandler}                  
+                  onChange={textInputHandler}
                 />
-                
+
                 {/* {hasError.remark && (
                   <div className="pt-1">
                     <span className="text-danger font-weight-bold">
@@ -303,7 +301,6 @@ useEffect(() => {
               </div>
             </div>
           </div>
-          
 
           <div className="inputgroup col-lg-6 mb-4 ">
             <div className="row align-items-center">
@@ -320,9 +317,9 @@ useEffect(() => {
                   placeholder="Remark"
                   name="remark"
                   value={competitorBizLineInput.remark}
-                  onChange={textInputHandler}                  
+                  onChange={textInputHandler}
                 />
-                
+
                 {/* {hasError.remark && (
                   <div className="pt-1">
                     <span className="text-danger font-weight-bold">
@@ -351,7 +348,7 @@ useEffect(() => {
           </div>
         </div>
       </form>
-      <CompetitorDetailsLineOfBusinessList bizLineList={bizLineList} onEdit={onEdit} onDelete={onDelete}/>
+      <CompetitorDetailsLineOfBusinessList bizLineList={bizLineList} onEdit={onEdit} onDelete={onDelete} />
     </div>
   );
 };

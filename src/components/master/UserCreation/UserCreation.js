@@ -397,7 +397,7 @@ const UserCreation = () => {
         <div className="card shadow mb-4 p-4">
           <form>
             <div className="row align-items-center">
-              <div className="inputgroup col-lg-6 mb-4">
+              <div className="col-lg-6 mb-4">
                 <div className="row align-items-center">
                   <div className="col-lg-4 text-dark">
                     <label htmlFor="userName" className="font-weight-bold">
@@ -424,7 +424,7 @@ const UserCreation = () => {
                   </div>
                 </div>
               </div>
-              <div className="inputgroup col-lg-6 mb-4">
+              <div className="col-lg-6 mb-4">
                 <div className="row align-items-center">
                   <div className="col-lg-4 text-dark">
                     <label htmlFor="usertype" className="font-weight-bold">
@@ -459,7 +459,7 @@ const UserCreation = () => {
                   </div>
                 </div>
               </div>
-              <div className="inputgroup col-lg-6 mb-4">
+              <div className="col-lg-6 mb-4">
                 <div className="row align-items-center">
                   <div className="col-lg-4 text-dark">
                     <label htmlFor="loginId" className="font-weight-bold">
@@ -486,7 +486,7 @@ const UserCreation = () => {
                   </div>
                 </div>
               </div>
-              <div className="inputgroup col-lg-6 mb-4">
+              <div className="col-lg-6 mb-4">
                 <div className="row align-items-center">
                   <div className="col-lg-4 text-dark">
                     <label htmlFor="password" className="font-weight-bold">
@@ -513,7 +513,7 @@ const UserCreation = () => {
                   </div>
                 </div>
               </div>
-              <div className="inputgroup col-lg-6 mb-4">
+              <div className="col-lg-6 mb-4">
                 <div className="row align-items-center">
                   <div className="col-lg-4 text-dark">
                     <label
@@ -544,7 +544,7 @@ const UserCreation = () => {
                   </div>
                 </div>
               </div>
-              <div className="inputgroup col-lg-6 mb-4">
+              <div className="col-lg-6 mb-4">
                 <div className="row align-items-center">
                   <div className="col-lg-4 text-dark">
                     <label htmlFor="mobile" className="font-weight-bold">
@@ -577,7 +577,7 @@ const UserCreation = () => {
                   </div>
                 </div>
               </div>
-              <div className="inputgroup col-lg-6 mb-4">
+              <div className="col-lg-6 mb-4">
                 <div className="row align-items-center">
                   <div className="col-lg-4 text-dark">
                     <label htmlFor="email" className="font-weight-bold">
@@ -604,7 +604,7 @@ const UserCreation = () => {
                   </div>
                 </div>
               </div>
-              <div className="inputgroup col-lg-6 mb-4">
+              <div className="col-lg-6 mb-4">
                 <div className="row align-items-center">
                   <div className="col-lg-5 text-dark ">
                     <label htmlFor="activeStatus " className="font-weight-bold">
@@ -650,7 +650,7 @@ const UserCreation = () => {
                 </div>
               </div>
               {file === null && (
-                <div className="inputgroup col-lg-12 mb-4 p-0">
+                <div className="col-lg-12 mb-4 p-0">
                   <div className="row col-lg-6">
                     <div className="col-lg-4 text-dark font-weight-bold">
                       <label htmlFor="image">
@@ -690,7 +690,7 @@ const UserCreation = () => {
               )}
 
               {file !== null && (
-                <div className="inputgroup col-lg-12 mb-4">
+                <div className="col-lg-12 mb-4">
                   <div className="row col-lg-6">
                     <div className="col-lg-4 text-dark font-weight-bold  p-0">
                       {file.lastModified && (
@@ -712,11 +712,11 @@ const UserCreation = () => {
                   <div className="col-lg-6">&nbsp;</div>
                 </div>
               )}
-              <div className="inputgroup col-lg-12">
+              <div className="col-lg-12">
                 <div className="row align-items-center">
                   <div className="col-lg-12 text-center ">
                     <button
-                      className="btn btn-primary  mr-2"
+                      className="btn btn-primary mr-2"
                       disabled={!formIsValid}
                       onClick={submitHandler}
                     >
@@ -731,8 +731,6 @@ const UserCreation = () => {
                         ? "Update"
                         : "Save"}
                     </button>
-            
-            
                     <button
                       className="btn btn-secondary"
                       onClick={cancelHandler}
@@ -740,13 +738,12 @@ const UserCreation = () => {
                     >
                       Cancel
                     </button>
-                  </div>
+                  </div>                  
                 </div>
               </div>
             </div>
           </form>
-        </div>
-      
+        </div>      
     </Fragment>
   );
 };

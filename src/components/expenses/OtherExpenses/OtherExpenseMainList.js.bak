@@ -14,8 +14,8 @@ import "datatables.net-buttons/js/buttons.colVis.js";
 import "datatables.net-buttons/js/buttons.flash.js";
 import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-buttons/js/buttons.print.js";
-//import pdfMake from "pdfmake/build/pdfmake";
-//import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 
 
 import axios from "axios";
@@ -110,26 +110,6 @@ const OtherExpenseMainList = (props) => {
                 // { data: 'current_stage' },
                 // { data: 'action' },
             ],
-            buttons:[
-              {
-                extend: "print",
-                text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> Print',
-                className: "btn btn-info",
-                exportOptions: {
-                  // columns: ':not(.exclude-action)', 
-                  columns: [0, 1, 2, 3, 4], //Except view 5 and action 6 columns
-                },
-              },
-              {
-                extend: "excel",
-                text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> Excel',
-                className: "btn btn-success",
-                exportOptions: {
-                  // columns: ':not(.exclude-action)', 
-                  columns: [0, 1, 2, 3, 4], //Except view 5 and action 6 columns
-                },
-              },
-            ],
             // dom:
             // //   "<'row'<'col-sm-12'l>>" +
             //   "<'row'<'col-sm-12   col-md-6 pl-4'l>  <'col-sm-12 col-md-6 pr-4'f>>" +
@@ -137,8 +117,6 @@ const OtherExpenseMainList = (props) => {
             //   "<'row'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",
     
         })
-        table.buttons().container().appendTo("#reimdataTable_wrapper .dataTables_filter");
-
         let ApproveStatus = '';
 
         $('#reimdataTable tbody').on('click', 'td', function(event) {

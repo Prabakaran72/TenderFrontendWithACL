@@ -10,172 +10,169 @@ import Select from "react-select";
 // const options = [{value:'1', label : 'AP'},{value:'2', label : 'MP'},{value:'3', label : 'Tamilnadu'},{value:'4', label : 'Delhi'}];
 
 const ZoneMaster = () => {
-    usePageTitle("Zone Master Creation");
+  usePageTitle("Zone Master Creation");
 
-    const {server1:baseUrl} = useBaseUrl()
-  
-    const navigate = useNavigate();
-    const { id } = useParams();
-    const [options, setOptions] = useState([]);
+  const { server1: baseUrl } = useBaseUrl()
 
-    const initialState = {
-        zonename: "",
-        statelist: "",
-        status: "active",
-      };
-    
-      const [input, setInput] = useState(initialState);
-      const [statelist, setStateList] = useState([]);
-      const [validation, setInputValidation] = useState({
-        zonenameErr : "",
-        statelistErr :""
-      });
-      const [dataSending, setDataSending] = useState(false);
-      const [formIsValid ,setFormIsValid] = useState(false);
-      const [isEdited , setIsEdited] = useState(false);
-      const [datafetching , setDataFetching] = useState(false);
-      useEffect(()=>{
-        axios.get(`${baseUrl}/api/state/list/105`).then((resp)=> {
-          setOptions(resp.data.stateList);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [options, setOptions] = useState([]);
+
+  const initialState = {
+    zonename: "",
+    statelist: "",
+    status: "active",
+  };
+
+  const [input, setInput] = useState(initialState);
+  const [statelist, setStateList] = useState([]);
+  const [validation, setInputValidation] = useState({
+    zonenameErr: "",
+    statelistErr: ""
+  });
+  const [dataSending, setDataSending] = useState(false);
+  const [formIsValid, setFormIsValid] = useState(false);
+  const [isEdited, setIsEdited] = useState(false);
+  const [datafetching, setDataFetching] = useState(false);
+  useEffect(() => {
+    axios.get(`${baseUrl}/api/state/list/105`).then((resp) => {
+      setOptions(resp.data.stateList);
+    })
+  }, [])
+
+  useEffect(() => {
+    if (id) {
+      setDataFetching(true);
+      axios.get(`${baseUrl}/api/zonemaster/${id}`).then((resp) => {
+        setInput({
+          zonename: resp.data.zonename.zone_name,
+          status: resp.data.zonename.active_status
         })
-      },[])
-      
-      useEffect(() => {
-        if(id){
-          setDataFetching(true);
-          axios.get(`${baseUrl}/api/zonemaster/${id}`).then((resp)=> {
-            setInput({
-                zonename: resp.data.zonename.zone_name,
-                status: resp.data.zonename.active_status
-            })
 
-            setStateList(resp.data.zonename.statelist)
-          })
-        }
-      },[id, baseUrl])
+        setStateList(resp.data.zonename.statelist)
+      })
+    }
+  }, [id, baseUrl])
 
-      const postData = (data) => {
-        axios.post(`${baseUrl}/api/zonemaster`, data).then((res) => {
-              if (res.data.status === 200) {
-                Swal.fire({
-                  icon: "success",
-                  title: "New Zone ",
-                  text: "Created Successfully!",
-                  confirmButtonColor: "#5156ed",
-                });
-                setInput(initialState)
-                navigate('/tender/master/zonemaster')
-              } else if (res.data.status === 400) {
-                Swal.fire({
-                  icon: "error",
-                  title: "Zone ",
-                  text: res.data.errors,
-                  confirmButtonColor: "#5156ed",
-                });
-                setDataSending(false)
-              }
-            });
-      }
-      
-      const putData = (data, id) => {
-        axios.put(`${baseUrl}/api/zonemaster/${id}`, data).then((res) => {
-          if (res.data.status === 200) {
-            Swal.fire({
-              icon: "success",
-              title: "Zone ",
-              text: "Updated Successfully!",
-              confirmButtonColor: "#5156ed",
-            });
-            setInput(initialState)
-            navigate('/tender/master/zonemaster')
-          } else if (res.data.status === 400) {
-            Swal.fire({
-              icon: "error",
-              title: "Zone ",
-              text: res.data.errors,
-              confirmButtonColor: "#5156ed",
-            });
-            setDataSending(false)
-          }
+  const postData = (data) => {
+    axios.post(`${baseUrl}/api/zonemaster`, data).then((res) => {
+      if (res.data.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "New Zone ",
+          text: "Created Successfully!",
+          confirmButtonColor: "#5156ed",
         });
+        setInput(initialState)
+        navigate('/tender/master/zonemaster')
+      } else if (res.data.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Zone ",
+          text: res.data.errors,
+          confirmButtonColor: "#5156ed",
+        });
+        setDataSending(false)
       }
+    });
+  }
+
+  const putData = (data, id) => {
+    axios.put(`${baseUrl}/api/zonemaster/${id}`, data).then((res) => {
+      if (res.data.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Zone ",
+          text: "Updated Successfully!",
+          confirmButtonColor: "#5156ed",
+        });
+        setInput(initialState)
+        navigate('/tender/master/zonemaster')
+      } else if (res.data.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Zone ",
+          text: res.data.errors,
+          confirmButtonColor: "#5156ed",
+        });
+        setDataSending(false)
+      }
+    });
+  }
 
 
-      useEffect(()=>{
-          
-          if(statelist.length > 0 || validation.statelistErr ==="")
-          {
-            setInputValidation({...validation,statelistErr: false})
-          }
-          else{
-            setInputValidation({...validation,statelistErr: true})
-          }
-      },[statelist])
+  useEffect(() => {
 
-      const inputHandler = (e) => {
-        e.persist();
-        setInput({ ...input , [e.target.name]: e.target.value });
-        if (e.target.value === "") {
-          setInputValidation({ ...validation, [e.target.name]: true });
-        } else {
-          setInputValidation({ ...validation, [e.target.name]: false });
-        }
-        if(datafetching === true && id)
-        {
-          setIsEdited(true);
-          setDataFetching(false);
-        }
+    if (statelist.length > 0 || validation.statelistErr === "") {
+      setInputValidation({ ...validation, statelistErr: false })
+    }
+    else {
+      setInputValidation({ ...validation, statelistErr: true })
+    }
+  }, [statelist])
+
+  const inputHandler = (e) => {
+    e.persist();
+    setInput({ ...input, [e.target.name]: e.target.value });
+    if (e.target.value === "") {
+      setInputValidation({ ...validation, [e.target.name]: true });
+    } else {
+      setInputValidation({ ...validation, [e.target.name]: false });
+    }
+    if (datafetching === true && id) {
+      setIsEdited(true);
+      setDataFetching(false);
+    }
+  };
+
+
+  useEffect(() => {
+
+    if (validation.statelistErr === false && validation.zonenameErr == false && input.zonename && statelist.length > 0) {
+      setFormIsValid(true);
+
+    }
+    else {
+      setFormIsValid(false);
+    }
+  }, [validation])
+
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setDataSending(true)
+
+    if (input.zonename && statelist.length > 0) {
+      const data = {
+        zonename: input.zonename,
+        statelist: statelist,
+        status: input.status,
+        tokenId: localStorage.getItem('token'),
       };
 
 
-      useEffect(()=>{
-        
-        if(validation.statelistErr=== false && validation.zonenameErr == false && input.zonename && statelist.length > 0)
-        {
-          setFormIsValid(true);
-          
-        }
-        else{
-          setFormIsValid(false);
-        }
-      },[validation])
-      
-   
-    const submitHandler = (e) => {
-        e.preventDefault();
-        setDataSending(true)
-    
-        if (input.zonename && statelist.length > 0) {
-          const data = {
-            zonename: input.zonename,
-            statelist: statelist,
-            status: input.status,
-            tokenId: localStorage.getItem('token'),
-          };
-        
-    
-          if(!id){
-            postData(data);
-          }else{
-            putData(data, id);
-          }
-        }
-        else{
-          setDataSending(false)
-          Swal.fire({
-            icon: "error",
-            title: "Zone ",
-            text: "Invalid Credentials. Try again Later",
-            confirmButtonColor: "#5156ed",
-          });
-        }
-    };
+      if (!id) {
+        postData(data);
+      } else {
+        putData(data, id);
+      }
+    }
+    else {
+      setDataSending(false)
+      Swal.fire({
+        icon: "error",
+        title: "Zone ",
+        text: "Invalid Credentials. Try again Later",
+        confirmButtonColor: "#5156ed",
+      });
+    }
+  };
 
-    console.log("Datasending", dataSending)
-    console.log("formIsvalid", formIsValid)
-    console.log("isEdited", isEdited)
-    console.log("datafetching", datafetching)
-    return (
+  console.log("Datasending", dataSending)
+  console.log("formIsvalid", formIsValid)
+  console.log("isEdited", isEdited)
+  console.log("datafetching", datafetching)
+  return (
     <Fragment>
       <div className="">
         <div className="card shadow mb-4 p-4">

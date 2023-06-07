@@ -1,22 +1,22 @@
 import axios from "axios";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import useInputValidation from "../../hooks/useInputValidation";
-import { isNotEmpty,isNotNull } from "../CommonFunctions/CommonFunctions";
+import { isNotEmpty, isNotNull } from "../CommonFunctions/CommonFunctions";
 import TendertrackerList from "./TendertrackerList";
 
 import Select from "react-select";
 
 function Tendertracker(props) {
-	const initialOptions = {
-		options: [],
-		isLoading: false,
-	  };
+  const initialOptions = {
+    options: [],
+    isLoading: false,
+  };
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(false);
   const [StateOptions, setStateOptions] = useState(initialOptions);
- 
+
   const [list, setListarr] = useState([])
   const {
     value: qtyValue,
@@ -31,12 +31,12 @@ function Tendertracker(props) {
 
 
   const Quantity = [
-	{ label: ">50,000", value: 'morethan50' },
-	{ label: "50,000 - 1,00,000", value: 'between' },
-	{ label: "< 1,00,000", value: 'lessthan1lk' },
-	
+    { label: ">50,000", value: 'morethan50' },
+    { label: "50,000 - 1,00,000", value: 'between' },
+    { label: "< 1,00,000", value: 'lessthan1lk' },
+
   ];
-  
+
   const {
     value: stateValue,
     isValid: stateIsValid,
@@ -59,53 +59,53 @@ function Tendertracker(props) {
 
 
   let filterValid = false;
-  if(stateIsValid || qtyIsValid){
+  if (stateIsValid || qtyIsValid) {
     filterValid = true;
   }
- 
+
 
   const goHandler = async () => {
     setLoading(true)
     let data = {
-      state : stateValue?.value,
-      quality : qtyValue?.value,
+      state: stateValue?.value,
+      quality: qtyValue?.value,
     }
 
 
     let response = await axios.post(`${baseUrl}/api/tendertrack/creation/tracklist`, data)
     let listarr = await generateListArray(response)
-    
-     setListarr(listarr)
+
+    setListarr(listarr)
     setLoading(false)
   }
 
-  const generateListArray = async (response) =>{
-	let list = [...response.data.tendertracker];
-	let listarr = list.map((item, index, arr)=> ({
-	  ...item,
-	 
-	  submissiondate:(item.submissiondate) ? FormattedDate(item.submissiondate) : '',
-	  pre_bid_date:(item.prebiddate)?FormattedDate(item.prebiddate):'',
-	  estprojectvalue:(item.estprojectvalue)?item.estprojectvalue.toLocaleString(undefined, {maximumFractionDigits:2}):'',
-	  tenderfeevalue:(item.tenderfeevalue)?item.tenderfeevalue.toLocaleString(undefined, {maximumFractionDigits:2}):'',
-	  emdamt:(item.emdamt)?item.emdamt.toLocaleString(undefined, {maximumFractionDigits:2}):'',
-	  quality:(item.quality)?item.quality.toLocaleString(undefined, {maximumFractionDigits:2}):'',
-	 
-	  
-	//   number2.toLocaleString(undefined, {maximumFractionDigits:2}) 
-	 sl_no : index+1
-	}))
+  const generateListArray = async (response) => {
+    let list = [...response.data.tendertracker];
+    let listarr = list.map((item, index, arr) => ({
+      ...item,
 
-	return listarr;
+      submissiondate: (item.submissiondate) ? FormattedDate(item.submissiondate) : '',
+      pre_bid_date: (item.prebiddate) ? FormattedDate(item.prebiddate) : '',
+      estprojectvalue: (item.estprojectvalue) ? item.estprojectvalue.toLocaleString(undefined, { maximumFractionDigits: 2 }) : '',
+      tenderfeevalue: (item.tenderfeevalue) ? item.tenderfeevalue.toLocaleString(undefined, { maximumFractionDigits: 2 }) : '',
+      emdamt: (item.emdamt) ? item.emdamt.toLocaleString(undefined, { maximumFractionDigits: 2 }) : '',
+      quality: (item.quality) ? item.quality.toLocaleString(undefined, { maximumFractionDigits: 2 }) : '',
+
+
+      //   number2.toLocaleString(undefined, {maximumFractionDigits:2}) 
+      sl_no: index + 1
+    }))
+
+    return listarr;
   }
 
   const getlist = async () => {
-	setLoading(true)
-	let response =  await axios.get(`${baseUrl}/api/tendertrack/list`);
-	let listarr = await generateListArray(response)
-	
-	setListarr(listarr)
-	setLoading(false)
+    setLoading(true)
+    let response = await axios.get(`${baseUrl}/api/tendertrack/list`);
+    let listarr = await generateListArray(response)
+
+    setListarr(listarr)
+    setLoading(false)
   }
   const getStateData = async (savedState) => {
     let response = await axios.get(`${baseUrl}/api/state-list/${savedState}`);
@@ -121,9 +121,9 @@ function Tendertracker(props) {
   };
   useEffect(() => {
     getStateListOptions();
-   
 
-    
+
+
   }, []);
 
   const FormattedDate = (date) => {
@@ -138,7 +138,7 @@ function Tendertracker(props) {
     const formattedDate = dd + '-' + mm + '-' + yyyy;
     return formattedDate
   }
-  
+
 
   return (
     <>

@@ -13,7 +13,7 @@ function Bidmanagement(props) {
   const { server1: baseUrl } = useBaseUrl();
   const [loading, setLoading] = useState(false);
   const [list, setListarr] = useState([])
-  const {permission} = useContext(AuthContext)
+  const { permission } = useContext(AuthContext)
 
   const {
     value: fromdateValue,
@@ -38,59 +38,60 @@ function Bidmanagement(props) {
 
   let filterValid = false;
 
-  if(fromdateIsValid && todateIsValid){
+  if (fromdateIsValid && todateIsValid) {
     filterValid = true;
   }
 
   const goHandler = async () => {
     setLoading(true)
     let data = {
-      fromdate : fromdateValue,
-      todate : todateValue,
+      fromdate: fromdateValue,
+      todate: todateValue,
     }
 
     let response = await axios.post(`${baseUrl}/api/bidcreation/creation/bidlist`, data)
     let listarr = await generateListArray(response)
-    
+
     setListarr(listarr)
     setLoading(false)
   }
 
-  const generateListArray = async (response) =>{
+  const generateListArray = async (response) => {
 
     let list = [...response.data.tenderCreationList];
-    
-    let listarr = list.map((item, index, arr)=> {
-      
+
+    let listarr = list.map((item, index, arr) => {
+
       let editbtn = !!(permission?.["Bids Managements"]?.can_edit) ? '<i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
-      let deletebtn = !!(permission?.["Bids Managements"]?.can_delete) ?  '<i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>' : '';
+      let deletebtn = !!(permission?.["Bids Managements"]?.can_delete) ? '<i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>' : '';
 
       return {
-      ...item,
-      NITdate:FormattedDate(item.nitdate),
+        ...item,
+        NITdate: FormattedDate(item.nitdate),
 
 
-      quality: item.quality!==null ? item.quality.toLocaleString('en-IN'): "--",
+        quality: item.quality !== null ? item.quality.toLocaleString('en-IN') : "--",
 
-      submissiondate:(item.submissiondate) ? FormattedDate(item.submissiondate) : '',
-      status:`<span class="font-weight-bold text-primary">${item.tenderStatus}</span>`,
-      current_stage:`<span class="font-weight-bold text-warning">Stage</span>`,
-      // action:`
-      
-      // <i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> 
-      // <i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>`,
-      action : editbtn+''+deletebtn,
-      sl_no : index+1
-    }})
-// <i class="fa fa-print text-info mr-2 h6" style="cursor:pointer; font-size: 1.25rem" title="Print"></i>  -- To add @ line 72 
+        submissiondate: (item.submissiondate) ? FormattedDate(item.submissiondate) : '',
+        status: `<span class="font-weight-bold text-primary">${item.tenderStatus}</span>`,
+        current_stage: `<span class="font-weight-bold text-warning">Stage</span>`,
+        // action:`
+
+        // <i class="fas fa-edit text-success mx-2 h6" style="cursor:pointer" title="Edit"></i> 
+        // <i class="fa fa-trash-o  text-danger h6  mx-2" style="cursor:pointer; font-size: 1.25rem"  title="Delete"></i>`,
+        action: editbtn + '' + deletebtn,
+        sl_no: index + 1
+      }
+    })
+    // <i class="fa fa-print text-info mr-2 h6" style="cursor:pointer; font-size: 1.25rem" title="Print"></i>  -- To add @ line 72 
     return listarr;
   }
 
   const getlist = async () => {
     setLoading(true)
-    let response =  await axios.get(`${baseUrl}/api/bidcreation/creation`);
+    let response = await axios.get(`${baseUrl}/api/bidcreation/creation`);
     let listarr = await generateListArray(response)
-    
+
     setListarr(listarr)
     setLoading(false)
   }

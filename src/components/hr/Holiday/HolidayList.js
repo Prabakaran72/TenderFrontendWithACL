@@ -10,6 +10,7 @@ import {
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2";
 import UseExport from "../../hooks/useExport";
+import DataTable from '../../hooks/DataTable';
 
 
 // const data = [
@@ -61,6 +62,8 @@ const HolidayList = () => {
         []
     );
 
+    console.log('columns',columns);
+
     const tableInstance = useTable( { columns, data, }, useGlobalFilter, useSortBy, usePagination );
 
     const {
@@ -98,7 +101,7 @@ const HolidayList = () => {
                 };                               
             })              
             setData(holidaysList);                     
-              
+            // console.log('data+++', holidaysList);     
         })
     },[]);
 
@@ -123,24 +126,24 @@ const HolidayList = () => {
       })
         setNewHeader(HeaderList);
         setNewData(newDatas);
-      console.log('newData',newData);
+    //   console.log('newData',newData);
       },[])
 
     //   useEffect(()=> {
     //   },[data])
 
      useEffect(()=> {                 
-        console.log('success');
+        // console.log('success');
     },[getRowData]);
 
     const getRow = (hod) => {
         navigate(`/tender/hr/holidays/edit/${hod.id}`);
-        console.log('hod', hod);
+        // console.log('hod', hod);
     }     
 
     const deleteRow = (hod) => {     
         setGetRowData(hod);    
-        console.log('hod', hod);
+        // console.log('hod', hod);
         axios.delete(`${baseUrl}/api/holidays/${hod.id}`).then((resp)=> { 
             console.log('delete',resp);
             if (resp.data.status === 200) {
@@ -150,7 +153,7 @@ const HolidayList = () => {
               text: "Deleted Successfully!",
               confirmButtonColor: "#5156ed",
             });            
-            navigate('/tender/hr/holidays')
+            navigate('/tender/hr/holiday')
           } else if (resp.data.status === 400) {
             Swal.fire({
               icon: "error",
@@ -166,7 +169,7 @@ const HolidayList = () => {
        
     return (  
         <>
-            <div className="react-table-headers">
+            {/* <div className="react-table-headers">
                 <div className="list-and-btns">
                     <div>
                         <select
@@ -285,7 +288,13 @@ const HolidayList = () => {
                         }}
                     />
                 </div>                
-            </div>
+            </div> */}
+            <DataTable 
+                data={data}
+                columns={columns}
+                header={header}
+                title={'HOLIDAY LIST'}
+            />
         </>      
 
     );

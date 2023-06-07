@@ -5,7 +5,6 @@ import { useBaseUrl } from "../../../hooks/useBaseUrl";
 import { useDispatch, useSelector } from "react-redux";
 import { ULBDetailsActions } from "../store/ULBDetailsSlice";
 
-
 const initialState = {
   area: "",
   population2011: "",
@@ -387,8 +386,13 @@ const CustomerCreationUlbDetails = () => {
     dispatch(ULBDetailsActions.resetInput())
   };
 
+ 
 
-
+// const trans = {
+//   show: {x: 200},
+//   hidden:{x:0,timing:{type: 'spring',stiffness: 180, delay: .1}},
+  
+// }
  
   return (
     <Fragment>
@@ -433,7 +437,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4"  >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="population2011">Population as per 2011</label>
@@ -451,7 +455,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4"   >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="presentpopulation">Present Population</label>
@@ -470,7 +474,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4"   >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="wards">No. of Wards</label>
@@ -488,7 +492,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4"   >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="households">No. House holds</label>
@@ -505,7 +509,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4"  >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="commercial">
@@ -524,7 +528,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4"  >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="ABbusstand">No. of A&B grade bus stand</label>
@@ -541,7 +545,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4"  >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="CDbusstand">No. of C&D grade bus stand</label>
@@ -558,7 +562,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4"  >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="market_morethan_oneacre">
@@ -653,7 +657,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4"  >
+            <div className="inputgroup col-lg-6 mb-4">
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lengthoflanes">
@@ -746,7 +750,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="tricycle">
@@ -765,7 +769,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="bov">No. of bov in working condition</label>
@@ -782,7 +786,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="bovrepair">No. of bov in repair</label>
@@ -799,7 +803,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lcv">
@@ -818,7 +822,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lcvrepair">
@@ -837,7 +841,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="compactor">
@@ -856,7 +860,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="hookloaderwithcapacity">
@@ -875,7 +879,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="compactorbin">
@@ -894,7 +898,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="hookloader">
@@ -913,7 +917,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="tractortipper">
@@ -932,7 +936,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="lorries">
@@ -951,7 +955,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="jcb">No. of JCB available</label>
@@ -968,7 +972,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="bobcat">No. of bobCat available</label>
@@ -985,7 +989,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="sanitaryworkers_sanctioned">
@@ -1004,7 +1008,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="sanitaryworkers_inservice">
@@ -1023,7 +1027,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="sanitarysupervisor_sanctioned">
@@ -1042,7 +1046,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="sanitarysupervisor_inservice">
@@ -1061,7 +1065,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="permanentdrivers">
@@ -1080,7 +1084,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="regulardrivers">
@@ -1099,7 +1103,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="publicgathering">
@@ -1118,7 +1122,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="secondarystorage">
@@ -1137,7 +1141,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="transferstation">
@@ -1156,7 +1160,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="households_animatorsurvey">
@@ -1175,7 +1179,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="assessments_residential">
@@ -1194,7 +1198,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="inputgroup col-lg-6 mb-4">
+            <div className="inputgroup col-lg-6 mb-4" >
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-7 text-dark">
                   <label htmlFor="assessments_commercial">
@@ -1213,7 +1217,7 @@ const CustomerCreationUlbDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="col-lg-12 mt-3 d-flex justify-content-end">
+            <div className="col-lg-12 mt-3 d-flex justify-content-center">
               <button
                 className={
                   !formvalid

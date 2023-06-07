@@ -63,7 +63,7 @@ const CallLogHistory = () => {
         <td>{prevNxtFlwDate}</td>
         <td>{callHis.callname}</td>
         <td>{callHis.bizzname}</td>
-        <td>{callHis.bizzstatusname ? callHis.bizzstatusname : '--'}</td>
+        <td>{callHis.bizzstatusname}</td>
         <td>{callHis.additional_info ? callHis.additional_info : '--'}</td>
         <td>{callHis.remarks ? callHis.remarks : '--'}</td>
         <td>{callHis.call_date.split(" ")[0]}</td>

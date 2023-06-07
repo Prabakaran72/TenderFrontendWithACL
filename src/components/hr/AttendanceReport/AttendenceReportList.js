@@ -23,21 +23,18 @@ let ResultSet = [
 
 let iconSet = [{}];
 
-const AttendenceReportList = (props) => {
+const AttendenceReportList = ({ employeeOptions, month, selectedMonth }) => {
   const { server1: baseUrl } = useBaseUrl();
   const [getEmpOption, setGetEmpOption] = useState([]);
   const [govHoliday, setGovHoliday] = useState([]);
   const [holiday, setHoliday] = useState([]);
   const [getResult, setGetResult] = useState([]);
-  //const [clicked,setClicked] = useState([]);
 
   const daysInMonth = (year, month) => {
     return new Date(year, month, 0).getDate();
   };
 
-// console.log('osCLICKED',props.isClicked)
-
-  const monthYear = props.input.month.split("-");
+  const monthYear = month.split("-");
   const noOfDays = daysInMonth(monthYear[0], monthYear[1]);
 
   let dates = [];
@@ -45,115 +42,186 @@ const AttendenceReportList = (props) => {
     dates.push(day);
   }
 
-
   useEffect(() => {
-    setReportList();
-  }, []);
+    axios.post(`${baseUrl}/api/getempleave/list`).then((res) => {
+      setGetEmpOption(res.data.userlist);
+      setGovHoliday(res.data.holiday);
+      console.log("res", res.data);
 
-  useEffect(() => {
-    // console.log('first')
-    if(props.isClicked){
-      setReportList();
-      
-    }
-  }, [props.isClicked]);
+      let arrId = [];
+      let arrName = [];
+      let arrAttendanceType = [];
+      let arrFromDate = [];
+      let arrToDate = [];
+      let arrHoliday = [];
 
-const setReportList = async()=>{
-  const data = {
-    // "user_id":props.input.employee?.value || props.input.employee?.value!=="All"?props.input.employee?.value:"",
-    // "role_id":props.input.role?.value || props.input.role?.value!=="All"?props.input.role?.value:"",
-    // "from_date" : props.input.month?props.input.month:"",
-
-    "user_id": props.input.employee?.value !== 'All' ? props.input.employee?.value : "",
-    "role_id": props.input.role?.value !== 'All' ? props.input.role?.value : "",
-    "from_date": props.input.month || "",
-    
-  }
-  // console.log('data--',data)
-  await axios.post(`${baseUrl}/api/getempleave/list`,data).then((res) => {
-    setGetEmpOption(res.data.userlist);
-    setGovHoliday(res.data.holiday);
-    // console.log("RESPONSE--", res);
-
-    let arrId = [];
-    let arrName = [];
-    let arrAttendanceType = [];
-    let arrFromDate = [];
-    let arrToDate = [];
-    let arrHoliday = [];
-
-    let holidayDateArr = Object.values(res.data.holiday).map((row) => {
-      let rowDate = row.date.split("-")[row.date.split("-").length - 1];
-      return { ...row, dateValue: rowDate };
-    });
-
-    let resultDateArr = Object.values(res.data.result).map((row) => {
-      const getResultObj = Object.values(row).map((data) => {
-        let fromDate =
-          data.from_date.split("-")[data.from_date.split("-").length - 1];
-        let toDate =
-          data.to_date.split("-")[data.to_date.split("-").length - 1];
-        return { ...data, fromDateValue: fromDate, toDateValue: toDate };
+      let holidayDateArr = Object.values(res.data.holiday).map((row) => {
+        let rowDate = row.date.split("-")[row.date.split("-").length - 1];
+        return { ...row, dateValue: rowDate };
       });
-      return [...getResultObj];
-    });
 
-    // console.log("resultDateArr: ", resultDateArr);
+      let resultDateArr = Object.values(res.data.result).map((row) => {
+        const getResultObj = Object.values(row).map((data) => {
+          let fromDate =
+            data.from_date.split("-")[data.from_date.split("-").length - 1];
+          let toDate =
+            data.to_date.split("-")[data.to_date.split("-").length - 1];
+          return { ...data, fromDateValue: fromDate, toDateValue: toDate };
+        });
+        return [...getResultObj];
+      });
 
-    const TodayDate = new Date();
-    const year = TodayDate.getFullYear();
-    const month = String(TodayDate.getMonth() + 1).padStart(2, "0");
-    const day = String(TodayDate.getDate()).padStart(2, "0");
-    const currentDate = `${year}-${month}-${day}`;
-    const currentMonth = `${year}-${month}`; // compare with selected Dropdown value
-    // console.log("holidayDateArr",holidayDateArr);
-    const Result12 = Object.values(res.data.userlist).map((emp, i) => {
-      //emp - > indivudial customer id , name
-      let outputObj = { id: emp.id, name: emp.name };
-      let entryArr = [];
+      console.log("resultDateArr: ", resultDateArr);
 
-      dates.map((date) => {
-        let isDateHoliday = holidayDateArr.find(
-          (hday) => hday.dateValue == date
-        );
+      const TodayDate = new Date();
+      const year = TodayDate.getFullYear();
+      const month = String(TodayDate.getMonth() + 1).padStart(2, "0");
+      const day = String(TodayDate.getDate()).padStart(2, "0");
+      const currentDate = `${year}-${month}-${day}`;
+      const currentMonth = `${year}-${month}`; // compare with selected Dropdown value
+      console.log("holidayDateArr",holidayDateArr);
+      const Result12 = Object.values(res.data.userlist).map((emp, i) => {
+        //emp - > indivudial customer id , name
+        let outputObj = { id: emp.id, name: emp.name };
+        let entryArr = [];
 
-    // console.log("isDateHoliday", isDateHoliday ? true : false);
-        if (isDateHoliday) {
-          let title = holidayDateArr.find((hday) => hday.dateValue == date);
-          entryArr[date - 1] = {
-            attendanceType: 0,
-            attendanceTypeID: 0,
-            fromDay: date,
-            toDay: date,
-            fromDate: title?.from_date ? title?.from_date : null,
-            toDate: title?.to_date ? title?.to_date : null,
-            // 'fromDate' : date,
-            // 'toDate' : date,
-            icon: title?.icon_class ? title?.icon_class : "fas fa-star",
-            title: title.occasion,
-          };
-          // console.log('entryArr: ',entryArr)
-        } else {
-          //if has result has entry on this date
-          // entry
-          let dateExistInResult = false;
-          let rowData = "";
-          resultDateArr.forEach((entry) => {
-            Object.values(entry).forEach((row) => {
-              if (
-                row.user_id == emp.id &&
-                row.fromDateValue <= date &&
-                row.toDateValue >= date
-              ) {
-                dateExistInResult = true;
-                rowData = row;
-              }
+        dates.map((date) => {
+          let isDateHoliday = holidayDateArr.find(
+            (hday) => hday.dateValue == date
+          );
+
+      console.log("isDateHoliday", isDateHoliday ? true : false);
+          if (isDateHoliday) {
+            let title = holidayDateArr.find((hday) => hday.dateValue == date);
+            entryArr[date - 1] = {
+              attendanceType: 0,
+              attendanceTypeID: 0,
+              fromDay: date,
+              toDay: date,
+              fromDate: title?.from_date ? title?.from_date : null,
+              toDate: title?.to_date ? title?.to_date : null,
+              // 'fromDate' : date,
+              // 'toDate' : date,
+              icon: title?.icon_class ? title?.icon_class : "fas fa-star",
+              title: title.occasion,
+            };
+            // console.log('entryArr: ',entryArr)
+          } else {
+            //if has result has entry on this date
+            // entry
+            let dateExistInResult = false;
+            let rowData = "";
+            resultDateArr.forEach((entry) => {
+              Object.values(entry).forEach((row) => {
+                if (
+                  row.user_id == emp.id &&
+                  row.fromDateValue <= date &&
+                  row.toDateValue >= date
+                ) {
+                  dateExistInResult = true;
+                  rowData = row;
+                }
+              });
             });
-          });
 
+            // if (dateExistInResult) {
+            //   entryArr[date - 1] = {
+            //     attendanceType: rowData.attendanceType,
+            //     attendanceTypeID: rowData.attendance_type_id,
+            //     // 'fromDate' : date,
+            //     // 'toDate' : date,
+            //     fromDay: date,
+            //     toDay: date,
+            //     fromDate: rowData?.from_date ? rowData?.from_date : null,
+            //     toDate: rowData?.to_date ? rowData?.to_date : null,
+            //     icon: rowData?.icon_class
+            //       ? rowData?.icon_class
+            //       : "fa fa-star-o text-info",
+            //     title: rowData?.reason ? rowData.reason : "Not updated",
+            //   };
+            // } else {
+              // let title = holidayDateArr.find((hday) =>  hday.dateValue == date);
+              // if(currentDate >= rowData?.from_date || currentDate >= rowData?.to_date || currentDate >= date || currentMonth )
 
-            if (props.input.month == currentMonth) {
-              if (date > day) {
+              if (selectedMonth == currentMonth) {
+                if (date > day) {
+                  entryArr[date - 1] = {
+                    attendanceType: null,
+                    attendanceTypeID: null,
+                    // 'fromDate' : date,
+                    // 'toDate' : date,
+                    fromDay: date,
+                    toDay: date,
+                    fromDate: rowData?.from_date ? rowData?.from_date : null,
+                    toDate: rowData?.to_date ? rowData?.to_date : null,
+                    icon: "",
+                    title: "-",
+                  };
+                } else {
+                    if (dateExistInResult) {
+                        entryArr[date - 1] = {
+                          attendanceType: rowData.attendanceType,
+                          attendanceTypeID: rowData.attendance_type_id,
+                          // 'fromDate' : date,
+                          // 'toDate' : date,
+                          fromDay: date,
+                          toDay: date,
+                          fromDate: rowData?.from_date ? rowData?.from_date : null,
+                          toDate: rowData?.to_date ? rowData?.to_date : null,
+                          icon: rowData?.icon_class
+                            ? rowData?.icon_class
+                            // : "fa fa-star-o text-info",
+                            : "fa fa-star-o text-info",
+                          title: rowData?.attendanceType ? rowData?.attendanceType : rowData.reason ? rowData.reason  : "Not updated",
+                        }
+                    }
+                        else{
+                            entryArr[date-1] =  {
+                                'attendanceType' : 0,
+                                'attendanceTypeID' : 0,
+                                // 'fromDate' : date,
+                                // 'toDate' : date,
+                                'fromDay' : date,
+                                'toDay' : date,
+                                'fromDate' : rowData?.from_date ? rowData?.from_date  : null,
+                                'toDate' : rowData?.to_date ? rowData?.toDate : null,
+                                'icon' : 'fas fa-check text-success',
+                                'title' : "Present"
+                                }
+                  }
+                }
+              } else if (selectedMonth < currentMonth) {
+                if (dateExistInResult) {
+                    entryArr[date - 1] = {
+                      attendanceType: rowData.attendanceType,
+                      attendanceTypeID: rowData.attendance_type_id,
+                      // 'fromDate' : date,
+                      // 'toDate' : date,
+                      fromDay: date,
+                      toDay: date,
+                      fromDate: rowData?.from_date ? rowData?.from_date : null,
+                      toDate: rowData?.to_date ? rowData?.to_date : null,
+                      icon: rowData?.icon_class
+                        ? rowData?.icon_class
+                        : "fa fa-star-o text-info",
+                        title: rowData?.attendanceType ? rowData?.attendanceType : rowData.reason ? rowData.reason  : "Not updated"
+                    }
+                }
+                    else{
+                        entryArr[date-1] =  {
+                            'attendanceType' : 0,
+                            'attendanceTypeID' : 0,
+                            // 'fromDate' : date,
+                            // 'toDate' : date,
+                            'fromDay' : date,
+                            'toDay' : date,
+                            'fromDate' : rowData?.from_date ? rowData?.from_date  : null,
+                            'toDate' : rowData?.to_date ? rowData?.toDate : null,
+                            'icon' : 'fas fa-check',
+                            'title' : "Present"
+                            }
+              }
+              } else if (selectedMonth > currentMonth) {
                 entryArr[date - 1] = {
                   attendanceType: null,
                   attendanceTypeID: null,
@@ -166,117 +234,76 @@ const setReportList = async()=>{
                   icon: "",
                   title: "-",
                 };
-              } else {
-                  if (dateExistInResult) {
-                      entryArr[date - 1] = {
-                        attendanceType: rowData.attendanceType,
-                        attendanceTypeID: rowData.attendance_type_id,
-                        // 'fromDate' : date,
-                        // 'toDate' : date,
-                        fromDay: date,
-                        toDay: date,
-                        fromDate: rowData?.from_date ? rowData?.from_date : null,
-                        toDate: rowData?.to_date ? rowData?.to_date : null,
-                        icon: rowData?.icon_class
-                          ? rowData?.icon_class
-                          // : "fa fa-star-o text-info",
-                          : "fa fa-star-o text-info",
-                        title: rowData?.attendanceType ? rowData?.attendanceType : rowData.reason ? rowData.reason  : "Not updated",
-                      }
-                  }
-                      else{
-                          entryArr[date-1] =  {
-                              'attendanceType' : 0,
-                              'attendanceTypeID' : 0,
-                              // 'fromDate' : date,
-                              // 'toDate' : date,
-                              'fromDay' : date,
-                              'toDay' : date,
-                              'fromDate' : rowData?.from_date ? rowData?.from_date  : null,
-                              'toDate' : rowData?.to_date ? rowData?.toDate : null,
-                              'icon' : 'fas fa-check text-success',
-                              'title' : "Present"
-                              }
-                }
               }
-            } else if (props.input.month < currentMonth) {
-              if (dateExistInResult) {
-                  entryArr[date - 1] = {
-                    attendanceType: rowData.attendanceType,
-                    attendanceTypeID: rowData.attendance_type_id,
-                    // 'fromDate' : date,
-                    // 'toDate' : date,
-                    fromDay: date,
-                    toDay: date,
-                    fromDate: rowData?.from_date ? rowData?.from_date : null,
-                    toDate: rowData?.to_date ? rowData?.to_date : null,
-                    icon: rowData?.icon_class
-                      ? rowData?.icon_class
-                      : "fa fa-star-o text-info",
-                      title: rowData?.attendanceType ? rowData?.attendanceType : rowData.reason ? rowData.reason  : "Not updated"
-                  }
-              }
-                  else{
-                      entryArr[date-1] =  {
-                          'attendanceType' : 0,
-                          'attendanceTypeID' : 0,
-                          // 'fromDate' : date,
-                          // 'toDate' : date,
-                          'fromDay' : date,
-                          'toDay' : date,
-                          'fromDate' : rowData?.from_date ? rowData?.from_date  : null,
-                          'toDate' : rowData?.to_date ? rowData?.toDate : null,
-                          'icon' : 'fas fa-check text-success',
-                          'title' : "Present"
-                          }
             }
-            } else if (props.input.month > currentMonth) {
-              entryArr[date - 1] = {
-                attendanceType: null,
-                attendanceTypeID: null,
-                // 'fromDate' : date,
-                // 'toDate' : date,
-                fromDay: date,
-                toDay: date,
-                fromDate: rowData?.from_date ? rowData?.from_date : null,
-                toDate: rowData?.to_date ? rowData?.to_date : null,
-                icon: "",
-                title: "-",
-              };
-            }
-          }
-      //   }
+        //   }
+        });
+
+        let NonentryArr = entryArr.filter(
+          (x) => x !== null && x !== "" && x != undefined
+        );
+        return { ...outputObj, entry: entryArr };
       });
 
-      let NonentryArr = entryArr.filter(
-        (x) => x !== null && x !== "" && x != undefined
-      );
-      return { ...outputObj, entry: entryArr };
+      console.log("Month $$$$", month);
+      console.log("currentDate $$$$", currentDate);
+      console.log("Current Month $$$$", selectedMonth);
+      console.log("Result12", Result12);
+
+    //   Object.values(res.data.holiday).forEach((holid) => {
+    //     const getHoliday = holid.date.toString().slice(8, 10);
+    //     const cnvNumber = Number(getHoliday);
+    //     arrHoliday.push(cnvNumber);
+    //   });
+    //   Object.values(res.data.userlist).forEach((user) => {
+    //     arrId.push(user.id);
+    //     arrName.push(user.name);
+    //   });
+    //   let resultObj = [];
+    //   Object.values(res.data.result).forEach((user) => {
+    //     user.map((item, index) => {
+    //       arrId.push(item.user_id);
+    //       arrAttendanceType.push(item.attendanceType);
+    //       arrFromDate.push(item.from_date.toString().slice(8, 10));
+    //       arrToDate.push(item.to_date.toString().slice(8, 10));
+    //       let userName = res.data.userlist.find((x) => x.id == item.user_id);
+    //       let getFromDate = item.from_date.toString().slice(8, 10);
+    //       let getToDate = item.to_date.toString().slice(8, 10);
+    //       let cvrFromNumber = Number(getFromDate);
+    //       let cvrToNumber = Number(getToDate);
+
+    //       let rowObj = {
+    //         // 'id': item.user_id,
+    //         name: userName?.name ? userName?.name : " - ",
+    //         attendanceType: item.attendanceType,
+    //         attendanceTypeID: item.attendance_type_id,
+    //         fromDate: cvrFromNumber,
+    //         toDate: cvrToNumber,
+    //         icon: "fas fa-close",
+    //         title: item.reason,
+    //       };
+    //     });
+    //   });
+
+    //   console.log("resultObj", resultObj);
+
+      const resultArr = [];
+      for (let i = 0; i < arrName.length; i++) {
+        resultArr.push({
+          name: arrName[i],
+          id: arrId[i],
+          entry: [
+            { date: Number(arrFromDate[i]), title: arrAttendanceType[i] },
+          ],
+        });
+      }
+      setHoliday(arrHoliday);
+      setGetResult(Result12);
     });
+  }, []);
 
-    
-    // console.log("currentDate $$$$", currentDate);
-    // console.log("Current Month $$$$", props.input.month);
-    // console.log("Result12", Result12);
-
-
-    const resultArr = [];
-    for (let i = 0; i < arrName.length; i++) {
-      resultArr.push({
-        name: arrName[i],
-        id: arrId[i],
-        entry: [
-          { date: Number(arrFromDate[i]), title: arrAttendanceType[i] },
-        ],
-      });
-    }
-    setHoliday(arrHoliday);
-    setGetResult(Result12);
-    props.setIsClicked(!props.isClicked)
-  });
-}
   const Result = Object.values(getResult).map((emp, i) => {
-    // console.log("emp", emp);
+    console.log("emp", emp);
     return (
       <tr key={`${emp.id}`}>
         <td>{emp?.name}</td>
