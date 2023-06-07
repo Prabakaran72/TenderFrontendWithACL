@@ -246,10 +246,13 @@ const CallLogCreation = () => {
     if (mode === "edit") {
       getFileList();
 
-      await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
+      
+      let data = {'tokenid' : token};
+  
+      await axios.post(`${baseUrl}/api/calltype/list`,data).then((res) => {
         setOptionsForCallList(res.data?.calltype);
       });
-    let data = {'tokenid' : token};
+    // let data = {'tokenid' : token};
       axios.post(`${baseUrl}/api/customer/list`, data).then((res) => {
         setOptionsForCutomerList(res.data?.customerList);
         setIsFetching((prev) => {
@@ -303,13 +306,15 @@ const CallLogCreation = () => {
         });
       }
     } else { //Execute here if  mode is not Edit ie., nxtFlw or Create a call
-      await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
+
+      let datatosend = {"tokenid": token};
+      await axios.post(`${baseUrl}/api/calltype/list`,datatosend).then((res) => {
         setOptionsForCallList(res.data?.calltype);
         // setIsFetching((prev) => {
         //   return { ...prev, calltype: false };
         // });
       });
-let datatosend = {"tokenid": token};
+// let datatosend = {"tokenid": token};
       axios.post(`${baseUrl}/api/customer/list`,datatosend).then((res) => {
         setOptionsForCutomerList(res.data?.customerList);
         setIsFetching((prev) => {

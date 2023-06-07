@@ -165,7 +165,10 @@ const [fileSizeLimit, setFileSizeLimit]= useState({error: ''});
       }
     });
 
-    axios.get(`${baseUrl}/api/expensetype/list`).then((res) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    axios.post(`${baseUrl}/api/expensetype/list`,data).then((res) => {
       if (res.status === 200) {
         setOptionsForExpense(res.data.expenselist);
       }

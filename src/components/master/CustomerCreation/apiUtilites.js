@@ -23,7 +23,11 @@ export const  getCityData =  async (baseUrl,countryid, stateid, districtid, save
 };
 
 export const getCustSubCatList = async (baseUrl, mainid) => {
-    let response = await axios.get(`${baseUrl}/api/customersubcategory/list/${mainid}`)  
+
+    let data = {
+        tokenid : localStorage.getItem('token')
+      }
+    let response = await axios.post(`${baseUrl}/api/customersubcategory/list/${mainid}`,data)  
     return { options: response.data.CustomerSubCategoryList, isLoading: false }
 }
 

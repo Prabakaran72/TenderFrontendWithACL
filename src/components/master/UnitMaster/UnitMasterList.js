@@ -37,11 +37,11 @@ const UnitMasterList = () => {
 
 
   const getList = async () => {
-    let data = {
-        tokenid : localStorage.getItem('token')
-      }
+    // let data = {
+    //     tokenid : localStorage.getItem('token')
+    //   }
   
-    const unitlist = await axios.post(`${baseUrl}/api/unit`,data);
+    const unitlist = await axios.get(`${baseUrl}/api/unit`);
   
     // let userPermissions ;
     // let data = {

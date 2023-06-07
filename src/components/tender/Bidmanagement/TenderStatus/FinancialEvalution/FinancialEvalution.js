@@ -177,7 +177,12 @@ const FinancialEvalution = (props) => {
   };
 
   const getUnitList = () => {
-    axios.get(`${baseUrl}/api/unitmasters/getUnitList`).then((resp) => {
+
+     let data = {
+        tokenid : localStorage.getItem('token')
+      }
+
+    axios.post(`${baseUrl}/api/unitmasters/getUnitList`,data).then((resp) => {
       // console.log(resp.data)
       if (resp.status === 200) {
         setunitList(resp.data.unitList);
