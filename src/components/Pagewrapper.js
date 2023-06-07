@@ -33,7 +33,7 @@ function Pagewrapper(props) {
 
     axios.post(`${baseUrl}/api/logout`, data).then((res) => {
       if (res.data.status === 200) {
-        navigate('/')
+        navigate(0)
         authCtx.logout()
       }else{
         alert("Unable to logout. Try again!")
@@ -50,7 +50,7 @@ function Pagewrapper(props) {
    
     <Provider store={dashboardStore}>
       {/* <SessionTimeout timeoutInSeconds={10} onTimeout={handleSessionTimeout} /> */}
-      <SessionTimeout timeoutInSeconds={80} onTimeout={() => window.dispatchEvent(new Event("sessionTimeout"))} />
+      <SessionTimeout timeoutInSeconds={1800} onTimeout={() => window.dispatchEvent(new Event("sessionTimeout"))} />
 
       {/***1800 Seconds => 30 Mins***/}
       
