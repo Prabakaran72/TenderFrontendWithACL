@@ -142,7 +142,7 @@ body {
     width: 180px;
     height: 180px;
     margin-top: 20px;
-    transition: 2s ease-in-out;
+    /* transition: 2s ease-in-out; */
     /* animation: wave; */
     animation-iteration-count: infinite;
     animation-duration: 2.5s;
@@ -464,20 +464,42 @@ body {
 }
 
 
-/* .abso {
-    position: relative;
-} */
 /*   Login Mobile Responsive    */
 
 @media screen and (max-width : 991px) {
     .Login .card {
         width: 340px;
         margin-left: 0;
+        margin-top: 0 !important;
     }
     .Login form button .dfx .fa-gavel {
         position: absolute;
         bottom: 63px;
-    }    
+    }   
+    .Login .alignment {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 0 !important;
+    } 
+    .Login .new-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 105px;
+        height: 105px;
+        border-radius: 250px;
+        position: relative;
+        /* z-index: 999; */
+        top: -7px;
+        background: #fff;
+        box-shadow: 1px 1px 15px #aa9e9e69;
+    }
+    .Login .login_logo {
+        width: 70px;
+        height: 70px;   
+        margin: 0;     
+    }
 }
 
 
