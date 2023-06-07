@@ -177,7 +177,11 @@ function Legacystatement() {
 		settypeofprojectOptions((c) => {
 			return { ...c, isLoading: true };
 		});
-		axios.get(`${baseUrl}/api/projecttype/list`).then((resp) => {
+
+		let data = {
+			tokenid : localStorage.getItem('token')
+		  }
+		axios.get(`${baseUrl}/api/projecttype/list`,data).then((resp) => {
 			settypeofprojectOptions({options : resp.data.projectTypeList, isLoading: false});
 		});
 	  };
