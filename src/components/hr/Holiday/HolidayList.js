@@ -169,7 +169,7 @@ const HolidayList = () => {
        
     return (  
         <>
-            {/* <div className="react-table-headers">
+            <div className="react-table-headers">
                 <div className="list-and-btns">
                     <div>
                         <select
@@ -288,13 +288,13 @@ const HolidayList = () => {
                         }}
                     />
                 </div>                
-            </div> */}
-            <DataTable 
+            </div>
+            {/* <DataTable 
                 data={data}
                 columns={columns}
                 header={header}
                 title={'HOLIDAY LIST'}
-            />
+            /> */}
         </>      
 
     );

@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useMemo, useContext} from 'react'; 
-import { useTable, useSortBy, usePagination, useGlobalFilter } from 'react-table';
+import React, {useState, useEffect, useMemo, useRef, useContext} from 'react'; 
+import { useTable, useSortBy, usePagination, useGlobalFilter, actions } from 'react-table';
 import UseExport from './useExport'
 import { Navigate, useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2/src/sweetalert2";
@@ -30,14 +30,12 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
 
 
   function getRow(res) {
-    console.log('getRow',res.id);
+    // console.log('getRow',res.id);
     navigate(`${navigation}${res.id}`);      
   }
   
-  function getDelete(res) {
-    console.log('deletion',`${deletion}${res.id}`);
-    axios.delete(`${deletion}${res.id}`).then((res) => {
-      console.log('res',res);       
+  function getDelete(res) {    
+    axios.delete(`${deletion}${res.id}`).then((res) => {      
     })  
 
     const newCount = count + 1; 
@@ -46,8 +44,7 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
   
 
   useEffect(()=> {    
-    setData(response);   
-    console.log('InsideResponse',response);  
+    setData(response);       
   },[(response || getPermission), id]) 
 
 
@@ -92,6 +89,48 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
       setPageSize,
   } = tableInstance; 
 
+
+  // Print the Data ********
+
+  const dataTableRef = useRef(null);
+  
+  const handlePrint = () => {
+    const dataTable = dataTableRef.current;
+    console.log('dataTable',dataTableRef);
+    if (dataTable) {
+      setTimeout(() => {
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`<html><head><title>${title}</title>`);
+        printWindow.document.write('<style>');
+        printWindow.document.write(`
+          .title {
+            display: block;
+            width: 100%;            
+          }
+          table {
+            border-collapse: collapse;
+            width: 100%;            
+          }          
+          th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+            vertical-align: middle;
+            text-align: center;
+          }
+          th {
+            background-color: #f2f2f2;
+          }          
+        `);
+        printWindow.document.write(`</style></head><body><div class="title"><h1>${title}</h1></div><table>`);
+        printWindow.document.write(dataTable.outerHTML);
+        printWindow.document.write('</table></body></html>');
+        printWindow.document.close();
+        printWindow.print();
+      }, 200);
+    }
+  };
+
   return (
     <>
       <div className="react-table-headers">
@@ -118,7 +157,8 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
                       accessor={accessor} 
                       title = {title}    
                   />   
-              </div>
+                   <button className='print-icon btn-rmv-border' onClick={handlePrint}><i className="fas fa-print"></i></button>
+              </div>            
           </div>                
           <div className="search">                                     
               <input
@@ -130,7 +170,7 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
           </div>
       </div>  
       <div className='table-responsive'>      
-        <table className="table table-bordered text-center" id="dataTable" width="100%" cellSpacing={0} {...getTableProps()}>
+        <table ref={dataTableRef} className="table table-bordered text-center" id="dataTable" width="100%" cellSpacing={0} {...getTableProps()}>
           <thead className="p-3 mb-2 text-center bg-greeny text-white">
             {headerGroups.map((headerGroup, index) => (
               <tr {...headerGroup.getHeaderGroupProps()} key={index}>
@@ -138,7 +178,7 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
                   <th {...column.getHeaderProps(column.getSortByToggleProps())} key={index} >
                     {column.render('Header')}
                     <span>
-                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                      {column.isSorted ? (column.isSortedDesc ?  <i className="fas fa-sort-up ml-2"></i> : <i className="fas fa-sort-down ml-2"></i>) : ''}
                     </span>
                   </th>
                 ))}
