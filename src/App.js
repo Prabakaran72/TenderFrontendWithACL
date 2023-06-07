@@ -431,6 +431,8 @@ function App() {
             </Route>
             </Route> 
           </Route>
+        {/* tender end */}
+        <Route path="remView/:id" element={<RembursementPrintView />} />
           
           {/* )} */}
           <Route path="*" element={<Navigate to="/" />} />
