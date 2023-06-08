@@ -118,8 +118,11 @@ function Dashboard() {
     });
 
     //Dashboard card
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios
-      .get(`${baseUrl}/api/bidcreation/creation/projectstatus`)
+      .post(`${baseUrl}/api/bidcreation/creation/projectstatus`,data)
       .then((resp) => {
         // if(resp.data.awarded_tender_count){
         // console.log("project status", resp);

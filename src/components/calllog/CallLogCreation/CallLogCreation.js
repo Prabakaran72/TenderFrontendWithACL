@@ -260,7 +260,7 @@ const CallLogCreation = () => {
         });
       });
 
-      await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
+      await axios.post(`${baseUrl}/api/procurementlist/list`,data).then((res) => {
         setOptionsForProcurement(res.data?.procurementlist);
         setIsFetching((prev) => {
           return { ...prev, procurement: false };
@@ -322,7 +322,7 @@ const CallLogCreation = () => {
         });
       });
 
-      await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
+      await axios.post(`${baseUrl}/api/procurementlist/list`,datatosend).then((res) => {
         setOptionsForProcurement(res.data?.procurementlist);
         setIsFetching((prev) => {
           return { ...prev, procurement: false };
@@ -535,8 +535,13 @@ const CallLogCreation = () => {
       return { ...prev, bizztype: true };
     });
     if (input.calltype?.value) {
+
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
+
       axios
-        .get(`${baseUrl}/api/bizzlist/list/${input.calltype?.value}`)
+        .post(`${baseUrl}/api/bizzlist/list/${input.calltype?.value}`,data)
         .then((res) => {
           setOptionsForBizzList(res.data.bizzlist);
         });
@@ -554,8 +559,11 @@ const CallLogCreation = () => {
       return { ...prev, bizz_status_type: true };
     });
     if (input.businessForecast?.value) {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
       axios
-        .get(`${baseUrl}/api/statuslist/list/${input.businessForecast?.value}`)
+        .post(`${baseUrl}/api/statuslist/list/${input.businessForecast?.value}`,data)
         .then((res) => {
           setOptionsForStatusList(res.data?.statuslist);
         });
