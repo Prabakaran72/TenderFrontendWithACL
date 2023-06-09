@@ -7,22 +7,116 @@ import { FaDownload } from "react-icons/fa";
 import {useAllowedUploadFileSize} from '../hooks/useAllowedUploadFileSize';
 import { useBaseUrl } from "../hooks/useBaseUrl";
 import Swal from "sweetalert2";
+import { useEffect } from 'react';
+import { useImageStoragePath } from "../hooks/useImageStoragePath";
 
-const MultiFileUploader = (props) => {
+const MultiFileUploader = ({setFileList,  APItoGetFileList,  APItoDeleteFile,  APItoDownloadFile,  ImageStoragePath, mainId, setInitiateRerender, DbOriginalFileName,DbHashedFileName,DbFileSize}) => {
+
+//Props has 
+//1)setFileList => to set the latest uploaded files to parent component state
+//2) APItoGetFileList => to get list of file details
+//3) APItoDeleteFile => api to delete a file from server
+//4) APItoDownloadFile=> api to downlaod a file
+//5) ImageStoragePath=> Storage path for show image preview, which the files are stored in server
+
+
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [totalFileList, setTotalFileList] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const MAX_TEXT_LENGTH = 20; // Maximum length for the card title
-  const {total: Total_Max_file_size} =useAllowedUploadFileSize();
+  const {total: Total_Max_file_size}=useAllowedUploadFileSize();
   const accumulatedStorageSize = useRef(0);
   const { server1: baseUrl } = useBaseUrl();
+ console.log("totalFileList",totalFileList)
+let fileObject = {
+    id: 0,  //subid if this file is stored in DB
+    file: '', 
+    name: '',
+    type: '',
+    size: '',
+    value: '',
+    src:''
+}
+
+useEffect(()=>{
+    if(mainId)
+    {
+      setInitiateRerender(1);
+    axios({
+      url: `${baseUrl}/api/${APItoGetFileList}${mainId}`,
+      method: "GET",
+      headers: {
+        //to stop cacheing this response at browsers. otherwise wrongly displayed cached files
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    }).then((res) => {
+      let files = res.data.docs;
+      console.log(files);
+      if (res.status === 200) {
+        let updatedSelectedFiles = [];
+        let totalFiles = [];
+        for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'pdf', 'zip', 'rar', 'doc', 'docx', 'xls', 'xlsx', 'csv'];
+        const fileExtension = file[DbOriginalFileName].split('.').pop().toLowerCase();
+          if (allowedExtensions.includes(fileExtension)) 
+          {
+              let totalSize = accumulatedStorageSize.current + (parseFloat(file[DbFileSize]));
+              if(totalSize <= Total_Max_file_size)
+              {
+               
+                accumulatedStorageSize.current = accumulatedStorageSize.current + (parseFloat(file[DbFileSize]));
+              
+              // If it's an image file, create a preview URL
+              const imageExtensions = ['png', 'jpg', 'jpeg'];
+              const fileExtension = file[DbOriginalFileName].split('.').pop().toLowerCase();
+              
+                if (imageExtensions.includes(fileExtension)) {
+                  file.previewURL = URL.createObjectURL(new Blob([ImageStoragePath+file[DbHashedFileName]]));
+                  
+                fileObject = {'id' : file.id, 'file': file,'oName':file[DbOriginalFileName],'hName':file[DbHashedFileName], type:file.filetype, size:file[DbFileSize], src:file.previewURL};
+                totalFiles.push(fileObject);
+                updatedSelectedFiles.push(file);
+            }
+            else{
+              Swal.fire({
+                title: "File Storage",
+                text: "Limit reached for this Entry..!",
+                icon: "error",
+                confirmButtonColor: "#2fba5f",
+              });
+            }
+          }
+          else{
+            Swal.fire({
+              title: "File Type",
+              text: "Invalid File Type..!",
+              icon: "error",
+              confirmButtonColor: "#2fba5f",
+            });
+          }
+          console.log("updatedSelectedFiles",updatedSelectedFiles);
+      }
+      console.log("totalFiles",totalFiles)
+      setTotalFileList(totalFiles);
+      setUploadedFiles(updatedSelectedFiles);
+    }}})
+    }
+},[mainId])
 
   const handleFileSelection = (event) => {
     const files = event.target.files;
     const updatedSelectedFiles = [...selectedFiles];
+    let newlyAddedFiles=[...totalFileList]; //to set file list to display to users
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       // Check if the file extension is allowed
-      if (isFileTypeAllowed(file)) {
+    const allowedExtensions = ['png', 'jpg', 'jpeg', 'pdf', 'zip', 'rar', 'doc', 'docx', 'xls', 'xlsx', 'csv'];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+    
+      if (allowedExtensions.includes(fileExtension)) {
         let totalSize = accumulatedStorageSize.current + file.size;
         if(totalSize <= Total_Max_file_size)
         {
@@ -30,8 +124,13 @@ const MultiFileUploader = (props) => {
         accumulatedStorageSize.current = accumulatedStorageSize.current + file.size;
          
         // If it's an image file, create a preview URL
-        if (isImageFile(file)) {
+        const imageExtensions = ['png', 'jpg', 'jpeg'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (imageExtensions.includes(fileExtension)) {
           file.previewURL = URL.createObjectURL(file);
+          fileObject = {'id' : 0, 'file': file,'oName':file.name,'hName':'', type:file.type, size:file.size, src:file.previewURL};
+          console.log("fileObject",fileObject)
+          newlyAddedFiles.push(fileObject);
         }
       }
       else{
@@ -39,7 +138,11 @@ const MultiFileUploader = (props) => {
       }
     }
     }
-    props.setFileList(updatedSelectedFiles);
+    setFileList(updatedSelectedFiles);
+    // let existingFiles ={...totalFileList};
+    // let newFiles ={...newlyAddedFiles};
+    
+    setTotalFileList(newlyAddedFiles);
     setSelectedFiles(updatedSelectedFiles);
   };
 
@@ -65,28 +168,10 @@ const MultiFileUploader = (props) => {
       return false;
   };
 
-  const handleFileUpload = () => {
-    const formData = new FormData();
-    for (let i = 0; i < selectedFiles.length; i++) {
-      const file = selectedFiles[i];
-      formData.append('files[]', file);
-    }
-
-    axios
-      .post('/upload', formData)
-      .then((response) => {
-        // Update the uploaded files state with the response from the server
-        setUploadedFiles(response.data.files);
-      })
-      .catch((error) => {
-        console.error('Error uploading files: ', error);
-      });
-  };
-
   const handleDeleteFile = (file) => {
     const updatedSelectedFiles = selectedFiles.filter((selectedFile) => selectedFile !== file);
     setSelectedFiles(updatedSelectedFiles);
-    props.setFileList(updatedSelectedFiles);
+    setFileList(updatedSelectedFiles);
   };
 
 
@@ -133,12 +218,12 @@ console.log("uploaded Files", uploadedFiles)
               
               <div className="fileDetails ">
                   <div className="pic">
-                    {isImageFile(file) ? (
+                    {/* {isImageFile(file) ? (
                     <img className="card-img-top" src={file.previewURL} alt={file.name} />
                     ) : isRarFile(file) ? (
                     <img className="card-img-top" src={ImageConfig['rar']} alt={file.name} />)
                       : (<img className="card-img-top" src={ImageConfig[file.type.split('/').pop()]} alt={file.name} />
-                      )}
+                      )} */}
                   </div>
                   <div className="text">
                     <div>
@@ -189,12 +274,12 @@ console.log("uploaded Files", uploadedFiles)
           {uploadedFiles.map((file, index) => (
             <div key={index} className="col-lg-12 mb-3">
               <div className="card">
-                {isImageFile(file) ? (
+                {/* {isImageFile(file) ? (
                   <img className="card-img-top" src={file.previewURL} alt={file.name} />
                 ) :  isRarFile(file) ? (
                   <img className="card-img-top" src={ImageConfig['rar']} alt={file.name} />)
                   : (<img className="card-img-top" src={ImageConfig[file.type.split('/').pop()]} alt={file.name} />
-                )}
+                )} */}
                 <div className="card-body">
                   <h5 className="card-title">{file.name}</h5>
                   {/* <button className="btn btn-danger" onClick={() => handleDeleteFile(file)}>Delete</button>
