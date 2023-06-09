@@ -6,7 +6,7 @@ import Swal from "sweetalert2/src/sweetalert2";
 
 import axios from 'axios';
 import AuthContext from "../../storeAuth/auth-context";
-import Print from '../../images/printer.png'
+// import Print from '../../images/printer.png'
 import { BsFillPrinterFill } from 'react-icons/bs';
 // import { Excel } from '../../../public/assets/img/excel'
 
@@ -66,14 +66,15 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
       accessor: (row, index) => index + 1,
     });   
     
-    (editpermission || deletepermission || newResponse)  && (columnArray.push({
+    ((editpermission || deletepermission) && newResponse)  && (columnArray.push({
       Header: 'Action',
-      accessor: 'action',      
-      // className: 'action-column', // Add your custom class name here
+      accessor: 'action',   
+      className: 'action-column', // Add your custom class name here
     })); 
-  
+    
+    console.log('newResponse', newResponse)
     return columnArray;
-  }, [response]); // success
+  }, [response, newResponse]); // success
   
   
   const tableInstance = useTable( { columns, data, }, useGlobalFilter, useSortBy, usePagination );
@@ -102,12 +103,21 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
   
   
   const handlePrint = () => {
+    setNewResponse(false);
+    
     const dataTable = dataTableRef.current;  
     console.log('dataTable',dataTable);       
+    // console.log('newResponse == true',newResponse == false);
    
-    if (dataTable) {      
-      setNewResponse(false);
-
+    if (dataTable) {  
+      
+      const actionColumn = dataTable.querySelector('.action-column');
+      console.log('actionColumn',actionColumn);
+      if (actionColumn) {
+        console.log('hell');
+        actionColumn.style.display = 'none';
+      }
+      
       // const TableHead = dataTable.querySelector('th');            
       // TableHead.classList.add('myClass')      
 
@@ -126,8 +136,8 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
       //   actionColumn.remove();
       // }
       
-
       setTimeout(() => {
+
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`<html><head><title>${title}</title>`);
         printWindow.document.write('<style>');
@@ -152,7 +162,12 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
           }  
           .myClass {
             display: none;
-          }        
+          }     
+          @media print {
+            .action-column {
+              display: none !important;
+            }
+          }   
         `);
         printWindow.document.write(`</style></head><body><div class="title"><h1>${title}</h1></div><table>`);
         printWindow.document.write(dataTable.outerHTML);
@@ -160,10 +175,17 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
         printWindow.document.close();
         printWindow.print();
       }, 200);
-    }
+    }   
 
     // setNewResponse(true);
   };
+
+  useEffect(()=> {    
+    setTimeout(()=> {
+      setNewResponse(true);
+    },300)    
+  },[newResponse])
+
 
   return (
     <>    

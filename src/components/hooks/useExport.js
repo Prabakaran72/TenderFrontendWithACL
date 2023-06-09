@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { RiFileExcel2Fill } from 'react-icons/ri';
-import Excel from '../../images/excel.png'
+// import Excel from '../../images/excel.png'
 
 
 const UseExport = ({ data, header, accessor, title }) => {
