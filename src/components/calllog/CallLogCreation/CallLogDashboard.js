@@ -8,10 +8,8 @@ import { MdPhoneInTalk } from 'react-icons/md';
 import axios from 'axios';
 import { useBaseUrl } from '../../hooks/useBaseUrl';
 
-
 const CallLogDashboard = () => {
-
-    usePageTitle("Call Logs Dashboard");
+    usePageTitle("Call Logs Dashboard")
     const { server1: baseUrl } = useBaseUrl();
     const [callCount, setCallCount] = useState({
         attendedCallsCount: 0,
@@ -20,10 +18,10 @@ const CallLogDashboard = () => {
         overduecallcount: 0,
         todaycallCount: 0,
       })
-    
 
 
-    useEffect(()=> {
+
+      useEffect(()=> {
         axios
         .get(`${baseUrl}/api/dashboard/getCallCountAnalysis`, { params: {tokenid: localStorage.getItem('token')} })
         .then((resp) => {
@@ -42,8 +40,6 @@ const CallLogDashboard = () => {
         }
         });
     },[])
-   
-    console.log('callCount',callCount);
 
 
     return (

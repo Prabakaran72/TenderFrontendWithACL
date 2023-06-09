@@ -5,9 +5,48 @@ import { Provider } from "react-redux";
 import dashboardStore from './store';
 
 function Pagewrapper(props) {
+  const navigate = useNavigate();
+  const {server1: baseUrl} = useBaseUrl();
+  const authCtx = useContext(AuthContext);
+
+  useEffect(() => {
+    window.addEventListener("sessionTimeout", handleSessionTimeout);
+
+    return () => {
+      window.removeEventListener("sessionTimeout", handleSessionTimeout);
+    };
+  }, []);
+
+  const handleSessionTimeout = () => {
+  
+    console.log('Session expired. Logging out user...');
+    
+    const data = {
+      tokenid : localStorage.getItem('token') 
+    }
+
+    axios.post(`${baseUrl}/api/logout`, data).then((res) => {
+      if (res.data.status === 200) {
+        navigate(0)
+        authCtx.logout()
+      }else{
+        alert("Unable to logout. Try again!")
+      }
+    });
+
+    // localStorage.clear();
+
+    // navigate('/');
+  };
+
   return (
    
     <Provider store={dashboardStore}>
+      {/* <SessionTimeout timeoutInSeconds={10} onTimeout={handleSessionTimeout} /> */}
+      <SessionTimeout timeoutInSeconds={1800} onTimeout={() => window.dispatchEvent(new Event("sessionTimeout"))} />
+
+      {/***1800 Seconds => 30 Mins***/}
+      
     <div className="container-fluid"> 
       {!props.loading && <Outlet />}
     </div>
