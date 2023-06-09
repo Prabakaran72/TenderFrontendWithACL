@@ -404,21 +404,21 @@ const CompetitorProfile = () => {
       setFetchingData({
         compNo: resp.data.competitor.compNo,
         compName: resp.data.competitor.compName,
-        registerationYear: resp.data.competitor?.registerationYear,
+        registerationYear: resp.data.competitor.registerationYear,
         country: resp.data.competitor.country,
         state: resp.data.competitor.state,
         district: resp.data.competitor.district,
         city: resp.data.competitor.city,
-        address: resp.data.competitor?.address,
-        pincode: resp.data.competitor?.pincode,
-        panNo: resp.data.competitor?.panNo,
-        mobile: resp.data.competitor?.mobile,
-        email: resp.data.competitor?.email,
-        gstNo: resp.data.competitor?.gstNo,
-        directors: resp.data.competitor?.directors,
-        registrationType: resp.data.competitor?.registrationType,
-        companyType: resp.data.competitor?.companyType,
-        manpower: resp.data.competitor?.manpower,
+        address: resp.data.competitor.address,
+        pincode: resp.data.competitor.pincode,
+        panNo: resp.data.competitor.panNo,
+        mobile: resp.data.competitor.mobile,
+        email: resp.data.competitor.email,
+        gstNo: resp.data.competitor.gstNo,
+        directors: resp.data.competitor.directors,
+        registrationType: resp.data.competitor.registrationType,
+        companyType: resp.data.competitor.companyType,
+        manpower: resp.data.competitor.manpower,
       });
       document.getElementById("dis").setAttribute("value", "2");
       document.getElementById("dis").setAttribute("defaultValue", "");
@@ -444,14 +444,14 @@ const CompetitorProfile = () => {
       setFormIsValid(true);
     });
   };
-console.log("Has Error", hasError);
+
   useEffect(() => {
     if (
       hasError.compName !== null &&
       hasError.compName !== true &&
-      // hasError.registrationType !== null &&
+      hasError.registrationType !== null &&
       hasError.registrationType !== true &&
-      // hasError.registerationYear !== null &&
+      hasError.registerationYear !== null &&
       hasError.registerationYear !== true &&
       hasError.country !== null &&
       hasError.country !== true &&
@@ -461,25 +461,25 @@ console.log("Has Error", hasError);
       hasError.district !== true &&
       hasError.city !== null &&
       hasError.city !== true &&
-      // hasError.panNo !== null &&
+      hasError.panNo !== null &&
       hasError.panNo !== true &&
-      // hasError.gstNo !== null &&
+      hasError.gstNo !== null &&
       hasError.gstNo !== true &&
-      // hasError.mobile !== null &&
+      hasError.mobile !== null &&
       hasError.mobile !== true &&
       hasError.compNo !== null &&
       hasError.compNo !== true &&
-      // hasError.address !== null &&
+      hasError.address !== null &&
       hasError.address !== true &&
-      // hasError.pincode !== null &&
+      hasError.pincode !== null &&
       hasError.pincode !== true &&
-      // hasError.email !== null &&
+      hasError.email !== null &&
       hasError.email !== true &&
-      // hasError.directors !== null &&
+      hasError.directors !== null &&
       hasError.directors !== true &&
-      // hasError.companyType !== null &&
+      hasError.companyType !== null &&
       hasError.companyType !== true &&
-      // hasError.manpower !== null &&
+      hasError.manpower !== null &&
       hasError.manpower !== true &&
       JSON.stringify(competitorFormInput) !== JSON.stringify(intialValues)
     ) {
@@ -498,30 +498,30 @@ console.log("Has Error", hasError);
     });
 
     switch (e.target.name) {
-      case "pincode":        
-        if ((!/^[1-9][0-9]{5}$/.test(e.target.value) && e.target.value!='') || isNaN(e.target.value)) {
+      case "pincode":
+        if (!/^[1-9][0-9]{5}$/.test(e.target.value)) {
           setHasError({ ...hasError, pincode: true });
         } else {
           setHasError({ ...hasError, pincode: false });
         }
         break;
 
-      // case "registerationYear":
-      //   if (
-      //     (e.target.value > today.getFullYear()) |
-      //     (e.target.value < 1900) |
-      //     isNaN(e.target.value)
-      //   ) {
-      //     setHasError({ ...hasError, registerationYear: true });
-      //   } else {
-      //     setHasError({ ...hasError, registerationYear: false });
-      //   }
-      //   break;
+      case "registerationYear":
+        if (
+          (e.target.value > today.getFullYear()) |
+          (e.target.value < 1900) |
+          isNaN(e.target.value)
+        ) {
+          setHasError({ ...hasError, registerationYear: true });
+        } else {
+          setHasError({ ...hasError, registerationYear: false });
+        }
+        break;
       case "mobile":
         if (
-          // e.target.value.trim() === "" ||
-          (e.target.value !='' &&
-          !/^[6-9]{1}[0-9]{9}$/.test(e.target.value)) || isNaN(e.target.value)
+          e.target.value.trim() === "" ||
+          e.target.value === null ||
+          !/^[6-9]{1}[0-9]{9}$/.test(e.target.value)
         ) {
           setHasError({ ...hasError, mobile: true });
         } else {
@@ -530,8 +530,8 @@ console.log("Has Error", hasError);
         break;
       case "email":
         if (
-          // e.target.value.trim() === "" ||
-          e.target.value !='' &&
+          e.target.value.trim() === "" ||
+          e.target.value === null ||
           !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e.target.value)
         ) {
           setHasError({ ...hasError, email: true });
@@ -541,8 +541,8 @@ console.log("Has Error", hasError);
         break;
       case "gstNo":
         if (
-          // e.target.value.trim() === "" ||
-          e.target.value !='' &&
+          e.target.value.trim() === "" ||
+          e.target.value === null ||
           !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(
             e.target.value
           )
@@ -554,8 +554,8 @@ console.log("Has Error", hasError);
         break;
       case "panNo":
         if (
-           e.target.value != "" &&
-          // e.target.value === null ||
+          e.target.value.trim() === "" ||
+          e.target.value === null ||
           !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(e.target.value)
         ) {
           setHasError({ ...hasError, panNo: true });
@@ -565,10 +565,9 @@ console.log("Has Error", hasError);
         break;
       case "manpower":
         if (
-          // e.target.value.trim() === "" ||
-          // e.target.value === null ||
-          // !/^[0-9]{1,5}$/.test(e.target.value)
-          isNaN(e.target.value)
+          e.target.value.trim() === "" ||
+          e.target.value === null ||
+          !/^[0-9]{1,5}$/.test(e.target.value)
         ) {
           setHasError({ ...hasError, manpower: true });
         } else {
@@ -578,14 +577,11 @@ console.log("Has Error", hasError);
 
       default:
         // setFormIsValid(true);
-        if(e.target.name == 'compName'){
-          if (e.target.value.trim() === "" || e.target.value === null) {
-            setHasError({ ...hasError, [e.target.name]: true });
-          } else {
-            setHasError({ ...hasError, [e.target.name]: false });
-          }
+        if (e.target.value.trim() === "" || e.target.value === null) {
+          setHasError({ ...hasError, [e.target.name]: true });
+        } else {
+          setHasError({ ...hasError, [e.target.name]: false });
         }
-        
     }
   };
 
@@ -628,41 +624,12 @@ console.log("Has Error", hasError);
         });
         break;
     }
-    let actionName = '';
-    let actionValue = '';
-    switch(action.name)
-    {
-      case 'registrationType':
-	
-      actionName = 'registrationType';
-      actionValue = (value == '' || value==null) ? true : false;
-      break;
-
-    case 'registerationYear':
-      
-      actionName = 'registerationYear';
-      actionValue = (value == '' || value==null) ? true : false;
-      break;
-    case 'companyType':
-      
-      actionName = 'companyType';
-      actionValue = (value == '' || value==null) ? true : false;
-      break;
-    }
-
-    if(action.name == 'registrationType' || action.name == 'registerationYear' || action.name == 'companyType')
-    {
-      setCompetitorFormInput({ ...competitorFormInput, [action.name]: value });
-      setHasError({ ...hasError, [action.name]: false });
-    }
-else{
     setCompetitorFormInput({ ...competitorFormInput, [action.name]: value });
     if (value === "" || value === null) {
       setHasError({ ...hasError, [action.name]: true });
     } else {
       setHasError({ ...hasError, [action.name]: false });
     }
-  }
   };
 
   const onBlurSelectHandler = (e) => {
@@ -758,8 +725,7 @@ else{
     e.preventDefault();
     setLoading(true);
     let tokenId = localStorage.getItem("token");
-    var registrationTypeInt = competitorFormInput.registrationType?.value ? competitorFormInput.registrationType.value : "";
-    
+    var registrationTypeInt = competitorFormInput.registrationType.value + "";
     const data = {
       compNo: competitorFormInput.compNo,
       compName: competitorFormInput.compName,
@@ -776,11 +742,11 @@ else{
       email: competitorFormInput.email,
       gstNo: competitorFormInput.gstNo,
       directors: competitorFormInput.directors,
-      companyType: competitorFormInput.companyType?.value ? competitorFormInput.companyType.value : '',
+      companyType: competitorFormInput.companyType.value,
       manpower: competitorFormInput.manpower,
       tokenId: tokenId,
     };
-    console.log('data',data);
+
     axios.post(`${baseUrl}/api/competitorprofile`, data).then((res) => {
       if (res.data.status === 200) {
         Swal.fire({
@@ -829,7 +795,7 @@ console.log("compId" , competitorFormInput?.compNo)
     const data = {
       compNo: competitorFormInput?.compNo,
       compName: competitorFormInput?.compName,
-      registrationType: competitorFormInput?.registrationType?.value ? competitorFormInput?.registrationType?.value: '',
+      registrationType: competitorFormInput?.registrationType?.value,
       registerationYear: competitorFormInput.registerationYear,
       country: competitorFormInput.country?.value,
       state: competitorFormInput.state?.value,
@@ -842,7 +808,7 @@ console.log("compId" , competitorFormInput?.compNo)
       email: competitorFormInput.email,
       gstNo: competitorFormInput.gstNo,
       directors: competitorFormInput.directors,
-      companyType: competitorFormInput.companyType?.value? competitorFormInput.companyType.value: '',
+      companyType: competitorFormInput.companyType.value,
       manpower: competitorFormInput.manpower,
       tokenId: tokenId,
     };
@@ -984,7 +950,7 @@ console.log("compId" , competitorFormInput?.compNo)
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="regType" className="font-weight-bold">
                     Registration Type
-                    {/* <span className="text-danger">&nbsp;*</span> */}
+                    <span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1015,12 +981,12 @@ console.log("compId" , competitorFormInput?.compNo)
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="registerationYear">
                     Registeration Year
-                    {/* <span className="text-danger">&nbsp;*</span> */}
+                    <span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
                 <div className="col-lg-8">
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     id="registerationYear"
                     placeholder="YYYY"
@@ -1163,8 +1129,7 @@ console.log("compId" , competitorFormInput?.compNo)
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="address">
-                    Address
-                    {/* <span className="text-danger">&nbsp;*</span> */}
+                    Address<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1195,13 +1160,12 @@ console.log("compId" , competitorFormInput?.compNo)
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="pincode" className="">
-                    Pincode
-                    {/* <span className="text-danger">&nbsp;*</span> */}
+                    Pincode<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
                 <div className="col-lg-8">
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     id="pincode"
                     placeholder="Ex: 638001"
@@ -1225,8 +1189,7 @@ console.log("compId" , competitorFormInput?.compNo)
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="panNo">
-                    PAN
-                    {/* <span className="text-danger">&nbsp;*</span> */}
+                    PAN<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
                 <div className="col-lg-8 mt-3">
@@ -1255,13 +1218,12 @@ console.log("compId" , competitorFormInput?.compNo)
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="mobile">
-                    Mobile No
-                    {/* <span className="text-danger">&nbsp;*</span> */}
+                    Mobile No<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
                 <div className="col-lg-8">
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     id="mobile"
                     placeholder="Enter Mobile No"
@@ -1285,8 +1247,7 @@ console.log("compId" , competitorFormInput?.compNo)
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="email">
-                    Email ID
-                    {/* <span className="text-danger">&nbsp;*</span> */}
+                    Email ID<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1316,8 +1277,7 @@ console.log("compId" , competitorFormInput?.compNo)
               <div className="row align-items-center font-weight-bold">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="gst">
-                    GST No
-                    {/* <span className="text-danger">&nbsp;*</span> */}
+                    GST No<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1347,8 +1307,7 @@ console.log("compId" , competitorFormInput?.compNo)
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="directors">
-                    Directors
-                    {/* <span className="text-danger">&nbsp;*</span> */}
+                    Directors<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1379,8 +1338,7 @@ console.log("compId" , competitorFormInput?.compNo)
               <div className="row align-items-center">
                 <div className="col-lg-4 text-dark">
                   <label htmlFor="companyType" className="font-weight-bold">
-                    Type of Company
-                    {/* <span className="text-danger">&nbsp;*</span> */}
+                    Type of Company<span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
                 <div className="col-lg-8">
@@ -1392,7 +1350,7 @@ console.log("compId" , competitorFormInput?.compNo)
                     options={companyTypeList}
                     onChange={selectInputHandler}
                     //onBlur="{companyTypeBlurHandler}"
-                    value={competitorFormInput.companyType || ''}
+                    value={competitorFormInput.companyType}
                   ></Select>
                   {hasError.companyType && (
                     <div className="pt-1">
@@ -1410,12 +1368,12 @@ console.log("compId" , competitorFormInput?.compNo)
                 <div className="col-lg-4 text-dark font-weight-bold">
                   <label htmlFor="manpower">
                     Manpower Strength
-                    {/* <span className="text-danger">&nbsp;*</span> */}
+                    <span className="text-danger">&nbsp;*</span>
                   </label>
                 </div>
                 <div className="col-lg-8">
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     id="manpower"
                     placeholder="Enter Company Manpower"
