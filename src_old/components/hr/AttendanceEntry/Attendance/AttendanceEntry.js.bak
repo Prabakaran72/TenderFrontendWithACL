@@ -1,0 +1,869 @@
+import { Fragment } from "react";
+import { useState, useEffect, useRef } from "react";
+import { usePageTitle } from "../../../hooks/usePageTitle";
+import Swal from "sweetalert2/src/sweetalert2.js";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { useBaseUrl } from "./../../../hooks/useBaseUrl";
+import Select from "react-select";
+import LocalDateTime from "./../../../hooks/useLocalDateTime";
+import styles from "../../../master/UserCreation/UserCreation.module.css";
+import { ImageConfig } from "../../../hooks/Config";
+import { useAllowedMIMEDocType } from "../../../hooks/useAllowedMIMEDocType";
+import { useAllowedUploadFileSize } from "../../../hooks/useAllowedUploadFileSize";
+import { useImageStoragePath } from "../../../hooks/useImageStoragePath";
+import { FaDownload } from "react-icons/fa";
+import { RiDeleteBin5Fill } from "react-icons/ri";
+
+const selectFiles = {
+  name: '',
+  size: '',
+  type: '',
+  value: '',
+  src: undefined,
+};
+
+
+const AttendanceEntry = () => {
+  usePageTitle("Daily Attendance Entry");
+  const { server1: baseUrl } = useBaseUrl()
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [options, setOptions] = useState([]);  
+
+  const initialState = {
+    userId: '',
+    attendanceType: '',
+    fromDate: '',
+    toDate: '',
+    startTime: '',
+    reason: '',   
+  };
+  const initialStateErr = {
+    userIdErr: false,
+    attendanceTypeErr: false,
+  };
+  const { MIMEtype: docType } = useAllowedMIMEDocType();
+  const [accFileStorage, setAccFileStorage] = useState(0);
+  const { total: totalStorageSize } = useAllowedUploadFileSize();
+  const { callcreation: filePath } = useImageStoragePath();
+  const [dateTime, setDateTime] = useState(new Date());
+
+  const [formIsValid, setFormIsValid] = useState(false);
+  const [input, setInput] = useState(initialState);
+  const [validation, setInputValidation] = useState(initialStateErr);
+  const [isClicked, setIsClicked] = useState({
+    userId: false,
+    attendanceType: false
+  });
+
+  const [employeeList, setEmployeeList] = useState([]);
+  const [attendanceList, setAttendanceList] = useState([]);
+
+  const [files, setFiles] = useState([]);
+  const [fileData, setFileData] = useState([]);
+  const [fileCheck, setFileCheck] = useState(null);
+  const [fileSizeLimit, setFileSizeLimit] = useState({ error: '' });
+  const [dataSending, setDataSending] = useState(false);
+  const [file, setFile] = useState(selectFiles);
+  const [fileListCheck, setFileListCheck] = useState(false);
+  const [fileuploading, setFileUploading] = useState(false);  
+
+
+
+  useEffect(() => {
+    axios.get(`${baseUrl}/api/employeelist`).then((resp) => {
+      setEmployeeList(resp.data.employeelist);
+    })
+
+    axios.get(`${baseUrl}/api/attendancetypelist`).then((resp) => {
+      setAttendanceList(resp.data.attendancetypelist);
+    })
+
+    // const Time = dateTime.toLocaleTimeString('en-US',{ hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' }).toString().slice(0,8);
+    // // setTime(Time);
+    // setInput({...input, startTime: Time})
+  }, [])  
+
+  // useEffect(() => {
+  //   let timer = setInterval(() => {
+  //     setDateTime(new Date());
+  //   }, 1000);
+  //   return function cleanup() {
+  //     clearInterval(timer);
+  //   }
+  // }, [dateTime])
+
+  useEffect(() => {
+    if (id) {
+      axios.get(`${baseUrl}/api/attendanceentry/${id}`).then((resp) => {
+        setInput({
+          userId: employeeList.find((x) => x.value == resp.data?.attendance?.userId),
+          attendanceType: attendanceList.find((x) => x.value == resp.data?.attendance?.attendanceType)
+        })
+      })
+    }
+  }, [id, baseUrl])
+
+  useEffect(() => {
+    const errors = validation;
+    if (input.userId === null) {
+      errors.userIdErr = true;
+    } else {
+      errors.userIdErr = false;
+    }
+    if (input.attendanceType === null) {
+      errors.attendanceTypeErr = true;
+    } else {
+      errors.attendanceTypeErr = false;
+      // BsFillArrowLeftSquareFill;
+    }
+    setInputValidation((prev) => { return { ...prev, userIdErr: errors.userIdErr, attendanceTypeErr: errors.attendanceTypeErr } });
+
+  }, [input])
+
+  useEffect(() => {
+    if (validation.userIdErr !== true && validation.attendanceTypeErr !== true) {
+      setFormIsValid(true);
+    } else {
+      setFormIsValid(false);
+    }
+  }, [validation])
+
+  const postData = (formData) => {
+    axios({
+      method: 'post',
+      url: `${baseUrl}/api/attendanceregister`,
+      data: formData,
+      headers:{
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then((res) =>{
+      if(res.data.status === 200){
+        Swal.fire({
+          title: "Attendance Details",
+          text: "Submitted Successfully...!",
+          icon: "success",
+          confirmButtonColor: "#2fba5f",
+          timer: 1000,
+        });
+      }
+      else{
+        Swal.fire({
+          title: "Attendance Details",
+          text: "Failed to Submit",
+          icon: "error",
+          confirmButtonColor: "#2fba5f",
+          timer: 1000,
+        });
+      }
+      setDataSending(false)
+    })
+
+    // axios.post(`${baseUrl}/api/attendanceregister`, formData).then((res) => {
+    //   console.log('res',res);
+    //   setDataSending(false)
+    //   if (res.data.status === 200) {
+    //     Swal.fire({
+    //       icon: "success",
+    //       title: "Attendance",
+    //       text: "Status Updated Successfully!",
+    //       confirmButtonColor: "#5156ed",
+    //     });       
+    //     setInput(initialState)
+    //     navigate('/tender/hr/attendanceentry')
+    //   } else if (res.data.status === 400) {
+    //     Swal.fire({
+    //       icon: "error",
+    //       title: "Attendance",
+    //       text: res.data.errors,
+    //       confirmButtonColor: "#5156ed",
+    //     });        
+    //   }
+    // });
+  }
+
+  const putData = (data, id) => {
+    axios.put(`${baseUrl}/api/attendanceentry/${id}`, data).then((res) => {
+      if (res.data.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Attendance",
+          text: "Status Updated Successfully!",
+          confirmButtonColor: "#5156ed",
+        });
+        setInput(initialState)
+        navigate('/tender/hr/attendanceentry')
+      } else if (res.data.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Attendance",
+          text: res.data.errors,
+          confirmButtonColor: "#5156ed",
+        });
+        setDataSending(false)
+      }
+    });
+  }
+
+  
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setDataSending(true)
+        
+    const formData = new FormData();
+    formData.append('user_id', input.userId?.value); 
+    formData.append('attendance_type_id',input.attendanceType?.value);  
+    formData.append('from_date',input.fromDate);  
+    formData.append('to_date',input.toDate);  
+    formData.append('reason',input.reason);  
+    formData.append('start_time',input.startTime);  
+    // formData.append('file',file);      
+
+    Object.values(files).forEach((item)=>{
+      formData.append("file[]", item);
+    })
+    
+    formData.append('tokenid',localStorage.getItem('token')); 
+
+   
+
+    const data = {
+      user_id: input.userId?.value,
+      attendance_type_id: input.attendanceType?.value,
+      from_date: input.fromDate,
+      to_date: input.toDate,      
+      reason: input.reason,
+      start_time: input.startTime,
+      file: files,
+      tokenid: localStorage.getItem('token'),
+    };
+
+        
+
+    if (!id) {
+      postData(formData);
+    } else {
+      putData(data, id);
+    }
+
+  };
+
+  const selectChangeHandler = (value, action) => {
+    setInput((prev) => { return { ...prev, [action.name]: value } });
+    setIsClicked((prev) => { return { ...prev, [action.name]: true } });
+  }
+
+  let fileCount = 1;
+
+
+
+  useEffect(()=>{
+    
+    let PreviweList= [];
+    Object.values(files).forEach((item)=>{
+      const fileType = item.type
+      ? item.type
+      : item.type === ""
+        ? "application/x-rar-compressed"
+        : "";
+
+    if (docType.includes(fileType)) {
+      
+    //to skip text file. MIME type of text file and csv file are same. so we get the extension of a file to stop uploading .txt file
+      if((fileType == "text/plain" && item.name.split('.').length[item.name.split('.').length]-1) =='txt')
+    {
+      
+      Swal.fire({
+        title: "File Type",
+        text: "Invalid File Type..!",
+        icon: "error",
+        confirmButtonColor: "#2fba5f",
+      });
+    }
+    else{
+    
+      // if (docType.includes(fileType)) {
+      if (accFileStorage + item?.size <= totalStorageSize) {
+        const Files = item;
+        const FilesValue =item;
+        const fileName = Files.name;
+        const fileSize = (Files.size.toString().length > 6 ? (Files.size / 1e+6).toString().slice(0, -5) + ' MB' : (Files.size / 1000).toString().slice(0, -1) + ' KB');
+
+        
+      
+
+        
+        //Set fileData For Show preview of files
+  let fileTypeRow = item.type? item.type: item.type === "" ? "application/x-rar-compressed": "";
+  let urlRow = URL.createObjectURL(item); //
+  let fileExt = fileTypeRow.split("/")[1];
+  let fileMIME = fileTypeRow.split("/")[0];
+  let src = fileMIME === "image"
+      ? urlRow
+      : fileMIME === "octet-stream" && fileExt === "csv"
+        ? ImageConfig["csv"]
+        : (fileMIME === "octet-stream" || fileMIME === "application") &&
+          (fileExt === "rar" || fileExt === "x-rar-compressed")
+          ? ImageConfig["rar"]
+          : ImageConfig[fileExt];
+
+          PreviweList.push({
+      name : item.name,
+      size: item.size,
+      pic: src});
+
+      // accFileStorage
+        setAccFileStorage((prev)=> {return prev + item.size});
+        // setFileCheck(true);
+          }
+       else {
+        Swal.fire({
+          title: "File Storage",
+          text: "Storage size Overflow..",
+          icon: "error",
+          confirmButtonColor: "#2fba5f",
+        });
+      }
+    } }else {
+      
+      Swal.fire({
+        title: "File Type",
+        text: "Invalid File Type..!",
+        icon: "error",
+        confirmButtonColor: "#2fba5f",
+      });
+    }
+    })
+    
+    setFileData((prev)=>{
+      return{
+        ...prev,...PreviweList
+      }
+    });
+  },[files])
+
+
+
+
+  const handleFile = (e) => {
+    
+    setFiles(e.target.files);
+    
+    // setFile(e.target.files);    
+
+
+    //******** */
+    // const fileTypeArr = Array.from(e.target.files).map((fileQ) => ({
+    //     fileQ
+    //   //  fileName :  fileQ.name,
+    //   //  fileType : fileQ.type ? fileQ.type : fileQ.type === "" ? "application/x-rar-compressed" : "",
+    //   //  fileSize : fileQ.size
+    // }));
+    // setFiles(fileTypeArr);
+    // setFiles(e.target.files);
+    // console.log("FileTyp", fileTypeArr)    
+    
+    // Object.keys(e.target.files).forEach((item)=>{
+    //   console.log("item", item);
+    // })
+    // const fileType = e.target.files[0].type
+    //   ? e.target.files[0].type
+    //   : e.target.files[0].type === ""
+    //     ? "application/x-rar-compressed"
+    //     : "";
+    // if (docType.includes(fileType) && (fileType == "text/plain" && Files.name.split('.').length[Files.name.split('.').length]-1) !='txt') {
+    // if (docType.includes(fileType)) {
+    //   if (accFileStorage + e.target.files[0]?.size <= totalStorageSize) {
+    //     const Files = e.target.files[0];
+    //     const FilesValue = e.target.value;
+    //     const fileName = Files.name;
+    //     const fileSize = (Files.size.toString().length > 6 ? (Files.size / 1e+6).toString().slice(0, -5) + ' MB' : (Files.size / 1000).toString().slice(0, -1) + ' KB');
+
+    //     // console.log('Files.size.length', Files.size.toString().length);
+    //     // const fileSize = ((Files.size / 1e+6).toString().slice(0,-4) + " MB");
+    //     const url = URL.createObjectURL(Files); // this points to the File object we just created
+    //     let fileExt = fileType.split("/")[1];
+    //     let fileMIME = fileType.split("/")[0];
+    //     // setFile1(e.target.files[0]);
+    //     // console.log('e.target.files[0]',e.target.files[0]);        
+    //     setFile({
+    //       // ...file,
+    //       file: e.target.files[0],
+    //       name: fileName,
+    //       type: fileType,
+    //       size: fileSize,
+    //       value: FilesValue,
+    //       src:
+    //         fileMIME === "image"
+    //           ? url
+    //           : fileMIME === "octet-stream" && fileExt === "csv"
+    //             ? ImageConfig["csv"]
+    //             : (fileMIME === "octet-stream" || fileMIME === "application") &&
+    //               (fileExt === "rar" || fileExt === "x-rar-compressed")
+    //               ? ImageConfig["rar"]
+    //               : ImageConfig[fileExt],
+    //     });
+    //     setAccFileStorage(accFileStorage + e.target.files[0].size);
+    //     setFileCheck(true);
+
+        
+
+
+
+
+
+
+
+    //   } else {
+    //     Swal.fire({
+    //       title: "File Storage",
+    //       text: "Storage size Overflow..",
+    //       icon: "error",
+    //       confirmButtonColor: "#2fba5f",
+    //     });
+    //   }
+    // } else {
+    //   Swal.fire({
+    //     title: "File Type",
+    //     text: "Invalid File Type..!",
+    //     icon: "error",
+    //     confirmButtonColor: "#2fba5f",
+    //   });
+    // }
+
+    // checkFileSize
+    // const checkFile = e.target.files[0];
+    // const fileSizeCheck = checkFile.size;
+
+
+    // // checkListUploadSize
+    // const totListSize = Object.values(fileData).map((lis) => ({
+    //   size: lis.size,
+    // }));
+    // const checkFSize = Object.values(totListSize).map((lit) => parseFloat(lit.size));
+    // let totalFSize = 0;
+    // for (let i = 0; i < checkFSize.length; i++) {
+    //   totalFSize += checkFSize[i];
+    // }
+
+
+    //checkPreviewFileSize
+//     const files = e.target.files[0];
+//     const prevFileSize = ((files.size / 1e+6).toString().slice(0, -5));
+//     const mergeTwoFileSize = parseInt(prevFileSize) + totalFSize;
+// console.log("totalFSize",totalFSize)
+// console.log("mergeTwoFileSize",mergeTwoFileSize)
+//     // if (fileSizeCheck > 50000000 || totalFSize > 50.0 || mergeTwoFileSize > 50.0) {
+//     if (fileSizeCheck > 50000000 || totalFSize > 50000000 || mergeTwoFileSize > 50000000) {
+//       setFileSizeLimit({ ...fileSizeLimit, error: 'File Size across the Limit (Limit : 50MB)' })
+//       setFileCheck(false);
+//       setFile({ ...file, value: '' });
+//     }
+//     else {
+//       setFileCheck(true);
+//     }
+
+
+    
+  };
+
+// useEffect(()=>{
+
+// let PreviweList= [];
+// console.log("Files",files);
+// if(files.length>0)
+// {
+//     Object.values(files).forEach((row)=>{
+      
+//   let fileTypeRow = row.type? row.type: row.type === "" ? "application/x-rar-compressed": "";
+//   let urlRow = URL.createObjectURL(row); //
+//   let fileExt = fileTypeRow.split("/")[1];
+//   let fileMIME = fileTypeRow.split("/")[0];
+//   let src = fileMIME === "image"
+//       ? urlRow
+//       : fileMIME === "octet-stream" && fileExt === "csv"
+//         ? ImageConfig["csv"]
+//         : (fileMIME === "octet-stream" || fileMIME === "application") &&
+//           (fileExt === "rar" || fileExt === "x-rar-compressed")
+//           ? ImageConfig["rar"]
+//           : ImageConfig[fileExt];
+
+//           PreviweList.push({
+//       name : row.name,
+//       size: row.size,
+//       pic: src});
+//   })
+// }
+
+//   console.log("PreviweList",PreviweList)
+//   setFileData((prev)=>{
+//     return{
+//       ...prev,...PreviweList
+//     }
+//   })
+// },[files])
+
+
+
+  const objectData = {
+    name: file.name,
+    size: file.size,
+    pic: file.src,
+  };
+
+  //for Preview purpose only
+  const addfiles = () => {
+    let updated = [...fileData];
+    updated.push(objectData);
+    setFileData(updated);
+    setFileListCheck(true);
+    setFileSizeLimit({ ...fileSizeLimit, error: '' })
+  };
+
+  const handleFileAdd = (e) => {
+    e.preventDefault();
+    addfiles();
+    // uploadFiles();      
+    setFileCheck(false);
+  };
+
+  const removePreview = (e) => {
+    e.preventDefault();
+    setFileCheck(false);
+    setFile({ ...file, value: '' })
+    setFileSizeLimit('');
+  };
+
+  const inputChangeHandler = (e) => {
+    setInput({ ...input, [e.target.name]: e.target.value })
+  }
+
+  console.log('filData', fileData);
+  
+
+  return (
+    <Fragment>
+      <div className="AttendanceEntry">
+        <div className="card shadow p-4 mb-4">
+          <form onSubmit={submitHandler}>
+            <div className="row">
+              <div className="col-lg-6">
+                <div className="row align-items-center mb-3">
+                  <div className="col-lg-3">
+                    <label>Employee Name <span className="text-danger h6">*</span></label>
+                  </div>
+                  <div className="col-lg-9">
+                    <Select
+                      name="userId"
+                      id="userId"
+                      isSearchable="true"
+                      isClearable="true"
+                      options={employeeList}
+                      value={input.userId}
+                      onChange={selectChangeHandler}
+                    ></Select>
+                    <div className="col-6 ml-n5 mt-2">
+                      {(validation.userIdErr === true && isClicked.userId) &&
+                        <span style={{ color: "red" }}>
+                          Please Select Employee..!
+                        </span>}
+                    </div>
+                  </div>
+                </div>
+                <div className="row align-items-center mb-3">
+                  <div className="col-lg-3">
+                    <label>From Date<span className="text-danger h6">*</span></label>
+                  </div>
+                  <div className="col-lg-9">
+                    <input type="date" className="form-control" name='fromDate' value={input.fromDate} onChange={(e) => inputChangeHandler(e)} />
+                  </div>
+                  <div className="col-6 ml-n5 mt-2">
+                    {(validation.userIdErr === true && isClicked.userId) &&
+                      <span style={{ color: "red" }}>
+                        Please Select Employee..!
+                      </span>}
+                  </div>
+                </div>
+                <div className="row align-items-center mb-3">
+                  <div className="col-lg-3">
+                    <label htmlFor="startTime">Start Time</label>
+                  </div>
+                  <div className="col-lg-9">
+                    <input type="time" id="startTime" name="startTime" className="form-control" value={input.startTime} onChange={inputChangeHandler}/>                   
+                  </div>
+                </div>
+                <div className="row align-items-center mb-3">
+                  <div className="col-lg-3 text-dark">
+                    <label htmlFor="document" className="font-weight-bold">
+                      Document
+                    </label>
+                  </div>
+                  <div className="col-lg-9">
+                    <div
+                      className={`document border-primary d-flex flex-column align-items-center justify-content-center   bg-gray-200 ${styles.height_of_dropbox} ${styles.boderradius__dropbox} ${styles.dashed} ${styles.drop_file_input} `}
+                    >
+                      <p className="display-4 mb-0">
+                        <i className="fas fa-cloud-upload-alt text-primary "></i>
+                      </p>
+                      <p>Drag & Drop an document or Click</p>
+                      <input
+                        type="file"
+                        value={file.value}
+                        name="image"
+                        id="image"
+                        className="h-100 w-100 position-absolute top-50 start-50 pointer"
+                        // accept={`image/*`}
+                        onChange={(e) => handleFile(e)}
+                        multiple
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-6">
+                <div className="row align-items-center mb-3">
+                  <div className="col-lg-3">
+                    <label>Attendance Type <span className="text-danger h6">*</span>  </label>
+                  </div>
+                  <div className="col-lg-9">
+                    <Select
+                      name="attendanceType"
+                      id="attendanceType"
+                      isSearchable="true"
+                      isClearable="true"
+                      options={attendanceList}
+                      value={input.attendanceType}
+                      onChange={selectChangeHandler}
+                    ></Select>
+                    <div className="col-6 ml-n5 mt-2">
+                      {(validation.attendanceTypeErr === true && isClicked.attendanceType) &&
+                        <span style={{ color: "red" }}>
+                          Please Select Attendance Type..!
+                        </span>}
+                    </div>
+                  </div>
+                </div>
+                <div className="row align-items-center mb-3">
+                  <div className="col-lg-3">
+                    <label>To Date<span className="text-danger h6">*</span></label>
+                  </div>
+                  <div className="col-lg-9">
+                    <input type="date" className="form-control" name='toDate' value={input.toDate} onChange={(e) => inputChangeHandler(e)} />
+                  </div>
+                  <div className="col-6 ml-n5 mt-2">
+                    {(validation.attendanceTypeErr === true && isClicked.attendanceType) &&
+                      <span style={{ color: "red" }}>
+                        Please Select Attendance Type..!
+                      </span>}
+                  </div>
+                </div>
+                <div className="row align-items-center mb-3">
+                  <div className="col-lg-3">
+                    <label>Reason </label>
+                  </div>
+                  <div className="col-lg-9">
+                    <textarea cols={50} rows={2} className="form-control" name='reason' value={input.reason} onChange={(e) => inputChangeHandler(e)} />
+                  </div>
+                </div>
+                {/* {fileCheck ?
+                  <div className="row align-items-center mb-3">
+                    <div className="col-lg-3">
+                      <label className="font-weight-bold">Preview</label>
+                    </div>
+                    <div className="col-lg-9">
+                      <>
+                        <div className="upload_Documents">
+                          <div className="card  my-4">
+                            <div className="card-body">
+                              <div className="UploadingDetails">
+                                <div>
+                                  <h6> Name : </h6> <span>{file.name}</span>
+                                </div>
+                                <div>
+                                  <h6> Size : </h6> <span>{file.size}</span>
+                                </div>
+                              </div>
+                              <div className="UploadImg">
+                                <img
+                                  src={file.src}
+                                  onClick={() =>
+                                    window.open(file.src, "_blank")
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="btns">
+                            <button
+                              className="btn btn-info mr-2"
+                              onClick={(e) => {
+                                handleFileAdd(e);
+                                // setFileUploading(true);
+                              }}
+                            >
+                              {fileuploading ? "Adding..." : "Add"}
+                            </button>
+                            <button
+                              className="btn btn-dark"
+                              onClick={(e) => removePreview(e)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </>
+                    </div>
+                  </div> : fileSizeLimit.error
+                } */}
+              </div>
+            </div>
+
+            <div className="row align-items-center mb-4">
+              <div className="col-lg-12">
+                {fileListCheck && (
+                  <h6 className="listOfupload">
+                    List of Uploaded documents
+                  </h6>
+                )}
+              </div>
+              <div className="col-lg-12">Length : {Object.keys(fileData).length} :::
+                {/* {fileListCheck && ( */}
+                  <div className="file_Documents">
+                    {Object.keys(fileData).length > 0 && (
+                    Object.values(fileData).map((t, i) => (
+                  
+                      <div className="card" key={i}>
+                        <div className="card-body">
+                          <div className="noOfFiles">{fileCount++}</div>
+                          <div className="fileDetails">
+                            <div className="pic">
+                              <img src={t.pic} alt="" />
+                            </div>
+                            <div className="text">
+                              <div>
+                                <h6>Name: </h6>
+                                <p>{t.name}</p>
+                              </div>
+                              <div>
+                                <h6>Size: </h6>
+                                <p>{t.size}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="fileAction">
+                            <div className="download">
+                              {/* <FaDownload
+                                onClick={() => downloadDoc(t.id, t.name)}
+                              /> */}
+                            </div>
+
+                            <div className="delete">
+                              {/* <RiDeleteBin5Fill
+                                onClick={() => DeleteDoc(t.id, t.name)}
+                              /> */}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                    )}
+                  </div>
+                {/* )} */}
+              </div>
+            </div>
+            <div className="row text-center">
+              <div className="col-12">
+                {id ? (
+                  <button className="btn btn-primary" disabled={dataSending || !formIsValid} > {dataSending ? "Updating..." : "Update"}</button>
+                ) : (
+                  <button className="btn btn-primary" disabled={dataSending || !formIsValid}> {dataSending ? "Submitting..." : "Submit"}</button>
+                )}
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </Fragment>
+  )
+}
+
+export default AttendanceEntry;
+
+
+
+
+
+{/* <form onSubmit={submitHandler}>
+<div className="row">
+  <div className="col-2">
+    <label>Employee Name</label>
+  </div>
+  <div className="col-10 mb-3">
+    <div className="row">
+      <div className="col-5 mr-5 ">
+        <Select
+          name="userId"
+          id="userId"
+          isSearchable="true"
+          isClearable="true"
+          options={employeeList}
+          value={input.userId}
+          onChange={selectChangeHandler}
+        ></Select>
+      </div>
+
+      <div className="col-6 ml-n5 mt-2">
+        {(validation.userIdErr === true && isClicked.userId) &&
+          <span style={{ color: "red" }}>
+            Please Select Employee..!
+          </span>}
+      </div>
+    </div>
+  </div>
+</div>
+<div className="row">
+  <div className="col-2">
+    <label>Attendance Type</label>
+  </div>
+  <div className="col-10 mb-3">
+    <div className="row">
+      <div className="col-5 mr-5 ">
+        <Select
+          name="attendanceType"
+          id="attendanceType"
+          isSearchable="true"
+          isClearable="true"
+          options={attendance_type_options}
+          value={input.attendanceType}
+          onChange={selectChangeHandler}
+        ></Select>
+      </div>
+      <div className="col-6 ml-n5 mt-2">
+        {(validation.attendanceTypeErr === true && isClicked.attendanceType) &&
+          <span style={{ color: "red" }}>
+            Please Select Attendance Type..!
+          </span>}
+      </div>
+    </div>
+  </div>
+</div>
+<div className="row">
+  <div className="col-2">
+    <label>Server Time</label>
+  </div>
+
+  <div className="col-5 ml-3">
+    <LocalDateTime />
+  </div>
+</div>
+<div className="row text-center">
+  <div className="col-12">
+    {id ? (
+      <button className="btn btn-primary" disabled={dataSending || !formIsValid} > {dataSending ? "Updating..." : "Update"}</button>
+    ) : (
+      <button className="btn btn-primary" disabled={dataSending || !formIsValid}> {dataSending ? "Submitting..." : "Submit"}</button>
+    )}
+  </div>
+</div>
+</form> */}
