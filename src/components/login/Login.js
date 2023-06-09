@@ -157,9 +157,9 @@ function Login() {
                   <div className="col-xl-10 col-lg-12 col-md-9">
                     {/* Nested Row within Card Body */}
                     <div className="row">
-                      <div className="col-lg-6 d-none d-lg-block py-3  px-0 mt-2">
+                      <div className="col-lg-6 py-3 alignment px-0 mt-2">
                         {/* <center> */}
-                          <div>
+                          <div className="new-box">
                             <img
                               className="login_logo"
                               src="/assets/icons/logo-zigma.png"
