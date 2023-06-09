@@ -61,14 +61,6 @@ function Dashboard() {
     retender: 0,
   });
 
-  const [callCount, setCallCount] = useState({
-    attendedCallsCount: 0,
-    completedCallCount: 0,
-    openingCallCount: 0,
-    overduecallcount: 0,
-    todaycallCount: 0,
-  })
-
   const marks = [
     { value: 0, label: "Zero" },
     { value: 6, label: "20 Lakh +" },

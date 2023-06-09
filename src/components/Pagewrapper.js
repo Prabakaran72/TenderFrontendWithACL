@@ -27,7 +27,7 @@ function Pagewrapper(props) {
 
     axios.post(`${baseUrl}/api/logout`, data).then((res) => {
       if (res.data.status === 200) {
-        navigate(0)
+        navigate('/')
         authCtx.logout()
       }else{
         alert("Unable to logout. Try again!")

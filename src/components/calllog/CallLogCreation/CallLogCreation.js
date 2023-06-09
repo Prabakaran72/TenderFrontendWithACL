@@ -16,7 +16,7 @@ import { useAllowedMIMEDocType } from "../../hooks/useAllowedMIMEDocType";
 import { useAllowedUploadFileSize } from "../../hooks/useAllowedUploadFileSize";
 import { useImageStoragePath } from "../../hooks/useImageStoragePath";
 import CallLogTab from "./CallLogTab";
-import MultiFileUploader from "../../multipleFileUpload/MultiFileUploader";
+import MultiFileUploader from '../../multipleFileUpload/MultiFileUploader';
 
 const selectState = {
   customer: null,
@@ -59,10 +59,8 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-
 const CallLogCreation = () => {
   usePageTitle("Call Details");
-
   // const { position, error } = useGeoPosition();
   const { server1: baseUrl } = useBaseUrl();
   const { id, mode } = useParams();
@@ -87,7 +85,7 @@ const CallLogCreation = () => {
 
   const [checked, setChecked] = useState("nextFollowUp");
   const [check, setCheck] = useState(false); //handleing the visibility of procurement type dropdown input field
-  const [fileSizeLimit, setFileSizeLimit] = useState({ error: "" });
+  const [fileSizeLimit, setFileSizeLimit]= useState({error: ''});
   const [nxtFlw, setNxtFlw] = useState(null);
 
   const [input, setInput] = useState(selectState);
@@ -97,22 +95,8 @@ const CallLogCreation = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [mainId, setMainId] = useState(null);
   const [fetchedData, setFetchedData] = useState([]);
-
-
-  //Data to pass file Handling Component *** Starts here  ***
-  // const [fileList, setFileList] = useState([]); //This state used to have newly attached files, which are to be submitted
-  // const [initiateRerender, setInitiateRerender] = useState(0); //This is used to make Parent component rerender after getting Stored Value 
-  // const APItoGetFileList='callcreation/doclist/'; //Api to get stored file list based on mainId/Id
-  // const APItoDeleteFile='callfileupload/'; //Api to delete a file based on subid
-  // const APItoDownloadFile='callcreation/docdownload/';  //Api to download a file based on subid
-  // const ImageStoragePath=filePath;  //want to extract path from useImageStoragePath() hook to show image preview
-  // const DbOriginalFileName='originalfilename';  //DB Table Field Name which holds Orignal File Name 
-  // const DbHashedFileName='hasfilename'; //DB Table Field Name which holds hashed/Modified File Name
-  // const DbFileSize='filesize'; //DB Table Field Name which holds File size
-    //mainId is the id to get relevant file. it is been set for Edit 
- //Data to pass file Handling Component *** Ends here  ***
-
-
+  
+  const [fileList, setFileList] = useState([]);
 
   const [isEdited, setEdited] = useState({
     customer: false,
@@ -143,9 +127,13 @@ const CallLogCreation = () => {
     pic: file.src,
   };
 
-// useEffect(()=>{
-//   console.log("initiateRerender",initiateRerender);
-// },[initiateRerender])
+  
+
+
+
+
+  
+
 
   useEffect(() => {
     if (
@@ -193,9 +181,7 @@ const CallLogCreation = () => {
             id: res.data.docs[key].id,
             mainid: res.data.docs[key].mainid,
             name: res.data.docs[key].originalfilename,
-            size:
-              (res.data.docs[key].filesize / 1000).toString().slice(0, -5) +
-              " MB",
+            size: ((res.data.docs[key].filesize / 1000).toString().slice(0,-5) + ' MB'),
             pic:
               fileMIME === "image"
                 ? filePath + "" + res.data.docs[key].hasfilename
@@ -253,6 +239,7 @@ const CallLogCreation = () => {
       }
     });
   };
+
   const InitialRequest = async () => {
     //if mode is Edit
     if (mode === "edit") {
@@ -261,7 +248,7 @@ const CallLogCreation = () => {
       await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
         setOptionsForCallList(res.data?.calltype);
       });
-      let data = { tokenid: token };
+    let data = {'tokenid' : token};
       axios.post(`${baseUrl}/api/customer/list`, data).then((res) => {
         setOptionsForCutomerList(res.data?.customerList);
         setIsFetching((prev) => {
@@ -276,7 +263,6 @@ const CallLogCreation = () => {
         });
       });
       if (id) {
-        console.log("ID", id)
         await axios.get(`${baseUrl}/api/callhistory/${id}`).then((res) => {
           let fetcheddata = res.data.showcallhistory;
 
@@ -297,7 +283,6 @@ const CallLogCreation = () => {
             };
           });
           setMainId(fetcheddata.main_id);
-          console.log("Main ID", fetcheddata.main_id)
 
           setEdited({
             customer: false,
@@ -314,16 +299,15 @@ const CallLogCreation = () => {
           }
         });
       }
-    } else {
-      //Execute here if  mode is not Edit ie., nxtFlw or Create a call
+    } else { //Execute here if  mode is not Edit ie., nxtFlw or Create a call
       await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
         setOptionsForCallList(res.data?.calltype);
         // setIsFetching((prev) => {
         //   return { ...prev, calltype: false };
         // });
       });
-      let datatosend = { tokenid: token };
-      axios.post(`${baseUrl}/api/customer/list`, datatosend).then((res) => {
+let datatosend = {"tokenid": token};
+      axios.post(`${baseUrl}/api/customer/list`,datatosend).then((res) => {
         setOptionsForCutomerList(res.data?.customerList);
         setIsFetching((prev) => {
           return { ...prev, customer: false };
@@ -336,7 +320,7 @@ const CallLogCreation = () => {
           return { ...prev, procurement: false };
         });
       });
-    
+      console.log("id", id);
       if (id) {
         await axios.get(`${baseUrl}/api/callhistory/${id}`).then((res) => {
           let histdata = res.data.showcallhistory;
@@ -682,11 +666,8 @@ const CallLogCreation = () => {
         const FilesValue = e.target.value;
         const fileName = Files.name;
         // const fileSize = Files.size + " KB";
-        const fileSize =
-          Files.size.toString().length > 6
-            ? (Files.size / 1e6).toString().slice(0, -5) + " MB"
-            : (Files.size / 1000).toString().slice(0, -1) + " KB";
-        console.log("Files.size.length", Files.size.toString().length);
+        const fileSize = (Files.size.toString().length > 6 ? (Files.size / 1e+6).toString().slice(0,-5) + ' MB' :  (Files.size / 1000).toString().slice(0,-1) + ' KB');        
+        console.log('Files.size.length', Files.size.toString().length);
         // const fileSize = ((Files.size / 1e+6).toString().slice(0,-4) + " MB");
 
         const url = URL.createObjectURL(Files); // this points to the File object we just created
@@ -729,52 +710,50 @@ const CallLogCreation = () => {
       });
     }
 
+
     // checkFileSize
     const checkFile = e.target.files[0];
     const fileSizeCheck = checkFile.size;
 
     // checkListUploadSize
-    const totListSize = fileData.map((lis) => ({
-      size: lis.size,
-    }));
-    const checkFSize = Object.values(totListSize).map((lit) =>
-      parseFloat(lit.size)
-    );
+    const totListSize = fileData.map((lis)=> ({
+      size : lis.size,      
+    }));   
+    const checkFSize = Object.values(totListSize).map((lit)=> parseFloat(lit.size));
     let totalFSize = 0;
     for (let i = 0; i < checkFSize.length; i++) {
       totalFSize += checkFSize[i];
-    }
+    }    
+
 
     //checkPreviewFileSize
-    const files = e.target.files[0];
-    const prevFileSize = (files.size / 1e6).toString().slice(0, -5);
-    const mergeTwoFileSize = parseInt(prevFileSize) + totalFSize;
+    const files = e.target.files[0];          
+    const prevFileSize = ((files.size / 1e+6).toString().slice(0,-5));              
+    const mergeTwoFileSize = parseInt(prevFileSize) + totalFSize;     
 
-    // if(fileSizeCheck > 50000000 || totalFSize > 50.0) {
+
+
+    // if(fileSizeCheck > 50000000 || totalFSize > 50.0) {      
     //   setFileSizeLimit({...fileSizeLimit, error: 'File Size across the Limit (Limit : 50MB)'})
     //   setFileCheck(false);
-    //   setFile({...file, value: ''});
+    //   setFile({...file, value: ''});       
     // }
 
-    if (
-      fileSizeCheck > 50000000 ||
-      totalFSize > 50.0 ||
-      mergeTwoFileSize > 50.0
-    ) {
-      setFileSizeLimit({
-        ...fileSizeLimit,
-        error: "File Size across the Limit (Limit : 50MB)",
-      });
+    if(fileSizeCheck > 50000000 || totalFSize > 50.0 || mergeTwoFileSize > 50.0) {      
+      setFileSizeLimit({...fileSizeLimit, error: 'File Size across the Limit (Limit : 50MB)'})
       setFileCheck(false);
-      setFile({ ...file, value: "" });
-    } else {
-      setFileCheck(true);
+      setFile({...file, value: ''});       
     }
 
-    // console.log('totalFSize',totalFSize);
-    // console.log('checkFSize',checkFSize);
+
+    else {
+      setFileCheck(true);      
+    }
+
+    // console.log('totalFSize',totalFSize); 
+    // console.log('checkFSize',checkFSize); 
     // console.log(" totalFSize > 50.0 ", totalFSize > 50.0);
-    // console.log('mergeTwoFileSize',mergeTwoFileSize);
+    // console.log('mergeTwoFileSize',mergeTwoFileSize); 
   };
 
   //for Preview purpose only
@@ -783,7 +762,7 @@ const CallLogCreation = () => {
     updated.push(objectData);
     setFileData(updated);
     setFileListCheck(true);
-    setFileSizeLimit({ ...fileSizeLimit, error: "" });
+    setFileSizeLimit({...fileSizeLimit, error: ''})
   };
 
   const handleFileAdd = (e) => {
@@ -849,7 +828,7 @@ const CallLogCreation = () => {
   const removePreview = (e) => {
     e.preventDefault();
     setFileCheck(false);
-    setFile({ ...file, value: "" });
+    setFile({...file, value:""});
   };
 
   let fileCount = 1;
@@ -917,7 +896,8 @@ const CallLogCreation = () => {
       });
   };
 
-  const displaySwal = (status, err = "") => {
+  const displaySwal = (status, err="")=>{
+    
     if (status === 200) {
       Swal.fire({
         icon: "success",
@@ -936,22 +916,26 @@ const CallLogCreation = () => {
       });
       setDataSending(false);
     }
-  };
+
+  }
 
   const putData = (data, id) => {
     let res = "";
     if (mode == "edit") {
-      axios.put(`${baseUrl}/api/callcreation/${id}`, data).then((res) => {
-        console.log("Status", res);
-        displaySwal(res.data.status, res?.data?.message);
+      axios.put(`${baseUrl}/api/callcreation/${id}`, data).then((res)=>{
+      
+        console.log("Status",res)
+        displaySwal(res.data.status,res?.data?.message);
       });
+      
     } else {
-      axios.post(`${baseUrl}/api/callhistory`, data).then((res) => {
-        console.log("Status", res);
-        displaySwal(res.data.status, res?.data?.message);
+      axios.post(`${baseUrl}/api/callhistory`, data).then((res)=>{
+        console.log("Status",res)
+        displaySwal(res.data.status,res?.data?.message);
       });
     }
-    console.log("Res", res);
+console.log("Res",res);
+    
   };
 
   return (
@@ -996,7 +980,7 @@ const CallLogCreation = () => {
                         options={optionsForCutomerList}
                         value={input.customer}
                         onChange={inputHandlerForSelect}
-                        isDisabled={mode === "nxtFlw" ? true : false}
+                        isDisabled = {mode === "nxtFlw" ? true : false}
                       ></Select>
                       {inputValidation.customer && (
                         <div className="pt-1">
@@ -1023,7 +1007,7 @@ const CallLogCreation = () => {
                         name="entrydate"
                         onChange={(e) => inputHandlerFortext(e)}
                         value={input.entrydate}
-                        disabled={mode === "nxtFlw" ? true : false}
+                        disabled = {mode === 'nxtFlw' ? true : false}
                       />
                       {inputValidation.Date && (
                         <div className="pt-1">
@@ -1052,7 +1036,7 @@ const CallLogCreation = () => {
                         options={optionsForCallList}
                         value={input.calltype}
                         onChange={inputHandlerForSelect}
-                        isDisabled={mode === "nxtFlw" ? true : false}
+                        isDisabled = {mode === "nxtFlw" ? true : false}
                       ></Select>
                       {inputValidation.calltype && (
                         <div className="pt-1">
@@ -1085,7 +1069,7 @@ const CallLogCreation = () => {
                     </div>
                   </div>
                 </div>
-
+               
                 <div className="inputgroup col-lg-6 mb-4">
                   <div className="row align-items-center">
                     <div className="col-lg-4 text-dark">
@@ -1107,7 +1091,7 @@ const CallLogCreation = () => {
                         options={optionsForBizzList}
                         value={input.businessForecast}
                         onChange={inputHandlerForSelect}
-                        isDisabled={mode === "nxtFlw" ? true : false}
+                        isDisabled = {mode === "nxtFlw" ? true : false}
                       ></Select>
                       {inputValidation.businessForecast && (
                         <div className="pt-1">
@@ -1141,7 +1125,7 @@ const CallLogCreation = () => {
                           options={optionsForProcurement}
                           value={input.procurement}
                           onChange={inputHandlerForSelect}
-                          isDisabled={mode === "nxtFlw" ? true : false}
+                          isDisabled = {mode === "nxtFlw" ? true : false}
                         ></Select>
                         {inputValidation.procurement && (
                           <div className="pt-1">
@@ -1181,7 +1165,7 @@ const CallLogCreation = () => {
                         options={optionsForStatusList}
                         value={input.forecastStatus}
                         onChange={inputHandlerForSelect}
-                        isDisabled={mode === "nxtFlw" ? true : false}
+                        isDisabled = {mode === "nxtFlw" ? true : false}
                       ></Select>
                       {inputValidation.forecastStatus && (
                         <div className="pt-1">
@@ -1255,7 +1239,7 @@ const CallLogCreation = () => {
                         cols="50"
                         value={input.addInfo}
                         onChange={(e) => inputHandlerFortext(e)}
-                        disabled={mode === "nxtFlw" ? true : false}
+                        disabled = {mode === 'nxtFlw' ? true : false}
                       />
                     </div>
                   </div>
@@ -1391,19 +1375,11 @@ const CallLogCreation = () => {
                     Cancel
                   </button>
                 </div>
+                      
+               
+                      <MultiFileUploader setFileList={setFileList}/>
+               
 
-                {/* <MultiFileUploader
-                  setFileList={setFileList}  //to update File details to Parent Component
-                  APItoGetFileList={`callcreation/doclist/`}
-                  APItoDeleteFile={"callfileupload/"}
-                  APItoDownloadFile={"callcreation/docdownload/"}
-                  ImageStoragePath={filePath}  //want to extract path from useImageStoragePath() hook to show image preview
-                  DbOriginalFileName={DbOriginalFileName}
-                  DbHashedFileName={DbHashedFileName}
-                  DbFileSize={DbFileSize}
-                  mainId={id}
-                  setInitiateRerender={setInitiateRerender}
-                /> */}
 
                 <div className="inputgroup col-lg-6 mb-4">
                   <div className="row align-items-center">
@@ -1436,7 +1412,7 @@ const CallLogCreation = () => {
                 </div>
 
                 <div className="inputgroup col-lg-6 mb-4 ">
-                  {fileCheck ? (
+                  {fileCheck ?
                     <div className="row align-items-center">
                       <div className="col-lg-4">
                         <label className="font-weight-bold">Preview</label>
@@ -1485,10 +1461,8 @@ const CallLogCreation = () => {
                           </div>
                         </>
                       </div>
-                    </div>
-                  ) : (
-                    fileSizeLimit.error
-                  )}
+                    </div> :  fileSizeLimit.error
+                  }
                 </div>
 
                 <div className="inputgroup col-lg-12 mb-4 ">

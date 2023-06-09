@@ -53,7 +53,6 @@ body {
 }
 .icon-delete, .icon-trash {
     color: #e74a3b ;
-    cursor: pointer;
 }
 .print-icon {
     color: #0da2d0;
@@ -178,7 +177,7 @@ body {
     width: 180px;
     height: 180px;
     margin-top: 20px;
-    /* transition: 2s ease-in-out; */
+    transition: 2s ease-in-out;
     /* animation: wave; */
     animation-iteration-count: infinite;
     animation-duration: 2.5s;
@@ -506,12 +505,11 @@ body {
     .Login .card {
         width: 340px;
         margin-left: 0;
-        margin-top: 0 !important;
     }
     .Login form button .dfx .fa-gavel {
         position: absolute;
         bottom: 63px;
-    }   
+    }
     .Login .alignment {
         display: flex;
         justify-content: center;
@@ -535,7 +533,7 @@ body {
         width: 70px;
         height: 70px;   
         margin: 0;     
-    }
+    }    
 }
 
 
@@ -1651,9 +1649,9 @@ table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:
     color: #9d4edd;
 }
 .CallLogsDashboard .cards .card .row .completedCall .count h4{
-    color: #38b000;
+    color: #d00000;
 }
-.CallLogsDashboard .cards .card .row .completedCall .icon{    
+.CallLogsDashboard .cards .card .row .completedCall .icon{
     background: #38b00018;
     color: #38b000;
 }
