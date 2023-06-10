@@ -157,9 +157,13 @@ const CallLogCreation = () => {
   }, [input]);
 
   const getFileList = async () => {
+
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios({
-      url: `${baseUrl}/api/callcreation/doclist/${mainId}`,
-      method: "GET",
+      url: `${baseUrl}/api/callcreation/doclist/${mainId}`,data,
+      method: "POST",
       // responseType: "blob", // important
       headers: {
         //to stop cacheing this response at browsers. otherwise wrongly displayed cached files
@@ -205,9 +209,12 @@ const CallLogCreation = () => {
   };
 
   const downloadDoc = (fileid, filename) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios({
-      url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,
-      method: "GET",
+      url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,data,
+      method: "POST",
       responseType: "blob", // important
     }).then((response) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));

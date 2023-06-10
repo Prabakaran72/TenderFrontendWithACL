@@ -323,8 +323,12 @@ const CommunicationFilesForm = () => {
   }, [input, file, previewForEdit]);
 
   const getCompFilesList = () => {
+
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios
-      .get(`${baseUrl}/api/competitordetails/commFilesList/${id}`)
+      .post(`${baseUrl}/api/competitordetails/commFilesList/${id}`,data)
       .then((resp) => {
         // console.log("resp.data.comm", resp.data.comm);
         let list = [...resp.data.comm];

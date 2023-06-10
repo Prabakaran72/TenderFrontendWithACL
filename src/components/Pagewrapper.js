@@ -50,7 +50,7 @@ function Pagewrapper(props) {
    
     <Provider store={dashboardStore}>
       {/* <SessionTimeout timeoutInSeconds={10} onTimeout={handleSessionTimeout} /> */}
-      <SessionTimeout timeoutInSeconds={900} onTimeout={() => window.dispatchEvent(new Event("sessionTimeout"))} />
+      <SessionTimeout timeoutInSeconds={3600} onTimeout={() => window.dispatchEvent(new Event("sessionTimeout"))} />
 
       {/* 300 seconds ==> 15 mins */}
       {/***1800 Seconds => 30 Mins***/}

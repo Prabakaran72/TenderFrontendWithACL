@@ -31,7 +31,11 @@ const CallReport = () => {
 
 
     useEffect(()=> {
-        axios.get(`${baseUrl}/api/customerOptions`).then((res)=> {           
+
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
+        axios.post(`${baseUrl}/api/customerOptions`,data).then((res)=> {           
            setCustomerName(res.data.customerList);
         })                         
          axios.get(`${baseUrl}/api/country/list`).then((res)=> {            

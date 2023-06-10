@@ -577,8 +577,12 @@ const CustomerCreationProfile = () => {
           let shortcode;
     
           smartcity==="yes" ? (shortcode = "SC") : (shortcode = "NC")
+
+          let data = {
+            tokenid : localStorage.getItem('token')
+          }
     
-          axios.get(`${baseUrl}/api/customercreation/getcustno/${stateValue.value}`).then((resp)=>{
+          axios.post(`${baseUrl}/api/customercreation/getcustno/${stateValue.value}`,data).then((resp)=>{
             let custno  = resp.data.no;
             custno = String(custno).padStart(2, '0')
             custno = `${stateValue.state_code}-${shortcode}-${custno}`
@@ -600,8 +604,12 @@ const CustomerCreationProfile = () => {
           let shortcode;
     
           smartcity==="yes" ? (shortcode = "SC") : (shortcode = "NC")
+
+          let data = {
+            tokenid : localStorage.getItem('token')
+          }
     
-          axios.get(`${baseUrl}/api/customercreation/getcustno/${stateValue.value}`).then((resp)=>{
+          axios.post(`${baseUrl}/api/customercreation/getcustno/${stateValue.value}`,data).then((resp)=>{
             let custno  = resp.data.no;
             custno = String(custno).padStart(2, '0')
             custno = `${stateValue.state_code}-${shortcode}-${custno}`
