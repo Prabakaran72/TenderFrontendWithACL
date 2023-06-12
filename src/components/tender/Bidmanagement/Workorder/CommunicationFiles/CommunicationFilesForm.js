@@ -77,8 +77,11 @@ const CommunicationFilesForm = () => {
   const onDrop = () => wrapperRef.current.classList.remove("dragover");
   const del_image = (e, id) => {
     e.preventDefault();
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios
-      .get(`${baseUrl}/api/workorder/creation/communicationfiledelete/${id}`)
+      .post(`${baseUrl}/api/workorder/creation/communicationfiledelete/${id}`,data)
       .then((res) => {
         if (res.data.status === 200) {
           imageList();

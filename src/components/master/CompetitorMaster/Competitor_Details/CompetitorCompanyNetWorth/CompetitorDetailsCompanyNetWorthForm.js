@@ -91,8 +91,11 @@ const CompetitorDetailsCompanyNetWorthForm = (props) => {
   }, [hasError]);
 
   const getNetWorthList = () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios
-      .get(`${baseUrl}/api/competitordetails/networthlist/${compid}`)
+      .post(`${baseUrl}/api/competitordetails/networthlist/${compid}`,data)
       .then((resp) => {
         let list = [...resp.data.networth];
         let listarr = list.map((item, index) => ({

@@ -3,22 +3,34 @@ import axios from "axios";
 
 
 export const  getCountryData =  async (baseUrl,savedcountry) => {
-  let response = await axios.get(`${baseUrl}/api/country/list/${savedcountry}`)  
+    let data = {
+        tokenid : localStorage.getItem('token')
+      }
+  let response = await axios.post(`${baseUrl}/api/country/list/${savedcountry}`,data)  
   return { options: response.data.countryList, isLoading: false }
 };
 
 export const  getSatateData =  async (baseUrl,countryid, category, savedstate) => {
-    let response = await  axios.get(`${baseUrl}/api/state/list/${countryid}/${category}/${savedstate}`)
+    let data = {
+        tokenid : localStorage.getItem('token')
+      }
+    let response = await  axios.post(`${baseUrl}/api/state/list/${countryid}/${category}/${savedstate}`,data)
     return { options: response.data.stateList, isLoading: false }
 };
 
 export const  getDistrictData =  async (baseUrl,countryid, stateid, savedDistrict) => {
-    let response = await  axios.get(`${baseUrl}/api/district/list/${countryid}/${stateid}/${savedDistrict}`)
+    let data = {
+        tokenid : localStorage.getItem('token')
+      }
+    let response = await  axios.post(`${baseUrl}/api/district/list/${countryid}/${stateid}/${savedDistrict}`,data)
     return { options: response.data.districtList, isLoading: false }
 };
 
 export const  getCityData =  async (baseUrl,countryid, stateid, districtid, savedCity) => {
-    let response = await  axios.get(`${baseUrl}/api/city/list/${countryid}/${stateid}/${districtid}/${savedCity}`)
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    let response = await  axios.post(`${baseUrl}/api/city/list/${countryid}/${stateid}/${districtid}/${savedCity}`,data)
     return { options: response.data.cityList, isLoading: false }
 };
 

@@ -140,12 +140,16 @@ const CompetitorProfile = () => {
   }, [competitorFormInput.state]);
 
   const generateNewCompNo = () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    
     let stateCode,
       newCompNo = "";
 
     axios
-      .get(
-        `${baseUrl}/api/customercreation/getstatecode/${competitorFormInput.state.value}`
+      .post(
+        `${baseUrl}/api/customercreation/getstatecode/${competitorFormInput.state.value}`,data
       )
       .then((resp) => {
         if (resp.status === 200) {
@@ -154,8 +158,8 @@ const CompetitorProfile = () => {
       })
       .then(() => {
         axios
-          .get(
-            `${baseUrl}/api/competitorprofile/getlastcompno/${competitorFormInput.state.value}`
+          .post(
+            `${baseUrl}/api/competitorprofile/getlastcompno/${competitorFormInput.state.value}`,data
           )
           .then((resp1) => {
             if (resp1.status === 200) {
@@ -314,22 +318,29 @@ const CompetitorProfile = () => {
   }, [cityList]);
 
   const getStateList = async () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
     if (competitorFormInput.country !== null) {
       await axios
-        .get(`${baseUrl}/api/state/list/${competitorFormInput.country.value}`)
+        .post(`${baseUrl}/api/state/list/${competitorFormInput.country.value}`,data)
         .then((resp) => {
           setStateList(resp.data.stateList);
         });
     }
   };
   const getDistrictList = async () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     if (
       competitorFormInput.country !== null &&
       competitorFormInput.state !== null
     ) {
       await axios
-        .get(
-          `${baseUrl}/api/district/list/${competitorFormInput.country.value}/${competitorFormInput.state.value}`
+        .post(
+          `${baseUrl}/api/district/list/${competitorFormInput.country.value}/${competitorFormInput.state.value}`,data
         )
         .then((resp) => {
           setDistrictList(resp.data.districtList);
@@ -337,14 +348,17 @@ const CompetitorProfile = () => {
     }
   };
   const getCityList = async () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     if (
       competitorFormInput.country !== null &&
       competitorFormInput.state !== null &&
       competitorFormInput.district !== null
     ) {
       await axios
-        .get(
-          `${baseUrl}/api/city/list/${competitorFormInput.country.value}/${competitorFormInput.state.value}/${competitorFormInput.district.value}/null`
+        .post(
+          `${baseUrl}/api/city/list/${competitorFormInput.country.value}/${competitorFormInput.state.value}/${competitorFormInput.district.value}/null`,data
         )
         .then((resp) => {
           setCityList(resp.data.cityList);

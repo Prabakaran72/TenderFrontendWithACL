@@ -93,8 +93,12 @@ const CallReportTable = ( {change, input, check} ) => {
         setPageSize,
     } = tableInstance;
 
-    useEffect(()=> {        
-        axios.post(`${baseUrl}/api/getdaywisereport/list`,change).then((resp)=> { 
+    useEffect(()=> {
+        let data = {
+            tokenid: 'd2b3b8f4f25138bff93ba741000a77aa1686376750815',
+            ...change
+          };          
+        axios.post(`${baseUrl}/api/getdaywisereport/list`,data).then((resp)=> { 
             const dayWiseReport = resp.data.daywisereport.map((dwr)=> ({
                 callid : dwr.callid,
                 customer_name : dwr.customer_name,

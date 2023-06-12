@@ -85,14 +85,14 @@ const AttendanceEntry = () => {
 
 
   useEffect(() => {
-    axios.get(`${baseUrl}/api/employeelist`).then((resp) => {
-      setEmployeeList(resp.data.employeelist);
-     
-    })
-
     let data = {
       tokenid : localStorage.getItem('token')
     }
+
+    axios.post(`${baseUrl}/api/employeelist`,data).then((resp) => {
+      setEmployeeList(resp.data.employeelist);
+     
+    })   
 
     axios.post(`${baseUrl}/api/attendancetypelist`,data).then((resp) => {
       setAttendanceList(resp.data.attendancetypelist);

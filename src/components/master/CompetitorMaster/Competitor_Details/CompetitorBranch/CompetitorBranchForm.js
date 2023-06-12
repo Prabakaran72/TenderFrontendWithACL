@@ -104,10 +104,12 @@ const CompetitorBranchForm = (props) => {
     });
   };
   const getStateList = async () => {
-
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     if (competitorBranchInput.country !== null) {
       await axios
-        .get(`${baseUrl}/api/state/list/${competitorBranchInput.country.value}`)
+        .post(`${baseUrl}/api/state/list/${competitorBranchInput.country.value}`,data)
         .then((resp) => {
           setStateList(resp.data.stateList);
           
@@ -115,13 +117,16 @@ const CompetitorBranchForm = (props) => {
     }
   };
   const getDistrictList = async () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     if (
       competitorBranchInput.country !== null &&
       competitorBranchInput.state !== null
     ) {
       await axios
-        .get(
-          `${baseUrl}/api/district/list/${competitorBranchInput.country.value}/${competitorBranchInput.state.value}`
+        .post(
+          `${baseUrl}/api/district/list/${competitorBranchInput.country.value}/${competitorBranchInput.state.value}`,data
         )
         .then((resp) => {
           setDistrictList(resp.data.districtList);
@@ -129,14 +134,17 @@ const CompetitorBranchForm = (props) => {
     }
   };
   const getCityList = async () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     if (
       competitorBranchInput.country !== null &&
       competitorBranchInput.state !== null &&
       competitorBranchInput.district !== null
     ) {
       await axios
-        .get(
-          `${baseUrl}/api/city/list/${competitorBranchInput.country.value}/${competitorBranchInput.state.value}/${competitorBranchInput.district.value}/null`
+        .post(
+          `${baseUrl}/api/city/list/${competitorBranchInput.country.value}/${competitorBranchInput.state.value}/${competitorBranchInput.district.value}/null`,data
         )
         .then((resp) => {
           setCityList(resp.data.cityList);
@@ -145,8 +153,11 @@ const CompetitorBranchForm = (props) => {
   };
 
   const getBranchList = () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios
-      .get(`${baseUrl}/api/competitorbranch/branchlist/${compid}`)
+      .post(`${baseUrl}/api/competitorbranch/branchlist/${compid}`,data)
       .then((resp) => {
         let list = [...resp.data.branch];
         let listarr = list.map((item, index) => ({

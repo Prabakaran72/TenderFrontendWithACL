@@ -112,7 +112,10 @@ function Tendertracker(props) {
 	setLoading(false)
   }
   const getStateData = async (savedState) => {
-    let response = await axios.get(`${baseUrl}/api/state-list/${savedState}`);
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    let response = await axios.post(`${baseUrl}/api/state-list/${savedState}`,data);
     return { options: response.data.stateList, isLoading: false };
   };
 

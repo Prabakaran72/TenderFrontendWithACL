@@ -35,6 +35,10 @@ const AttendanceList = () => {
   }
 
   const getList = async () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    
     const zonelist = await axios.get(`${baseUrl}/api/attendanceregister`);
     var dataSet;
 

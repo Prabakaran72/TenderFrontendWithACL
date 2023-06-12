@@ -71,9 +71,12 @@ const CallToBDM = () => {
   useEffect(() => {
     setStateList({ ...stateList, isLoading: true });
     let countryid = input.country?.value;
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
 
     if (countryid) {
-      axios.get(`${baseUrl}/api/state/list/${countryid}`).then((resp) => {
+      axios.post(`${baseUrl}/api/state/list/${countryid}`,data).then((resp) => {
         setStateList({ options: resp.data.stateList, isLoading: false });
       });
     } else {
@@ -83,12 +86,15 @@ const CallToBDM = () => {
   }, [input.country]);
 
   useEffect(() => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     setDistrictList({ ...districtList, isLoading: true });
     let countryid = input.country?.value;
     let stateid = input.state?.value;
     if (countryid && stateid) {
       axios
-        .get(`${baseUrl}/api/district/list/${countryid}/${stateid}`)
+        .post(`${baseUrl}/api/district/list/${countryid}/${stateid}`,data)
         .then((resp) => {
           setDistrictList({
             options: resp.data.districtList,

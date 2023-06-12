@@ -180,9 +180,12 @@ const TenderFee = () => {
                   setvalueValue (tenderfee.value?tenderfee.value:"")
   
                   if(resp.data.file){
+                    let data = {
+                        tokenid : localStorage.getItem('token')
+                      }
                       axios({
-                          url: `${baseUrl}/api/download/tenderfeedocs/${tenderfee.id}`,
-                          method: 'GET',
+                          url: `${baseUrl}/api/download/tenderfeedocs/${tenderfee.id}`,data,
+                          method: 'POST',
                           responseType: 'blob', // important
                       }).then((response) => {
                           if (response.status === 200) {

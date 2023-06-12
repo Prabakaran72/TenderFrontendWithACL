@@ -38,17 +38,20 @@ const CallReport = () => {
         axios.post(`${baseUrl}/api/customerOptions`,data).then((res)=> {           
            setCustomerName(res.data.customerList);
         })                         
-         axios.get(`${baseUrl}/api/country/list`).then((res)=> {            
+         axios.post(`${baseUrl}/api/country/list`,data).then((res)=> {            
             setCountryName(res.data.countryList);
          }) 
-         axios.get(`${baseUrl}/api/bdmlist`).then((res)=> {            
+         axios.post(`${baseUrl}/api/bdmlist`,data).then((res)=> {            
             setExecutiveName(res.data.bdmlist);
          })           
     },[]);
 
     useEffect(()=> {
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
         if (input.country?.value || input.country !==  null) {
-            axios.get(`${baseUrl}/api/state/list/${input.country?.value}`).then((res)=> {         // Example***{id} - 105***            
+            axios.post(`${baseUrl}/api/state/list/${input.country?.value}`,data).then((res)=> {         // Example***{id} - 105***            
                 setStateName(res.data.stateList);
             })            
             console.log('success');
@@ -63,8 +66,11 @@ const CallReport = () => {
     },[input.country?.value])
 
     useEffect(()=> {
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
         if ((input.country?.value && input.state?.value) || (input.state !== null)) {
-            axios.get(`${baseUrl}/api/district/list/${input.country?.value}/${input.state?.value}`).then((res)=> {     // Example***{countryid} - 105 & {stateid} - 31 ***            
+            axios.post(`${baseUrl}/api/district/list/${input.country?.value}/${input.state?.value}`,data).then((res)=> {     // Example***{countryid} - 105 & {stateid} - 31 ***            
                 setDistrictName(res.data.districtList);
             })
         }

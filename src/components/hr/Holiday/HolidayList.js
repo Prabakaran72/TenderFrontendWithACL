@@ -82,7 +82,10 @@ const HolidayList = () => {
     } = tableInstance;
 
 
-    useEffect(()=> {                 
+    useEffect(()=> {    
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }             
         axios.get(`${baseUrl}/api/holidays`).then((resp)=> { 
             const holidaysList = resp.data.holidaylist.map((hod)=> {                                      
                 return {

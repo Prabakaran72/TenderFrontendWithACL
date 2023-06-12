@@ -123,6 +123,10 @@ const CityCreation = () => {
   // }, [id, savedData]);
 
   useEffect(() => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
     setStateList(initialStateList);
     setInput((prevState) => {
       return {
@@ -136,7 +140,7 @@ const CityCreation = () => {
         return { ...prevList, isLoading: true };
       });
       let countryid = input.country.value;
-      axios.get(`${baseUrl}/api/state/list/${countryid}`).then((resp) => {
+      axios.post(`${baseUrl}/api/state/list/${countryid}`,data).then((resp) => {
         setStateList({ options: resp.data.stateList, isLoading: false });
       });
     }
@@ -149,6 +153,10 @@ const CityCreation = () => {
   // }, [stateList]);
 
   useEffect(() => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
     setDistrictList(initialDistrictList);
     setInput((prevState) => {
       return {
@@ -164,7 +172,7 @@ const CityCreation = () => {
         return { ...prevList, isLoading: true };
       });
       axios
-        .get(`${baseUrl}/api/district/list/${countryid}/${stateid}`)
+        .post(`${baseUrl}/api/district/list/${countryid}/${stateid}`,data)
         .then((resp) => {
           setDistrictList({
             options: resp.data.districtList,
