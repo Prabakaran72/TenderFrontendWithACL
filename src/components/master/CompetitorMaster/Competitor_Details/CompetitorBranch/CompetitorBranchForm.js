@@ -99,7 +99,10 @@ const CompetitorBranchForm = (props) => {
   //     });
   // };
   const getCountryList = async () => {
-    await axios.get(`${baseUrl}/api/country/list`).then((resp) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    await axios.post(`${baseUrl}/api/country/list`,data).then((resp) => {
       setCountryList(resp.data.countryList);
     });
   };

@@ -45,7 +45,10 @@ const DistrictMaster = () => {
 
   useEffect(() => {
     if (id) {
-      axios.get(`${baseUrl}/api/country/list`).then((resp) => {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
+      axios.post(`${baseUrl}/api/country/list`,data).then((resp) => {
         setCountryList(resp.data.countryList);
         setStateList([]);
       });
@@ -92,7 +95,7 @@ const DistrictMaster = () => {
     }
 
     if (!id) {
-      axios.get(`${baseUrl}/api/country/list`).then((resp) => {
+      axios.post(`${baseUrl}/api/country/list`,data).then((resp) => {
         setCountryList(resp.data.countryList);
         setStateList([]);
       });

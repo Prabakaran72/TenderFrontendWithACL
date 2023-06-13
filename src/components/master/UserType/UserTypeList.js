@@ -37,7 +37,10 @@ const UserTypeList = () => {
   }
 
   const getList = async () => {
-    const usertypelist = await axios.get(`${baseUrl}/api/usertype`);
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    const usertypelist = await axios.post(`${baseUrl}/api/usertype`,data);
     
  
 

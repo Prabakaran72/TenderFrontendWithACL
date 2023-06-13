@@ -59,7 +59,10 @@ const CallToBDM = () => {
           }
         });
     }
-    axios.get(`${baseUrl}/api/country/list`).then((resp) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    axios.post(`${baseUrl}/api/country/list`,data).then((resp) => {
       setCountryList({ options: resp.data.countryList, isLoading: false });
     });
 

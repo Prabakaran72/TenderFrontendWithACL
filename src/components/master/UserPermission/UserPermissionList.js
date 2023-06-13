@@ -43,7 +43,10 @@ const UserPermissionList = () => {
   
 
     const getList = async () => {
-        const userPermissionList = await axios.get(`${baseUrl}/api/userpermissions`);
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
+        const userPermissionList = await axios.post(`${baseUrl}/api/userpermissions`,data);
 
         var dataSet;
         if (

@@ -41,7 +41,10 @@ const UserPermission = () => {
     const [inputValidation, setInputValidation] = useState(initialStateErr);
 
     useEffect(() => {
-        axios.get(`${baseUrl}/api/usertypeOptionsForPermission`).then((response) => {
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
+        axios.post(`${baseUrl}/api/usertypeOptionsForPermission`,data).then((response) => {
             if (response.data.status === 200) {
                 generateOptions(response.data.userType);
             }
@@ -52,7 +55,10 @@ const UserPermission = () => {
     }, [])
 
     useEffect(() => {
-        axios.get(`${baseUrl}/api/menu/options`).then((response) => {
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
+        axios.post(`${baseUrl}/api/menu/options`,data).then((response) => {
             if (response.status === 200) {
                 // console.log(response.data)
                 setMenuData(response.data.menuList)
@@ -63,7 +69,10 @@ const UserPermission = () => {
     }, [])
 
     const getSavedData = () => {
-        axios.get(`${baseUrl}/api/permisions/${id}`).then((resp) => {
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
+        axios.post(`${baseUrl}/api/permisions/${id}`,data).then((resp) => {
             if(resp.data.status === 200){
                 let usertypeValue = {
                     value   : resp.data.roleName.id,
