@@ -16,8 +16,7 @@ import { useAllowedMIMEDocType } from "../../hooks/useAllowedMIMEDocType";
 import { useAllowedUploadFileSize } from "../../hooks/useAllowedUploadFileSize";
 import { useImageStoragePath } from "../../hooks/useImageStoragePath";
 import CallLogTab from "./CallLogTab";
-
-
+// import MultiFileUploader from '../../multipleFileUpload/MultiFileUploader';
 
 
 const selectState = {
@@ -97,6 +96,9 @@ const CallLogCreation = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [mainId, setMainId] = useState(null);
   const [fetchedData, setFetchedData] = useState([]);
+  
+  // const [fileList, setFileList] = useState([]);
+
   const [isEdited, setEdited] = useState({
     customer: false,
     calltype: false,
@@ -939,24 +941,7 @@ let datatosend = {"tokenid": token};
       });
     }
 console.log("Res",res);
-    // if (res.data.status === 200) {
-    //   Swal.fire({
-    //     icon: "success",
-    //     title: "Call Log",
-    //     text: "Updated Successfully!",
-    //     confirmButtonColor: "#5156ed",
-    //   });
-    //   // navigate('/tender/calllog')
-    //   setDataSending(false);
-    // } else if (res.data.status === 400) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Call Log",
-    //     text: res.data.errors,
-    //     confirmButtonColor: "#5156ed",
-    //   });
-    //   setDataSending(false);
-    // }
+
   };
 
   return (
@@ -1396,6 +1381,10 @@ console.log("Res",res);
                     Cancel
                   </button>
                 </div>
+                      
+               
+                      {/* <MultiFileUploader setFileList={setFileList}/> */}
+               
 
                 <div className="inputgroup col-lg-6 mb-4">
                   <div className="row align-items-center">

@@ -5,10 +5,46 @@ import { BsFillTelephonePlusFill } from 'react-icons/bs';
 import { MdSettingsPhone } from 'react-icons/md';
 import { TbPhoneCheck } from 'react-icons/tb';
 import { MdPhoneInTalk } from 'react-icons/md';
-
+import axios from 'axios';
+import { useBaseUrl } from '../../hooks/useBaseUrl';
 
 const CallLogDashboard = () => {
-    usePageTitle("Call Logs Dashboard")
+
+    usePageTitle("Call Logs Dashboard");
+    const { server1: baseUrl } = useBaseUrl();
+    const [callCount, setCallCount] = useState({
+        attendedCallsCount: 0,
+        completedCallCount: 0,
+        openingCallCount: 0,
+        overduecallcount: 0,
+        todaycallCount: 0,
+      })
+    
+
+
+    useEffect(()=> {
+        axios
+        .get(`${baseUrl}/api/dashboard/getCallCountAnalysis`, { params: {tokenid: localStorage.getItem('token')} })
+        .then((resp) => {
+        if (resp.data.status === 200) {
+            // console.log("Call Count IF: ",resp.data);
+            setCallCount({
+            attendedCallsCount: resp.data.attendedCallsCount,
+            completedCallCount: resp.data.completedCallCount,
+            openingCallCount: resp.data.openingCallCount,
+            overduecallcount: resp.data.overduecallcount,
+            todaycallCount: resp.data.todaycallCount
+            })
+        }
+        else{
+            console.log("Call Count Else: ",resp);
+        }
+        });
+    },[])
+   
+    console.log('callCount',callCount);
+
+
     return (
     <div className='CallLogsDashboard'>
         <div className='title'>

@@ -151,9 +151,9 @@ function Dashboard() {
       .get(`${baseUrl}/api/dashboard/getCallCountAnalysis`, { params: {tokenid: localStorage.getItem('token')} })
       .then((resp) => {
         if (resp.data.status === 200) {
-           // console.log("Call Count IF: ",resp.data);
+          // console.log("Call Count IF: ",resp.data);
 
-           setCallCount({
+          setCallCount({
             attendedCallsCount: resp.data.attendedCallsCount,
             completedCallCount: resp.data.completedCallCount,
             openingCallCount: resp.data.openingCallCount,
@@ -310,8 +310,7 @@ function Dashboard() {
                         </div>
 
                         <div className="h2 mb-0 font-weight-bold text-gray-800 text-center">
-                          {/* {Live_tenders_count} */} 
-                          {callCount.openingCallCount}
+                          {/* {Live_tenders_count} */} {callCount.openingCallCount}
                         </div>
                       </div>
                       {/* <div className="col-auto">
@@ -334,8 +333,7 @@ function Dashboard() {
                           Today Calls
                         </div>
                         <div className="h2 mb-0 font-weight-bold text-gray-800 text-center">
-                          {/* {fresh_tenders_count} */}
-                          {callCount.todaycallCount}
+                          {/* {fresh_tenders_count} */}{callCount.todaycallCount}
                         </div>
                       </div>
                       {/* <div className="col-auto">
@@ -359,8 +357,7 @@ function Dashboard() {
                           Attended Calls
                         </div>
                         <div className="h2 mb-0 font-weight-bold text-gray-800 text-center">
-                          {/* {awarded_tenders_count} */} 
-                          {callCount.attendedCallsCount}
+                          {/* {awarded_tenders_count} */} {callCount.attendedCallsCount}
                         </div>
                       </div>
                       {/* <div className="col-auto">
@@ -384,8 +381,7 @@ function Dashboard() {
                           Completed Calls
                         </div>
                         <div className="h2 mb-0 font-weight-bold text-gray-800 text-center">
-                          {/* {running_tenders_count} */} 
-                          {callCount.completedCallCount}
+                          {/* {running_tenders_count} */} {callCount.completedCallCount}
                         </div>
                       </div>
                       {/* <div className="col-auto">
@@ -408,8 +404,7 @@ function Dashboard() {
                           Over Due Calls
                         </div>
                         <div className="h2 mb-0 font-weight-bold text-gray-800 text-center">
-                          {/* {completed_tenders_count} */} 
-                          {callCount.overduecallcount}
+                          {/* {completed_tenders_count} */} {callCount.overduecallcount}
                         </div>
                       </div>
                       {/* <div className="col-auto">

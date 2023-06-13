@@ -92,7 +92,10 @@ import ReimbursementCreate from "./components/expenses/Reimbursement/Reimburseme
 import RembursementPrintView from "./components/expenses/Reimbursement/RembursementPrintView"
 import HolidayCreation from "./components/hr/Holiday/HolidayCreation";
 import Holiday from "./components/hr/Holiday/Holiday";
-
+/***Navin added  */
+import BusinessForecastStatusCreate from "./components/master/BusinessForecastStatus/BusinessForecastStatusCreate"
+import ForecastStatus from "./components/master/BusinessForecastStatus/ForecastStatus"
+/****navin added */
 // **********************
 
 function App() {
@@ -370,7 +373,18 @@ function App() {
                   element={!!(permission?.['attendance_type']?.can_edit) ? <AttendanceType /> : <Unauthorized/>} 
                 />
               </Route>
-
+              <Route path="businessforecaststatus" >
+              <Route index element={<ForecastStatus />} />
+              <Route path="create"
+              element={!!(permission?.['BusinessForecastStatus']?.can_add) ? <BusinessForecastStatusCreate /> : <Unauthorized/>} 
+             />
+             <Route
+                  path="edit/:id"
+                  element={!!(permission?.['BusinessForecastStatus']?.can_edit) ? <BusinessForecastStatusCreate /> : <Unauthorized/>} 
+                />
+                {/* <Route path="customersubcategorycreation" element={<CustSubCategMaster />} /> */}
+                {/* <Route path="customersubcategorycreation/:id" element={<CustSubCategMaster />} /> */}
+              </Route>
             </Route>
 
             <Route path="library">
