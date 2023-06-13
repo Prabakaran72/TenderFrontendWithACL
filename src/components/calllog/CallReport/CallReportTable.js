@@ -106,7 +106,7 @@ const CallReportTable = ( {change, input, check} ) => {
             }))              
             setData(dayWiseReport);
             // console.log('change', change);             
-            console.log('data+++', resp.data.daywisereport);     
+            // console.log('data+++', resp.data.daywisereport);     
         })
     },[change]);
 
@@ -168,16 +168,15 @@ const CallReportTable = ( {change, input, check} ) => {
                                 {headerGroup.headers.map((column) => (
                                     <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                                         {column.render("Header")}
-                                        <span className="text-right">
-                                            {column.defaultCanSort && column.isSorted ? (
+                                        <span className="text-right">{"   "}
+                                            { column.isSorted ? 
                                                 column.isSortedDesc ? (
-                                                    <i className="fas fa-sort-amount-asc text-white"></i>
+                                                    <i className="fa fa-caret-down text-white h6"></i>
                                                 ) : (
-                                                    <i className="fas fa-sort-amount-desc text-white"></i>
+                                                    <i className="fa fa-caret-down fa-rotate-180 text-white h6"></i>
                                                 )
-                                            ) : (
-                                                <span></span>
-                                            )}
+                                                :  ""
+                                                }
                                         </span>
                                     </th>
                                 ))}

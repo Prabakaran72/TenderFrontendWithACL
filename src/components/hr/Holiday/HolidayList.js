@@ -26,6 +26,7 @@ const HolidayList = () => {
     const [getRowData, setGetRowData] = useState(0); 
     const [newHeader,setNewHeader] = useState([]);
     const [newData,setNewData] = useState([]);
+    const [deleteRowState,setDeleteRowState] = useState(0);
 
     const columns = useMemo(
         () => [
@@ -97,10 +98,9 @@ const HolidayList = () => {
                   )   
                 };                               
             })              
-            setData(holidaysList);                     
-              
+            setData(holidaysList);                      
         })
-    },[]);
+    },[deleteRowState]);
 
     useEffect(()=> {
         let HeadersList = [];
@@ -137,8 +137,12 @@ const HolidayList = () => {
         navigate(`/tender/hr/holidays/edit/${hod.id}`);
         console.log('hod', hod);
     }     
+    // useEffect(()=> {                 
+    //     console.log('success');
+    // },[deleteRowState]);
 
-    const deleteRow = (hod) => {     
+    const deleteRow = (hod) => { 
+        console.log("data",data)    
         setGetRowData(hod);    
         console.log('hod', hod);
         axios.delete(`${baseUrl}/api/holidays/${hod.id}`).then((resp)=> { 
@@ -149,8 +153,9 @@ const HolidayList = () => {
               title: "Holiday",
               text: "Deleted Successfully!",
               confirmButtonColor: "#5156ed",
-            });            
-            navigate('/tender/hr/holidays')
+            });           
+            setDeleteRowState(1); 
+            // navigate('/tender/hr/holidays')
           } else if (resp.data.status === 400) {
             Swal.fire({
               icon: "error",

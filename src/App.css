@@ -501,7 +501,7 @@ body {
         /* z-index: 999; */
         top: -7px;
         background: #fff;
-        box-shadow: 1px 1px 15px #aa9e9e69;
+        box-shadow: 1px 1px 15px #aa9e9e4f;
     }
     .Login .login_logo {
         width: 70px;
@@ -2854,6 +2854,9 @@ table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:
     text-transform: capitalize;
    }
 
+   .rotate-45 {
+    transform: rotate(315deg);
+  }
 
 
 

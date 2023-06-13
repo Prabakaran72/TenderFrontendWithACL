@@ -35,7 +35,7 @@ const selectFile = {
   src: undefined,
 };
 
-const CreateExpenseCreationSubList = ({
+const CreateExpenseCreationSubList = ({ 
   setTable,
   editData,
   currentRow,
@@ -375,7 +375,7 @@ const [fileSizeLimit, setFileSizeLimit]= useState({error: ''});
   const inputHandlerForSelect = (value, action) => {
 
 
-setexpType(value.value)
+setexpType(value?.value)
     setInputSub({ ...inputSub, [action.name]: value });
 
   };
@@ -458,9 +458,13 @@ if(lmits.lmitsatatus===0){
 
   const handleRemoveDoc = () => {
     setFile({ ...file, value: "" });
+
+    if(!updateId){
+      setEditCheck(false);
+    }
     setFileCheck(false);
     setBtnCheck(false);
-    setEditCheck(false);
+    
     setFileCheck(false);
     setCheckImage(false);
     setRemove(1);
@@ -722,7 +726,7 @@ setCheckImage(false);
               </div>
             </div>
             {LimitExeed ? (
-  <span className='fade' style={{color: "#eb0e0e"}}>Lmit Amount Exeed For This Staff.Lmit Amount is: {Lmitamt}</span>
+  <span  style={{color: "#eb0e0e"}}>Lmit Amount Exeed For This Staff.Lmit Amount is: {Lmitamt}</span>
 ) : (
   null
 )}

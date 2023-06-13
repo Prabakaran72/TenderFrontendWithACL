@@ -30,7 +30,7 @@ const AttendanceList = () => {
   const navigate = useNavigate();
   const {permission} = useContext(AuthContext)
   const deleterecord = async (id) => {
-    let response =  axios.delete(`${baseUrl}/api/attendanceentry/${id}`)
+    let response =  axios.delete(`${baseUrl}/api/attendanceregister/${id}`)
     return response;
   }
 
@@ -130,9 +130,9 @@ const AttendanceList = () => {
     // to delete a row
     $("#dataTable tbody").on("click", "tr .fa-trash-alt", async function () {
       let rowdata = table.row($(this).closest("tr")).data();
-      
+      console.log("Rowdata", rowdata);
       Swal.fire({
-        text: `Are You sure, to delete ${rowdata.userName}?`,
+        text: `Are You sure, to delete ${rowdata.user_name}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -141,13 +141,14 @@ const AttendanceList = () => {
         cancelButtonColor: "#fc5157",
       }).then( async (willDelete) => {
         if (willDelete.isConfirmed) {
+         
          let response = await deleterecord(rowdata.id)
 
          if (response.data.status === 200) {
             Swal.fire({ //success msg
               icon: "success",
               title:"Attendance Entry",
-              text: `${rowdata.userName} has been removed!`,
+              text: `${rowdata.user_name} has been removed!`,
               timer: 1500,
               showConfirmButton: false,
             });

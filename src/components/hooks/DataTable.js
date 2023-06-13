@@ -35,10 +35,15 @@ const DataTable = () => {
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>{column.isSorted}
                   {column.render('Header')}
                   <span>
-                    {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                    {column.isSorted ? (column.isSortedDesc ? (
+                                                    <i className="fa fa-caret-down text-white h6"></i>
+                                                ) : (
+                                                    <i className="fa fa-caret-down fa-rotate-180 text-white h6"></i>
+                                                ))
+                                                :  ""}
                   </span>
                 </th>
               ))}

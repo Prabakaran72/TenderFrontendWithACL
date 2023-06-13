@@ -77,6 +77,7 @@ import AttendanceEntry from "./components/hr/AttendanceEntry/Attendance/Attendan
 import AttendanceReport from "./components/hr/AttendanceReport/AttendanceReport";
 import AttendanceType from "./components/master/AttendanceType/AttendanceType";
 import AttendanceTypeView from "./components/master/AttendanceType/AttendanceTypeView";
+// import CallLogCreation from './components/calllog/CallLogCreation/CallLogCreation_newlyAdded';
 import CallLogCreation from './components/calllog/CallLogCreation/CallLogCreation';
 import CallLogMain from './components/calllog/CallLogCreation/CallLogMain';
 import CallLogHistory from "./components/calllog/CallLogCreation/CallLogHistory";
