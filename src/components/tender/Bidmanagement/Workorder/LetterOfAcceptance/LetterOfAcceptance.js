@@ -187,9 +187,13 @@ const LetterOfAcceptance = () => {
 
   var getWorkOrderImage = async () => {
     if (lettacpId) {
+
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
       await axios({
-        url: `${baseUrl}/api/download/letterofacceptance/workorderimage/${id}`,
-        method: "GET",
+        url: `${baseUrl}/api/download/letterofacceptance/workorderimage/${id}`,data,
+        method: "POST",
         responseType: "blob", // important
         headers: {   //to stop cacheing this response at browsers. otherwise wrongly displayed cached files
           'Cache-Control': 'no-cache',

@@ -157,9 +157,13 @@ const CallLogCreation = () => {
   }, [input]);
 
   const getFileList = async () => {
+
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios({
-      url: `${baseUrl}/api/callcreation/doclist/${mainId}`,
-      method: "GET",
+      url: `${baseUrl}/api/callcreation/doclist/${mainId}`,data,
+      method: "POST",
       // responseType: "blob", // important
       headers: {
         //to stop cacheing this response at browsers. otherwise wrongly displayed cached files
@@ -205,9 +209,12 @@ const CallLogCreation = () => {
   };
 
   const downloadDoc = (fileid, filename) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios({
-      url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,
-      method: "GET",
+      url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,data,
+      method: "POST",
       responseType: "blob", // important
     }).then((response) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -246,10 +253,13 @@ const CallLogCreation = () => {
     if (mode === "edit") {
       getFileList();
 
-      await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
+      
+      let data = {'tokenid' : token};
+  
+      await axios.post(`${baseUrl}/api/calltype/list`,data).then((res) => {
         setOptionsForCallList(res.data?.calltype);
       });
-    let data = {'tokenid' : token};
+    // let data = {'tokenid' : token};
       axios.post(`${baseUrl}/api/customer/list`, data).then((res) => {
         setOptionsForCutomerList(res.data?.customerList);
         setIsFetching((prev) => {
@@ -257,7 +267,7 @@ const CallLogCreation = () => {
         });
       });
 
-      await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
+      await axios.post(`${baseUrl}/api/procurementlist/list`,data).then((res) => {
         setOptionsForProcurement(res.data?.procurementlist);
         setIsFetching((prev) => {
           return { ...prev, procurement: false };
@@ -303,13 +313,15 @@ const CallLogCreation = () => {
         });
       }
     } else { //Execute here if  mode is not Edit ie., nxtFlw or Create a call
-      await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
+
+      let datatosend = {"tokenid": token};
+      await axios.post(`${baseUrl}/api/calltype/list`,datatosend).then((res) => {
         setOptionsForCallList(res.data?.calltype);
         // setIsFetching((prev) => {
         //   return { ...prev, calltype: false };
         // });
       });
-let datatosend = {"tokenid": token};
+// let datatosend = {"tokenid": token};
       axios.post(`${baseUrl}/api/customer/list`,datatosend).then((res) => {
         setOptionsForCutomerList(res.data?.customerList);
         setIsFetching((prev) => {
@@ -317,7 +329,7 @@ let datatosend = {"tokenid": token};
         });
       });
 
-      await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
+      await axios.post(`${baseUrl}/api/procurementlist/list`,datatosend).then((res) => {
         setOptionsForProcurement(res.data?.procurementlist);
         setIsFetching((prev) => {
           return { ...prev, procurement: false };
@@ -530,8 +542,13 @@ let datatosend = {"tokenid": token};
       return { ...prev, bizztype: true };
     });
     if (input.calltype?.value) {
+
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
+
       axios
-        .get(`${baseUrl}/api/bizzlist/list/${input.calltype?.value}`)
+        .post(`${baseUrl}/api/bizzlist/list/${input.calltype?.value}`,data)
         .then((res) => {
           setOptionsForBizzList(res.data.bizzlist);
         });
@@ -549,8 +566,11 @@ let datatosend = {"tokenid": token};
       return { ...prev, bizz_status_type: true };
     });
     if (input.businessForecast?.value) {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
       axios
-        .get(`${baseUrl}/api/statuslist/list/${input.businessForecast?.value}`)
+        .post(`${baseUrl}/api/statuslist/list/${input.businessForecast?.value}`,data)
         .then((res) => {
           setOptionsForStatusList(res.data?.statuslist);
         });

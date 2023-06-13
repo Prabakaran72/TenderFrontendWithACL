@@ -23,7 +23,11 @@ const CallLogHistory = () => {
       setNavMode(navMode);
     }
 
-    axios.get(`${baseUrl}/api/getcallhistory/list/${id}`).then((res) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
+    axios.post(`${baseUrl}/api/getcallhistory/list/${id}`,data).then((res) => {
       if (res.data.status === 200) {
         setGetCallHistory(res.data.getcallhistory);
         setSomeCallNms({

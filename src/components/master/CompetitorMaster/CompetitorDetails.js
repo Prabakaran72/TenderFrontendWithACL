@@ -29,8 +29,11 @@ useEffect(() => {
 }, []);
 
 const getCompNo = async () => {
+  let data = {
+    tokenid : localStorage.getItem('token')
+  }
   await axios
-    .get(`${baseUrl}/api/competitorprofile/getcompno/${compid}`)
+    .post(`${baseUrl}/api/competitorprofile/getcompno/${compid}`,data)
     .then((resp) => {
       if (resp.data.status === 200) {
         setCompNo(resp.data.compNo);

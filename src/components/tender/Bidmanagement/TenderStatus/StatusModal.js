@@ -143,9 +143,12 @@ const StatusModal = (props) => {
           );
 
           if (resp.data.file) {
+            let data = {
+              tokenid : localStorage.getItem('token')
+            }
             axios({
-              url: `${baseUrl}/api/download/BidManagementTenderOrBidStausDocs/${resp.data.BidManagementTenderOrBidStaus.id}`,
-              method: "GET",
+              url: `${baseUrl}/api/download/BidManagementTenderOrBidStausDocs/${resp.data.BidManagementTenderOrBidStaus.id}`,data,
+              method: "POST",
               responseType: "blob", // important
             }).then((response) => {
               if (response.status === 200) {

@@ -83,16 +83,19 @@ function Dashboard() {
 
   useEffect(() => {
 
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     // setValue(0,6)
     //Tender Analysis
-    axios.get(`${baseUrl}/api/dashboard/tenderanalysis`).then((resp) => {
+    axios.post(`${baseUrl}/api/dashboard/tenderanalysis`,data).then((resp) => {
       // console.log("Tender :",resp.data);
     });
 
     
 
     //Customer Bid Analysis
-    axios.get(`${baseUrl}/api/dashboard/bidanalysis`).then((resp) => {
+    axios.post(`${baseUrl}/api/dashboard/bidanalysis`,data).then((resp) => {
       if (resp.data.status === 200) {
         // console.log("Bid :", resp.data);
 
@@ -126,8 +129,9 @@ function Dashboard() {
     });
 
     //Dashboard card
+    
     axios
-      .get(`${baseUrl}/api/bidcreation/creation/projectstatus`)
+      .post(`${baseUrl}/api/bidcreation/creation/projectstatus`,data)
       .then((resp) => {
         // if(resp.data.awarded_tender_count){
         // console.log("project status", resp);

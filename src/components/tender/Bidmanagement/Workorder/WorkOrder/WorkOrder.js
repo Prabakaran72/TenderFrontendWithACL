@@ -412,9 +412,12 @@ const WorkOrder = () => {
 
   var getWorkOrderImage = async () => {
     if (workid) {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
       await axios({
-        url: `${baseUrl}/api/download/workorderimage/${id}`,
-        method: "GET",
+        url: `${baseUrl}/api/download/workorderimage/${id}`,data,
+        method: "POST",
         responseType: "blob", //important
       }).then((response) => {
         if (response.status === 200) {
@@ -438,10 +441,14 @@ const WorkOrder = () => {
   //agreement image data
 
   const getWorkOrderImageData = async () => {
+
     if (workid) {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
       await axios({
-        url: `${baseUrl}/api/download/agreementimage/${id}`,
-        method: "GET",
+        url: `${baseUrl}/api/download/agreementimage/${id}`,data,
+        method: "POST",
         responseType: "blob", // important
       }).then((response) => {
         if (response.status === 200) {
@@ -476,9 +483,12 @@ const WorkOrder = () => {
 
   const getsitehandoverImageData = async () => {
     if (workid) {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
       await axios({
-        url: `${baseUrl}/api/download/sitehandoverimage/${id}`,
-        method: "GET",
+        url: `${baseUrl}/api/download/sitehandoverimage/${id}`,data,
+        method: "POST",
         responseType: "blob", // important
       }).then((response) => {
         if (response.status === 200) {

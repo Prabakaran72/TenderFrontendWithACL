@@ -35,7 +35,10 @@ const ZoneMaster = () => {
       const [isEdited , setIsEdited] = useState(false);
       const [datafetching , setDataFetching] = useState(false);
       useEffect(()=>{
-        axios.get(`${baseUrl}/api/state/list/105`).then((resp)=> {
+        let data = {
+          tokenid : localStorage.getItem('token')
+        }
+        axios.post(`${baseUrl}/api/state/list/105`,data).then((resp)=> {
           setOptions(resp.data.stateList);
         })
       },[])

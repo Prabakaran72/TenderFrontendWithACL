@@ -45,7 +45,10 @@ const DistrictMaster = () => {
 
   useEffect(() => {
     if (id) {
-      axios.get(`${baseUrl}/api/country/list`).then((resp) => {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
+      axios.post(`${baseUrl}/api/country/list`,data).then((resp) => {
         setCountryList(resp.data.countryList);
         setStateList([]);
       });
@@ -53,11 +56,14 @@ const DistrictMaster = () => {
   }, []);
 
   useEffect(() => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     
     if (id && districtInput.countryId) {
       
       axios
-        .get(`${baseUrl}/api/state/list/${districtInput.countryId.value}`)
+        .post(`${baseUrl}/api/state/list/${districtInput.countryId.value}`,data)
         .then((resp) => {
           setStateList(resp.data.stateList);
           setDistrictValidation({
@@ -84,14 +90,18 @@ const DistrictMaster = () => {
 
 
   useEffect(() => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
     if (!id) {
-      axios.get(`${baseUrl}/api/country/list`).then((resp) => {
+      axios.post(`${baseUrl}/api/country/list`,data).then((resp) => {
         setCountryList(resp.data.countryList);
         setStateList([]);
       });
       if (districtInput.stateId === null && districtInput.countryId) {
         axios
-          .get(`${baseUrl}/api/state/list/${districtInput.countryId.value}`)
+          .post(`${baseUrl}/api/state/list/${districtInput.countryId.value}`,data)
           .then((resp) => {
             setStateList(resp.data.stateList);
             setDistrictValidation({ ...districtValidation, countryId: "" });

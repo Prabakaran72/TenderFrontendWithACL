@@ -58,8 +58,11 @@ const FinancialEvalution = (props) => {
   const getTechnicalEvalutionList = () => {
     setFetchLoading(true);
     try {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
       axios
-        .get(`${baseUrl}/api/technicalevalution/qualifiedlist/${id}`)
+        .post(`${baseUrl}/api/technicalevalution/qualifiedlist/${id}`,data)
         .then((resp) => {
           if (resp.status === 200) {
             setqualifiedList(resp.data.qualifiedList);
@@ -143,8 +146,11 @@ const FinancialEvalution = (props) => {
   const getAlreadySavedFinancialEvalutionData = (qualifiedList) => {
     setFetchLoading(true);
     try {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
       axios
-        .get(`${baseUrl}/api/financialevaluation/getstoreddata/${id}`)
+        .post(`${baseUrl}/api/financialevaluation/getstoreddata/${id}`,data)
         .then((resp) => {
           if (resp.status === 200) {
             if (resp.data.storedFinEvalList.length > 0) {
@@ -177,7 +183,12 @@ const FinancialEvalution = (props) => {
   };
 
   const getUnitList = () => {
-    axios.get(`${baseUrl}/api/unitmasters/getUnitList`).then((resp) => {
+
+     let data = {
+        tokenid : localStorage.getItem('token')
+      }
+
+    axios.post(`${baseUrl}/api/unitmasters/getUnitList`,data).then((resp) => {
       // console.log(resp.data)
       if (resp.status === 200) {
         setunitList(resp.data.unitList);

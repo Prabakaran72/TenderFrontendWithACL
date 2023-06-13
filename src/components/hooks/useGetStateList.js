@@ -22,9 +22,13 @@ const useGetStateList = async (props) => {
 //   return {
 //     states: list.data.stateList
 //   }
+let data = {
+  tokenid : localStorage.getItem('token')
+}
+
 let list=[];
     await axios
-        .get(`${baseUrl}/api/state/list/${props.country}`)
+        .post(`${baseUrl}/api/state/list/${props.country}`,data)
         .then((resp) => {
           // console.log("resp.data.stateList",resp.data.stateList);
           list = resp.data.stateList;      

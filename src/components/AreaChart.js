@@ -38,7 +38,10 @@ const AreaChart = () => {
   
   useEffect(()=>{
     //Customer Analysis
-  axios.get(`${baseUrl}/api/dashboard/ulbdetails`).then((resp) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+  axios.post(`${baseUrl}/api/dashboard/ulbdetails`,data).then((resp) => {
     console.log("resp", resp);
     setDataValue(resp.data.list);
   });

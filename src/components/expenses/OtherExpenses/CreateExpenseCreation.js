@@ -104,8 +104,12 @@ const CreateExpenseCreation = () => {
 
     if (id && optionsForStaff.length > 0) {
 
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
 
-      axios.get(`${baseUrl}/api/updatedl/` + id).then((res) => {
+
+      axios.post(`${baseUrl}/api/updatedl/` + id,data).then((res) => {
         if (res.status === 200) {
           let Updatedata = res.data.update_del;
           // setmainDisable(true);
@@ -261,7 +265,11 @@ const CreateExpenseCreation = () => {
   const handleDel = (id) => {
 
     setDel(true);
-    axios.get(`${baseUrl}/api/otherexpensesubdel/${id}`)
+
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    axios.post(`${baseUrl}/api/otherexpensesubdel/${id}`,data)
       .then((res) => {
         if (res.data.status === 200) {
 

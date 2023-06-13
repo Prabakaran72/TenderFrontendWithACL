@@ -33,38 +33,47 @@ const BusinessForecast = () => {
   const [formIsValid, setFormIsValid] = useState(false);
 
   useEffect(() => {
-    axios.get(`${baseUrl}/api/calltype/list`).then((resp) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
+    axios.post(`${baseUrl}/api/calltype/list`,data).then((resp) => {
       setCallTypeList(resp.data.calltype);
     });
   }, []);
 
   useEffect(() => {
     if (id) {
-      axios.get(`${baseUrl}/api/bizzforecast/${id}`).then((resp) => {
-        if (resp.data.status === 200) {
-          setSavedData(resp.data?.bizzforecast[0]);
-          setInput((prev) => {
-            return {
+      axios.get(`${baseUrl}/api/bizzforecast/${id}`)
+        .then((resp) => {
+          if (resp.data.status === 200 && resp.data.bizzforecast.length > 0) {
+            const { name, activeStatus, id: bizzforecastId } = resp.data.bizzforecast[0];
+            setSavedData(resp.data.bizzforecast[0]);
+            setInput((prev) => ({
               ...prev,
-              bizzforecast: resp?.data?.bizzforecast[0]?.name,
-              activeStatus: resp?.data?.bizzforecast[0]?.activeStatus,
-            };
-          });
-        }
-      });
+              bizzforecast: name,
+              activeStatus: activeStatus,
+              calltype: calltypeList.find((x) => x.value === bizzforecastId),
+            }));
+          }
+        })
+        .catch((error) => {
+          // Handle error if the request fails
+        });
     }
-  }, [id,baseUrl]);
+  }, [id, baseUrl, calltypeList]);
+  
+  // useEffect(() => {
+  //   if (calltypeList.length > 0 && savedData.id) {
+  //     setInput((prev) => ({
+  //       ...prev,
+  //       calltype: calltypeList.find((x) => x.value === savedData.id),
+  //     }));
+  //   }
+  // }, [calltypeList, savedData]);
 
-  useEffect(() => {
-    if (calltypeList.length > 0) {
-      setInput((prev) => {
-        return {
-          ...prev,
-          calltype: calltypeList.find((x) => x.value == savedData.id),
-        };
-      });
-    }
-  }, [savedData]);
+  
+  
 
   const inputHandler = (e) => {
     setInput({

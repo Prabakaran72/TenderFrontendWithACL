@@ -36,16 +36,14 @@ const AttendanceEntry = () => {
   const initialState = {
     userId: '',
     attendanceType: '',
-    fromDate: undefined,
-    toDate: undefined,
+    fromDate: '',
+    toDate: '',
     startTime: '',
     reason: '',   
   };
   const initialStateErr = {
-    userIdErr: "",
-    attendanceTypeErr: "",
-    fromDateErr: "",
-    toDateErr: "",
+    userIdErr: false,
+    attendanceTypeErr: false,
   };
   const { MIMEtype: docType } = useAllowedMIMEDocType();
   const [accFileStorage, setAccFileStorage] = useState(0);
@@ -55,12 +53,11 @@ const AttendanceEntry = () => {
 
   const [formIsValid, setFormIsValid] = useState(false);
   const [input, setInput] = useState(initialState);
-  const [inputValidation, setInputValidation] = useState(initialStateErr);
-  
-  // const [isClicked, setIsClicked] = useState({
-  //   userId: false,
-  //   attendanceType: false
-  // });
+  const [validation, setInputValidation] = useState(initialStateErr);
+  const [isClicked, setIsClicked] = useState({
+    userId: false,
+    attendanceType: false
+  });
 
   const [employeeList, setEmployeeList] = useState([]);
   const [attendanceList, setAttendanceList] = useState([]);
@@ -76,23 +73,18 @@ const AttendanceEntry = () => {
 
   const [savedData, setSavedData] = useState({});
 
-
   const location = useGeoLocation();
-
-  // console.log('LOCATION--',location)
-
- 
 
 
   useEffect(() => {
+    axios.get(`${baseUrl}/api/employeelist`).then((resp) => {
+      setEmployeeList(resp.data.employeelist);
+     
+    })
+
     let data = {
       tokenid : localStorage.getItem('token')
     }
-
-    axios.post(`${baseUrl}/api/employeelist`,data).then((resp) => {
-      setEmployeeList(resp.data.employeelist);
-     
-    })   
 
     axios.post(`${baseUrl}/api/attendancetypelist`,data).then((resp) => {
       setAttendanceList(resp.data.attendancetypelist);
@@ -180,12 +172,8 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
   
     }
 
-
-    
-
   useEffect(() => {
-    
-    const errors = inputValidation;
+    const errors = validation;
     if (input.userId === null) {
       errors.userIdErr = true;
     } else {
@@ -196,40 +184,27 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
     } else {
       errors.attendanceTypeErr = false;
     }
-    if (input.fromDate === '') {
-      errors.fromDateErr = true;
+    if (input.fromDate === null) {
+      errors.fromDate = true;
     } else {
-      errors.fromDateErr = false;
+      errors.fromDate = false;
     }
-    if (input.toDate === '') {
-      errors.toDateErr = true;
+    if (input.toDate === null) {
+      errors.toDate = true;
     } else {
-      errors.toDateErr = false;
+      errors.toDate = false;
     }
-    setInputValidation((prev) => { return { 
-      ...prev,
-       userIdErr: errors.userIdErr,
-       attendanceTypeErr: errors.attendanceTypeErr,
-       fromDateErr: errors.fromDateErr,
-       toDateErr: errors.toDateErr,
-       } });
+    setInputValidation((prev) => { return { ...prev, userIdErr: errors.userIdErr, attendanceTypeErr: errors.attendanceTypeErr } });
 
   }, [input])
 
   useEffect(() => {
-    
-    if (
-      input.userId?.value && 
-      input.attendanceType?.value &&
-      input.fromDate && 
-      input.toDate &&
-      location.coordinates
-      ) {
+    if (validation.userIdErr !== true && validation.attendanceTypeErr !== true) {
       setFormIsValid(true);
     } else {
       setFormIsValid(false);
     }
-  }, [inputValidation,location])
+  }, [validation])
 
   const postData = (formData) => {
     axios({
@@ -331,11 +306,6 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
     e.preventDefault();
     setDataSending(true)
 
-    if(!formIsValid){
-           setDataSending(false)
-           return     
-        }
-
     const formData = new FormData();
     formData.append('user_id', input.userId?.value); 
     formData.append('attendance_type_id',input.attendanceType?.value);  
@@ -343,8 +313,6 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
     formData.append('to_date',input.toDate);  
     formData.append('reason',input.reason);  
     formData.append('start_time',input.startTime);  
-    formData.append('latitude', location.coordinates?.lat);
-    formData.append('longitude', location.coordinates?.lng);
     // formData.append('file',file);      
 
     Object.values(files).forEach((item)=>{
@@ -368,9 +336,9 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
 
   };
 
-  const inputHandlerForSelect = (value, action) => {
+  const selectChangeHandler = (value, action) => {
     setInput((prev) => { return { ...prev, [action.name]: value } });
-   // setIsClicked((prev) => { return { ...prev, [action.name]: true } });
+    setIsClicked((prev) => { return { ...prev, [action.name]: true } });
   }
 
   let fileCount = 1;
@@ -589,7 +557,6 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
   }
 
   
-  // console.log('input',input)
   return (
     <Fragment>
       <div className="AttendanceEntry">
@@ -609,15 +576,14 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
                       isClearable="true"
                       options={employeeList}
                       value={input.userId}
-                      onChange={inputHandlerForSelect}
+                      onChange={selectChangeHandler}
                     ></Select>
-                    {inputValidation.userIdErr && (
-                      <div className="pt-1">
-                        <span className="text-danger font-weight-bold">
-                          Select Employee
-                        </span>
-                      </div>
-                    )}
+                    <div className="col-6 ml-n5 mt-2">
+                      {(validation.userIdErr === true && isClicked.userId) &&
+                        <span style={{ color: "red" }}>
+                          Please Select Employee..!
+                        </span>}
+                    </div>
                   </div>
                 </div>
                 <div className="row align-items-center mb-3">
@@ -625,19 +591,14 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
                     <label>From Date<span className="text-danger h6">*</span></label>
                   </div>
                   <div className="col-lg-9">
-                    <input type="date" className="form-control" name='fromDate'  value={input.fromDate} 
-                    onChange={(e) => inputChangeHandler(e)}
-                    // onChange={inputHandler}
-                     />
-                    {inputValidation.fromDateErr && (
-                      <div className="pt-1">
-                        <span className="text-danger font-weight-bold">
-                          Select From Date
-                        </span>
-                      </div>
-                    )}
+                    <input type="date" className="form-control" name='fromDate' value={input.fromDate} onChange={(e) => inputChangeHandler(e)} />
                   </div>
-                  
+                  <div className="col-6 ml-n5 mt-2">
+                    {(validation.fromDate === true ) &&
+                      <span style={{ color: "red" }}>
+                        Please Select Employee..!
+                      </span>}
+                  </div>
                 </div>
                 <div className="row align-items-center mb-3">
                   <div className="col-lg-3">
@@ -688,15 +649,14 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
                       isClearable="true"
                       options={attendanceList}
                       value={input.attendanceType}
-                      onChange={inputHandlerForSelect}
+                      onChange={selectChangeHandler}
                     ></Select>
-                  {inputValidation.attendanceTypeErr && (
-                      <div className="pt-1">
-                        <span className="text-danger font-weight-bold">
-                          Select Attendance Type 
-                        </span>
-                      </div>
-                    )}
+                    <div className="col-6 ml-n5 mt-2">
+                      {(validation.attendanceTypeErr === true && isClicked.attendanceType) &&
+                        <span style={{ color: "red" }}>
+                          Please Select Attendance Type..!
+                        </span>}
+                    </div>
                   </div>
                 </div>
                 <div className="row align-items-center mb-3">
@@ -704,21 +664,14 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
                     <label>To Date<span className="text-danger h6">*</span></label>
                   </div>
                   <div className="col-lg-9">
-                    <input type="date" className="form-control" name='toDate' value={input.toDate} 
-                    onChange={(e) => inputChangeHandler(e)}
-                    // onChange={inputHandler}
-                     />
-                    {inputValidation.toDateErr && (
-                      <div className="pt-1">
-                        <span className="text-danger font-weight-bold">
-                          Select To Date
-                        </span>
-                      </div>
-                    )}
-                  
+                    <input type="date" className="form-control" name='toDate' value={input.toDate} onChange={(e) => inputChangeHandler(e)} />
                   </div>
-                  
-                
+                  <div className="col-6 ml-n5 mt-2">
+                    {(validation.toDate === true) &&
+                      <span style={{ color: "red" }}>
+                        Please Select Attendance Type..!
+                      </span>}
+                  </div>
                 </div>
                 <div className="row align-items-center mb-3">
                   <div className="col-lg-3">
