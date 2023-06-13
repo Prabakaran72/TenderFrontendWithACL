@@ -2,13 +2,9 @@ import React, {useState, useEffect, useMemo, useRef, useContext} from 'react';
 import { useTable, useSortBy, usePagination, useGlobalFilter, actions } from 'react-table';
 import UseExport from './useExport'
 import { Navigate, useNavigate } from 'react-router-dom';
-import Swal from "sweetalert2/src/sweetalert2";
-
 import axios from 'axios';
 import AuthContext from "../../storeAuth/auth-context";
-// import Print from '../../images/printer.png'
 import { BsFillPrinterFill } from 'react-icons/bs';
-// import { Excel } from '../../../public/assets/img/excel'
 
 
 const DataTable = ({ response, accessor, header, getPermission, navigation, deletion, title, count, handleCount}) => {
@@ -18,8 +14,8 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
   const [id, setId] = useState(0);  
   const navigate = useNavigate();   
   const {permission} = useContext(AuthContext);
-
-  console.log('newResponse', newResponse);
+  const dataTableRef = useRef(null);
+  // console.log('permission', permission);
 
   let keyName = 'action';  // For Object KeyName
 
@@ -27,10 +23,13 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
   const deletepermission = permission?.[getPermission]?.can_delete == 1;  
 
   response.forEach(res=> {  
+    const resp = Object.values(res).map(x=> (x === null) ? "--" : x);
     let editBtn = editpermission ? <i className="fas fa-edit icon-edit mr-3" onClick={()=>getRow(res)}></i> : "";
     let deleteBtn = deletepermission ? <i className="fas fa-trash-alt icon-delete" onClick={()=>getDelete(res)}></i> : "";
 
     res[keyName] = [editBtn, deleteBtn]; // Add New Object Keys & Value
+    // console.log('resp',resp)
+
   });
 
 
@@ -98,9 +97,6 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
 
   
   // Print the Data ********
-
-  const dataTableRef = useRef(null);
-  
   
   const handlePrint = () => {
     setNewResponse(false);

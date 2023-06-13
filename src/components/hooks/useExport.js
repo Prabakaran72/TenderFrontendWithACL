@@ -40,7 +40,8 @@ const UseExport = ({ data, header, accessor, title }) => {
     let i=1;       
     const csv = [
       title,
-      Header.map((head)=> {return head == 'Action' ? '' : head}),
+      Header.map((head)=> {return head == 'Action' ? '' : head}).join(','),
+      
       ...data.map((row, index) => {  
         // console.log('rowdata',row);
 

@@ -180,7 +180,9 @@ const CallLogCreation = () => {
     if (mode === "nxtFlw") {
       if (        
         // input.executiveName?.value &&
-        // input.procurement?.value &&       
+        // input.procurement?.value &&   
+        input.calltype?.value &&  
+        input.businessForecast?.value &&     
         // input.forecastStatus?.value &&
         // input.addInfo.value &&
         (input.nxtFollowupDate
@@ -466,11 +468,11 @@ const CallLogCreation = () => {
       setIsAllow({
         customerName: true,
         date: true,
-        callType: true,
+        callType: false,
         executiveName: true,
-        businessForecast: true,
+        businessForecast: false,
         procurementType: true,
-        status: true,
+        status: false,
         additionalInfo: true,
         nextFollowUp: false,
         closeStatus: false,
