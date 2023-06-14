@@ -47,8 +47,8 @@ function ReimbursementAdmin(props) {
     reset: resettodate,
   } = useInputValidation(isNotEmpty);
 
-  let filterValid = true;
-
+  let filterValid = false;
+  
   const cust_category = [
     { value: "state", label: "State" },
     { value: "unionterritory", label: "Union Territory" },
@@ -108,9 +108,25 @@ function ReimbursementAdmin(props) {
     setInputValue: setexecutive,
     reset: resetexecutive,
   } = useInputValidation(isNotNull);
-  // if(stateIsValid || catIsValid || groupIsValid){
+  // if(stateIsValid || catIsValid || groupIsValid){ 1998
   //   filterValid = true;
   // }
+
+  if((fromdateValue)&&(todateValue)||executiveValue){
+
+    if((!fromdateValue)&&(todateValue)||executiveValue){
+      filterValid = false;
+    } 
+    
+    if((fromdateValue)&&(!todateValue)||executiveValue){
+      filterValid = false;
+    }
+    
+    if((fromdateValue)&&(todateValue)||executiveValue) {
+      filterValid = true;
+    }
+    
+  }
   useEffect(() => {
     axios.post(`${baseUrl}/api/expenses/staffList`).then((res) => {
       if (res.status === 200) {

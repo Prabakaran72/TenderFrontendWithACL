@@ -12,6 +12,10 @@ import OtherExpenseMainList from "./OtherExpenseMainList";
 
 
 function OtherExpenseMain(props) {
+
+	const userName = localStorage.getItem('UserName');
+	const token = localStorage.getItem('token');
+
 	const initialOptions = {
 		options: [],
 		isLoading: false,
@@ -24,6 +28,8 @@ function OtherExpenseMain(props) {
 	const [CategoryOptions, setCategoryOptions] = useState(initialOptions);
 	const [groupOptions, setgroupOptions] = useState(initialOptions);
 	const [optionsForStaff, setOptionsForStaff] = useState([]);
+const[userType,setUserType]=useState('');
+
 	const {
 		value: fromdateValue,
 		isValid: fromdateIsValid,
@@ -163,11 +169,13 @@ console.log('grp',fromdateValue);
 			fromdate: fromdateValue,
 			todate: todateValue,
 			executive: value3,
+			token :token,
+			userName :userName
 		}
 
 		let response = await axios.post(`${baseUrl}/api/mainlist`, data)
 		let listarr = await generateListArray(response)
-
+		setUserType(response.data.usertype);
 		setListarr(listarr)
 		setLoading(false)
 	}
@@ -191,7 +199,7 @@ let print =  '<i class="fas fa-solid fa-print print" style={{color: "#70e60f"}} 
 				...item, 
 				entry_date: item.entry_date,
 				exp_no:item.expense_no ,
-				staff_name: item.userName,
+				staff_name : item.userName,
 				total_amount:item.expense_amount,
 			
 
@@ -259,7 +267,7 @@ let print =  '<i class="fas fa-solid fa-print print" style={{color: "#70e60f"}} 
 											/>
 										</div>
 									</div>
-									<div className="col-lg-3">
+									{userType === 1 && (<div className="col-lg-3">
 										<div className="form-group">
 											<label htmlFor="Group">Executive Name :</label>										
 											<Select
@@ -276,7 +284,7 @@ let print =  '<i class="fas fa-solid fa-print print" style={{color: "#70e60f"}} 
 
 											></Select>
 										</div>
-									</div>
+									</div>)}
 									<div className="col-lg-3">										
 										<button className='btn-tender-block' onClick={goHandler} disabled={!filterValid}> Search </button>										
 									</div>																		

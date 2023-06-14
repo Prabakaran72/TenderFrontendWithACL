@@ -28,7 +28,25 @@ function Tendertracker(props) {
     reset: resetqty,
   } = useInputValidation(isNotNull);
 
+  const {
+		value: fromdateValue,
+		isValid: fromdateIsValid,
+		hasError: fromdateHasError,
+		valueChangeHandler: fromdateChangeHandler,
+		inputBlurHandler: fromdateBlurHandler,
+		setInputValue: setfromdateValue,
+		reset: resetfromdate,
+	} = useInputValidation(isNotEmpty);
 
+  const {
+		value: todateValue,
+		isValid: todateIsValid,
+		hasError: todateHasError,
+		valueChangeHandler: todateChangeHandler,
+		inputBlurHandler: todateBlurHandler,
+		setInputValue: settodateValue,
+		reset: resettodate,
+	} = useInputValidation(isNotEmpty);
 
   const Quantity = [
 	{ label: ">50,000", value: 'morethan50' },
@@ -47,21 +65,24 @@ function Tendertracker(props) {
     reset: resetstate,
   } = useInputValidation(isNotNull);
 
-  const {
-    value: todateValue,
-    isValid: todateIsValid,
-    hasError: todateHasError,
-    valueChangeHandler: todateChangeHandler,
-    inputBlurHandler: todateBlurHandler,
-    setInputValue: settodateValue,
-    reset: resettodate,
-  } = useInputValidation(isNotEmpty);
+ 
 
 
-  let filterValid = false;
-  if(stateIsValid || qtyIsValid){
-    filterValid = true;
+  let filterValid = true;
+  if((fromdateValue)&&(todateValue)||stateIsValid || qtyIsValid){
+    if((fromdateValue)&&(!todateValue)){
+      filterValid = true;
+    }
+    else if((!fromdateValue)&&(todateValue)){
+      filterValid = true;
+
+    }else{
+      filterValid = false;
+    }
+
+    
   }
+  console.log('filterValid',filterValid)
  
 
   const goHandler = async () => {
@@ -69,6 +90,8 @@ function Tendertracker(props) {
     let data = {
       state : stateValue?.value,
       quality : qtyValue?.value,
+      fromdate : fromdateValue,
+      todate : todateValue,
     }
 
 
@@ -147,7 +170,38 @@ function Tendertracker(props) {
           <div className="col-lg-12">
             <div className="card shadow mb-4 p-4">
               <div className="row">
-                <div className="col-lg-5">
+              <div className="col-lg-2">
+                  <div className="form-group">
+                  <label htmlFor="From">From :</label>										
+											<input
+												type="date"
+												className="form-control"
+												id="fromdate"
+												placeholder="From Date"
+												name="fromdate"
+												value={fromdateValue}
+												onChange={fromdateChangeHandler}
+												max={todateValue}
+											/>
+
+                  </div>
+                </div>
+                <div className="col-lg-2">
+                  <div className="form-group">
+                    	<label htmlFor="From">To :</label>										
+											<input
+												type="date"
+												className="form-control"
+												id="todate"
+												placeholder="To Date"
+												name="todate"
+												value={todateValue}
+												onChange={todateChangeHandler}
+												min={fromdateValue}
+											/>
+                  </div>
+                </div>
+                <div className="col-lg-3">
                   <div className="form-group">
                     <label htmlFor="From">Quantity :</label>
                     <Select
@@ -164,7 +218,7 @@ function Tendertracker(props) {
                     ></Select>
                   </div>
                 </div>
-                <div className="col-lg-5">
+                <div className="col-lg-3">
                   <div className="form-group">
                     <label htmlFor="From">State :</label>
                     <Select
@@ -186,7 +240,7 @@ function Tendertracker(props) {
                   </div>
                 </div>
                 <div className="col-lg-2 text-center">                  
-                  <button className='btn-tender-block' onClick={goHandler} disabled={!filterValid}> Search </button>
+                  <button className='btn-tender-block' onClick={goHandler} disabled={filterValid}> Search </button>
                 </div>
               </div>
             </div>
