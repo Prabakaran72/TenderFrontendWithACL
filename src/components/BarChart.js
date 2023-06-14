@@ -28,7 +28,10 @@ function BarChart(props) {
   }, []);
 
   const getpopulationata = async () => {
-    await axios.get(`${baseUrl}/api/dashboard/ulbpopdetails`).then((resp) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    await axios.post(`${baseUrl}/api/dashboard/ulbpopdetails`,data).then((resp) => {
       if (resp.status === 200) {
         setUlbPopulation(resp.data.ulbdetails);        
         // console.log(resp.data.ulbdetails);
