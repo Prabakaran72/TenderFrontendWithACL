@@ -15,6 +15,7 @@ import BarChart from "./BarChart";
 import Chart from "react-apexcharts";
 import Unauthorized from "./pages/Unauthorized";
 
+// Demo
 
 function valueLabelFormat(value) {
   const units = [
