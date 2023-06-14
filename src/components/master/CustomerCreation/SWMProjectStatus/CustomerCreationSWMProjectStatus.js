@@ -235,7 +235,11 @@ const CustomerCreationSWMProjectStatus = () => {
         setprojecttypeOptions((c) => {
           return { ...c, isLoading: true };
         });
-        let response = await axios.get(`${baseUrl}/api/projecttype/list/${id}`); 
+
+        let data = {
+          tokenid : localStorage.getItem('token')
+        }
+        let response = await axios.post(`${baseUrl}/api/projecttype/list/${id}`,data); 
         projectTypeList = { options: response.data.projectTypeList, isLoading: false }
         setprojecttypeOptions(projectTypeList)
       }
@@ -244,7 +248,11 @@ const CustomerCreationSWMProjectStatus = () => {
         setprojectstatusoptions((c) => {
           return { ...c, isLoading: true };
         });
-        let response = await axios.get(`${baseUrl}/api/projectstatus/list/${id}`);
+
+        let data = {
+          tokenid : localStorage.getItem('token')
+        }
+        let response = await axios.post(`${baseUrl}/api/projectstatus/list/${id}`,data);
         projectstatusList = { options: response.data.projectstatusList, isLoading: false }
         setprojectstatusoptions(projectstatusList)
       }

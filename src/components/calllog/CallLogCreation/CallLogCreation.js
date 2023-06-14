@@ -16,7 +16,8 @@ import { useAllowedMIMEDocType } from "../../hooks/useAllowedMIMEDocType";
 import { useAllowedUploadFileSize } from "../../hooks/useAllowedUploadFileSize";
 import { useImageStoragePath } from "../../hooks/useImageStoragePath";
 import CallLogTab from "./CallLogTab";
-import MultiFileUploader from '../../multipleFileUpload/MultiFileUploader';
+// import MultiFileUploader from '../../multipleFileUpload/MultiFileUploader';
+
 
 const selectState = {
   customer: null,
@@ -96,7 +97,7 @@ const CallLogCreation = () => {
   const [mainId, setMainId] = useState(null);
   const [fetchedData, setFetchedData] = useState([]);
   
-  const [fileList, setFileList] = useState([]);
+  // const [fileList, setFileList] = useState([]);
 
   const [isEdited, setEdited] = useState({
     customer: false,
@@ -119,6 +120,21 @@ const CallLogCreation = () => {
     doclist: true,
   });
 
+  const [isAllow, setIsAllow] = useState({   // ********* This State only based on mode type i.e URL ********** //
+    customerName: false,
+    date: false,
+    callType: false,
+    executiveName: false,
+    businessForecast: false,
+    procurementType: false,
+    status: false,
+    additionalInfo: false,
+    nextFollowUp: false,
+    closeStatus: false,
+    closeDate: false,
+    remarks: false,
+  });
+
   let token = localStorage.getItem("token");
 
   const objectData = {
@@ -136,30 +152,61 @@ const CallLogCreation = () => {
 
 
   useEffect(() => {
-    if (
-      input.customer?.value &&
-      input.entrydate &&
-      input.calltype?.value &&
-      // input.executiveName?.value &&
-      // input.procurement?.value &&
-      input.businessForecast?.value &&
-      // input.forecastStatus?.value &&
-      // input.addInfo.value &&
-      (input.nxtFollowupDate
-        ? input.nxtFollowupDate
-        : input.callcloseStatus?.value && input.callcloseDate)
-      //  && input.remarks.value
-    ) {
-      setIsFormValid(true);
-    } else {
-      setIsFormValid(false);
+
+    if (mode !== "edit") {
+      if ( input.customer?.value && input.entrydate ) {
+        setIsFormValid(true);
+      } else {
+        setIsFormValid(false);
+      }
+      // console.log('check', input.customer && input.entrydate ? true : false);
     }
+
+    if (mode === "edit") {
+      if (
+        input.customer?.value &&
+        input.entrydate &&
+        input.calltype?.value &&        
+        input.businessForecast?.value &&        
+        (input.nxtFollowupDate
+          ? input.nxtFollowupDate
+          : input.callcloseStatus?.value && input.callcloseDate)        
+      ) {        
+          setIsFormValid(true);
+        } else {      
+            setIsFormValid(false);
+        }      
+    }
+
+    if (mode === "nxtFlw") {
+      if (        
+        // input.executiveName?.value &&
+        // input.procurement?.value &&   
+        input.calltype?.value &&  
+        input.businessForecast?.value &&     
+        // input.forecastStatus?.value &&
+        // input.addInfo.value &&
+        (input.nxtFollowupDate
+          ? input.nxtFollowupDate
+          : input.callcloseStatus?.value && input.callcloseDate)
+        //  && input.remarks.value
+      ) {
+          setIsFormValid(true);
+        } else {
+            setIsFormValid(false);
+        }      
+    }
+    
   }, [input]);
 
   const getFileList = async () => {
+
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios({
-      url: `${baseUrl}/api/callcreation/doclist/${mainId}`,
-      method: "GET",
+      url: `${baseUrl}/api/callcreation/doclist/${mainId}`,data,
+      method: "POST",
       // responseType: "blob", // important
       headers: {
         //to stop cacheing this response at browsers. otherwise wrongly displayed cached files
@@ -205,9 +252,12 @@ const CallLogCreation = () => {
   };
 
   const downloadDoc = (fileid, filename) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios({
-      url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,
-      method: "GET",
+      url: `${baseUrl}/api/callcreation/docdownload/${fileid}`,data,
+      method: "POST",
       responseType: "blob", // important
     }).then((response) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -246,10 +296,13 @@ const CallLogCreation = () => {
     if (mode === "edit") {
       getFileList();
 
-      await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
+      
+      let data = {'tokenid' : token};
+  
+      await axios.post(`${baseUrl}/api/calltype/list`,data).then((res) => {
         setOptionsForCallList(res.data?.calltype);
       });
-    let data = {'tokenid' : token};
+    // let data = {'tokenid' : token};
       axios.post(`${baseUrl}/api/customer/list`, data).then((res) => {
         setOptionsForCutomerList(res.data?.customerList);
         setIsFetching((prev) => {
@@ -257,7 +310,7 @@ const CallLogCreation = () => {
         });
       });
 
-      await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
+      await axios.post(`${baseUrl}/api/procurementlist/list`,data).then((res) => {
         setOptionsForProcurement(res.data?.procurementlist);
         setIsFetching((prev) => {
           return { ...prev, procurement: false };
@@ -303,13 +356,15 @@ const CallLogCreation = () => {
         });
       }
     } else { //Execute here if  mode is not Edit ie., nxtFlw or Create a call
-      await axios.get(`${baseUrl}/api/calltype/list`).then((res) => {
+
+      let datatosend = {"tokenid": token};
+      await axios.post(`${baseUrl}/api/calltype/list`,datatosend).then((res) => {
         setOptionsForCallList(res.data?.calltype);
         // setIsFetching((prev) => {
         //   return { ...prev, calltype: false };
         // });
       });
-let datatosend = {"tokenid": token};
+// let datatosend = {"tokenid": token};
       axios.post(`${baseUrl}/api/customer/list`,datatosend).then((res) => {
         setOptionsForCutomerList(res.data?.customerList);
         setIsFetching((prev) => {
@@ -317,7 +372,7 @@ let datatosend = {"tokenid": token};
         });
       });
 
-      await axios.get(`${baseUrl}/api/procurementlist/list`).then((res) => {
+      await axios.post(`${baseUrl}/api/procurementlist/list`,datatosend).then((res) => {
         setOptionsForProcurement(res.data?.procurementlist);
         setIsFetching((prev) => {
           return { ...prev, procurement: false };
@@ -393,7 +448,55 @@ let datatosend = {"tokenid": token};
     setIsFetching((prev) => {
       return { ...prev, formData: false };
     });
-  }, []);
+  }, []); 
+
+  useEffect(()=> {  // maintains isAllow State //
+
+    if(mode !== 'edit') {
+      setIsAllow({
+        customerName: false,
+        date: false,
+        callType: true,
+        executiveName: true,
+        businessForecast: true,
+        procurementType: true,
+        status: true,
+        additionalInfo: true,
+        nextFollowUp: true,   
+        closeStatus: true,
+        closeDate: true,
+        remarks: true,   
+      });
+    }
+
+    if(mode === "edit") {
+      setIsAllow({
+        customerName: true,
+        date: true,
+      })
+
+    }
+
+    if(mode === 'nxtFlw') {
+      setIsAllow({
+        customerName: true,
+        date: true,
+        callType: false,
+        executiveName: true,
+        businessForecast: false,
+        procurementType: true,
+        status: false,
+        additionalInfo: true,
+        nextFollowUp: false,
+        closeStatus: false,
+        closeDate: false,
+        remarks: false,
+      })
+    }
+
+    // console.log('isAllow',isAllow);
+
+  },[]) 
 
   useEffect(() => {
     if (
@@ -530,8 +633,13 @@ let datatosend = {"tokenid": token};
       return { ...prev, bizztype: true };
     });
     if (input.calltype?.value) {
+
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
+
       axios
-        .get(`${baseUrl}/api/bizzlist/list/${input.calltype?.value}`)
+        .post(`${baseUrl}/api/bizzlist/list/${input.calltype?.value}`,data)
         .then((res) => {
           setOptionsForBizzList(res.data.bizzlist);
         });
@@ -549,8 +657,11 @@ let datatosend = {"tokenid": token};
       return { ...prev, bizz_status_type: true };
     });
     if (input.businessForecast?.value) {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
       axios
-        .get(`${baseUrl}/api/statuslist/list/${input.businessForecast?.value}`)
+        .post(`${baseUrl}/api/statuslist/list/${input.businessForecast?.value}`,data)
         .then((res) => {
           setOptionsForStatusList(res.data?.statuslist);
         });
@@ -940,8 +1051,9 @@ let datatosend = {"tokenid": token};
       });
     }
 console.log("Res",res);
-    
+
   };
+
 
   return (
     <PreLoader loading={isFetching.formData}>
@@ -985,7 +1097,7 @@ console.log("Res",res);
                         options={optionsForCutomerList}
                         value={input.customer}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
+                        isDisabled = {isAllow.customerName}
                       ></Select>
                       {inputValidation.customer && (
                         <div className="pt-1">
@@ -1012,7 +1124,7 @@ console.log("Res",res);
                         name="entrydate"
                         onChange={(e) => inputHandlerFortext(e)}
                         value={input.entrydate}
-                        disabled = {mode === 'nxtFlw' ? true : false}
+                        disabled = {isAllow.date}
                       />
                       {inputValidation.Date && (
                         <div className="pt-1">
@@ -1041,7 +1153,7 @@ console.log("Res",res);
                         options={optionsForCallList}
                         value={input.calltype}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
+                        isDisabled = {isAllow.callType}
                       ></Select>
                       {inputValidation.calltype && (
                         <div className="pt-1">
@@ -1068,7 +1180,7 @@ console.log("Res",res);
                         id="executiveName"
                         name="executiveName"
                         value={userName}
-                        disabled={true}
+                        disabled={isAllow.executiveName}
                         className="form-control"
                       />
                     </div>
@@ -1096,7 +1208,7 @@ console.log("Res",res);
                         options={optionsForBizzList}
                         value={input.businessForecast}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
+                        isDisabled = {isAllow.businessForecast}
                       ></Select>
                       {inputValidation.businessForecast && (
                         <div className="pt-1">
@@ -1130,7 +1242,7 @@ console.log("Res",res);
                           options={optionsForProcurement}
                           value={input.procurement}
                           onChange={inputHandlerForSelect}
-                          isDisabled = {mode === "nxtFlw" ? true : false}
+                          isDisabled = {isAllow.procurementType}
                         ></Select>
                         {inputValidation.procurement && (
                           <div className="pt-1">
@@ -1170,7 +1282,7 @@ console.log("Res",res);
                         options={optionsForStatusList}
                         value={input.forecastStatus}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
+                        isDisabled = {isAllow.status}
                       ></Select>
                       {/* {inputValidation.forecastStatus && (
                         <div className="pt-1">
@@ -1244,7 +1356,7 @@ console.log("Res",res);
                         cols="50"
                         value={input.addInfo}
                         onChange={(e) => inputHandlerFortext(e)}
-                        disabled = {mode === 'nxtFlw' ? true : false}
+                        disabled = {isAllow.additionalInfo}
                       />
                     </div>
                   </div>
@@ -1268,6 +1380,7 @@ console.log("Res",res);
                           type="date"
                           value={input.nxtFollowupDate}
                           onChange={(e) => inputHandlerFortext(e)}
+                          disabled={isAllow.nextFollowUp}
                         />
                       </div>
                       {inputValidation.nxtFollowupDate && (
@@ -1306,6 +1419,7 @@ console.log("Res",res);
                           options={optionsForCallCloseStatus}
                           value={input.callcloseStatus}
                           onChange={inputHandlerForSelect}
+                          isDisabled={isAllow.closeStatus}
                         ></Select>
                       </div>
                       <div className="col-lg-4 text-dark ">
@@ -1320,6 +1434,7 @@ console.log("Res",res);
                           type="date"
                           onChange={(e) => inputHandlerFortext(e)}
                           value={input.callcloseDate}
+                          disabled={isAllow.closeDate}
                         />
                         {inputValidation.callcloseDate && (
                           <div className="pt-1">
@@ -1344,6 +1459,7 @@ console.log("Res",res);
                           cols="50"
                           value={input.remarks}
                           onChange={(e) => inputHandlerFortext(e)}
+                          disabled={isAllow.remarks}
                         />
                       </div>
                     </div>
@@ -1382,9 +1498,8 @@ console.log("Res",res);
                 </div>
                       
                
-                      <MultiFileUploader setFileList={setFileList}/>
+                      {/* <MultiFileUploader setFileList={setFileList}/> */}
                
-
 
                 <div className="inputgroup col-lg-6 mb-4">
                   <div className="row align-items-center">
@@ -1483,7 +1598,7 @@ console.log("Res",res);
                       {fileListCheck && (
                         <div className="file_Documents">
                           {fileData.map((t, i) => (
-                            <div className="card col-lg-4 " key={i}>
+                            <div className="card" key={i}>
                               <div className="card-body">
                                 <div className="noOfFiles">{fileCount++}</div>
                                 <div className="fileDetails">

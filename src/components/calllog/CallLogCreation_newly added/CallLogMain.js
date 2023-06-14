@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Fragment, useContext } from "react"
 import CallLogDashboard from "./CallLogDashboard";
 import CallLogMainList from "./CallLogMainList";
-import CallLogCreation from "./CallLogCreation";
+import CallLogCreation from "./CallLogCreation_newlyAdded";
 
 import "./../../logoicon.css";
 const CallLogMain = () => {

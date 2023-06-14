@@ -89,13 +89,19 @@ const CompetitorCompanyWorkOrderForm = () => {
   }, []);
 
   const getStateList = async () => {
-    await axios.get(`${baseUrl}/api/state/list/105`).then((resp) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    await axios.post(`${baseUrl}/api/state/list/105`,data).then((resp) => {
       setWoStateList(resp.data.stateList);
     });
   };
 
   const getUnitList = async () => {
-    await axios.get(`${baseUrl}/api/unit/list`).then((resp) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    await axios.post(`${baseUrl}/api/unit/list`,data).then((resp) => {
       setWoUnitList(resp.data.unitList);
     });
   };
@@ -201,8 +207,11 @@ const CompetitorCompanyWorkOrderForm = () => {
   }, [completionFile]);
 
   const getCompNo = async () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     await axios
-      .get(`${baseUrl}/api/competitorprofile/getcompno/${compid}`)
+      .post(`${baseUrl}/api/competitorprofile/getcompno/${compid}`,data)
       .then((resp) => {
         if (resp.data.status === 200) {
           setCompetitorWOInput({

@@ -47,7 +47,10 @@ const UserCreation = () => {
   const [dragover, setdragover] = useState(false);
 
   useEffect(() => {
-    axios.get(`${baseUrl}/api/usertype/options`).then((response) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    axios.post(`${baseUrl}/api/usertype/options`,data).then((response) => {
       if (response.data.status === 200) {
         generateOptions(response.data.userType);
       }
@@ -56,6 +59,10 @@ const UserCreation = () => {
 
   useEffect(() => {
     if (id) {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
+      
       axios.get(`${baseUrl}/api/usercreation/${id}`).then((resp) => {
         console.log(resp);
         if (resp.data.status === 200) {
@@ -73,8 +80,8 @@ const UserCreation = () => {
 
           if (resp.data.user.filename) {
             axios({
-              url: `${baseUrl}/api/download/userfile/${user.id}`,
-              method: "GET",
+              url: `${baseUrl}/api/download/userfile/${user.id}`,data,
+              method: "POST",
               responseType: "blob", // important
             }).then((response) => {
               if (response.status === 200) {

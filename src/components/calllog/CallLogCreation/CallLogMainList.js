@@ -43,7 +43,10 @@ const CallLogMainList = () => {
   }
 
   const getList = async () => {
-    const callloglist = await axios.get(`${baseUrl}/api/callcreation/getCallMainList/${localStorage.getItem("token")}`);
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    const callloglist = await axios.post(`${baseUrl}/api/callcreation/getCallMainList/${localStorage.getItem("token")}`,data);
     console.log('CallCreatoin--',callloglist)
     // let userPermissions ;
     // let data = {

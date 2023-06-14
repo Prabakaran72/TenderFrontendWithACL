@@ -318,6 +318,9 @@ const BidCreation = () => {
   };
 
   useEffect(() => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     if (!id) {
       
       let statecode = "";
@@ -335,8 +338,8 @@ const BidCreation = () => {
         var currentMonth =
           (now.getMonth() + 1 < 10 ? "0" : "") + (now.getMonth() + 1);
         axios
-          .get(
-            `${baseUrl}/api/customercreation/getstatecode/${stateValue.value}`
+          .post(
+            `${baseUrl}/api/customercreation/getstatecode/${stateValue.value}`,data
           )
           .then((resp) => {
             statecode = resp.data.state_code;
@@ -353,7 +356,10 @@ const BidCreation = () => {
   }, [stateValue, lastId]);
 
   const getStateData = async (savedState) => {
-    let response = await axios.get(`${baseUrl}/api/state-list/${savedState}`);
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    let response = await axios.post(`${baseUrl}/api/state-list/${savedState}`,data);
     return { options: response.data.stateList, isLoading: false };
   };
 
@@ -366,7 +372,10 @@ const BidCreation = () => {
   };
 
   const getulbData = async (savedulb) => {
-    let response = await axios.get(`${baseUrl}/api/ulb-list/${savedulb}`);
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    let response = await axios.post(`${baseUrl}/api/ulb-list/${savedulb}`,data);
     return { options: response.data.ulbList, isLoading: false };
   };
 

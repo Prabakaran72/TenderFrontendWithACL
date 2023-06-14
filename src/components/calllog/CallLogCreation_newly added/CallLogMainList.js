@@ -23,7 +23,7 @@ import { useBaseUrl } from "../../hooks/useBaseUrl";
 import Swal from "sweetalert2/src/sweetalert2";
 import { Loader } from "rsuite";
 import AuthContext from "../../../storeAuth/auth-context";
-import CallLogCreation from "./CallLogCreation";
+import CallLogCreation from "./CallLogCreation_newlyAdded";
 //import CallLogHistory from "./CallLogHistory";
 
 

@@ -55,7 +55,10 @@ const BDMUsersList = () => {
     }
 
     const getList = async () => {
-        const List = await axios.get(`${baseUrl}/api/bdmoptions`);
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
+        const List = await axios.post(`${baseUrl}/api/bdmoptions`,data);
 
         var dataSet;
         if (

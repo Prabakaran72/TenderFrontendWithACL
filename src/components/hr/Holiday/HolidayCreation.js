@@ -44,6 +44,9 @@ const HolidayCreation = () => {
 
 
     useEffect(()=> {             
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
         if(id) {
             axios.get(`${baseUrl}/api/holidays/${id}`).then((resp)=> {                 
                 // const holidaysList = resp.data.holidaylist.map((hod)=> ({                
@@ -53,12 +56,23 @@ const HolidayCreation = () => {
                 //     action : <button onClick={() => getRow(hod)}><i className="fas fa-edit"/></button>
                 // }))              
                 // setData(holidaysList);                     
-                console.log('resp+++', resp.data.holidaylist);     
+
+                
+                 
+                const date = new Date(resp.data.holidaylist[0].date); 
+                const dayIndex = date.getDay(); // Get the day index (0 for Sunday, 1 for Monday, etc.)
+        
+                // Map the day index to the corresponding value from the Day array
+                const dayValue = Day[dayIndex].value;
+                const dayLabel = Day[dayIndex].label;
+  
                 setInput({...input, 
                     date: resp.data.holidaylist[0].date,
                     occasion: resp.data.holidaylist[0].occasion,
                     remarks: resp.data.holidaylist[0].remarks,
+                    day: { value: dayValue, label: dayLabel },
                 })
+                
             })
         }            
     },[id]);
@@ -99,17 +113,16 @@ const HolidayCreation = () => {
 
 
     const postData = (formData) => {
-        console.log("Post Data")
+        // console.log("Post Data")
         axios.post(`${baseUrl}/api/holidays`, formData).then((resp) => {  
-            console.log('resp', resp)          
+            // console.log('resp', resp)          
           if (resp.status === 200) {
             Swal.fire({
               icon: "success",
               title: "Holiday",
-              text:  resp.data.message,
+              text:  "Added Successfully",
               confirmButtonColor: "#5156ed",
             });
-
           navigate('/tender/hr/holidays');
           
           } else if (resp.status === 400) {
@@ -135,7 +148,7 @@ const HolidayCreation = () => {
           setDataSending(false);
         })
         .catch((err) => {
-            console.log("err", err.response.data.message)
+            // console.log("err", err.response.data.message)
             Swal.fire({
                 icon: "error",
                 title: "Holiday",
@@ -149,7 +162,7 @@ const HolidayCreation = () => {
 
       const putData = (data, id) => {
         axios.put(`${baseUrl}/api/holidays/${id}`, data).then((res) => {
-            console.log('res',res);
+            // console.log('res',res);
           if (res.data.status === 200) {
             Swal.fire({
               icon: "success",
@@ -158,7 +171,7 @@ const HolidayCreation = () => {
               confirmButtonColor: "#5156ed",
             });
             setInput(initialState)
-            // navigate('/tender/hr/holidays')
+            navigate('/tender/hr/holidays')
           } else if (res.data.status === 400) {
             Swal.fire({
               icon: "error",
@@ -170,7 +183,7 @@ const HolidayCreation = () => {
           }
         })
         .catch((err) => {
-            console.log("err", err.response.data.message)
+            // console.log("err", err.response.data.message)
             Swal.fire({
                 icon: "error",
                 title: "Holiday",
@@ -229,7 +242,7 @@ const HolidayCreation = () => {
     }
 
 
-    console.log('input', input);
+    // console.log('input', input);
     return (
         <Fragment>            
             <div className="card shadow mb-4 p-4">

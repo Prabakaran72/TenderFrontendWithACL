@@ -150,8 +150,11 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
   }, [competitorQCInput, file, previewForEdit]);
 
   const getQCList = () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios
-      .get(`${baseUrl}/api/competitordetails/qclist/${compid}`)
+      .post(`${baseUrl}/api/competitordetails/qclist/${compid}`,data)
       .then((resp) => {
         let list = [...resp.data.qc];
         let listarr = list.map((item, index) => ({
@@ -214,6 +217,10 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
     });
 
     if (data.filepath) {
+      let token = {
+        tokenid : localStorage.getItem('token')
+      }
+
       axios
         .get(`${baseUrl}/api/competitorqcertificate/${data.id}`)
         .then((resp) => {
@@ -221,8 +228,8 @@ const CompetitorCompanyQualityCertificatesForm = (props) => {
             if (resp.data.qc[0].filepath) {
               setFileName(resp.data.qc[0].filepath);
               axios({
-                url: `${baseUrl}/api/download/competitorqcertificate/${data.id}`,
-                method: "GET",
+                url: `${baseUrl}/api/download/competitorqcertificate/${data.id}`,token,
+                method: "POST",
                 responseType: "blob", // important
                 headers: {
                   //to stop cacheing this response at browsers. otherwise wrongly displayed cached files

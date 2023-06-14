@@ -70,8 +70,11 @@ useEffect(() => {
 }, [competitorBizLineInput]);
 
   const getBizLineList = () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios
-      .get(`${baseUrl}/api/competitordetails/lineofbusinesslist/${compid}`)
+      .post(`${baseUrl}/api/competitordetails/lineofbusinesslist/${compid}`,data)
       .then((resp) => {
         let list = [...resp.data.buz_line];
         let listarr = list.map((item, index) => ({

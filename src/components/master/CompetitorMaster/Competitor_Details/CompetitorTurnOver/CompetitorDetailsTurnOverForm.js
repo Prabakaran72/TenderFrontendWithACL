@@ -94,8 +94,11 @@ useEffect(() => {
 }, [hasError]);
 
   const getTurnOverList = () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios
-      .get(`${baseUrl}/api/competitordetails/turnoverlist/${compid}`)
+      .post(`${baseUrl}/api/competitordetails/turnoverlist/${compid}`,data)
       .then((resp) => {
         let list = [...resp.data.turn_over];
         let listarr = list.map((item, index) => ({

@@ -128,23 +128,25 @@ props.handleExpense(event);
     return (
         <div>
              <ViewExpense onData={popup} />
-            <table className='poptb'>
-                <thead>
-                    <tr>
-                        <th className='popth' >#</th>
-                        <th className='popth'>Check Status</th>
-                        <th className='popth'>Entry Date</th>
-                        <th className='popth'>Branch Name / Staff Name</th>
-                        <th className='popth'>Call Amount</th>
-                        <th className='popth'>Expense Amount</th>
-                        <th className='popth'>View</th>
+             <div className="table-responsive">
+                <table className='table table-bordered'>
+                    <thead className="text-center bg-greeny text-white">
+                        <tr>
+                            <th>#</th>
+                            <th>Check Status</th>
+                            <th>Entry Date</th>
+                            <th>Branch Name / Staff Name</th>
+                            <th>Call Amount</th>
+                            <th>Expense Amount</th>
+                            <th>View</th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    {getlist}
-                </tbody>
-            </table>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {getlist}
+                    </tbody>
+                </table>
+            </div>
             {/* <button onClick={}>Save</button> */}
         </div>
     );

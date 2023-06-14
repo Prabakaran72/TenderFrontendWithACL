@@ -378,8 +378,8 @@ axios.post(`${baseUrl}/api/expensesapp/storeData`, data).then((resp) => {
 
     return (
         <Fragment>
-            <div className="container-fluid">
-                <div className="card p-4">
+            <div className="">
+                <div className="card shadow mb-4 p-4">
                     <form>
                         <div className="row align-items-center">
                             <div className="inputgroup col-lg-6 mb-4">
@@ -429,12 +429,7 @@ axios.post(`${baseUrl}/api/expensesapp/storeData`, data).then((resp) => {
                                 </div>
                             </div>
                             <div className="inputgroup col-lg-12 mb-4">
-
                                 <ReimbursementSublist onData={getSublist} handleExpense={handleExpense} />
-
-
-
-
                             </div>
                             <div className="inputgroup col-lg-6 mb-4">
                                 <div className="row align-items-center">
@@ -454,10 +449,7 @@ axios.post(`${baseUrl}/api/expensesapp/storeData`, data).then((resp) => {
                                     </div>
 
                                 </div>
-                            </div>
-                            <div className="inputgroup col-lg-6 mb-4">
-
-                            </div>
+                            </div>                            
                             <div className="inputgroup col-lg-6 mb-4">
 
                                 <div className="row align-items-center">
@@ -493,11 +485,11 @@ axios.post(`${baseUrl}/api/expensesapp/storeData`, data).then((resp) => {
                                 </div>
                                 <div className="col-lg-6">&nbsp;</div>
                             </div>}
-                            <div className="inputgroup col-lg-12 mb-4 ml-3">
+                            <div className="inputgroup col-lg-12">
                                 <div className="row align-items-center">
-                                    <div className="col-lg-10 text-right ">
+                                    <div className="col-lg-12 text-center ">
                                         <button
-                                            className="btn btn-primary"
+                                            className="btn btn-primary mr-3"
                                             disabled={!formIsValid}
                                             onClick={submitHandler}
                                         >
@@ -505,12 +497,10 @@ axios.post(`${baseUrl}/api/expensesapp/storeData`, data).then((resp) => {
                                             {dataSending === true ? ((id) ? 'Updating...' : "Submitting....") : ((id) ? 'Update' : "Save")}
 
                                         </button>
-                                    </div>
-                                    <div className="col-lg-1 text-left">
                                         <button className="btn btn-secondary" onClick={cancelHandler} disabled={dataSending}>
                                             Cancel
                                         </button>
-                                    </div>
+                                    </div>                                    
                                 </div>
                             </div>
                         </div>

@@ -97,9 +97,12 @@ const BidSubmittedStatus = () => {
             
 
               if(resp.data.file){
+                let data = {
+                    tokenid : localStorage.getItem('token')
+                  }
                   axios({
-                      url: `${baseUrl}/api/download/bidsubmittedstatusdocs/${bidsubmittedstatus.id}`,
-                      method: 'GET',
+                      url: `${baseUrl}/api/download/bidsubmittedstatusdocs/${bidsubmittedstatus.id}`,data,
+                      method: 'POST',
                       responseType: 'blob', // important
                   }).then((response) => {
                       if (response.status === 200) {

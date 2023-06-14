@@ -119,9 +119,12 @@ const TechnicalEvalution = (props) => {
   function getTechEvalutionList() {
     if (bidManageMainId) {
       try {
+        let data = {
+          tokenid : localStorage.getItem('token')
+        }
         axios({
-          url: `${baseUrl}/api/tenderstatus/techevaluation/${bidManageMainId}`,
-          method: "GET",
+          url: `${baseUrl}/api/tenderstatus/techevaluation/${bidManageMainId}`,data,
+          method: "POST",
           headers: {
             //to stop cacheing this response at browsers. otherwise wrongly displayed cached files
             "Cache-Control": "no-cache",
@@ -152,9 +155,10 @@ const TechnicalEvalution = (props) => {
                 setNotHasValue(false);
               }
 
+              
               axios({
-                url: `${baseUrl}/api/tenderstatus/techevaluation/download/${bidManageMainId}`,
-                method: "GET",
+                url: `${baseUrl}/api/tenderstatus/techevaluation/download/${bidManageMainId}`,data,
+                method: "POST",
                 responseType: "blob", // important
                 headers: {
                   //to stop cacheing this response at browsers. otherwise wrongly displayed cached files

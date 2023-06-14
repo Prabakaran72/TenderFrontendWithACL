@@ -107,13 +107,19 @@ const CompetitorCompanyWorkOrderForm = (props) => {
   }, [props.compNo]);
 
   const getStateList = async () => {
-    await axios.get(`${baseUrl}/api/state/list/105`).then((resp) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    await axios.post(`${baseUrl}/api/state/list/105`,data).then((resp) => {
       setWoStateList(resp.data.stateList);
     });
   };
 
   const getUnitList = async () => {
-    await axios.get(`${baseUrl}/api/unit/list`).then((resp) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    await axios.post(`${baseUrl}/api/unit/list`,data).then((resp) => {
       setWoUnitList(resp.data.unitList);
     });
   };
@@ -302,8 +308,11 @@ const CompetitorCompanyWorkOrderForm = (props) => {
   }, [competitorWOInput, woFile, previewForEdit]);
 
   const getWOList = () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios
-      .get(`${baseUrl}/api/competitordetails/wolist/${compid}`)
+      .post(`${baseUrl}/api/competitordetails/wolist/${compid}`,data)
       .then((resp) => {
         let list = [...resp.data.wo];
         let listarr = list.map((item, index) => ({
@@ -396,6 +405,10 @@ const CompetitorCompanyWorkOrderForm = (props) => {
   };
 
   const getImageUrl = (id) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
     axios
       .get(`${baseUrl}/api/competitorworkorder/${id}`)
       .then((res) => {
@@ -404,8 +417,8 @@ const CompetitorCompanyWorkOrderForm = (props) => {
             return { ...prev, woFile: res.data.wo.woFile };
           });
           axios({
-            url: `${baseUrl}/api/download/competitorworkorder/${id}/${"woFile"}`,
-            method: "GET",
+            url: `${baseUrl}/api/download/competitorworkorder/${id}/${"woFile"}`,data,
+            method: "POST",
             responseType: "blob", // important
             headers: {
               //to stop cacheing this response at browsers. otherwise may displayed cached files
@@ -439,8 +452,8 @@ const CompetitorCompanyWorkOrderForm = (props) => {
             return { ...prev, woCompletionFile: res.data.wo.completionFile };
           });
           axios({
-            url: `${baseUrl}/api/download/competitorworkorder/${id}/${"woCompletionFile"}`,
-            method: "GET",
+            url: `${baseUrl}/api/download/competitorworkorder/${id}/${"woCompletionFile"}`,data,
+            method: "POST",
             responseType: "blob", // important
             headers: {
               //to stop cacheing this response at browsers. otherwise may displayed cached files

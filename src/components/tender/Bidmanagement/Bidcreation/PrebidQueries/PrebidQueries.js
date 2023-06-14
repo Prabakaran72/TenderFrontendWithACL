@@ -214,9 +214,13 @@ const PrebidQueries = () => {
         setisEditbtn(true)
         setUploadDocId(item.id)
 
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
+
         axios({
-            url: `${baseUrl}/api/download/prebidqueriesdocs/${item.id}`,
-            method: 'GET',
+            url: `${baseUrl}/api/download/prebidqueriesdocs/${item.id}`,data,
+            method: 'POST',
             responseType: 'blob', // important
         }).then((response) => {
             if (response.status === 200) {

@@ -127,9 +127,13 @@ const TechnicalEvalution = (props) => {
               setisEditbtn(true);
               SelectList();
 
+              let data = {
+                tokenid : localStorage.getItem('token')
+              }
+
               axios({
-                url: `${baseUrl}/api/tenderstatus/awardontract/download/${bidManageMainId}`,
-                method: "GET",
+                url: `${baseUrl}/api/tenderstatus/awardontract/download/${bidManageMainId}`,data,
+                method: "POST",
                 responseType: "blob", // important
                 headers: {
                   //to stop cacheing this response at browsers. otherwise wrongly displayed cached files
@@ -176,9 +180,12 @@ const TechnicalEvalution = (props) => {
   }, [bidManageMainId]);
   const SelectList = () => {
     if (bidManageMainId) {
+      let data = {
+        tokenid : localStorage.getItem('token')
+      }
       axios({
-        url: `${baseUrl}/api/tenderstatus/financialevaluation/getleastbidder/${bidManageMainId}`,
-        method: "GET",
+        url: `${baseUrl}/api/tenderstatus/financialevaluation/getleastbidder/${bidManageMainId}`,data,
+        method: "POST",
 
         headers: {
           //to stop cacheing this response at browsers. otherwise wrongly displayed cached files

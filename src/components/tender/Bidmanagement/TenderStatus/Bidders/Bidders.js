@@ -91,8 +91,11 @@ const Bidders = (props) => {
   };
 
   const getCompetitorList = () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     setCompListLoading(true);
-    axios.get(`${baseUrl}/api/tenderstatus/complist`).then((resp) => {
+    axios.post(`${baseUrl}/api/tenderstatus/complist`,data).then((resp) => {
       if (resp.data.status === 200) {
         setCompList(resp.data.compList);
         // setCompListCopy(resp.data.compList);

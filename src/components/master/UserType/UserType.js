@@ -30,7 +30,10 @@ const UserType = () => {
 
     useEffect(() => {
         if(id){
-          axios.get(`${baseUrl}/api/usertype/${id}`).then((resp)=> {
+            let data = {
+                tokenid : localStorage.getItem('token')
+              }
+          axios.post(`${baseUrl}/api/usertype/${id}`,data).then((resp)=> {
             setInput({
                 usertype: resp.data.usertype.name,
                 activeStatus: resp.data.usertype.activeStatus,
