@@ -116,7 +116,10 @@ const CompetitorCompanyWorkOrderForm = (props) => {
   };
 
   const getUnitList = async () => {
-    await axios.get(`${baseUrl}/api/unit/list`).then((resp) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    await axios.post(`${baseUrl}/api/unit/list`,data).then((resp) => {
       setWoUnitList(resp.data.unitList);
     });
   };
