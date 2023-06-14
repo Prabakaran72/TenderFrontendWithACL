@@ -16,9 +16,12 @@ const DocCardSaved = (props) => {
     const { commnunicationfilesmaster: communicationfiles_path } = useImageStoragePath();
     const downloadDoc = (filename, docname, ext) => {
   
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
             axios({
-                url: `${baseUrl}/api/download/communicationfilesmaster/${filename}`,
-                method: 'GET',
+                url: `${baseUrl}/api/download/communicationfilesmaster/${filename}`,data,
+                method: 'POST',
                 responseType: 'blob', // important
               }).then((response) => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));

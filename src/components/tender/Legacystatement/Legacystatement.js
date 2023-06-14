@@ -161,7 +161,10 @@ function Legacystatement() {
 
 	
 	const getStateData = async (savedState) => {
-		let response = await axios.get(`${baseUrl}/api/state-list/${savedState}`);
+		let data = {
+			tokenid : localStorage.getItem('token')
+		  }
+		let response = await axios.post(`${baseUrl}/api/state-list/${savedState}`,data);
 		return { options: response.data.stateList, isLoading: false };
 	  };
 	
@@ -177,7 +180,11 @@ function Legacystatement() {
 		settypeofprojectOptions((c) => {
 			return { ...c, isLoading: true };
 		});
-		axios.get(`${baseUrl}/api/projecttype/list`).then((resp) => {
+
+		let data = {
+			tokenid : localStorage.getItem('token')
+		  }
+		axios.get(`${baseUrl}/api/projecttype/list`,data).then((resp) => {
 			settypeofprojectOptions({options : resp.data.projectTypeList, isLoading: false});
 		});
 	  };

@@ -14,9 +14,12 @@ const AcceptedBidders = (props) => {
       // //setFetchLoading(true);
       if(props.bidManageMainId)
       {
+        let data = {
+          tokenid : localStorage.getItem('token')
+        }
       axios
-        .get(
-          `${baseUrl}/api/bidmanagement/tenderstatus/acceptedbidders/${props.bidManageMainId}`
+        .post(
+          `${baseUrl}/api/bidmanagement/tenderstatus/acceptedbidders/${props.bidManageMainId}`,data
         )
         .then((response) => {
           if (response.status === 200) {

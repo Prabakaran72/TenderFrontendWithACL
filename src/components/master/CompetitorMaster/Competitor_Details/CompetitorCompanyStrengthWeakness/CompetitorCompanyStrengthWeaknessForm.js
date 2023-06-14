@@ -67,8 +67,11 @@ const CompetitorCompanyStrengthWeaknessForm = (props) => {
   }, [competitorProsConsInput]);
 
   const getProsConsList = () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios
-      .get(`${baseUrl}/api/competitordetails/prosconslist/${compid}`)
+      .post(`${baseUrl}/api/competitordetails/prosconslist/${compid}`,data)
       .then((resp) => {
         let list = [...resp.data.pros_cons];
         let listarr = list.map((item, index) => ({

@@ -75,7 +75,10 @@ const Tendercreation = () => {
   // };
 
   const getTenderTypeList = () => {
-    axios.get(`${baseUrl}/api/tendertype/list`).then((resp) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    axios.post(`${baseUrl}/api/tendertype/list`,data).then((resp) => {
       setTenderTypeList(resp.data.tendertypeList);
     });
   };

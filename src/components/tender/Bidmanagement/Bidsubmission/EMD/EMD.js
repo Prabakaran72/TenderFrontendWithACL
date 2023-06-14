@@ -182,9 +182,12 @@ const EMD = () => {
                   setvalueValue (emdfee.value?emdfee.value:"")
   
                   if(resp.data.file){
+                    let data = {
+                        tokenid : localStorage.getItem('token')
+                      }
                       axios({
-                          url: `${baseUrl}/api/download/emdfeedocs/${emdfee.id}`,
-                          method: 'GET',
+                          url: `${baseUrl}/api/download/emdfeedocs/${emdfee.id}`,data,
+                          method: 'POST',
                           responseType: 'blob', // important
                       }).then((response) => {
                           if (response.status === 200) {

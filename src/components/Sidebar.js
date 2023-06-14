@@ -31,7 +31,10 @@ function Sidebar() {
 
 
   useEffect(() => {
-    axios.get(`${baseUrl}/api/menus`).then((response) => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+    axios.post(`${baseUrl}/api/menus`,data).then((response) => {
       setMenu(response.data.menuList || [])
     });
   }, [])

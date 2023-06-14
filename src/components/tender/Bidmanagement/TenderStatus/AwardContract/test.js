@@ -107,8 +107,11 @@ const CompetitorCompanyQualityCertificatesForm = () => {
     }
   }, [file]);
   const getCompNo = async () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     await axios
-      .get(`${baseUrl}/api/competitorprofile/getcompno/${compid}`)
+      .post(`${baseUrl}/api/competitorprofile/getcompno/${compid}`,data)
       .then((resp) => {
         if (resp.data.status === 200) {
           setCompetitorQCInput({
@@ -132,8 +135,11 @@ const CompetitorCompanyQualityCertificatesForm = () => {
   }, [competitorQCInput, file, previewForEdit]);
 
   const getQCList = () => {
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
     axios
-      .get(`${baseUrl}/api/competitordetails/qclist/${compid}`)
+      .post(`${baseUrl}/api/competitordetails/qclist/${compid}`,data)
       .then((resp) => {
         let list = [...resp.data.qc];
         let listarr = list.map((item, index) => ({

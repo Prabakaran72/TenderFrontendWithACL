@@ -44,6 +44,9 @@ const HolidayCreation = () => {
 
 
     useEffect(()=> {             
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
         if(id) {
             axios.get(`${baseUrl}/api/holidays/${id}`).then((resp)=> {                 
                 // const holidaysList = resp.data.holidaylist.map((hod)=> ({                

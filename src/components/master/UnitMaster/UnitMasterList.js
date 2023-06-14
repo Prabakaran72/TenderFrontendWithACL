@@ -37,6 +37,10 @@ const UnitMasterList = () => {
 
 
   const getList = async () => {
+    // let data = {
+    //     tokenid : localStorage.getItem('token')
+    //   }
+  
     const unitlist = await axios.get(`${baseUrl}/api/unit`);
   
     // let userPermissions ;

@@ -12,10 +12,14 @@ const DocCardCP = (props) => {
     const { server1: baseUrl } = useBaseUrl();
     const { CorrigendumPublishdocs: biddocs_filePath } = useImageStoragePath();
     const downloadDoc = (filename, docname, ext) => {
+
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
   
             axios({
-                url: `${baseUrl}/api/download/corrigendumpublishdocs/${filename}`,
-                method: 'GET',
+                url: `${baseUrl}/api/download/corrigendumpublishdocs/${filename}`,data,
+                method: 'POST',
                 responseType: 'blob', // important
               }).then((response) => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
