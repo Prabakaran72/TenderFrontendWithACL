@@ -61,7 +61,7 @@ const UnitMasterList = () => {
       let list = [...unitlist.data.unit];
       let listarr = list.map((item, index, arr) => {
         let editbtn = !!(permission?.["Units"]?.can_edit) ? '<i class="fas fa-edit text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
-           
+        // let deletebtn = !!(permission?.["Units"]?.can_delete) ? '<i class="fas fa-trash text-info mx-2 h6" style="cursor:pointer" title="Edit"></i> ' : '';
 
         
         return {

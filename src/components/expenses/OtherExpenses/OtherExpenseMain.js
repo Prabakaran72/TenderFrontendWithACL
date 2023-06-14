@@ -194,7 +194,7 @@ let print =  '<i class="fas fa-solid fa-print print" style={{color: "#70e60f"}} 
 				...item, 
 				entry_date: item.entry_date,
 				exp_no:item.expense_no ,
-				staff_name: item.userName,
+				staff_name : item.userName,
 				total_amount:item.expense_amount,
 			
 

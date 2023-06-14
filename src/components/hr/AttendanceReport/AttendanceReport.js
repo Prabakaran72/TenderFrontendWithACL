@@ -53,10 +53,14 @@ const AttendanceReport = () => {
         const usertypelist = await axios.post(`${baseUrl}/api/usertype`,data);
         // console.log(usertypelist)
 
-        let options = usertypelist.data.userType.map((item, index) => ({
-            value: item.id,
-            label: item.name,
-        }))
+        // let options = usertypelist.data.userType.map((item, index) => ({
+        //     value: item.id,
+        //     label: item.name,
+        // }))
+
+        let options = usertypelist.data.userType
+        .filter((item) => item.id !== 1)
+        .map((item) => ({ value: item.id, label: item.name }));
 
         options.unshift({ value: 'All', label: 'All' });
         setRoleOptions(options)

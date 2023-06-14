@@ -16,7 +16,8 @@ import { useAllowedMIMEDocType } from "../../hooks/useAllowedMIMEDocType";
 import { useAllowedUploadFileSize } from "../../hooks/useAllowedUploadFileSize";
 import { useImageStoragePath } from "../../hooks/useImageStoragePath";
 import CallLogTab from "./CallLogTab";
-import MultiFileUploader from '../../multipleFileUpload/MultiFileUploader';
+// import MultiFileUploader from '../../multipleFileUpload/MultiFileUploader';
+
 
 const selectState = {
   customer: null,
@@ -96,7 +97,7 @@ const CallLogCreation = () => {
   const [mainId, setMainId] = useState(null);
   const [fetchedData, setFetchedData] = useState([]);
   
-  const [fileList, setFileList] = useState([]);
+  // const [fileList, setFileList] = useState([]);
 
   const [isEdited, setEdited] = useState({
     customer: false,
@@ -1050,7 +1051,7 @@ const CallLogCreation = () => {
       });
     }
 console.log("Res",res);
-    
+
   };
 
 
@@ -1497,9 +1498,8 @@ console.log("Res",res);
                 </div>
                       
                
-                      <MultiFileUploader setFileList={setFileList}/>
+                      {/* <MultiFileUploader setFileList={setFileList}/> */}
                
-
 
                 <div className="inputgroup col-lg-6 mb-4">
                   <div className="row align-items-center">
@@ -1598,7 +1598,7 @@ console.log("Res",res);
                       {fileListCheck && (
                         <div className="file_Documents">
                           {fileData.map((t, i) => (
-                            <div className="card col-lg-4 " key={i}>
+                            <div className="card" key={i}>
                               <div className="card-body">
                                 <div className="noOfFiles">{fileCount++}</div>
                                 <div className="fileDetails">

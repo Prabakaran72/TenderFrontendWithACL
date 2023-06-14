@@ -94,6 +94,10 @@ const AttendanceEntry = () => {
      
     })   
 
+    let data = {
+      tokenid : localStorage.getItem('token')
+    }
+
     axios.post(`${baseUrl}/api/attendancetypelist`,data).then((resp) => {
       setAttendanceList(resp.data.attendancetypelist);
     })
@@ -123,15 +127,16 @@ const getSavedList = ()=>{
       setInput({
         userId: setuserid,
         attendanceType: setAttendanceType,
-        fromDate: resp.data.showattendance.from_date,
-        toDate: resp.data.showattendance.to_date,
+        fromDate: resp.data.showattendance?.from_date,
+        toDate: resp.data.showattendance?.to_date,
         startTime: resp.data.showattendance?.start_time ? resp.data.showattendance.start_time : '',
-        reason: resp.data.showattendance.reason,              
+        reason: resp.data.showattendance?.reason ? resp.data.showattendance?.reason : '',              
       })
 
 getAttendanceFiles(resp.data.attendanceFiles, 1);
 })
 }
+
 
 
 //get the submittd file list
@@ -180,9 +185,6 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
   
     }
 
-
-    
-
   useEffect(() => {
     
     const errors = inputValidation;
@@ -196,14 +198,16 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
     } else {
       errors.attendanceTypeErr = false;
     }
-    if (input.fromDate === '') {
+    if (input.fromDate === null) {
       errors.fromDateErr = true;
     } else {
       errors.fromDateErr = false;
+      errors.fromDateErr = false;
     }
-    if (input.toDate === '') {
+    if (input.toDate === null) {
       errors.toDateErr = true;
     } else {
+      errors.toDateErr = false;
       errors.toDateErr = false;
     }
     setInputValidation((prev) => { return { 
@@ -211,7 +215,7 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
        userIdErr: errors.userIdErr,
        attendanceTypeErr: errors.attendanceTypeErr,
        fromDateErr: errors.fromDateErr,
-       toDateErr: errors.toDateErr,
+       toDateErr: errors.toDateErr
        } });
 
   }, [input])
@@ -222,13 +226,15 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
       input.userId?.value && 
       input.attendanceType?.value &&
       input.fromDate && 
-      input.toDate &&
-      location.coordinates
+      input.toDate 
+      // &&
+      // location.coordinates
       ) {
       setFormIsValid(true);
     } else {
       setFormIsValid(false);
     }
+
   }, [inputValidation,location])
 
   const postData = (formData) => {
@@ -246,8 +252,10 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
           text: "Submitted Successfully...!",
           icon: "success",
           confirmButtonColor: "#2fba5f",
-          timer: 1000,
+          // timer: 1000,
         });
+        // navigate(`/tender/hr/attendanceentry/edit/${res.data.id}`);
+        navigate(`/tender/hr/attendanceentry`);
         getFileList();
       }
       else if(res.data.status === 400){
@@ -256,7 +264,7 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
           text: res.data.message,
           icon: "error",
           confirmButtonColor: "#2fba5f",
-          timer: 1000,
+          // timer: 1000,
         });
       }
       else{
@@ -265,7 +273,7 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
           text: "Failed to Submit",
           icon: "error",
           confirmButtonColor: "#2fba5f",
-          timer: 1000,
+          // timer: 1000,
         });
       }
       setDataSending(false)
@@ -293,7 +301,7 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
         });
         getFileList();
         // setInput(initialState)
-        // navigate('/tender/hr/attendanceentry')
+        navigate('/tender/hr/attendanceentry')
       } else if (res.data.status === 400) {
         Swal.fire({
           icon: "error",
@@ -330,11 +338,38 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
   const submitHandler = (e) => {
     e.preventDefault();
     setDataSending(true)
+  
+    if(location?.error?.code)
+    {
+      Swal.fire({
+        title: "Geo Location Access Denied..!",
+        text: "Allow to to get Geo Location...!",
+        icon: "error",
+        confirmButtonColor: "#2fba5f",
+      });
+      setDataSending(false)
+      return;
+    }
+      
 
     if(!formIsValid){
            setDataSending(false)
            return     
         }
+      else{
+        if(input.fromDate > input.toDate)
+        {
+          Swal.fire({
+            title: "Date Range Error",
+            text: "Check the selected Date Range...!",
+            icon: "error",
+            confirmButtonColor: "#2fba5f",
+          });
+          setDataSending(false)
+          return;
+        }
+  
+      }
 
     const formData = new FormData();
     formData.append('user_id', input.userId?.value); 
@@ -346,12 +381,13 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
     formData.append('latitude', location.coordinates?.lat);
     formData.append('longitude', location.coordinates?.lng);
     // formData.append('file',file);      
-
+    formData.append('tokenid',localStorage.getItem('token')); 
+    // console.log("localStorage.getItem('token')",localStorage.getItem('token'))
     Object.values(files).forEach((item)=>{
       formData.append("file[]", item);
     })
     
-    formData.append('tokenid',localStorage.getItem('token')); 
+    
 
     if(id)
     {
@@ -585,6 +621,8 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
   };
 
   const inputChangeHandler = (e) => {
+    // console.log("e.target.value ", e.target.value==='' );
+    // console.log("e.target.value ", e.target.value===null);
     setInput({ ...input, [e.target.name]: e.target.value })
   }
 
@@ -668,6 +706,7 @@ const getAttendanceFiles = (fileList, mode = 0) =>{
                         id="image"
                         className="h-100 w-100 position-absolute top-50 start-50 pointer"
                         // accept={`image/*`}
+                        accept=".png, .jpg, .jpeg, .pdf, .zip, .rar, .doc, .docx, .xls, .xlsx, .csv"
                         onChange={(e) => handleFile(e)}
                         multiple
                       />

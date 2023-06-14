@@ -67,6 +67,7 @@ const setReportList = async()=>{
     "user_id": props.input.employee?.value !== 'All' ? props.input.employee?.value : "",
     "role_id": props.input.role?.value !== 'All' ? props.input.role?.value : "",
     "from_date": props.input.month || "",
+    'token': localStorage.getItem("token")
     
   }
   // console.log('data--',data)

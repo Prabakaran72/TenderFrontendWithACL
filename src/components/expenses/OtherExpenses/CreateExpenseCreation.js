@@ -15,6 +15,7 @@ const initailState = {
   description: "",
   invoice: "",
 };
+
 const CreateExpenseCreation = () => {
 
   const navigate = useNavigate();
@@ -228,7 +229,7 @@ const CreateExpenseCreation = () => {
 
   }
   const getSubdata = async (inv_no) => {
-
+    
     let data = {
       invc: inv_no,
     };
@@ -302,7 +303,7 @@ const CreateExpenseCreation = () => {
   /********************************************/
   let details = '';
   const generatepopArray = async (res) => {
-
+    setList([]);
     let status = res.data.status;
 
     if (status == 400) {

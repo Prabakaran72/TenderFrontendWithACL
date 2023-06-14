@@ -19,29 +19,160 @@ const CallReportTable = ({change}) => {
     const [title,setTitle] = useState('');
     const [count, setCount] = useState(0);
 
-       
-    
-    useEffect(()=> {    
-      let data = {
-        tokenid: 'd2b3b8f4f25138bff93ba741000a77aa1686376750815',
-        ...change
-      };   
-      // let additionalData = { key: change }; // Additional data object  
-      axios.post('http://192.168.1.68:8000/api/callreportstable',data).then((res)=> {
-          setResponse(res.data.data);   
-          setAccessor(res.data.accessor);     
-          setHeader(res.data.header);         
-          setTitle(res.data.title);  
-          console.log('res+++',res);                
-      })      
-    },[count, change])
+    useEffect(()=> {
+        let data = {
+           tokenid : localStorage.getItem('token'),
+            ...change
+          };          
+        axios.post(`${baseUrl}/api/getdaywisereport/list`,data).then((resp)=> { 
+            const dayWiseReport = resp.data.daywisereport.map((dwr)=> ({
+                callid : dwr.callid,
+                customer_name : dwr.customer_name,
+                // call_type : dwr.call_type,
+                action: dwr.action,
+                call_date: dwr.call_date,
+                close_date : dwr.close_date ? dwr.close_date : '--' ,
+                next_followup_date: dwr.next_followup_date ? dwr.next_followup_date : '--'
+            }))              
+            setData(dayWiseReport);
+            // console.log('change', change);             
+            // console.log('data+++', resp.data.daywisereport);     
+        })
+    },[change]);
+
+    useEffect(()=> {
+        let HeadersList = [];
   
-    const handleCount = (newCount) => {
-      setCount(newCount);
-    //   console.log('newCount',newCount);
-    }
-  
-    // console.log('response',response)
+        columns.map((col)=> {        
+            HeadersList.push(col.accessor);
+        })
+        // console.log('HeadersList',HeadersList);
+      setHeader(HeadersList);     
+      },[])
+        
+   
+    // console.log('page',page);
+    return (    
+        <>
+            <div className="d-flex justify-content-between mb-2">
+            <div className="">
+                <select
+                    className="form-control"
+                    value={pageSize}
+                    onChange={(e) => {
+                        setPageSize(Number(e.target.value));
+                    }}
+                >
+                    {[10, 20, 30, 40, 50].map((pageSize) => (
+                        <option key={pageSize} value={pageSize}>
+                            Show {pageSize}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div className="d-flex ">  
+                <UseExport               
+                    data={data}                       
+                    header={header}
+                    title = {'CALL REPOST LIST'}
+                />                       
+                <input
+                    value={globalFilter || ""}
+                    onChange={(e) => setGlobalFilter(e.target.value)}
+                    placeholder="Search..."
+                    className="form-control"
+                />
+            </div>
+            </div>   
+            <div className="table-responsive pb-3">           
+                <table
+                    className="table table-bordered text-center"
+                    id="dataTable"
+                    width="100%"
+                    cellSpacing={0}
+                    {...getTableProps()}
+                >
+                    <thead className="p-3 mb-2 text-center bg-greeny text-white">
+                        {headerGroups.map((headerGroup) => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map((column) => (
+                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                        {column.render("Header")}
+                                        <span className="text-right">{"   "}
+                                            { column.isSorted ? 
+                                                column.isSortedDesc ? (
+                                                    <i className="fa fa-caret-down text-white h6"></i>
+                                                ) : (
+                                                    <i className="fa fa-caret-down fa-rotate-180 text-white h6"></i>
+                                                )
+                                                :  ""
+                                                }
+                                        </span>
+                                    </th>
+                                ))}
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                        {page.map((row) => {
+                            prepareRow(row);
+                            return (
+                                <tr {...row.getRowProps()}>
+                                    {row.cells.map((cell) => (
+                                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                    ))}
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>                     
+            </div>
+            <div className="row align-items-center">
+            <div className="col-auto">
+                <button
+                    className="btn btn-sm mr-1 bg-greeny text-white font-weight-bold"
+                    onClick={() => previousPage()}
+                    disabled={!canPreviousPage}
+                >
+                    <i className="fas fa-chevron-circle-left" />
+                </button>
+            </div>
+            <div className="col-auto">
+                <button
+                    className="btn btn-sm mr-1 bg-greeny text-white font-weight-bold"
+                    onClick={() => nextPage()}
+                    disabled={!canNextPage}
+                >
+                    <i className="fas fa-chevron-circle-right" />
+                </button>
+            </div>
+            <div className="col-auto">
+                <span>
+                    Page{" "}
+                    <strong>
+                        {pageIndex + 1} of {pageOptions.length}
+                    </strong>{" "}
+                </span>
+            </div>
+            <div className="col-auto">
+                <span> {"| "} &nbsp;&nbsp;Go to page: </span>
+            </div>
+            <div className="col-sm-1">
+                <input
+                    className="form-control"
+                    type="number"
+                    defaultValue={pageIndex + 1}
+                    onChange={(e) => {
+                        const pageNumber = e.target.value
+                            ? Number(e.target.value) - 1
+                            : 0;
+                        gotoPage(pageNumber);
+                    }}
+                />
+            </div>
+            </div> 
+        </> 
+
 
 // console.log('change', change);
     return (    
