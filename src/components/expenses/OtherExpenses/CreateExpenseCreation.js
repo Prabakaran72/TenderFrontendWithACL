@@ -37,8 +37,8 @@ const CreateExpenseCreation = () => {
   const { expense: filePath } = useImageStoragePath();
   const [getlist, setList] = useState([]);
   const selectStaffName = localStorage.getItem('userName');
- 
-  
+
+
   useEffect(() => {
 
     // async function fetchData(id) {
@@ -84,24 +84,31 @@ const CreateExpenseCreation = () => {
 
   /******************get sublist while update*************************************** */
   useEffect(() => {
-    setInput((prev) => {
-      const selectedStaff = optionsForStaff.find((x) => x.label === selectStaffName);
 
-      return {
-        ...prev,
-        entryDate: getCurrentDate(),
-        staff: selectedStaff && selectedStaff ? selectedStaff : null,
-      };
-    });
+    if (optionsForStaff.length > 0) {
+      setInput((prev) => {
+        const selectedStaff = optionsForStaff.find((x) => x.label === selectStaffName);
 
-    const userValues = optionsForStaff
-      .filter((option) => option.label === selectStaffName)
-      .map((option) => option.user);
+        return {
+          ...prev,
+          entryDate: getCurrentDate(),
+          staff: selectedStaff && selectedStaff ? selectedStaff : null,
+        };
+      });
 
-   
 
-    setBdm(userValues[0]);
-    
+      const userValues = optionsForStaff
+        .filter((option) => option.label === selectStaffName)
+        .map((option) => option.user);
+
+
+
+      setBdm(userValues[0]);
+
+
+    }
+
+    console.log('Bdm', Bdm);
 
     if (id && optionsForStaff.length > 0) {
 
@@ -160,7 +167,8 @@ const CreateExpenseCreation = () => {
     // }
 
 
-  }, [optionsForStaff]);
+  }, [optionsForStaff, selectStaffName
+  ]);
 
   const getCurrentDate = () => {
     const currentDate = new Date();
