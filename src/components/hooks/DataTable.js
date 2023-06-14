@@ -2,13 +2,9 @@ import React, {useState, useEffect, useMemo, useRef, useContext} from 'react';
 import { useTable, useSortBy, usePagination, useGlobalFilter, actions } from 'react-table';
 import UseExport from './useExport'
 import { Navigate, useNavigate } from 'react-router-dom';
-import Swal from "sweetalert2/src/sweetalert2";
-
 import axios from 'axios';
 import AuthContext from "../../storeAuth/auth-context";
-import Print from '../../images/printer.png'
 import { BsFillPrinterFill } from 'react-icons/bs';
-// import { Excel } from '../../../public/assets/img/excel'
 
 
 const DataTable = ({ response, accessor, header, getPermission, navigation, deletion, title, count, handleCount}) => {
@@ -18,8 +14,8 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
   const [id, setId] = useState(0);  
   const navigate = useNavigate();   
   const {permission} = useContext(AuthContext);
-
-  console.log('newResponse', newResponse);
+  const dataTableRef = useRef(null);
+  // console.log('permission', permission);
 
   let keyName = 'action';  // For Object KeyName
 
@@ -27,10 +23,13 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
   const deletepermission = permission?.[getPermission]?.can_delete == 1;  
 
   response.forEach(res=> {  
+    const resp = Object.values(res).map(x=> (x === null) ? "--" : x);
     let editBtn = editpermission ? <i className="fas fa-edit icon-edit mr-3" onClick={()=>getRow(res)}></i> : "";
     let deleteBtn = deletepermission ? <i className="fas fa-trash-alt icon-delete" onClick={()=>getDelete(res)}></i> : "";
 
     res[keyName] = [editBtn, deleteBtn]; // Add New Object Keys & Value
+    // console.log('resp',resp)
+
   });
 
 
@@ -66,14 +65,15 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
       accessor: (row, index) => index + 1,
     });   
     
-    (editpermission || deletepermission || newResponse)  && (columnArray.push({
+    ((editpermission || deletepermission) && newResponse)  && (columnArray.push({
       Header: 'Action',
-      accessor: 'action',      
-      // className: 'action-column', // Add your custom class name here
+      accessor: 'action',   
+      className: 'action-column', // Add your custom class name here
     })); 
-  
+    
+    console.log('newResponse', newResponse)
     return columnArray;
-  }, [response]); // success
+  }, [response, newResponse]); // success
   
   
   const tableInstance = useTable( { columns, data, }, useGlobalFilter, useSortBy, usePagination );
@@ -97,17 +97,23 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
 
   
   // Print the Data ********
-
-  const dataTableRef = useRef(null);
-  
   
   const handlePrint = () => {
+    setNewResponse(false);
+    
     const dataTable = dataTableRef.current;  
     console.log('dataTable',dataTable);       
+    // console.log('newResponse == true',newResponse == false);
    
-    if (dataTable) {      
-      setNewResponse(false);
-
+    if (dataTable) {  
+      
+      const actionColumn = dataTable.querySelector('.action-column');
+      console.log('actionColumn',actionColumn);
+      if (actionColumn) {
+        console.log('hell');
+        actionColumn.style.display = 'none';
+      }
+      
       // const TableHead = dataTable.querySelector('th');            
       // TableHead.classList.add('myClass')      
 
@@ -126,8 +132,8 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
       //   actionColumn.remove();
       // }
       
-
       setTimeout(() => {
+
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`<html><head><title>${title}</title>`);
         printWindow.document.write('<style>');
@@ -152,7 +158,12 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
           }  
           .myClass {
             display: none;
-          }        
+          }     
+          @media print {
+            .action-column {
+              display: none !important;
+            }
+          }   
         `);
         printWindow.document.write(`</style></head><body><div class="title"><h1>${title}</h1></div><table>`);
         printWindow.document.write(dataTable.outerHTML);
@@ -160,10 +171,17 @@ const DataTable = ({ response, accessor, header, getPermission, navigation, dele
         printWindow.document.close();
         printWindow.print();
       }, 200);
-    }
+    }   
 
     // setNewResponse(true);
   };
+
+  useEffect(()=> {    
+    setTimeout(()=> {
+      setNewResponse(true);
+    },300)    
+  },[newResponse])
+
 
   return (
     <>    

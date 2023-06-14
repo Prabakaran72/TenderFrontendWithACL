@@ -56,6 +56,7 @@ const HolidayCreation = () => {
                 //     action : <button onClick={() => getRow(hod)}><i className="fas fa-edit"/></button>
                 // }))              
                 // setData(holidaysList);                     
+                console.log('resp+', resp);     
                 console.log('resp+++', resp.data.holidaylist);     
                 setInput({...input, 
                     date: resp.data.holidaylist[0].date,
