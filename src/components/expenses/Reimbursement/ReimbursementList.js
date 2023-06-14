@@ -1,21 +1,21 @@
 import { Fragment, useEffect, useState } from "react";
 import PreLoader from "../../UI/PreLoader";
 
-
+import wating from "./image/wait_f.gif"
 //For DataTable
 import "jquery/dist/jquery.min.js";
 import $ from "jquery";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-bs4";
-import jsZip from "jszip";
+//import jsZip from "jszip";
 import "datatables.net-buttons-bs4";
 import "datatables.net-buttons/js/dataTables.buttons.js";
 import "datatables.net-buttons/js/buttons.colVis.js";
 import "datatables.net-buttons/js/buttons.flash.js";
 import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-buttons/js/buttons.print.js";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+//import pdfMake from "pdfmake/build/pdfmake";
+//import pdfFonts from "pdfmake/build/vfs_fonts";
 
 
 import axios from "axios";
@@ -24,7 +24,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import Swal from "sweetalert2";
 import { usePageTitle } from "../../hooks/usePageTitle";
-
+import family from "./image/wait_f.gif";
 
 
 let table; 
@@ -36,7 +36,7 @@ const ReimbursementList = (props) => {
     const [UlbtList, setUlbList] = useState([]);
     
     const { server1: baseUrl } = useBaseUrl();
-   
+    const navigate = useNavigate()
     const location = useLocation();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -75,7 +75,7 @@ const ReimbursementList = (props) => {
 
     useEffect(() => {
      
-      console.log("UlbtList",UlbtList);
+     
         table =  $('#reimdataTable').DataTable({
             data : UlbtList,
             columns: [
@@ -91,6 +91,26 @@ const ReimbursementList = (props) => {
                 // { data: 'current_stage' },
                 // { data: 'action' },
             ],
+            buttons:[
+              {
+                extend: "print",
+                text: '<i class="fa fa-print  mx-1" aria-hidden="true"></i> <span class="print">Print</span>',
+                className: "btn btn-info",
+                exportOptions: {
+                  // columns: ':not(.exclude-action)', 
+                  columns: [0, 1, 2, 3, 4, 5, 6, 7], //Except view 8
+                },
+              },
+              {
+                extend: "excel",
+                text: '<i class="fa fa-file-excel-o mx-1" aria-hidden="true"></i> <span class="excel">Excel</span>',
+                className: "btn btn-success",
+                exportOptions: {
+                  // columns: ':not(.exclude-action)', 
+                  columns: [0, 1, 2, 3, 4, 5, 6, 7], //Except view 8
+                },
+              },
+            ],
             // dom:
             // //   "<'row'<'col-sm-12'l>>" +
             //   "<'row'<'col-sm-12   col-md-6 pl-4'l>  <'col-sm-12 col-md-6 pr-4'f>>" +
@@ -98,6 +118,8 @@ const ReimbursementList = (props) => {
             //   "<'row'<'col-sm-12 col-md-5 pl-4'i><'col-sm-12 col-md-7 pr-4'p>>",
     
         })
+        table.buttons().container().appendTo("#reimdataTable_wrapper .dataTables_filter");
+
         let ApproveStatus = '';
 
         $('#reimdataTable tbody').on('click', 'td', function(event) {
@@ -184,7 +206,7 @@ if(ApproveStatus){
   })
 
 
-}else if((action=='HOApprove_reject')||(action=='CEOApprove_reject')||(action=='HRApprove_reject')){
+}else{
 
 
   Swal.fire({
@@ -241,18 +263,6 @@ if(response.data.status===200){
 
 
 
-
-
-
-}else if((action=='printView')){
-
-  const width = 800;
-  const height = 600;
-  const left = (window.innerWidth - width) / 2;
-  const top = (window.innerHeight - height) / 2;
-
-  const url = 'remView/';
-window.open(url+rowdata.id, '', `width=${width}, height=${height}, left=${left}, top=${top}`);
 
 
 
@@ -426,19 +436,19 @@ window.open(url+rowdata.id, '', `width=${width}, height=${height}, left=${left},
          
             <PreLoader loading={props.loading}>
                 <ToastContainer />
-                <div className="table-responsive pb-3">
+                <div className="table-responsive">
                     <table
-                        className="table text-center"
+                        className="table table-bordered text-center"
                         id="reimdataTable"
                         width="100%"
                         cellSpacing={0}
                     >
-                        <thead className="text-center bg-gray-200 text-primary">
+                        <thead className="text-center bg-greeny text-white">
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Entry Date</th>
                                 <th scope="col">Expense Bill No</th>
-                                <th scope="col">Staff Name</th>
+                                <th scope="col"> Staff Name</th>
                                 <th scope="col">Total Amount</th>
                                 <th scope="col">HO Approval</th>
                                 <th scope="col">CEO Approal</th>
