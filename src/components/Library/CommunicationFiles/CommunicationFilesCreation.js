@@ -102,7 +102,10 @@ const CommunicationFilesCreation = () => {
     };
 
     const getulbData = async (savedulb) => {
-        let response = await axios.get(`${baseUrl}/api/ulb-list/${savedulb}`);
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
+        let response = await axios.post(`${baseUrl}/api/ulb-list/${savedulb}`,data);
         return { options: response.data.ulbList, isLoading: false };
     };
 

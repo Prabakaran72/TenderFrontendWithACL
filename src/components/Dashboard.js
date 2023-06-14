@@ -15,6 +15,7 @@ import BarChart from "./BarChart";
 import Chart from "react-apexcharts";
 import Unauthorized from "./pages/Unauthorized";
 
+// Demo
 
 function valueLabelFormat(value) {
   const units = [
@@ -152,10 +153,10 @@ function Dashboard() {
       });
       
       axios
-      .get(`${baseUrl}/api/dashboard/getCallCountAnalysis`, { params: {tokenid: localStorage.getItem('token')} })
+      .post(`${baseUrl}/api/dashboard/getCallCountAnalysis`, data)
       .then((resp) => {
         if (resp.data.status === 200) {
-          // console.log("Call Count IF: ",resp.data);
+           console.log("Call Count IF: ",resp.data);
 
           setCallCount({
             attendedCallsCount: resp.data.attendedCallsCount,

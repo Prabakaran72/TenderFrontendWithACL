@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { RiFileExcel2Fill } from 'react-icons/ri';
-import Excel from '../../images/excel.png'
+// import Excel from '../../images/excel.png'
 
 
 const UseExport = ({ data, header, accessor, title }) => {
@@ -40,7 +40,8 @@ const UseExport = ({ data, header, accessor, title }) => {
     let i=1;       
     const csv = [
       title,
-      Header.map((head)=> {return head == 'Action' ? '' : head}),
+      Header.map((head)=> {return head == 'Action' ? '' : head}).join(','),
+      
       ...data.map((row, index) => {  
         // console.log('rowdata',row);
 

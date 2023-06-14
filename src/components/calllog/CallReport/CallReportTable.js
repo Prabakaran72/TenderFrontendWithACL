@@ -1,14 +1,9 @@
 import axios from "axios";
-import React, { useState, useMemo, useEffect, useRef } from "react";
-import {
-    useTable,
-    useSortBy,
-    usePagination,
-    useGlobalFilter,
-} from "react-table";
+import React, { useState, useMemo, useEffect, useRef, Fragment } from "react";
+
 import { useBaseUrl } from "../../hooks/useBaseUrl";
 import UseExport from "../../hooks/useExport";
-
+import DataTable from "../../hooks/DataTable";
 
 // const data = [
 //     { call_no: 'John', customer_name: 25, call_type: 'John', status: 25, next_follow_up_date: 'John', started: 25, finished: 25 },
@@ -16,86 +11,17 @@ import UseExport from "../../hooks/useExport";
 //     // Add more data objects as needed
 //   ];
 
-const CallReportTable = ( {change, input, check} ) => {
-    const {server1: baseUrl} = useBaseUrl();    
-    const [data, setData] = useState([]);      
-    const [header, setHeader] = useState([]);   
-
-    const columns = useMemo(
-        () => [
-            {
-                Header: "#",
-                accessor: (row, index) => index + 1,
-            },
-            {
-                Header: "Call No",
-                accessor: "callid",
-                // defaultCanSort: true,
-                sortable: true,
-            },
-            {
-                Header: "Customer Name",
-                accessor: "customer_name",
-                // defaultCanSort: true,
-                sortable: true,
-            },
-            // {
-            //     Header: "Call Type",
-            //     accessor: "call_type",
-            //     // defaultCanSort: true,
-            //     sortable: true,
-            // },
-            {
-                Header: "Status",
-                accessor: "action",
-                // defaultCanSort: true,
-                sortable: true,
-            },
-            {
-                Header: "Next Follow Up Date",
-                accessor: "next_followup_date",
-                // defaultCanSort: true,
-                sortable: true,                
-            },
-            {
-                Header: "Started",
-                accessor: "call_date",
-                // defaultCanSort: true,
-                sortable: true,                
-            },
-            {
-                Header: "Finished",
-                accessor: "close_date",
-                // defaultCanSort: true,
-                sortable: true,                
-            },            
-        ],
-        []
-    );
-
-    const tableInstance = useTable( { columns, data, }, useGlobalFilter, useSortBy, usePagination );
-
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        prepareRow,
-        page,
-        state: { pageIndex, pageSize, globalFilter },
-        setGlobalFilter,
-        previousPage,
-        nextPage,
-        canPreviousPage,
-        canNextPage,
-        pageOptions,
-        gotoPage,
-        pageCount,
-        setPageSize,
-    } = tableInstance;
+const CallReportTable = ({change}) => {
+    const { server1: baseUrl } = useBaseUrl();    
+    const [response,setResponse] = useState([]);
+    const [accessor,setAccessor] = useState([]);
+    const [header,setHeader] = useState([]);
+    const [title,setTitle] = useState('');
+    const [count, setCount] = useState(0);
 
     useEffect(()=> {
         let data = {
-            tokenid: 'd2b3b8f4f25138bff93ba741000a77aa1686376750815',
+           tokenid : localStorage.getItem('token'),
             ...change
           };          
         axios.post(`${baseUrl}/api/getdaywisereport/list`,data).then((resp)=> { 
@@ -247,6 +173,24 @@ const CallReportTable = ( {change, input, check} ) => {
             </div> 
         </> 
 
+
+// console.log('change', change);
+    return (    
+       <Fragment>        
+            <DataTable 
+                response={response}               
+                accessor={accessor}   
+                header={header}   
+                getPermission={""}
+                // navigation={navigation}
+                // deletion={deletion}
+                title={title}
+                count={count}
+                handleCount={handleCount}
+            />
+        </Fragment>
     );
 };
+
+
 export default CallReportTable;

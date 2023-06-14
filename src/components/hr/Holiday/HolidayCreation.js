@@ -56,6 +56,7 @@ const HolidayCreation = () => {
                 //     action : <button onClick={() => getRow(hod)}><i className="fas fa-edit"/></button>
                 // }))              
                 // setData(holidaysList);                     
+
                 
                  
                 const date = new Date(resp.data.holidaylist[0].date); 

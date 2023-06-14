@@ -23,8 +23,11 @@ const CallLogDashboard = () => {
 
 
     useEffect(()=> {
+        let data = {
+            tokenid : localStorage.getItem('token')
+          }
         axios
-        .get(`${baseUrl}/api/dashboard/getCallCountAnalysis`, { params: {tokenid: localStorage.getItem('token')} })
+        .post(`${baseUrl}/api/dashboard/getCallCountAnalysis`, data)
         .then((resp) => {
         if (resp.data.status === 200) {
             // console.log("Call Count IF: ",resp.data);

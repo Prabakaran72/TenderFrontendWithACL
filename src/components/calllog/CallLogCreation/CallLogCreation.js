@@ -120,6 +120,21 @@ const CallLogCreation = () => {
     doclist: true,
   });
 
+  const [isAllow, setIsAllow] = useState({   // ********* This State only based on mode type i.e URL ********** //
+    customerName: false,
+    date: false,
+    callType: false,
+    executiveName: false,
+    businessForecast: false,
+    procurementType: false,
+    status: false,
+    additionalInfo: false,
+    nextFollowUp: false,
+    closeStatus: false,
+    closeDate: false,
+    remarks: false,
+  });
+
   let token = localStorage.getItem("token");
 
   const objectData = {
@@ -137,24 +152,51 @@ const CallLogCreation = () => {
 
 
   useEffect(() => {
-    if (
-      input.customer?.value &&
-      input.entrydate &&
-      input.calltype?.value &&
-      // input.executiveName?.value &&
-      // input.procurement?.value &&
-      input.businessForecast?.value &&
-      // input.forecastStatus?.value &&
-      // input.addInfo.value &&
-      (input.nxtFollowupDate
-        ? input.nxtFollowupDate
-        : input.callcloseStatus?.value && input.callcloseDate)
-      //  && input.remarks.value
-    ) {
-      setIsFormValid(true);
-    } else {
-      setIsFormValid(false);
+
+    if (mode !== "edit") {
+      if ( input.customer?.value && input.entrydate ) {
+        setIsFormValid(true);
+      } else {
+        setIsFormValid(false);
+      }
+      // console.log('check', input.customer && input.entrydate ? true : false);
     }
+
+    if (mode === "edit") {
+      if (
+        input.customer?.value &&
+        input.entrydate &&
+        input.calltype?.value &&        
+        input.businessForecast?.value &&        
+        (input.nxtFollowupDate
+          ? input.nxtFollowupDate
+          : input.callcloseStatus?.value && input.callcloseDate)        
+      ) {        
+          setIsFormValid(true);
+        } else {      
+            setIsFormValid(false);
+        }      
+    }
+
+    if (mode === "nxtFlw") {
+      if (        
+        // input.executiveName?.value &&
+        // input.procurement?.value &&   
+        input.calltype?.value &&  
+        input.businessForecast?.value &&     
+        // input.forecastStatus?.value &&
+        // input.addInfo.value &&
+        (input.nxtFollowupDate
+          ? input.nxtFollowupDate
+          : input.callcloseStatus?.value && input.callcloseDate)
+        //  && input.remarks.value
+      ) {
+          setIsFormValid(true);
+        } else {
+            setIsFormValid(false);
+        }      
+    }
+    
   }, [input]);
 
   const getFileList = async () => {
@@ -406,7 +448,55 @@ const CallLogCreation = () => {
     setIsFetching((prev) => {
       return { ...prev, formData: false };
     });
-  }, []);
+  }, []); 
+
+  useEffect(()=> {  // maintains isAllow State //
+
+    if(mode !== 'edit') {
+      setIsAllow({
+        customerName: false,
+        date: false,
+        callType: true,
+        executiveName: true,
+        businessForecast: true,
+        procurementType: true,
+        status: true,
+        additionalInfo: true,
+        nextFollowUp: true,   
+        closeStatus: true,
+        closeDate: true,
+        remarks: true,   
+      });
+    }
+
+    if(mode === "edit") {
+      setIsAllow({
+        customerName: true,
+        date: true,
+      })
+
+    }
+
+    if(mode === 'nxtFlw') {
+      setIsAllow({
+        customerName: true,
+        date: true,
+        callType: false,
+        executiveName: true,
+        businessForecast: false,
+        procurementType: true,
+        status: false,
+        additionalInfo: true,
+        nextFollowUp: false,
+        closeStatus: false,
+        closeDate: false,
+        remarks: false,
+      })
+    }
+
+    // console.log('isAllow',isAllow);
+
+  },[]) 
 
   useEffect(() => {
     if (
@@ -964,6 +1054,7 @@ console.log("Res",res);
 
   };
 
+
   return (
     <PreLoader loading={isFetching.formData}>
       <div className="CallLogsCreation">
@@ -1006,7 +1097,7 @@ console.log("Res",res);
                         options={optionsForCutomerList}
                         value={input.customer}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
+                        isDisabled = {isAllow.customerName}
                       ></Select>
                       {inputValidation.customer && (
                         <div className="pt-1">
@@ -1033,7 +1124,7 @@ console.log("Res",res);
                         name="entrydate"
                         onChange={(e) => inputHandlerFortext(e)}
                         value={input.entrydate}
-                        disabled = {mode === 'nxtFlw' ? true : false}
+                        disabled = {isAllow.date}
                       />
                       {inputValidation.Date && (
                         <div className="pt-1">
@@ -1062,7 +1153,7 @@ console.log("Res",res);
                         options={optionsForCallList}
                         value={input.calltype}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
+                        isDisabled = {isAllow.callType}
                       ></Select>
                       {inputValidation.calltype && (
                         <div className="pt-1">
@@ -1089,7 +1180,7 @@ console.log("Res",res);
                         id="executiveName"
                         name="executiveName"
                         value={userName}
-                        disabled={true}
+                        disabled={isAllow.executiveName}
                         className="form-control"
                       />
                     </div>
@@ -1117,7 +1208,7 @@ console.log("Res",res);
                         options={optionsForBizzList}
                         value={input.businessForecast}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
+                        isDisabled = {isAllow.businessForecast}
                       ></Select>
                       {inputValidation.businessForecast && (
                         <div className="pt-1">
@@ -1151,7 +1242,7 @@ console.log("Res",res);
                           options={optionsForProcurement}
                           value={input.procurement}
                           onChange={inputHandlerForSelect}
-                          isDisabled = {mode === "nxtFlw" ? true : false}
+                          isDisabled = {isAllow.procurementType}
                         ></Select>
                         {inputValidation.procurement && (
                           <div className="pt-1">
@@ -1191,7 +1282,7 @@ console.log("Res",res);
                         options={optionsForStatusList}
                         value={input.forecastStatus}
                         onChange={inputHandlerForSelect}
-                        isDisabled = {mode === "nxtFlw" ? true : false}
+                        isDisabled = {isAllow.status}
                       ></Select>
                       {/* {inputValidation.forecastStatus && (
                         <div className="pt-1">
@@ -1265,7 +1356,7 @@ console.log("Res",res);
                         cols="50"
                         value={input.addInfo}
                         onChange={(e) => inputHandlerFortext(e)}
-                        disabled = {mode === 'nxtFlw' ? true : false}
+                        disabled = {isAllow.additionalInfo}
                       />
                     </div>
                   </div>
@@ -1289,6 +1380,7 @@ console.log("Res",res);
                           type="date"
                           value={input.nxtFollowupDate}
                           onChange={(e) => inputHandlerFortext(e)}
+                          disabled={isAllow.nextFollowUp}
                         />
                       </div>
                       {inputValidation.nxtFollowupDate && (
@@ -1327,6 +1419,7 @@ console.log("Res",res);
                           options={optionsForCallCloseStatus}
                           value={input.callcloseStatus}
                           onChange={inputHandlerForSelect}
+                          isDisabled={isAllow.closeStatus}
                         ></Select>
                       </div>
                       <div className="col-lg-4 text-dark ">
@@ -1341,6 +1434,7 @@ console.log("Res",res);
                           type="date"
                           onChange={(e) => inputHandlerFortext(e)}
                           value={input.callcloseDate}
+                          disabled={isAllow.closeDate}
                         />
                         {inputValidation.callcloseDate && (
                           <div className="pt-1">
@@ -1365,6 +1459,7 @@ console.log("Res",res);
                           cols="50"
                           value={input.remarks}
                           onChange={(e) => inputHandlerFortext(e)}
+                          disabled={isAllow.remarks}
                         />
                       </div>
                     </div>
